@@ -1,1 +1,3 @@
 # quid-ai
+
+docker ps 
