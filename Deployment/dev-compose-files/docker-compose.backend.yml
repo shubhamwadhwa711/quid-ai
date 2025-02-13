@@ -5,7 +5,7 @@ services:
     build:
       context: ../Backend
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: backend-qa
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ../Backend:/app
