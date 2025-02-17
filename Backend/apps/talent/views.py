@@ -1,21 +1,17 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.response import Response
 from .serializers import *
-from rest_framework.views import APIView
 from django.contrib.auth.models import User
-from rest_framework import status
+
 # Create your views here.
 
 
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.filter(status="APPROVED")
-#     serializer_class = ProfileSerializer
-
-
-
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.filter(profile__status="APPROVED")
+    serializer_class = UserSerializer
+    http_method_names = ['get', 'patch', 'delete',]
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -25,31 +21,41 @@ class ProfileViewSet(viewsets.ModelViewSet):
     filterset_fields = ['location', 'user__first_name', 'industry', 'skill']  
 
 class EducationViewSet(viewsets.ModelViewSet):
-    queryset = Education.objects.filter(profile__status="APPROVED")
-    serializer_class = EducationSerializer    
+    serializer_class = EducationSerializer   
+
+    def get_queryset(self):
+        profile_id = self.kwargs['profile_pk']
+        return Education.objects.filter(profile_id=profile_id , profile__status="APPROVED")  
+
+
 
 class ExperienceViewSet(viewsets.ModelViewSet):
-    queryset = Experience.objects.filter(profile__status="APPROVED")
     serializer_class = ExperienceSerializer  
+    def get_queryset(self):
+        profile_id = self.kwargs['profile_pk']
+        return Experience.objects.filter(profile_id=profile_id , profile__status="APPROVED") 
+
 
 class CertificationViewSet(viewsets.ModelViewSet):
-    queryset = Certification.objects.filter(profile__status="APPROVED")
-    serializer_class = CertificationSerializer  
+    serializer_class = CertificationSerializer
+
+    def get_queryset(self):
+        profile_id = self.kwargs['profile_pk']
+        return Certificates.objects.filter(profile_id=profile_id , profile__status="APPROVED")   
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.filter(profile__status="APPROVED")
-    serializer_class =ProjectSerializer                
+    serializer_class =ProjectSerializer    
+
+    def get_queryset(self):
+        profile_id = self.kwargs['profile_pk']
+        return Project.objects.filter(profile_id=profile_id , profile__status="APPROVED")         
 
 
-class EnquiryView(APIView):
-    def post(self, request):
-       serializer = EnquirySerializer(data=request.data)
-       if serializer.is_valid():
-          serializer.save()
-          return Response({'success':'Enquiry Created'}, status=status.HTTP_201_CREATED)
-       
-       return Response(serializer.errors)
+class EnquiryViewSet(viewsets.ModelViewSet):
+    queryset = Enquiry.objects.all()
+    serializer_class = EnquirySerializer
+    http_method_names = ['post']
     
     
 

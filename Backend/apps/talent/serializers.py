@@ -4,6 +4,7 @@ from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(read_only = True)
     class Meta:
         model = User
         fields = ['username','email','first_name','last_name']
@@ -13,11 +14,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.StringRelatedField()
     skill = serializers.SlugRelatedField(many=True, queryset=Skill.objects.all(), slug_field="name")
     class Meta:
         model = Profile
-        exclude =['status'] 
+        exclude =['status','is_featured', 'auto_approve_inquiry'] 
 
 
 
@@ -36,7 +37,7 @@ class ExperienceSerializer(serializers.ModelSerializer):
 class CertificationSerializer(serializers.ModelSerializer):
     profile = serializers.StringRelatedField()
     class Meta:
-        model = Certification
+        model = Certificates
         fields = '__all__'  
 
 class ProjectSerializer(serializers.ModelSerializer):

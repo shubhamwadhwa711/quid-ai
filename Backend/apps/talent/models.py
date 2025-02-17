@@ -1,15 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 
 class Skill(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True)
     
 
     def __str__(self):
         return self.name
-
 
 
 class Profile(models.Model):
@@ -19,9 +19,11 @@ class Profile(models.Model):
         ('REJECTED','Rejected'),
     )
     status = models.CharField(max_length=8, choices=STATUS, default='PENDING')
+    auto_approve_inquiry = models.BooleanField(default=False)
+    is_featured = models.BooleanField(default=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    headline = models.CharField(max_length=255)  
+    headline = models.CharField(max_length=255,null=True, blank=True)  
     summary = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
     industry = models.CharField(max_length=255, blank=True, null=True)
@@ -38,11 +40,11 @@ class Profile(models.Model):
 
 class Experience(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='experiences')
-    title = models.CharField(max_length=255)
-    company = models.CharField(max_length=255)
+    title = models.CharField(max_length=255,null=True, blank=True)
+    company = models.CharField(max_length=255,null=True, blank=True)
     location = models.CharField(max_length=255, blank=True, null=True)
     start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)  # Null for current jobs
+    end_date = models.DateField(blank=True, null=True) 
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -62,14 +64,12 @@ class Education(models.Model):
 
 
 
-
-
-class Certification(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='certifications')
+class Certificates(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='certificates')
     name = models.CharField(max_length=255)
     issuing_organization = models.CharField(max_length=255)
     issue_date = models.DateField()
-    expiration_date = models.DateField(blank=True, null=True)
+    
     
     def __str__(self):
         return self.name
@@ -87,6 +87,24 @@ class Project(models.Model):
 
 
 
+class Publication(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='publication')
+    title = models.CharField(max_length=200, null=True, blank=True )
+
+    def __str__(self):
+        return self.title  
+
+
+
+class Client(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name='client')
+    name = models.CharField(max_length=80, null=True, blank=True )
+
+    def __str__(self):
+        return self.name   
+
+
+
 class Enquiry(models.Model):
     STATUS = (
         ('PENDING','Pending'),
@@ -94,11 +112,14 @@ class Enquiry(models.Model):
         ('REJECTED','Rejected'),
     )
     status = models.CharField(max_length=8, choices=STATUS, default='PENDING')
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    name = models.CharField(max_length=80)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='enquiry')
+    full_name = models.CharField(max_length=80)
     email = models.EmailField(max_length=250)
     mobile = models.IntegerField(null=True)
-    message = models.TextField() 
+    message = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by =models.ForeignKey(User, on_delete=models.CASCADE, related_name='enquiry_updated_by_user') 
+    
 
     def __str__(self):
-        return self.name   
+        return self.full_name   
