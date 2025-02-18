@@ -23,8 +23,9 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class EducationSerializer(serializers.ModelSerializer):
-    profile = serializers.StringRelatedField()
-    class Meta:
+#    profile = serializers.PrimaryKeyRelatedField( queryset=Profile.objects.all(), source="profile.id")
+# #    profile = serializers.StringRelatedField()
+   class Meta:
         model = Education
         fields = '__all__'
 
@@ -52,4 +53,4 @@ class EnquirySerializer(serializers.ModelSerializer):
     profile = serializers.StringRelatedField()
     class Meta:
         model = Enquiry
-        exclude =['status'] 
+        exclude =['status', 'updated_by','updated_at'] 

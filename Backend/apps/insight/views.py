@@ -20,6 +20,15 @@ class AssociatedCompanyViewSet(viewsets.ModelViewSet):
         return AssociatedCompany.objects.filter(category_id=category_id) 
 
 
+class AllCompany(viewsets.ModelViewSet):
+    queryset = AssociatedCompany.objects.all()
+    serializer_class = AssociatedCompanySerializer
+    http_method_names = ['get']
+
+
+
+
+
 # API for testimonial
 class Testimonial(viewsets.ModelViewSet):
     queryset = Testimonial.objects.all()

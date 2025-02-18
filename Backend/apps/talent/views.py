@@ -58,6 +58,13 @@ class EnquiryViewSet(viewsets.ModelViewSet):
     http_method_names = ['post']
     
     
+class ProfileEnquiry(viewsets.ModelViewSet):
+    serializer_class =EnquirySerializer    
+    http_method_names = ['post']
+    def get_queryset(self):
+        profile_id = self.kwargs['profile_pk']
+        return Enquiry.objects.filter(profile_id=profile_id , status="APPROVED") 
+    
 
 
 
