@@ -6,6 +6,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'category', CompanyCategoryViewSet)
+router.register(r'all-company', AllCompany)
 router.register(r'company', AssociatedCompanyViewSet, basename='company')
 router.register(r'testimonial', Testimonial)
 
