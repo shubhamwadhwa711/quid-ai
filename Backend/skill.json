@@ -1,0 +1,138 @@
+[
+    {
+        "model": "talent.skill",
+        "pk": 1,
+        "fields": {
+            "name": "Python"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 2,
+        "fields": {
+            "name": "Django"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 3,
+        "fields": {
+            "name": "C"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 4,
+        "fields": {
+            "name": "Java"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 5,
+        "fields": {
+            "name": "JS"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 6,
+        "fields": {
+            "name": "DRF"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 7,
+        "fields": {
+            "name": "API  "
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 8,
+        "fields": {
+            "name": "HTML"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 9,
+        "fields": {
+            "name": "CSS"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 10,
+        "fields": {
+            "name": "AJAX"
+        }
+    },
+    {
+        "model": "talent.industry",
+        "pk": 1,
+        "fields": {
+            "name": "IT",
+            "logo": "industry_logo/download_tf7QdbC.jpeg"
+        }
+    },
+    {
+        "model": "talent.industry",
+        "pk": 2,
+        "fields": {
+            "name": "Finance",
+            "logo": "industry_logo/download_tf7QdbC.jpeg"
+        }
+    },
+    {
+        "model": "talent.industry",
+        "pk": 3,
+        "fields": {
+            "name": "Health",
+            "logo": "industry_logo/download_tf7QdbC.jpeg"
+        }
+    },
+    {
+        "model": "talent.profile",
+        "pk": 1,
+        "fields": {
+            "status": "APPROVED",
+            "auto_approve_inquiry": false,
+            "is_featured": false,
+            "user": 2,
+            "image": "profile_pics/lord-krishna-and-meera-hd-wallpapers75_31j8nZC.jpg",
+            "headline": "I am a HR.",
+            "summary": "",
+            "location": "M.P",
+            "industry": null,
+            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "phone": "9090909090",
+            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "skill": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "talent.profile",
+        "pk": 2,
+        "fields": {
+            "status": "APPROVED",
+            "auto_approve_inquiry": false,
+            "is_featured": false,
+            "user": 3,
+            "image": "",
+            "headline": "I am a HR.",
+            "summary": "",
+            "location": "M.P",
+            "industry": null,
+            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "phone": "9090909090",
+            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "skill": [
+                2
+            ]
+        }
+    }
+]

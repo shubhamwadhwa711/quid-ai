@@ -20,4 +20,22 @@ class AssociatedCompanySerializer(serializers.ModelSerializer):
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testimonial
-        exclude = ['created_by']        
+        exclude = ['created_by']     
+
+
+class InsightsCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InsightsCategory
+        fields = '__all__'                
+
+
+class InsightsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Insights
+        fields = '__all__'                        
+
+
+class FaqSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Faq
+        fields = '__all__'                                

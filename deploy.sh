@@ -2,7 +2,9 @@
 set -e
 
 # Change directory to the Deployment folder
-cd "$(dirname "$0")/Deployment"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "--------- $SCRIPT_DIR"
+cd "$SCRIPT_DIR/Deployment"
 
 echo "Building and starting backend and frontend services..."
 

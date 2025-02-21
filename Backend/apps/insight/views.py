@@ -26,9 +26,6 @@ class AllCompany(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
-
-
-
 # API for testimonial
 class Testimonial(viewsets.ModelViewSet):
     queryset = Testimonial.objects.all()
@@ -36,3 +33,23 @@ class Testimonial(viewsets.ModelViewSet):
     http_method_names = ['get']
 
 
+class InsightsCategoryViewSet(viewsets.ModelViewSet):
+    queryset = Insights.objects.all()
+    serializer_class = InsightsCategorySerializer
+    http_method_names = ['get']
+
+
+
+class InsightsViewSet(viewsets.ModelViewSet):
+    serializer_class = InsightsSerializer
+    http_method_names = ['get']
+
+    def get_queryset(self):
+        category_id = self.kwargs['category_pk']
+        return Insights.objects.filter(category_id=category_id)
+
+
+class FaqViewSet(viewsets.ModelViewSet):
+    queryset = Faq.objects.all()
+    serializer_class = FaqSerializer
+    http_method_names = ['get']

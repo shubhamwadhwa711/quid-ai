@@ -10,12 +10,17 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username','email','first_name','last_name']
 
 
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = '__all__'        
 
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()
-    skill = serializers.SlugRelatedField(many=True, queryset=Skill.objects.all(), slug_field="name")
+    # user = serializers.StringRelatedField()
+    # skill = serializers.SlugRelatedField(many=True, queryset=Skill.objects.all(), slug_field="name")
+    skill = SkillSerializer(many=True)
     class Meta:
         model = Profile
         exclude =['status','is_featured', 'auto_approve_inquiry'] 
@@ -30,27 +35,39 @@ class EducationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ExperienceSerializer(serializers.ModelSerializer):
-    profile = serializers.StringRelatedField()
+    # profile = serializers.StringRelatedField()
     class Meta:
         model = Experience
         fields = '__all__'      
 
 class CertificationSerializer(serializers.ModelSerializer):
-    profile = serializers.StringRelatedField()
+    # profile = serializers.StringRelatedField()
     class Meta:
         model = Certificates
         fields = '__all__'  
 
 class ProjectSerializer(serializers.ModelSerializer):
-    profile = serializers.StringRelatedField()
+    # profile = serializers.StringRelatedField()
     class Meta:
         model = Project
         fields = '__all__'                        
 
     
 
+class IndustrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Industry
+        fields = '__all__'
+
+
+
+
+
 class EnquirySerializer(serializers.ModelSerializer):
-    profile = serializers.StringRelatedField()
+    # profile = serializers.StringRelatedField()
     class Meta:
         model = Enquiry
         exclude =['status', 'updated_by','updated_at'] 
+
+
+
