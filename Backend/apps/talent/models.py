@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 
 
@@ -10,6 +11,16 @@ class Skill(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Industry(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    logo = models.ImageField(upload_to='industry_logo/', null=True, blank=True)
+    
+
+    def __str__(self):
+        return self.name    
+
 
 
 class Profile(models.Model):
@@ -26,7 +37,7 @@ class Profile(models.Model):
     headline = models.CharField(max_length=255,null=True, blank=True)  
     summary = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
-    industry = models.CharField(max_length=255, blank=True, null=True)
+    industry = models.ForeignKey(Industry, on_delete=models.CASCADE, null=True, blank=True)
     website = models.URLField(blank=True, null=True)
     skill = models.ManyToManyField(Skill)
     

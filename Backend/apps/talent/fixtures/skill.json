@@ -1,0 +1,11 @@
+[{"model": "talent.skill", "pk": 1, "fields": {"name": "Python"}},
+ {"model": "talent.skill", "pk": 2, "fields": {"name": "Django"}},
+ {"model": "talent.skill", "pk": 3, "fields": {"name": "C"}},
+ {"model": "talent.skill", "pk": 4, "fields": {"name": "Java"}}, 
+ {"model": "talent.skill", "pk": 5, "fields": {"name": "JS"}}, 
+ {"model": "talent.skill", "pk": 6, "fields": {"name": "DRF"}},
+ {"model": "talent.skill", "pk": 7, "fields": {"name": "API  "}}, 
+ {"model": "talent.skill", "pk": 8, "fields": {"name": "HTML"}},
+ {"model": "talent.skill", "pk": 9, "fields": {"name": "CSS"}}, 
+ {"model": "talent.skill", "pk": 10, "fields": {"name": "AJAX"}}
+]

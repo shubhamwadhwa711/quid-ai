@@ -52,6 +52,18 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return Project.objects.filter(profile_id=profile_id , profile__status="APPROVED")         
 
 
+class IndustryViewSet(viewsets.ModelViewSet):
+    queryset = Industry.objects.all()
+    serializer_class = IndustrySerializer
+
+
+# class SkillViewSet(viewsets.ModelViewSet):
+#     queryset = Skill.objects.all()
+#     serializer_class = SkillSerializer
+
+
+
+
 class EnquiryViewSet(viewsets.ModelViewSet):
     queryset = Enquiry.objects.all()
     serializer_class = EnquirySerializer

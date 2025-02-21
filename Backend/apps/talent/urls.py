@@ -12,6 +12,8 @@ router.register(r'certification',CertificationViewSet, basename='certification')
 router.register(r'project',ProjectViewSet, basename='project')
 router.register(r'enquiry',EnquiryViewSet)
 router.register(r'profile-all-enquiry',ProfileEnquiry, basename='profile-enquiry')
+router.register(r'industry',IndustryViewSet)
+# router.register(r'skill',SkillViewSet)
 
 # Nested router for project under profile, education, experience, certification
 profile_project_router = NestedDefaultRouter(router, r'profile',lookup='profile')

@@ -1,0 +1,50 @@
+[
+
+    {
+        "model": "talent.profile",
+        "pk": 1,
+        "fields": {
+            "status": "APPROVED",
+            "auto_approve_inquiry": false,
+            "is_featured": false,
+            "user": 2,
+            "image": "profile_pics/ola.jpg",
+            "headline": "I am a HR.",
+            "summary": "",
+            "location": "M.P",
+            "industry": null,
+            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "phone": "9090909090",
+            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "skill": [
+                1
+            ]
+        }
+    },
+
+
+    {
+        "model": "talent.profile",
+        "pk": 2,
+        "fields": {
+            "status": "APPROVED",
+            "auto_approve_inquiry": false,
+            "is_featured": false,
+            "user": 3,
+            "image": "profile_pics/ola.jpg",
+            "headline": "I am a Software Engineer.",
+            "summary": "",
+            "location": "M.P",
+            "industry": null,
+            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "phone": "9090909090",
+            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "skill": [
+                1
+            ]
+        }
+    }
+
+
+
+]
