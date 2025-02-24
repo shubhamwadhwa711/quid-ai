@@ -1,0 +1,47 @@
+[
+    {
+    "model": "talent.client",
+    "pk": 1,
+    "fields": {
+        "profile": 1,
+        "name": "Google"
+    }
+},
+
+{
+    "model": "talent.client",
+    "pk": 2,
+    "fields": {
+        "profile": 2,
+        "name": "IBM"
+    }
+},
+
+{
+    "model": "talent.client",
+    "pk": 3,
+    "fields": {
+        "profile": 3,
+        "name": "Shubpy"
+    }
+},
+
+{
+    "model": "talent.client",
+    "pk": 4,
+    "fields": {
+        "profile": 4,
+        "name": "CGI"
+    }
+},
+
+{
+    "model": "talent.client",
+    "pk": 5,
+    "fields": {
+        "profile": 5,
+        "name": "Facebook"
+    }
+}
+
+]

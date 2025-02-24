@@ -1,0 +1,52 @@
+[
+    {
+    "model": "insight.associatedcompany",
+    "pk": 1,
+    "fields": {
+        "category": 1,
+        "name": "IBM",
+        "logo": "logo/download_2.jpeg"
+    }
+},
+
+{
+    "model": "insight.associatedcompany",
+    "pk": 2,
+    "fields": {
+        "category": 2,
+        "name": "Unacademy",
+        "logo": "logo/download_2.jpeg"
+    }
+},
+
+{
+    "model": "insight.associatedcompany",
+    "pk": 3,
+    "fields": {
+        "category": 3,
+        "name": "Shubpy",
+        "logo": "logo/download_2.jpeg"
+    }
+},
+
+{
+    "model": "insight.associatedcompany",
+    "pk": 4,
+    "fields": {
+        "category": 4,
+        "name": "Lohiya",
+        "logo": "logo/download_2.jpeg"
+    }
+},
+
+{
+    "model": "insight.associatedcompany",
+    "pk": 5,
+    "fields": {
+        "category": 5,
+        "name": "Lilavati",
+        "logo": "logo/download_2.jpeg"
+    }
+}
+
+]

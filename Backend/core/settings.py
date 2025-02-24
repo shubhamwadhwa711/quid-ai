@@ -47,9 +47,39 @@ INSTALLED_APPS = [
     'rest_framework',
     'apps.talent',
     'apps.insight',
+    'apps.user',
+    # alluth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+     #social account providers
+    'allauth.socialaccount.providers.linkedin_oauth2',
     # 'django_ckeditor_5',
     'drf_yasg',
 ]
+
+
+
+
+
+# Linkedin Authentication Setting
+
+SOCIALACCOUNT_PROVIDERS = {
+    "linkedin_oauth2": {
+        "APP": {
+            "client_id": "86r1likhjcc2qo",
+            "secret": "WPL_AP1.ng9uOjDz2wEksrNJ.kXimMA==",
+            "key": "",
+        },
+         'SCOPE': [
+            'profile',
+            'email',
+        ],
+        "PROFILE_FIELDS": ["id", "first-name", "last-name", "email-address"],
+    }
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -63,6 +93,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -70,7 +101,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,"apps")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -166,7 +197,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 
 
@@ -282,3 +312,16 @@ EMAIL_HOST_USER =os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # DEFAULT_FROM_EMAIL=os.getenv('DEFAULT_FROM_EMAIL')
 
+
+
+AUTHENTICATION_BACKENDS = (
+"allauth.account.auth_backends.AuthenticationBackend",
+)
+
+SITE_ID = 2
+
+# allout login settings
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+LOGIN_REDIRECT_URL = "home"
+ACCOUNT_LOGOUT_ON_GET = True
