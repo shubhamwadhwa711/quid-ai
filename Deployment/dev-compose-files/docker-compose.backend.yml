@@ -6,7 +6,7 @@ services:
       context: ../Backend
       dockerfile: Dockerfile
     container_name: backend-qa
-    command: sh -c "ls && python manage.py migrate && python manage.py runserver"
+    command: sh -c "ls && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ../Backend:/app
     ports:
