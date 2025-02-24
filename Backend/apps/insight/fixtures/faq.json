@@ -1,0 +1,44 @@
+[
+
+    {
+        "model": "insight.faq",
+        "pk": 1,
+        "fields": {
+            "question": "How can i pay to the AI experts.",
+            "answer": "You can pay using different methods.",
+            "created_at": "2025-02-19T12:29:32.198Z",
+            "created_by": 1,
+            "updated_at": "2025-02-19T12:29:32.198Z",
+            "updated_by": 1
+        }
+    },
+
+    {
+        "model": "insight.faq",
+        "pk": 2,
+        "fields": {
+            "question": "How can i use this platform.",
+            "answer": "You can use this platform in 3easy step.",
+            "created_at": "2025-02-19T12:29:32.198Z",
+            "created_by": 1,
+            "updated_at": "2025-02-19T12:29:32.198Z",
+            "updated_by": 1
+        }
+    },
+
+
+    {
+        "model": "insight.faq",
+        "pk": 3,
+        "fields": {
+            "question": "How can i hire someone.",
+            "answer": "You can hire someone by making an easy enquiry.",
+            "created_at": "2025-02-19T12:29:32.198Z",
+            "created_by": 1,
+            "updated_at": "2025-02-19T12:29:32.198Z",
+            "updated_by": 1
+        }
+    }
+
+    
+]

@@ -1,0 +1,33 @@
+[
+    {
+        "model": "insight.insightscategory",
+        "pk": 1,
+        "fields": {
+            "title": "Blog"
+        }
+    },
+
+    {
+        "model": "insight.insightscategory",
+        "pk": 2,
+        "fields": {
+            "title": "Interview"
+        }
+    },
+
+    {
+        "model": "insight.insightscategory",
+        "pk": 3,
+        "fields": {
+            "title": "Video"
+        }
+    },
+
+    {
+        "model": "insight.insightscategory",
+        "pk": 4,
+        "fields": {
+            "title": "Q&A"
+        }
+    }
+]

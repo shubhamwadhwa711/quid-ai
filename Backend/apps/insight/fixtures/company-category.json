@@ -1,0 +1,42 @@
+[
+    {
+    "model": "insight.companycategory",
+    "pk": 1,
+    "fields": {
+        "title": "Tech"
+    }
+},
+
+{
+    "model": "insight.companycategory",
+    "pk": 2,
+    "fields": {
+        "title": "Ed-Tech"
+    }
+},
+
+{
+    "model": "insight.companycategory",
+    "pk": 3,
+    "fields": {
+        "title": "Finance"
+    }
+},
+
+{
+    "model": "insight.companycategory",
+    "pk": 4,
+    "fields": {
+        "title": "Medical"
+    }
+},
+
+{
+    "model": "insight.companycategory",
+    "pk": 5,
+    "fields": {
+        "title": "Healthcare"
+    }
+}
+
+]
