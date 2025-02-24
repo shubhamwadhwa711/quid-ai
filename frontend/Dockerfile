@@ -1,5 +1,5 @@
 # Stage 1: Build the Next.js app
-FROM node:16-alpine
+FROM node:23-alpine
 WORKDIR /app
 
 # Copy the rest of the application code
