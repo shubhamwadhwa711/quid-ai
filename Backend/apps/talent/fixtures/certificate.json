@@ -1,0 +1,57 @@
+[
+    {
+    "model": "talent.certificates",
+    "pk": 1,
+    "fields": {
+        "profile": 1,
+        "name": "django",
+        "issuing_organization": "Udemy",
+        "issue_date": "2025-02-03"
+    }
+},
+
+{
+    "model": "talent.certificates",
+    "pk": 2,
+    "fields": {
+        "profile": 2,
+        "name": "Python",
+        "issuing_organization": "Udemy",
+        "issue_date": "2025-02-03"
+    }
+},
+
+{
+    "model": "talent.certificates",
+    "pk": 3,
+    "fields": {
+        "profile": 3,
+        "name": "Drf",
+        "issuing_organization": "Udemy",
+        "issue_date": "2025-02-03"
+    }
+},
+
+{
+    "model": "talent.certificates",
+    "pk": 4,
+    "fields": {
+        "profile": 4,
+        "name": "React",
+        "issuing_organization": "Udemy",
+        "issue_date": "2025-02-03"
+    }
+},
+
+{
+    "model": "talent.certificates",
+    "pk": 5,
+    "fields": {
+        "profile": 5,
+        "name": "M.L",
+        "issuing_organization": "Udemy",
+        "issue_date": "2025-02-03"
+    }
+}
+
+]

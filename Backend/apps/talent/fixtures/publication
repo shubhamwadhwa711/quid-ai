@@ -1,0 +1,47 @@
+ [
+    {
+        "model": "talent.publication",
+        "pk": 1,
+        "fields": {
+            "profile": 1,
+            "title": "R.S"
+        }
+    },
+
+
+    {
+        "model": "talent.publication",
+        "pk": 2,
+        "fields": {
+            "profile": 2,
+            "title": "P.S"
+        }
+    },
+
+    {
+        "model": "talent.publication",
+        "pk": 3,
+        "fields": {
+            "profile": 3,
+            "title": "J.S"
+        }
+    },
+
+    {
+        "model": "talent.publication",
+        "pk": 4,
+        "fields": {
+            "profile": 4,
+            "title": "HC.S"
+        }
+    },
+
+    {
+        "model": "talent.publication",
+        "pk": 5,
+        "fields": {
+            "profile": 5,
+            "title": "PK.S"
+        }
+    }
+]
