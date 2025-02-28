@@ -31,7 +31,21 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ENVIRONMENT = 'DEV'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1',]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    
+]
+
+CORS_ORIGIN_WHITELIST = (
+    
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    
+)
+
 
 
 # Application definition
@@ -180,7 +194,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 
