@@ -1,10 +1,12 @@
-# Stage 1: Build the Next.js app
-FROM node:23-alpine
+FROM node:22-alpine
+
 WORKDIR /app
 
-# Copy the rest of the application code
+COPY package*.json ./
+
+RUN npm install
+
 COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]

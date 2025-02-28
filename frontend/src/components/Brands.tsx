@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
-const brandData = {
+type Brand = {
+  name: string;
+  url: string;
+};
+
+type BrandData = {
+  [key: string]: Brand[];
+};
+const brandData: BrandData = {
   Telco: [
     {
       name: "Microsoft",
@@ -72,7 +80,7 @@ const Brands = () => {
       </div>
 
       {/* Categories */}
-      <div className="m-4 pb-2 flex gap-4 overflow-x-auto ">
+      <div className="m-4 pb-2 flex gap-4 overflow-x-auto hide-scrollbar">
         {categories.map((category) => (
           <Button
             key={category}
