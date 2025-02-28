@@ -8,10 +8,19 @@ cd "$SCRIPT_DIR/Deployment"
 
 echo "Building and starting backend and frontend services..."
 
-docker-compose \
-  -f docker-compose.yml \
-  -f dev-compose-files/docker-compose.backend.yml \
-  -f dev-compose-files/docker-compose.frontend.yml \
-  up --build -d
+if [ "$#" -eq 0 ]; then
+    docker-compose \
+      -f docker-compose.yml \
+      -f dev-compose-files/docker-compose.backend.yml \
+      -f dev-compose-files/docker-compose.frontend.yml \
+      up --build -d
+    echo "Deployment complete. Containers are up and running."
+else
+    docker-compose \
+      -f docker-compose.yml \
+      -f dev-compose-files/docker-compose.backend.yml \
+      -f dev-compose-files/docker-compose.frontend.yml \
+      "$@"
+fi
 
-echo "Deployment complete. Containers are up and running."
+echo "Command executed."

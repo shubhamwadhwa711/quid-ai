@@ -1,7 +1,17 @@
 import { useState } from "react";
 import { Card, CardDescription, CardTitle } from "./ui/card";
+type Insight = {
+  id: number;
+  title: string;
+  type: string;
+  image: string;
+};
+
+type InsightsData = {
+  [key: string]: Insight[];
+};
 const insightsCategories = ["All", "Insights", "Interviews", "Videos", "Q&A"];
-const insightsData = {
+const insightsData: InsightsData = {
   All: [
     {
       id: 1,
@@ -18,7 +28,7 @@ const insightsData = {
         "https://s3-alpha-sig.figma.com/img/eeab/5fbd/9abbccd9c8c0247a3eaca614d16f590b?Expires=1740960000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=GxJLmPlRyHsKZUZm6LhnuMTTYP7opTogesYOvLhv7JJLM6iwPH-MVthhAUjhtD4yh0Mq-lKzQk38t3cL8WxON~FAJBIdKsk8aCvETo9QFe-8StZr5TL44cB3gxM3ae07XogupliwC9D4E51zMcMv~rK3NpDqmfpy38cOD6iWiirHFpg2vr2oq2d9SRynh8zUPvg7vt~G7S70aigZwYCjjrhzD~UYs130mlaU0~kt4MapmSFLPIjdAGVIzdbsa8yKKbtt3xPlprpoTTswTkdI6y2I5rLnJV1YWtK8A24BN6v9H7mdNCsULbFYc4M3mA~eoqvOr2-g-EOwrZrNNZbhjw__",
     },
     {
-      id: 2,
+      id: 3,
       title: "Getting work done has never been easier",
       type: "CASE STUDY",
       image:
@@ -27,10 +37,14 @@ const insightsData = {
     // { id: 3, title: "Tech Innovations", type: "Videos" },
     // { id: 4, title: "Startup Q&A", type: "Q&A" },
   ],
-  Insights: [{ id: 1, title: "Market Trends 2024", type: "Insights" }],
-  Interviews: [{ id: 2, title: "Exclusive CEO Interview", type: "Interviews" }],
-  Videos: [{ id: 3, title: "Tech Innovations", type: "Videos" }],
-  "Q&A": [{ id: 4, title: "Startup Q&A", type: "Q&A" }],
+  Insights: [
+    { id: 1, title: "Market Trends 2024", type: "Insights", image: "" },
+  ],
+  Interviews: [
+    { id: 1, title: "Exclusive CEO Interview", type: "Interviews", image: "" },
+  ],
+  Videos: [{ id: 1, title: "Tech Innovations", type: "Videos", image: "" }],
+  "Q&A": [{ id: 1, title: "Startup Q&A", type: "Q&A", image: "" }],
 };
 
 const getTypeColor = (type: string) => {
@@ -56,7 +70,7 @@ const Insights = () => {
 
       <div className="p-4 space-y-8">
         {/* Categories Section */}
-        <div className="mb-4 pb-2 flex gap-4 overflow-x-auto scrollbar-none">
+        <div className="mb-4 pb-2 flex gap-4 overflow-x-auto hide-scrollbar">
           {insightsCategories.map((insights) => (
             <button
               key={insights}
@@ -75,7 +89,7 @@ const Insights = () => {
         {/* Cards Section */}
         <div className="w-full">
           <div className="relative">
-            <div className="flex overflow-x-auto scrollbar-none">
+            <div className="flex overflow-x-auto hide-scrollbar">
               <div className="flex gap-4 min-w-max px-1 pb-4">
                 {insightsData[selectedInsights].map((insight) => (
                   <Card
