@@ -46,8 +46,22 @@ CORS_ORIGIN_WHITELIST = (
     
 )
 
-
-
+CORS_ALLOW_HEADERS = [
+    "ngrok-skip-browser-warning",
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "access-control-allow-origin",
+    "Authorization",
+    
+]
+ 
 # Application definition
 
 INSTALLED_APPS = [
