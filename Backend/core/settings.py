@@ -31,7 +31,21 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ENVIRONMENT = 'DEV'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1',]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    
+]
+
+CORS_ORIGIN_WHITELIST = (
+    
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    
+)
+
 
 
 # Application definition
@@ -48,41 +62,27 @@ INSTALLED_APPS = [
     'apps.talent',
     'apps.insight',
     'apps.user',
-    # alluth
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-     #social account providers
-    'allauth.socialaccount.providers.linkedin_oauth2',
-    # 'django_ckeditor_5',
+   # 'django_ckeditor_5',
     'drf_yasg',
+    'oauth2_provider',
+    'social_django',
+    'drf_social_oauth2',
+
 ]
 
 
 
 
 
-# Linkedin Authentication Setting
-
-SOCIALACCOUNT_PROVIDERS = {
-    "linkedin_oauth2": {
-        "APP": {
-            "client_id": "86r1likhjcc2qo",
-            "secret": "WPL_AP1.ng9uOjDz2wEksrNJ.kXimMA==",
-            "key": "",
-        },
-         'SCOPE': [
-            'profile',
-            'email',
-        ],
-        "PROFILE_FIELDS": ["id", "first-name", "last-name", "email-address"],
-    }
-}
 
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  
+        'drf_social_oauth2.authentication.SocialAuthentication',
+    ),
 }
 
 MIDDLEWARE = [
@@ -93,7 +93,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -109,6 +109,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -180,7 +182,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 
@@ -315,13 +317,16 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 
 AUTHENTICATION_BACKENDS = (
-"allauth.account.auth_backends.AuthenticationBackend",
+     # Linked OpenID
+   'drf_social_oauth2.backends.LinkedInOpenIDUserInfo',
+   'drf_social_oauth2.backends.DjangoOAuth2',
+   'django.contrib.auth.backends.ModelBackend',
 )
 
-SITE_ID = 2
+DRFSO2_PROPRIETARY_BACKEND_NAME = ""
+DRFSO2_URL_NAMESPACE = ""
+ACTIVATE_JWT = ""
 
-# allout login settings
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
-LOGIN_REDIRECT_URL = "home"
-ACCOUNT_LOGOUT_ON_GET = True
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY = '86r1likhjcc2qo'
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET = 'WPL_AP1.JrR1Bj2R52WqAzbG.rJoiiA=='
