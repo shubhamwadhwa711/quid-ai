@@ -19,7 +19,7 @@ class Command(BaseCommand):
         call_command('loaddata', 'client.json')
         call_command('loaddata', 'education.json')
         call_command('loaddata', 'industry.json')
-        call_command('loaddata', 'experience.json.json')
+        call_command('loaddata', 'experience.json')
         call_command('loaddata', 'publication.json')
         call_command('loaddata', 'project.json')
         call_command('loaddata', 'insight-category.json')
