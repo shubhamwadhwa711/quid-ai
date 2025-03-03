@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Provider } from "react-redux";
-import { store } from "@/store";
+import { store } from "@/store/store";
 import { BottomNav } from "@/components/bottom-nav";
 import Navbar from "@/components/navbar";
 import "@/styles/globals.css";
