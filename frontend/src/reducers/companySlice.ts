@@ -27,7 +27,7 @@ export const fetchCompanies = createAsyncThunk(
       try {
         console.log("Fetching companies...");
         const response = await axios.get("http://localhost:8000/all-company");
-        console.log("Companies fetched:", response.data);git 
+        console.log("Companies fetched:", response.data); 
         return response.data; // Axios automatically parses JSON
       } catch (error: any) {
         return rejectWithValue(error.response?.data?.message || "Failed to fetch companies");
