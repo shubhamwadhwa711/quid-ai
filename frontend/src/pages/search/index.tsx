@@ -483,9 +483,9 @@ const Search = () => {
         />
       </div> */}
       <div className="h-screen w-full overflow-x-auto hide-scrollbar px-4">
-        <div className="mx-4">
-          <div className="rounded-full bg-orange-500"></div>
-          <h1 className="text-bold text-xl">Top AI Talents</h1>
+        <div className="mx-4 flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+          <h1 className="font-bold text-xl">Top AI Talents</h1>
         </div>
         <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
           {talentData.map((talent) => (
