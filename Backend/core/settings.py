@@ -57,10 +57,12 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    "access-control-allow-origin",
+    # "access-control-allow-origin",
     "Authorization",
     
 ]
+
+CORS_ORIGIN_ALLOW_ALL = False
  
 # Application definition
 
@@ -85,6 +87,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.linkedin_oauth2',
     # 'django_ckeditor_5',
     'drf_yasg',
+    'corsheaders',
 ]
 
 
@@ -105,6 +108,20 @@ SOCIALACCOUNT_PROVIDERS = {
             'email',
         ],
         "PROFILE_FIELDS": ["id", "first-name", "last-name", "email-address"],
+    },
+    'linkedin_oauth2': {
+        'SCOPE': [
+            'r_liteprofile',
+            'r_emailaddress',
+        ],
+        'PROFILE_FIELDS': [
+            'id',
+            'firstName',
+            'lastName',
+            'profilePicture',
+            'emailAddress',
+        ],
+        'VERIFIED_EMAIL': True,
     }
 }
 
@@ -115,6 +132,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -129,7 +147,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"apps")],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -208,7 +228,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    '/home/japjeet/Documents/quid-ai/Backend/static',
 ]
 
 
@@ -342,14 +362,56 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 
 
-AUTHENTICATION_BACKENDS = (
-"allauth.account.auth_backends.AuthenticationBackend",
-)
+AUTHENTICATION_BACKENDS = [
+    # Default Django auth
+    'django.contrib.auth.backends.ModelBackend',
+    # Allauth
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
-SITE_ID = 2
+SITE_ID = 1
 
-# allout login settings
+# Django-allauth configuration
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_USERNAME_REQUIRED = False
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
-LOGIN_REDIRECT_URL = "home"
-ACCOUNT_LOGOUT_ON_GET = True
+# Disable signup form confusion
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+ACCOUNT_SESSION_REMEMBER = True
+
+# Social settings
+SOCIALACCOUNT_AUTO_SIGNUP = True           # Auto-create user on successful OAuth
+SOCIALACCOUNT_QUERY_EMAIL = True           # Attempt to get email from LinkedIn
+SOCIALACCOUNT_EMAIL_REQUIRED = False
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_STORE_TOKENS = True          # Save OAuth tokens to the DB
+
+# Redirects
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# LinkedIn OAuth2 provider settings
+SOCIALACCOUNT_PROVIDERS = {
+    'linkedin_oauth2': {
+        'SCOPE': ['r_liteprofile', 'r_emailaddress'],
+        'PROFILE_FIELDS': [
+            'id',
+            'firstName',
+            'lastName',
+            'profilePicture',
+            'emailAddress',
+        ],
+        'VERIFIED_EMAIL': True,
+    }
+}
+
+# Additional allauth settings for social accounts
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_STORE_TOKENS = True
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Set to False if you want to require additional steps
+
+# Update deprecated setting
+ACCOUNT_LOGIN_METHODS = {'email'}
