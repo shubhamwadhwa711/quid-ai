@@ -1,17 +1,13 @@
 "use client";
-
-import { cn } from "@/lib/utils";
 import {
   Home,
   Search,
-  BookOpen,
-  Linkedin,
   Menu,
   LayoutPanelTop,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import { cn } from "@/lib/utils";
 export const menuItems = [
   { icon: Home, label: "Home", href: "/" },
   { icon: Search, label: "Search", href: "/search" },
@@ -36,7 +32,7 @@ export function BottomNav() {
               key={itemHref}
               href={itemHref}
               className={cn(
-                "flex flex-col items-center justify-center px-3 border-t-2 border-transparent transition-colors duration-300",
+                "flex flex-col items-center justify-center px-3 transition-colors duration-300",
                 isActive ? "border-primary text-white" : "text-white"
               )}
             >

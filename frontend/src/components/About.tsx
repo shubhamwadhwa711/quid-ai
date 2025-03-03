@@ -29,7 +29,7 @@ const About = () => {
       </p>
       <div>
         {about.map((about) => (
-          <div className="flex items-center space-x-10">
+          <div key={about.id} className="flex items-center space-x-10">
             <Check className="h-8 w-8  text-[#F8984C]" />
             <div key={about.id} className="text-lg">
               {about.label}
