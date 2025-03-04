@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { menuItems } from "./bottom-nav";
 import {
@@ -94,15 +95,16 @@ const Navbar = () => {
           </div>
 
           {/* Drawer for the Menu */}
-          <div className="hidden sm:flex ">
+          <div className="hidden sm:flex">
             {/* Login/Signup Buttons */}
             <div className="hidden sm:flex items-center gap-2">
-              <Link
-                href="/login"
+              <Button
+                variant="none"
+                onClick={() => signIn("linkedin")}
                 className="text-sm text-white hover:text-gray-200"
               >
                 Login
-              </Link>
+              </Button>
               <span className="text-white">|</span>
               <Link
                 href="/signup"
