@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'apps.talent',
     'apps.insight',
     'apps.user',
-   # 'django_ckeditor_5',
+    'django_ckeditor_5',
     'drf_yasg',
     'oauth2_provider',
     'social_django',
@@ -322,24 +322,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Example for Gmail
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-# EMAIL_HOST_USER='mahimaverma3112@gmail.com'
-# EMAIL_HOST_PASSWORD='hmld jfqd vhuf ebuy'
 EMAIL_HOST_USER =os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-# DEFAULT_FROM_EMAIL=os.getenv('DEFAULT_FROM_EMAIL')
 
 
 
 AUTHENTICATION_BACKENDS = (
-     # Linked OpenID
+ 
    'drf_social_oauth2.backends.LinkedInOpenIDUserInfo',
    'drf_social_oauth2.backends.DjangoOAuth2',
    'django.contrib.auth.backends.ModelBackend',
 )
 
-DRFSO2_PROPRIETARY_BACKEND_NAME = ""
-DRFSO2_URL_NAMESPACE = ""
-ACTIVATE_JWT = ""
+# DRFSO2_PROPRIETARY_BACKEND_NAME = ""
+# DRFSO2_URL_NAMESPACE = ""
+# ACTIVATE_JWT = ""
 
 
 SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY = '86r1likhjcc2qo'
