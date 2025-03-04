@@ -22,18 +22,19 @@ const initialState: CompanyState = {
 
 // Async Thunk to fetch company data
 export const fetchCompanies = createAsyncThunk(
-    "company/fetchCompanies",
-    async (_, { rejectWithValue }) => {
-      try {
-        console.log("Fetching companies...");
-        const response = await axios.get("http://localhost:8000/all-company");
-        console.log("Companies fetched:", response.data); 
-        return response.data; // Axios automatically parses JSON
-      } catch (error: any) {
-        return rejectWithValue(error.response?.data?.message || "Failed to fetch companies");
-      }
+  "company/fetchCompanies",
+  async (_, { rejectWithValue }) => {
+    try {
+      console.log("Fetching companies...");
+      const response = await axios.get("/api/company"); 
+      console.log("Companies fetched:", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch companies");
     }
-  );
+  }
+);
+
 
 // Create the slice
 const companySlice = createSlice({
