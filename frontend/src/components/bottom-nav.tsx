@@ -3,8 +3,16 @@ import { Home, Search, Menu, LayoutPanelTop } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerClose } from "@/components/ui/drawer";
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerClose,
+} from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 
 export const menuItems = [
   { icon: Home, label: "Home", href: "/" },
@@ -51,12 +59,16 @@ export function BottomNav() {
               <DrawerTitle>Menu</DrawerTitle>
             </DrawerHeader>
             <ul className="p-4 space-y-2">
-              <li><a href="/settings" className="block text-white">Settings</a></li>
-              <li><a href="/profile" className="block text-white">Profile</a></li>
-              <li><a href="/logout" className="block text-white">Logout</a></li>
+              {/* <Button variant="none">Settings</Button> */}
+              {/* <Button variant="none">Profile</Button> */}
+              <Button variant="none" onClick={() => signIn("linkedin")}>
+                SignIn | SignUp
+              </Button>
             </ul>
             <DrawerClose>
-              <Button variant="outline" className="w-full mt-4">Close</Button>
+              <Button variant="outline" className="w-full mt-4">
+                Close
+              </Button>
             </DrawerClose>
           </DrawerContent>
         </Drawer>
