@@ -334,9 +334,6 @@ AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
 )
 
-# DRFSO2_PROPRIETARY_BACKEND_NAME = ""
-# DRFSO2_URL_NAMESPACE = ""
-# ACTIVATE_JWT = ""
 
 
 SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY = '86r1likhjcc2qo'
