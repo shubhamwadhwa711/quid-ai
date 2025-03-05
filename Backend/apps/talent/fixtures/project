@@ -1,0 +1,68 @@
+ [
+    {
+        "model": "talent.project",
+        "pk": 1,
+        "fields": {
+            "profile": 1,
+            "title": "Anime Recommendation System",
+            "description": "I have build Anime Recommendation System.",
+            "url": "https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+            "start_date": "2025-02-04",
+            "end_date": "2025-02-28"
+        }
+    },
+
+    {
+        "model": "talent.project",
+        "pk": 1,
+        "fields": {
+            "profile": 2,
+            "title": "Movie Recommendation System",
+            "description": "I have build Movie Recommendation System.",
+            "url": "https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+            "start_date": "2025-02-04",
+            "end_date": "2025-02-28"
+        }
+    },
+
+
+    {
+        "model": "talent.project",
+        "pk": 1,
+        "fields": {
+            "profile": 2,
+            "title": "Hospital Management System",
+            "description": "I have build Hospital Management System.",
+            "url": "https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+            "start_date": "2025-02-04",
+            "end_date": "2025-02-28"
+        }
+    },
+
+    {
+        "model": "talent.project",
+        "pk": 1,
+        "fields": {
+            "profile": 2,
+            "title": "Library Management System",
+            "description": "I have build Library Recommendation System.",
+            "url": "https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+            "start_date": "2025-02-04",
+            "end_date": "2025-02-28"
+        }
+    },
+
+    {
+        "model": "talent.project",
+        "pk": 1,
+        "fields": {
+            "profile": 2,
+            "title": "Dancing Robot",
+            "description": "I have build Dancing Robot.",
+            "url": "https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+            "start_date": "2025-02-04",
+            "end_date": "2025-02-28"
+        }
+    }
+
+]
