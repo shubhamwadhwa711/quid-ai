@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchCompanies } from "@/reducers/companySlice";
 import { Button } from "./ui/button";
 type Brand = {
   name: string;
@@ -71,7 +73,15 @@ const brandData: BrandData = {
 const categories = Object.keys(brandData);
 const Brands = () => {
   const [selectedCategory, setSelectedCategory] = useState("Telco");
-
+  const dispatch = useAppDispatch();
+  const { companies, loading, error } = useAppSelector(
+    (state) => state.company
+  );
+  useEffect(() => {
+    dispatch(fetchCompanies());
+  }, [dispatch]);
+  console.error("error", error);
+  console.log("companies", companies);
   return (
     <div className="relative border h-[400px] rounded-xl p-4">
       {/* Title */}

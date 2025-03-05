@@ -1,8 +1,6 @@
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -38,13 +36,13 @@ const Hero = () => {
         <h2 className="text-2xl md:text-3xl font-medium ">
           <span className="font-bold">AI Expertise</span> On Demand
         </h2>
-        <p className="text-lg max-w-2xl mx-auto">
+        <p className="text-lg max-w-2xl  mx-auto">
           From strategy to implementation, we provide access to the brightest AI
           talents worldwide.
         </p>
       </div>
 
-      <div className="w-full  max-w-3xl mx-auto">
+      <div className="w-full mt-10 max-w-3xl mx-auto">
         <div className="grid grid-cols-2 gap-4">
           {heros.map((hero, index) => (
             <Card
