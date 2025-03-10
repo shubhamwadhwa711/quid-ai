@@ -2,9 +2,6 @@ from rest_framework import serializers
 from .models import *
 
 
-
-
-
 class CompanyCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CompanyCategory
@@ -16,24 +13,20 @@ class AssociatedCompanySerializer(serializers.ModelSerializer):
         model = AssociatedCompany
         fields = '__all__'
 
-
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testimonial
         exclude = ['created_by']     
-
 
 class InsightsCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = InsightsCategory
         fields = '__all__'                
 
-
 class InsightsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Insights
-        fields = '__all__'                        
-
+        exclude = ['text','updated_at','updated_by','created_by']                       
 
 class FaqSerializer(serializers.ModelSerializer):
     class Meta:
