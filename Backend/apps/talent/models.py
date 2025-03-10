@@ -2,26 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# Create your models here.
-
-
 class Skill(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     
-
     def __str__(self):
         return self.name
     
-
 class Industry(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     logo = models.ImageField(upload_to='industry_logo/', null=True, blank=True)
     
-
     def __str__(self):
         return self.name    
-
-
 
 class Profile(models.Model):
     STATUS = (
@@ -40,12 +32,9 @@ class Profile(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE, null=True, blank=True)
     website = models.URLField(blank=True, null=True)
     skill = models.ManyToManyField(Skill)
-    
-    # Contact Info
     phone = models.CharField(max_length=20, blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
 
-    
     def __str__(self):
         return self.user.username
 
@@ -73,14 +62,11 @@ class Education(models.Model):
     def __str__(self):
         return f"{self.degree} at {self.school}"
 
-
-
 class Certificates(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='certificates')
     name = models.CharField(max_length=255)
     issuing_organization = models.CharField(max_length=255)
     issue_date = models.DateField()
-    
     
     def __str__(self):
         return self.name
@@ -92,11 +78,9 @@ class Project(models.Model):
     url = models.URLField(blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
-
+    
     def __str__(self):
         return self.title
-
-
 
 class Publication(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='publication')
@@ -105,16 +89,12 @@ class Publication(models.Model):
     def __str__(self):
         return self.title  
 
-
-
 class Client(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name='client')
     name = models.CharField(max_length=80, null=True, blank=True )
 
     def __str__(self):
         return self.name   
-
-
 
 class Enquiry(models.Model):
     STATUS = (
@@ -131,6 +111,5 @@ class Enquiry(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     updated_by =models.ForeignKey(User, on_delete=models.CASCADE, related_name='enquiry_updated_by_user') 
     
-
     def __str__(self):
         return self.full_name   

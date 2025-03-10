@@ -1,6 +1,8 @@
 from django.urls import path, include
+
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested.routers import NestedDefaultRouter
+
 from .views import *
 
 router = DefaultRouter()
@@ -13,7 +15,6 @@ router.register(r'project',ProjectViewSet, basename='project')
 router.register(r'enquiry',EnquiryViewSet)
 router.register(r'profile-all-enquiry',ProfileEnquiry, basename='profile-enquiry')
 router.register(r'industry',IndustryViewSet)
-# router.register(r'skill',SkillViewSet)
 
 # Nested router for project under profile, education, experience, certification
 profile_project_router = NestedDefaultRouter(router, r'profile',lookup='profile')
@@ -23,15 +24,8 @@ profile_project_router.register(r'experience', ExperienceViewSet, basename='expe
 profile_project_router.register(r'certification', CertificationViewSet, basename='certification')
 profile_project_router.register(r'profile-all-enquiry',ProfileEnquiry, basename='profile-enquiry')
 
-
-
-
-
 urlpatterns = [
    
     path('', include(router.urls)),
     path('', include(profile_project_router.urls)),
-
-     
-    
 ]
