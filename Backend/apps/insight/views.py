@@ -51,7 +51,7 @@ class InsightsCategoryViewSet(viewsets.ModelViewSet):
     API view to list all insight-category.
     """
     permission_classes = [AllowAny]
-    queryset = Insights.objects.all()
+    queryset = InsightsCategory.objects.all()
     serializer_class = InsightsCategorySerializer
     http_method_names = ['get']
 
