@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  celery:
+    image: backend-qa-image:latest
+    container_name: celery-qa
+    command: sh -c "ls && celery -A core beat -l info"
+    volumes:
+      - ../Backend:/app
+    env_file:
+      - ../Backend/core/.env
+    networks:
+      - quid-ai-nw
