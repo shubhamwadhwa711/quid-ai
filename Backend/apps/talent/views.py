@@ -122,6 +122,14 @@ class ProfileEnquiry(viewsets.ModelViewSet):
         return Enquiry.objects.filter(profile_id=profile_id , status="APPROVED") 
     
 
+class ProfileRelatedViewSet(viewsets.ModelViewSet):
+    """
+    API view to list, create, delete and update all profile.
+    """
+    permission_classes = [AllowAny]
+    queryset = Profile.objects.filter(status="APPROVED")
+    serializer_class = ProfileRelatedSerializer
+    
 
 
 

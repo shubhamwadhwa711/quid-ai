@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only = True)
     class Meta:
         model = User
-        fields = ['username','email','first_name','last_name']
+        fields = ['id','username','email','first_name','last_name']
 
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,10 +14,10 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = '__all__'        
 
 class ProfileSerializer(serializers.ModelSerializer):
-    skill = SkillSerializer(many=True)
+    # skill = SkillSerializer(many=True)
     class Meta:
         model = Profile
-        exclude =['status','is_featured', 'auto_approve_inquiry'] 
+        exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
 
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,4 +50,20 @@ class EnquirySerializer(serializers.ModelSerializer):
         exclude =['status', 'updated_by','updated_at'] 
 
 
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = '__all__'
 
+
+
+class ProfileRelatedSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    skill = SkillSerializer(many=True, read_only=True)
+    education= EducationSerializer(many=True,read_only=True)
+    projects = ProjectSerializer(many=True,read_only=True)
+    client = ClientSerializer(many=True,read_only=True)
+    
+    class Meta:
+        model = Profile
+        exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 

@@ -8,6 +8,7 @@ from .views import *
 router = DefaultRouter()
 router.register(r'user', UserViewSet)
 router.register(r'profile', ProfileViewSet)
+router.register(r'profile-related', ProfileRelatedViewSet, basename='profile-related')
 router.register(r'education',EducationViewSet, basename='education')
 router.register(r'experience',ExperienceViewSet, basename='experience')
 router.register(r'certification',CertificationViewSet, basename='certification')
