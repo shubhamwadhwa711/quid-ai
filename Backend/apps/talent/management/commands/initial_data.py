@@ -14,11 +14,12 @@ class Command(BaseCommand):
     def load_fixtures(self):
 
         call_command('loaddata', 'user.json')
+        call_command('loaddata', 'skill.json')
+        call_command('loaddata', 'industry.json')
         call_command('loaddata', 'profile.json')
         call_command('loaddata', 'certificate.json')
         call_command('loaddata', 'client.json')
         call_command('loaddata', 'education.json')
-        call_command('loaddata', 'industry.json')
         call_command('loaddata', 'experience.json')
         call_command('loaddata', 'publication.json')
         call_command('loaddata', 'project.json')
@@ -28,4 +29,4 @@ class Command(BaseCommand):
         call_command('loaddata', 'associate-company.json')
         call_command('loaddata', 'faq.json')
         call_command('loaddata', 'testimonial.json')
-        call_command('loaddata', 'skill.json')
+        
