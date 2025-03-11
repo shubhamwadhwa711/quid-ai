@@ -13,6 +13,8 @@ import {
   Search as SearchIcon,
   Filter,
   X,
+  CheckCircle,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -26,6 +28,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const talentData = [
   {
@@ -318,12 +331,20 @@ const getAllLocations = () => {
 
 const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const [showConnectForm, setShowConnectForm] = useState(false);
+  const [selectedTalent, setSelectedTalent] = useState(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
     skills: [],
     location: "",
     specialization: "",
   });
-
+  const [connectForm, setConnectForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+    project: "",
+  });
   const handleFilterToggle = () => {
     setShowFilters(!showFilters);
   };
@@ -364,6 +385,28 @@ const Search = () => {
     });
   };
 
+  const handleConnectForm = (talent) => {
+    setSelectedTalent(talent);
+    setShowConnectForm(!showConnectForm);
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setConnectForm({
+      ...connectForm,
+      [name]: value,
+    });
+  };
+  const handleSubmitConnect = () => {
+    // Here you would typically handle the form submission to your backend
+    console.log("Form submitted:", connectForm);
+
+    // Show thank you message
+    setFormSubmitted(true);
+
+    // Optional: Reset form
+    setConnectForm({ name: "", email: "", message: "" });
+  };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="w-11/12 my-20 flex flex-col gap-4">
@@ -475,14 +518,14 @@ const Search = () => {
         )}
       </div>
 
-      {/* <div className="absolute top-40 left-50 w-full  flex justify-center">
+      {/* <div className="absolute top-10 left-50 w-full  flex justify-center">
         <img
           src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
           alt="Spiral Background"
           className="w-full h-full object-cover"
         />
       </div> */}
-      <div className="h-screen w-full overflow-x-auto hide-scrollbar px-4">
+      <div className=" w-full overflow-x-auto hide-scrollbar px-4">
         <div className="mx-4 flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-orange-500"></div>
           <h1 className="font-bold text-xl">Top AI Talents</h1>
@@ -526,7 +569,10 @@ const Search = () => {
               <CardFooter>
                 <div className="w-full flex -mt-2 flex-col">
                   <div className="flex justify-center items-center gap-4">
-                    <Button className="rounded-3xl px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2">
+                    <Button
+                      onClick={handleConnectForm}
+                      className="rounded-3xl px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
+                    >
                       Connect <MoveRight />
                     </Button>
                     <Button
@@ -561,6 +607,177 @@ const Search = () => {
             </Card>
           ))}
         </div>
+        <div className="mt-10 mb-20">
+          <div className="mx-4 flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+            <h1 className="font-bold text-xl">AI Talents from US</h1>
+          </div>
+          <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
+            {talentData.map((talent) => (
+              <Card
+                key={talent.id}
+                className="bg-white/10 h-96 w-80 border-none max-w-md relative text-white mt-20"
+              >
+                <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 z-10">
+                  <Avatar className="w-24 h-24 shadow-lg ">
+                    <AvatarImage
+                      src={talent.avatar}
+                      alt={talent.name}
+                      className="object-cover"
+                    />
+                  </Avatar>
+                </div>
+                <CardHeader className="mt-8 flex flex-col items-center">
+                  <CardTitle>{talent.name}</CardTitle>
+                  <CardDescription>{talent.location}</CardDescription>
+                  <p>{talent.role}</p>
+                </CardHeader>
+                <CardContent className="text-center">
+                  <div>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {Object.values(talent.skills)
+                        .flat()
+                        .map((skill, index) => (
+                          <Badge
+                            key={index}
+                            className="h-5 text-sm rounded-full bg-white/20 font-medium transition-all duration-300"
+                          >
+                            {skill}
+                          </Badge>
+                        ))}
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <div className="w-full flex -mt-2 flex-col">
+                    <div className="flex justify-center items-center gap-4">
+                      <Button className="rounded-3xl px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2">
+                        Connect <MoveRight />
+                      </Button>
+                      <Button
+                        className="rounded-full h-12 w-12 border flex items-center justify-center"
+                        onClick={() =>
+                          window.open(talent.socialLinks.linkedin, "_blank")
+                        }
+                      >
+                        <Linkedin />
+                      </Button>
+                    </div>
+                    <div className="flex items-center mt-2">
+                      <h3 className="text-sm ">Featured Clients</h3>
+                      <Separator orientation="vertical" className="h-4" />
+                      <div className="w-full overflow-x-auto hide-scrollbar">
+                        <div className="w-full relative">
+                          <div className="flex items-center">
+                            {talent.featuredClients.map((client, index) => (
+                              <img
+                                key={index}
+                                src={client.image}
+                                alt={client.name}
+                                className="h-8 w-20 object-contain inline-block ms-2"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+        <Dialog open={showConnectForm} onOpenChange={setShowConnectForm}>
+          <DialogContent className="sm:max-w-md bg-gradient-to-t  from-black  via-blue-950  to-black  border-white/20 text-white">
+            {!formSubmitted ? (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-xl text-center font-semibold">
+                    Connect Now
+                  </DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Send a message to start collaborating with this AI talent.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="grid gap-4">
+                  <Separator className="bg-white/20" />
+
+                  <div className="grid gap-4">
+                    <div>
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Your Name</Label>
+                        <Input
+                          id="name"
+                          name="name"
+                          value={connectForm.name}
+                          onChange={handleFormChange}
+                          className="bg-white/5 border-white/10 rounded-3xl focus:border-purple-500"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Your Email</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={connectForm.email}
+                        onChange={handleFormChange}
+                        className="bg-white/5 border-white/10 rounded-3xl focus:border-purple-500"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Message</Label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        value={connectForm.message}
+                        onChange={handleFormChange}
+                        placeholder="Describe your project or what you'd like to collaborate on..."
+                        className="bg-white/5 border-white/10 focus:border-purple-500 min-h-24"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <DialogFooter className="flex justify-center mt-4">
+                  <Button
+                    onClick={handleSubmitConnect}
+                    className="rounded-3xl px-8 py-3 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] w-full"
+                  >
+                    Send Request <MoveRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </DialogFooter>
+              </>
+            ) : (
+              // Thank you message after submission
+              <div className="py-8 flex flex-col items-center justify-center text-center">
+                <div className="relative flex justify-center items-center">
+                  <div className="h-16 w-16 flex justify-center items-center rounded-full bg-gradient-to-b from-[#7C2BD3] to-[#075AA8] relative z-10">
+                    <Check className="h-6 w-8 text-white" />
+                  </div>
+                  <div className="absolute h-24 w-24 rounded-full bg-[#7C2BD3]/30 z-0"></div>
+                  <div className="absolute h-32 w-32 rounded-full bg-[#7C2BD3]/20 z-[-1]"></div>
+                </div>
+
+                <DialogTitle className="text-xl font-semibold mb-2 mt-14">
+                  Thank You!
+                </DialogTitle>
+                <DialogDescription className="text-white max-w-xs mx-auto">
+                  Your message has been sent successfully. <br />
+                  AI expert will get back to you soon.
+                </DialogDescription>
+                <DialogFooter className="mt-4">
+                  <Button className="rounded-3xl px-8 py-3 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] w-full">
+                    Continue Searching <MoveRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </DialogFooter>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
