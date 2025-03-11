@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Card, CardDescription, CardTitle } from "./ui/card";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchInsightCategory } from "@/reducers/insights/category/insightscategorySlice";
+import { useEffect } from "react";
 type Insight = {
   id: number;
   title: string;
@@ -59,7 +62,17 @@ const getTypeColor = (type: string) => {
 };
 const Insights = () => {
   const [selectedInsights, setSelectedInsights] = useState("All");
+  const dispatch = useAppDispatch();
+  const { insightsCategory, loading, error } = useAppSelector(
+    (state) => state.insightsCategory
+  );
+  const {insights, loading: insightsLoading, error: insightsError} = useAppSelector((state) => state.insights);
+  useEffect(() => {
+    dispatch(fetchInsightCategory());
+  }, [dispatch]);
 
+  console.log("insightsCategory", insightsCategory);
+  console.log("insights", insights);
   return (
     <div>
       <div>
@@ -71,17 +84,17 @@ const Insights = () => {
       <div className="p-4 space-y-8">
         {/* Categories Section */}
         <div className="mb-4 pb-2 flex gap-4 overflow-x-auto hide-scrollbar">
-          {insightsCategories.map((insights) => (
+          {insightsCategory.map((insight) => (
             <button
-              key={insights}
+              key={insight.id}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-all backdrop-blur-md flex-shrink-0 ${
-                selectedInsights === insights
+                selectedInsights === insight.title
                   ? "bg-[#425BFF] text-white"
                   : "bg-white/30"
               }`}
-              onClick={() => setSelectedInsights(insights)}
+              onClick={() => setSelectedInsights(insight.title)}
             >
-              {insights}
+              {insight.title}
             </button>
           ))}
         </div>

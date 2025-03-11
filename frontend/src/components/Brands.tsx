@@ -1,87 +1,28 @@
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchCompanies } from "@/reducers/companySlice";
+import { fetchCompanies } from "@/reducers/company/companySlice";
+import { fetchCompanyCategory } from "@/reducers/company/category/companycategorySlice";
 import { Button } from "./ui/button";
-type Brand = {
-  name: string;
-  url: string;
-};
 
-type BrandData = {
-  [key: string]: Brand[];
-};
-const brandData: BrandData = {
-  Telco: [
-    {
-      name: "Microsoft",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
-    },
-    {
-      name: "Samsung",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
-    },
-    {
-      name: "Google",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
-    },
-    {
-      name: "Discord",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
-    },
-    {
-      name: "Intel",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
-    },
-    {
-      name: "Meta",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
-    },
-    {
-      name: "Netflix",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
-    },
-    {
-      name: "Amazon",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
-    },
-    {
-      name: "Lakme",
-      url: "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
-    },
-  ],
-  Government: [
-    { name: "Govt1", url: "/api/placeholder/120/60" },
-    { name: "Govt2", url: "/api/placeholder/120/60" },
-    { name: "Govt3", url: "/api/placeholder/120/60" },
-  ],
-  Startups: [
-    { name: "Startup1", url: "/api/placeholder/120/60" },
-    { name: "Startup2", url: "/api/placeholder/120/60" },
-    { name: "Startup3", url: "/api/placeholder/120/60" },
-  ],
-  "Banks/Fintech": [
-    { name: "Bank1", url: "/api/placeholder/120/60" },
-    { name: "Bank2", url: "/api/placeholder/120/60" },
-    { name: "Bank3", url: "/api/placeholder/120/60" },
-  ],
-  Corporate: [
-    { name: "Corp1", url: "/api/placeholder/120/60" },
-    { name: "Corp2", url: "/api/placeholder/120/60" },
-    { name: "Corp3", url: "/api/placeholder/120/60" },
-  ],
-};
-const categories = Object.keys(brandData);
 const Brands = () => {
   const [selectedCategory, setSelectedCategory] = useState("Telco");
   const dispatch = useAppDispatch();
+
   const { companies, loading, error } = useAppSelector(
     (state) => state.company
   );
+  const {
+    companyCategory,
+    loading: categoryLoading,
+    error: categoryError,
+  } = useAppSelector((state) => state.companyCategory);
   useEffect(() => {
     dispatch(fetchCompanies());
+    dispatch(fetchCompanyCategory());
   }, [dispatch]);
   console.error("error", error);
   console.log("companies", companies);
+  console.log("companycategory", companyCategory);
   return (
     <div className="relative border h-[400px] rounded-xl p-4">
       {/* Title */}
@@ -91,29 +32,29 @@ const Brands = () => {
 
       {/* Categories */}
       <div className="m-4 pb-2 flex gap-4 overflow-x-auto hide-scrollbar">
-        {categories.map((category) => (
+        {companyCategory.map((category) => (
           <Button
-            key={category}
+            key={category.id}
             variant="none"
-            onClick={() => setSelectedCategory(category)}
+            onClick={() => setSelectedCategory(category.title)}
             className={`px-6 py-2 rounded-full text-sm font-medium transition-all backdrop-blur-md ${
-              selectedCategory === category
+              selectedCategory === category.title
                 ? "bg-[#425BFF] text-white"
                 : "bg-gradient-to-tr bg-white/30"
             }`}
           >
-            {category}
+            {category.title}
           </Button>
         ))}
       </div>
 
       {/* Logos Grid */}
       <div className="grid grid-cols-3 md:grid-cols-4 gap-8 mt-8 p-4">
-        {brandData[selectedCategory].map((brand, index) => (
+        {companies.map((company, index) => (
           <div key={index} className="flex items-center justify-center p-2">
             <img
-              src={brand.url}
-              alt={`${brand.name} logo`}
+              src={company.logo}
+              alt={`${company.name} logo`}
               className="max-h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
             />
           </div>

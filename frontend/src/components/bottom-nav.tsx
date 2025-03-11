@@ -12,7 +12,8 @@ import {
   DrawerClose,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 
 export const menuItems = [
   { icon: Home, label: "Home", href: "/" },
@@ -22,6 +23,7 @@ export const menuItems = [
 
 export function BottomNav() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
     <nav className="fixed bottom-3 left-0 right-0 z-50 h-16 sm:hidden border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
@@ -58,13 +60,49 @@ export function BottomNav() {
             <DrawerHeader>
               <DrawerTitle>Menu</DrawerTitle>
             </DrawerHeader>
-            <ul className="p-4 space-y-2">
-              {/* <Button variant="none">Settings</Button> */}
-              {/* <Button variant="none">Profile</Button> */}
-              <Button variant="none" onClick={() => signIn("linkedin")}>
-                SignIn | SignUp
-              </Button>
-            </ul>
+            {/* <ul className="p-4 space-y-2">
+              {session ? (
+                <>
+                  <div className="text-center text-sm flex flex-col items-center gap-2">
+                    {session.user?.image ? (
+                      <div className="w-16 h-16 rounded-full overflow-hidden">
+                        <Image
+                         src={session.user?.image}
+                          alt="Profile"
+                          className="w-full h-full"
+                          width={16}
+                          height={16}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-500 text-xl">
+                          {session.user?.name?.charAt(0) || "U"}
+                        </span>
+                      </div>
+                    )}
+                    <span>
+                      Signed in as {session.user?.name || session.user?.email}
+                    </span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => signOut()}
+                    className="w-full"
+                  >
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  onClick={() => signIn("linkedin")}
+                  className="w-full"
+                >
+                  Sign In | Sign Up
+                </Button>
+              )}
+            </ul> */}
             <DrawerClose>
               <Button variant="outline" className="w-full mt-4">
                 Close
