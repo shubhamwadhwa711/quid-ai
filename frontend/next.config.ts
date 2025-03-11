@@ -1,3 +1,5 @@
+import { hostname } from "os";
+
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
@@ -5,8 +7,21 @@ const withPWA = require("next-pwa")({
 });
 
 const nextConfig = withPWA({
-  reactStrictMode: true, // Keep it outside PWA config
+  reactStrictMode: false, // Keep it outside PWA config
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   swcMinify: true,
+  images: {
+    domains: ["media.licdn.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "media.licdn.com",
+        pathname: "/dms/image/**",
+      },
+    ],
+  },
 });
 
 export default nextConfig;

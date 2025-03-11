@@ -5,6 +5,9 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { Separator } from "./ui/separator";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchFAQ } from "@/reducers/faq/faqSlice";
+import { useEffect } from "react";
 const faq = [
   {
     id: 1,
@@ -24,6 +27,14 @@ const faq = [
   },
 ];
 const FAQ = () => {
+  const dispatch = useAppDispatch();
+  const { FAQ, loading, error } = useAppSelector((state) => state.FAQ);
+
+  useEffect(() => {
+    dispatch(fetchFAQ());
+  }, [dispatch]);
+
+  console.log("FAQ", FAQ);
   return (
     <div className="w-full  mx-auto py-8 px-4">
       <div className="mb-8 space-y-6">
@@ -37,7 +48,7 @@ const FAQ = () => {
       </div>
 
       <Accordion type="single" collapsible className=" w-full">
-        {faq.map((item) => (
+        {FAQ.map((item) => (
           <AccordionItem key={item.id} value={`item-${item.id}`}>
             <AccordionTrigger className="text-left hover:no-underline">
               <span className="text-lg flex items-center justify-between w-full">
@@ -53,6 +64,5 @@ const FAQ = () => {
     </div>
   );
 };
-
 
 export default FAQ;

@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const response = await axios.get("http://localhost:8000/all-company", {
+    const response = await axios.get(`${process.env.BACKEND_URL}/all-company`, {
       headers: { "Content-Type": "application/json" },
     });
 

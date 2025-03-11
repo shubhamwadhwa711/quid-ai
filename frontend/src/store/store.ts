@@ -5,6 +5,7 @@ import companyCategoryReducer from "../reducers/company/category/companycategory
 import FAQReducer from "@/reducers/faq/faqSlice";
 import InsightCategoryReducer from "@/reducers/insights/category/insightscategorySlice";
 import InsightsReducer from "@/reducers/insights/insightsSlice";
+import SolutionsReducer from "@/reducers/solutions/solutionSlice";
 export const store = configureStore({
   reducer: {
     company: companyReducer,
@@ -12,6 +13,7 @@ export const store = configureStore({
     FAQ: FAQReducer,
     insights: InsightsReducer,
     insightsCategory: InsightCategoryReducer,
+    Solutions: SolutionsReducer,
   },
 });
 
