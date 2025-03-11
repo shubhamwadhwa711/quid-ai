@@ -66,6 +66,18 @@ class InsightsViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         category_id = self.kwargs['category_pk']
         return Insights.objects.filter(category_id=category_id)
+    
+
+class AllInsightViewSet(viewsets.ModelViewSet):
+    """
+    API view to list all insight.
+    """
+    permission_classes = [AllowAny]
+    queryset = Insights.objects.all()
+    serializer_class = InsightsSerializer
+    http_method_names = ['get']
+
+      
 
 class FaqViewSet(viewsets.ModelViewSet):
     """

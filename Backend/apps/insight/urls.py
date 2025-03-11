@@ -8,8 +8,10 @@ router.register(r'category', CompanyCategoryViewSet)
 router.register(r'all-company', AllCompany)
 router.register(r'company', AssociatedCompanyViewSet, basename='company')
 router.register(r'testimonial', Testimonial)
+router.register(r'all-insight', AllInsightViewSet, basename='all-insight')
 router.register(r'insight-category', InsightsCategoryViewSet)
 router.register(r'insight', InsightsViewSet, basename = 'insight')
+
 router.register(r'faq', FaqViewSet)
 
 # Nested routing for company under category
