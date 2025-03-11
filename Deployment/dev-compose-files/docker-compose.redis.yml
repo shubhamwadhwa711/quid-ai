@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  redis:
+    container_name: "redis"
+    image: redis:alpine
+    networks:
+      quid-ai-nw:
