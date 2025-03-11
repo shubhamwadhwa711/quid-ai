@@ -1,14 +1,12 @@
 version: '3.8'
 
 services:
-  backend:
+  celery:
     image: backend-qa-image:latest
     container_name: celery-qa
     command: sh -c "ls && celery -A core beat -l info"
     volumes:
       - ../Backend:/app
-    ports:
-      - "6379:6379"
     env_file:
       - ../Backend/core/.env
     networks:
