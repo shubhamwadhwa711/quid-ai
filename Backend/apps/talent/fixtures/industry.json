@@ -4,8 +4,8 @@
         "model": "talent.industry",
         "pk": 1,
         "fields": {
-            "name": "Technical",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
+            "name": "Healthcare & Pharma",
+            "logo": "industry_logo/Healthcare.png"
         }
     },
 
@@ -14,16 +14,16 @@
         "model": "talent.industry",
         "pk": 2,
         "fields": {
-            "name": "Healthcare & Pharma",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
+            "name": "Hospitality Management",
+            "logo": "industry_logo/Hospitality.png"
         }
     },
     {
         "model": "talent.industry",
         "pk": 3,
         "fields": {
-            "name": "Hospitality Management",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
+            "name": "Banks & Fintech",
+            "logo": "industry_logo/Bank.png"
         }
     },
 
@@ -31,63 +31,24 @@
         "model": "talent.industry",
         "pk": 4,
         "fields": {
-            "name": "Banks & Fintech",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
+            "name": "Events & Training",
+            "logo": "industry_logo/Event.png"
         }
     },
     {
         "model": "talent.industry",
         "pk": 5,
         "fields": {
-            "name": "Web Developer",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
+            "name": "Marketing Experts",
+            "logo": "industry_logo/Marketing.png"
         }
     },
     {
         "model": "talent.industry",
         "pk": 6,
         "fields": {
-            "name": "Events & Training",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
+            "name": "Corporate World",
+            "logo": "industry_logo/Corporate.png"
         }
-    },
-    {
-        "model": "talent.industry",
-        "pk": 7,
-        "fields": {
-            "name": "Marketing Experts",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
-        }
-    },
-    {
-        "model": "talent.industry",
-        "pk": 8,
-        "fields": {
-            "name": "Finance",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
-        }
-    },
-
-
-    {
-
-        "model": "talent.industry",
-        "pk": 9,
-        "fields": {
-        
-        "name": "Corporate World",
-        "logo": "industry_logo/download_tf7QdbC.jpeg"
     }
-        },
-
-        {
-
-            "model": "talent.industry",
-            "pk": 10,
-            "fields": {
-            
-            "name": "Ed-Tech",
-            "logo": "industry_logo/download_tf7QdbC.jpeg"
-        }
-            }
 ]

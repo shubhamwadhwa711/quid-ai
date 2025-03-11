@@ -78,56 +78,42 @@ INSTALLED_APPS = [
     'apps.talent',
     'apps.insight',
     'apps.user',
-    # alluth
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-     #social account providers
-    'allauth.socialaccount.providers.linkedin_oauth2',
-    # 'django_ckeditor_5',
+    'django_ckeditor_5',
     'drf_yasg',
+    'oauth2_provider',
+    'social_django',
+    'drf_social_oauth2',
     'corsheaders',
+
 ]
 
 
 
+CORS_ALLOW_HEADERS = [
+    "ngrok-skip-browser-warning",
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "access-control-allow-origin",
+    "Authorization",
+    
+]
 
-
-# Linkedin Authentication Setting
-
-SOCIALACCOUNT_PROVIDERS = {
-    "linkedin_oauth2": {
-        "APP": {
-            "client_id": "86r1likhjcc2qo",
-            "secret": "WPL_AP1.ng9uOjDz2wEksrNJ.kXimMA==",
-            "key": "",
-        },
-         'SCOPE': [
-            'profile',
-            'email',
-        ],
-        "PROFILE_FIELDS": ["id", "first-name", "last-name", "email-address"],
-    },
-    'linkedin_oauth2': {
-        'SCOPE': [
-            'r_liteprofile',
-            'r_emailaddress',
-        ],
-        'PROFILE_FIELDS': [
-            'id',
-            'firstName',
-            'lastName',
-            'profilePicture',
-            'emailAddress',
-        ],
-        'VERIFIED_EMAIL': True,
-    }
-}
 
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  
+        'drf_social_oauth2.authentication.SocialAuthentication',
+    ),
 }
 
 MIDDLEWARE = [
@@ -139,7 +125,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -157,6 +143,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -228,7 +216,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    '/home/japjeet/Documents/quid-ai/Backend/static',
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 
@@ -354,64 +342,30 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Example for Gmail
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-# EMAIL_HOST_USER='mahimaverma3112@gmail.com'
-# EMAIL_HOST_PASSWORD='hmld jfqd vhuf ebuy'
 EMAIL_HOST_USER =os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-# DEFAULT_FROM_EMAIL=os.getenv('DEFAULT_FROM_EMAIL')
 
 
 
-AUTHENTICATION_BACKENDS = [
-    # Default Django auth
-    'django.contrib.auth.backends.ModelBackend',
-    # Allauth
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+AUTHENTICATION_BACKENDS = (
+ 
+   'drf_social_oauth2.backends.LinkedInOpenIDUserInfo',
+   'drf_social_oauth2.backends.DjangoOAuth2',
+   'django.contrib.auth.backends.ModelBackend',
+)
 
-SITE_ID = 1
 
-# Django-allauth configuration
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_USERNAME_REQUIRED = False
 
-# Disable signup form confusion
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
-ACCOUNT_SESSION_REMEMBER = True
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY = '86r1likhjcc2qo'
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET = 'WPL_AP1.JrR1Bj2R52WqAzbG.rJoiiA=='
 
-# Social settings
-SOCIALACCOUNT_AUTO_SIGNUP = True           # Auto-create user on successful OAuth
-SOCIALACCOUNT_QUERY_EMAIL = True           # Attempt to get email from LinkedIn
-SOCIALACCOUNT_EMAIL_REQUIRED = False
-SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
-SOCIALACCOUNT_STORE_TOKENS = True          # Save OAuth tokens to the DB
 
-# Redirects
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+# CELERY SETTINGS
 
-# LinkedIn OAuth2 provider settings
-SOCIALACCOUNT_PROVIDERS = {
-    'linkedin_oauth2': {
-        'SCOPE': ['r_liteprofile', 'r_emailaddress'],
-        'PROFILE_FIELDS': [
-            'id',
-            'firstName',
-            'lastName',
-            'profilePicture',
-            'emailAddress',
-        ],
-        'VERIFIED_EMAIL': True,
-    }
-}
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_Task_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
 
-# Additional allauth settings for social accounts
-SOCIALACCOUNT_QUERY_EMAIL = True
-SOCIALACCOUNT_EMAIL_REQUIRED = True
-SOCIALACCOUNT_STORE_TOKENS = True
-SOCIALACCOUNT_AUTO_SIGNUP = True  # Set to False if you want to require additional steps
-
-# Update deprecated setting
-ACCOUNT_LOGIN_METHODS = {'email'}
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'

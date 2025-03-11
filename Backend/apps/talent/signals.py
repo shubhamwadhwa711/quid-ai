@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-from django.core.mail import send_mail
 from .models import Profile, Enquiry
+from .tasks import send_mail_enq , send_mail_talent
 
 
 @receiver(post_save, sender= Profile)
@@ -13,31 +13,20 @@ def profile_approve(sender, instance, created, **kwargs):
         sender_email = settings.DEFAULT_FROM_EMAIL
         recipient_email = [instance.user.email]
         
-        # Send email and check the response
-        email_sent = send_mail(subject, message, sender_email, recipient_email)
-        if email_sent:
-            print(f"Email successfuly sent to {instance.user.email}")
-        else:
-            print(f"Failed to send email to {instance.user.email}")    
-
+        send_mail_talent.delay(subject, message, sender_email, recipient_email)     
 
 @receiver(post_save, sender=Enquiry)
 def send_approval_email(sender, instance, **kwargs):
     if instance.status == "APPROVED":  
-        
         subject = "Your Enquiry Has Been Approved"
         message = "Hello, your enquiry has been approved!"
         sender_email = settings.DEFAULT_FROM_EMAIL
         recipient_email = [instance.email]
+        
+        send_mail_enq.delay(subject, message, sender_email, recipient_email)    
 
-        # Send email and check the response
-        email_sent = send_mail(subject, message, sender_email, recipient_email, fail_silently=False)
 
-        if email_sent:
-            print(f" Email successfully sent to {instance.email}")
-        else:
-            print(f" Failed to send email to {instance.email}")
-
+ 
        
 
 

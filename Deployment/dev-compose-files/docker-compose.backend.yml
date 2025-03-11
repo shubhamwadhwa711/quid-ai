@@ -15,4 +15,4 @@ services:
     env_file:
       - ../Backend/core/.env
     networks:
-      - quid-ai-nw
+      quid-ai-nw:

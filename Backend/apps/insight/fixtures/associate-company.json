@@ -4,8 +4,8 @@
     "pk": 1,
     "fields": {
         "category": 1,
-        "name": "IBM",
-        "logo": "logo/download_2.jpeg"
+        "name": "Amazone",
+        "logo": "logo/amazon.png"
     }
 },
 
@@ -14,8 +14,8 @@
     "pk": 2,
     "fields": {
         "category": 2,
-        "name": "Unacademy",
-        "logo": "logo/download_2.jpeg"
+        "name": "Discord",
+        "logo": "logo/discord.png"
     }
 },
 
@@ -24,8 +24,8 @@
     "pk": 3,
     "fields": {
         "category": 3,
-        "name": "Shubpy",
-        "logo": "logo/download_2.jpeg"
+        "name": "Google",
+        "logo": "logo/google.png"
     }
 },
 
@@ -34,8 +34,8 @@
     "pk": 4,
     "fields": {
         "category": 4,
-        "name": "Lohiya",
-        "logo": "logo/download_2.jpeg"
+        "name": "Intel",
+        "logo": "logo/intel.png"
     }
 },
 
@@ -44,9 +44,44 @@
     "pk": 5,
     "fields": {
         "category": 5,
-        "name": "Lilavati",
-        "logo": "logo/download_2.jpeg"
+        "name": "Lakme",
+        "logo": "logo/lakme.png"
+    }
+},
+{
+    "model": "insight.associatedcompany",
+    "pk": 6,
+    "fields": {
+        "category": 1,
+        "name": "Meta",
+        "logo": "logo/meta.png"
+    }
+},
+{
+    "model": "insight.associatedcompany",
+    "pk": 7,
+    "fields": {
+        "category": 2,
+        "name": "Microsoft",
+        "logo": "logo/microsoft.png"
+    }
+},
+{
+    "model": "insight.associatedcompany",
+    "pk": 8,
+    "fields": {
+        "category": 2,
+        "name": "Netflix",
+        "logo": "logo/netflix.png"
+    }
+},
+{
+    "model": "insight.associatedcompany",
+    "pk": 9,
+    "fields": {
+        "category": 1,
+        "name": "Samsung",
+        "logo": "logo/samsung.png"
     }
 }
-
 ]
