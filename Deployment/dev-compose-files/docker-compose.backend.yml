@@ -5,8 +5,9 @@ services:
     build:
       context: ../Backend
       dockerfile: Dockerfile
+    image: backend-qa-image:latest
     container_name: backend-qa
-    command: sh -c "ls && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "ls && poetry install --no-root && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ../Backend:/app
     ports:
