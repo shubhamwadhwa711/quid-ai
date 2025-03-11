@@ -1,5 +1,6 @@
 [
 
+    
     {
         "model": "talent.profile",
         "pk": 1,
@@ -7,228 +8,31 @@
             "status": "APPROVED",
             "auto_approve_inquiry": false,
             "is_featured": false,
-            "user": 2,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a HR.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-
-    {
-        "model": "talent.profile",
-        "pk": 2,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
             "user": 3,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a Software Engineer.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "image": "profile_pics/image_1.png",
+            "headline": "Mathematician and Statistician | Expert in Pure Maths, Advance Maths, Probability-Statistics, Data Science",
+            "summary": "An AI expert with a strong background in mathematics and statistics, specializing in pure and advanced mathematics, probability, and data science. With deep analytical and problem-solving skills, they excel in developing statistical models, machine learning algorithms, and AI-driven solutions. Their expertise spans theoretical and applied mathematics, enabling them to extract meaningful insights from complex data.",
+            "location": "United States",
+            "industry": 1,
+            "website": "https://www.django-rest-framework.org/api-guide/fields/#serializermethodfield",
             "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
+            "linkedin_url": "http://linkedin.com/sophia-chris-de",
             "skill": [
-                1
-            ]
-        }
-    },
-
-
-    {
-        "model": "talent.profile",
-        "pk": 3,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 4,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a Finance Manager.",
-            "summary": "",
-            "location": "U.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909091",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-    {
-        "model": "talent.profile",
-        "pk": 4,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 5,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a AI specialist.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-
-    {
-        "model": "talent.profile",
-        "pk": 5,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 6,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a AI expert.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-
-    {
-        "model": "talent.profile",
-        "pk": 6,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 7,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a Robotics Expert.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-
-    {
-        "model": "talent.profile",
-        "pk": 7,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 8,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a HR.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-
-    {
-        "model": "talent.profile",
-        "pk": 8,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 9,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a Web developer.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-
-
-    {
-        "model": "talent.profile",
-        "pk": 9,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 10,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a Android Developer.",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
-            ]
-        }
-    },
-
-    {
-        "model": "talent.profile",
-        "pk": 10,
-        "fields": {
-            "status": "APPROVED",
-            "auto_approve_inquiry": false,
-            "is_featured": false,
-            "user": 11,
-            "image": "profile_pics/ola.jpg",
-            "headline": "I am a .",
-            "summary": "",
-            "location": "M.P",
-            "industry": null,
-            "website": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "phone": "9090909090",
-            "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
-            "skill": [
-                1
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
             ]
         }
     }
 
 
+    
 
 
 ]

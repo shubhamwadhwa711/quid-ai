@@ -3,9 +3,9 @@
         "model": "talent.education",
         "pk": 1,
         "fields": {
-            "profile": 2,
+            "profile": 1,
             "school": "Goel",
-            "degree": "Pharma",
+            "degree": "Masters",
             "field_of_study": "Chemical",
             "start_year": 2020,
             "end_year": 2024,
@@ -17,9 +17,9 @@
         "model": "talent.education",
         "pk": 2,
         "fields": {
-            "profile": 3,
+            "profile": 1,
             "school": "REC",
-            "degree": "Pharma",
+            "degree": "Phd",
             "field_of_study": "Chemical",
             "start_year": 2020,
             "end_year": 2024,

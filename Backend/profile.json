@@ -1,0 +1,2298 @@
+[
+    {
+        "model": "admin.logentry",
+        "pk": 1,
+        "fields": {
+            "action_time": "2025-03-04T12:16:29.417Z",
+            "user": 1,
+            "content_type": 20,
+            "object_id": "1",
+            "object_repr": "Blog",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 2,
+        "fields": {
+            "action_time": "2025-03-04T12:19:57.223Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "1",
+            "object_repr": "AI",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 3,
+        "fields": {
+            "action_time": "2025-03-04T12:53:59.356Z",
+            "user": 1,
+            "content_type": 23,
+            "object_id": "1",
+            "object_repr": "mk1DwtQ6Nq5T7Wvm8G28tLVQGhCvVEThsY3uNWiM",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 4,
+        "fields": {
+            "action_time": "2025-03-06T12:56:37.481Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "1",
+            "object_repr": "Python",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 5,
+        "fields": {
+            "action_time": "2025-03-06T12:56:40.179Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 6,
+        "fields": {
+            "action_time": "2025-03-06T12:57:20.915Z",
+            "user": 1,
+            "content_type": 11,
+            "object_id": "1",
+            "object_repr": "Mahima Verma",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 7,
+        "fields": {
+            "action_time": "2025-03-06T13:08:34.421Z",
+            "user": 1,
+            "content_type": 11,
+            "object_id": "1",
+            "object_repr": "Mahima Verma",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 8,
+        "fields": {
+            "action_time": "2025-03-06T13:08:41.425Z",
+            "user": 1,
+            "content_type": 11,
+            "object_id": "1",
+            "object_repr": "Mahima Verma",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 9,
+        "fields": {
+            "action_time": "2025-03-07T04:41:18.613Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 10,
+        "fields": {
+            "action_time": "2025-03-07T04:41:25.145Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 11,
+        "fields": {
+            "action_time": "2025-03-07T04:41:59.987Z",
+            "user": 1,
+            "content_type": 4,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Email address\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 12,
+        "fields": {
+            "action_time": "2025-03-07T04:42:12.377Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 13,
+        "fields": {
+            "action_time": "2025-03-07T04:42:18.086Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 14,
+        "fields": {
+            "action_time": "2025-03-07T05:53:28.513Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 15,
+        "fields": {
+            "action_time": "2025-03-07T05:53:35.436Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 16,
+        "fields": {
+            "action_time": "2025-03-07T10:37:13.298Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "1",
+            "object_repr": "10 open source AI platforms for innovation",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Title\", \"Text\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 17,
+        "fields": {
+            "action_time": "2025-03-07T10:40:59.338Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "2",
+            "object_repr": "Implementing AI in Customer Service",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Title\", \"Category\", \"Text\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 18,
+        "fields": {
+            "action_time": "2025-03-07T10:41:07.375Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "1",
+            "object_repr": "10 open source AI platforms for innovation",
+            "action_flag": 2,
+            "change_message": "[]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 19,
+        "fields": {
+            "action_time": "2025-03-07T10:58:31.939Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "3",
+            "object_repr": "What does a Customer support agent do?",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Title\", \"Category\", \"Text\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 20,
+        "fields": {
+            "action_time": "2025-03-07T10:58:49.019Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "4",
+            "object_repr": "Q&A",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 21,
+        "fields": {
+            "action_time": "2025-03-07T11:08:49.554Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "1",
+            "object_repr": "10 open source AI platforms for innovation",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Text\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 22,
+        "fields": {
+            "action_time": "2025-03-10T08:15:29.380Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "1",
+            "object_repr": "10 open source AI platforms for innovation",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 23,
+        "fields": {
+            "action_time": "2025-03-10T10:07:06.913Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "3",
+            "object_repr": "What does a Customer support agent do?",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 24,
+        "fields": {
+            "action_time": "2025-03-10T10:07:14.352Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "2",
+            "object_repr": "Implementing AI in Customer Service",
+            "action_flag": 3,
+            "change_message": ""
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 25,
+        "fields": {
+            "action_time": "2025-03-10T10:25:37.200Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "5",
+            "object_repr": "Generative AI",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 26,
+        "fields": {
+            "action_time": "2025-03-10T12:06:33.222Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 27,
+        "fields": {
+            "action_time": "2025-03-10T12:06:39.307Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 28,
+        "fields": {
+            "action_time": "2025-03-10T12:14:13.152Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 29,
+        "fields": {
+            "action_time": "2025-03-10T12:14:24.659Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "mahi",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"Status\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 30,
+        "fields": {
+            "action_time": "2025-03-11T05:41:50.112Z",
+            "user": 1,
+            "content_type": 4,
+            "object_id": "3",
+            "object_repr": "Sophia0Chris",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 31,
+        "fields": {
+            "action_time": "2025-03-11T05:43:10.918Z",
+            "user": 1,
+            "content_type": 4,
+            "object_id": "3",
+            "object_repr": "Sophia0Chris",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 32,
+        "fields": {
+            "action_time": "2025-03-11T05:49:21.350Z",
+            "user": 1,
+            "content_type": 7,
+            "object_id": "1",
+            "object_repr": "Tech",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 33,
+        "fields": {
+            "action_time": "2025-03-11T05:50:03.395Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "2",
+            "object_repr": "Artificial Intelligence",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 34,
+        "fields": {
+            "action_time": "2025-03-11T05:50:16.656Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "3",
+            "object_repr": "Mathematics",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 35,
+        "fields": {
+            "action_time": "2025-03-11T05:50:34.498Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "4",
+            "object_repr": "Differential Equations",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 36,
+        "fields": {
+            "action_time": "2025-03-11T05:50:51.175Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "5",
+            "object_repr": "Regression Analysis",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 37,
+        "fields": {
+            "action_time": "2025-03-11T05:51:03.452Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "6",
+            "object_repr": "Data Mining",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 38,
+        "fields": {
+            "action_time": "2025-03-11T05:51:15.143Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "7",
+            "object_repr": "Graph Theory",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 39,
+        "fields": {
+            "action_time": "2025-03-11T05:51:48.403Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "8",
+            "object_repr": "Data Analysis",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 40,
+        "fields": {
+            "action_time": "2025-03-11T05:52:08.259Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "9",
+            "object_repr": "Business Statistics",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 41,
+        "fields": {
+            "action_time": "2025-03-11T05:52:44.545Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "Sophia0Chris",
+            "action_flag": 2,
+            "change_message": "[{\"changed\": {\"fields\": [\"User\", \"Image\", \"Headline\", \"Summary\", \"Location\", \"Industry\", \"Skill\", \"Linkedin url\"]}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 42,
+        "fields": {
+            "action_time": "2025-03-11T06:05:46.723Z",
+            "user": 1,
+            "content_type": 9,
+            "object_id": "1",
+            "object_repr": "Sophia0Chris",
+            "action_flag": 2,
+            "change_message": "[]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 43,
+        "fields": {
+            "action_time": "2025-03-11T08:12:33.237Z",
+            "user": 1,
+            "content_type": 21,
+            "object_id": "6",
+            "object_repr": "AI",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "admin.logentry",
+        "pk": 44,
+        "fields": {
+            "action_time": "2025-03-11T11:09:22.785Z",
+            "user": 1,
+            "content_type": 8,
+            "object_id": "10",
+            "object_repr": "History",
+            "action_flag": 1,
+            "change_message": "[{\"added\": {}}]"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 1,
+        "fields": {
+            "name": "Can add log entry",
+            "content_type": 1,
+            "codename": "add_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 2,
+        "fields": {
+            "name": "Can change log entry",
+            "content_type": 1,
+            "codename": "change_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 3,
+        "fields": {
+            "name": "Can delete log entry",
+            "content_type": 1,
+            "codename": "delete_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 4,
+        "fields": {
+            "name": "Can view log entry",
+            "content_type": 1,
+            "codename": "view_logentry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 5,
+        "fields": {
+            "name": "Can add permission",
+            "content_type": 2,
+            "codename": "add_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 6,
+        "fields": {
+            "name": "Can change permission",
+            "content_type": 2,
+            "codename": "change_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 7,
+        "fields": {
+            "name": "Can delete permission",
+            "content_type": 2,
+            "codename": "delete_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 8,
+        "fields": {
+            "name": "Can view permission",
+            "content_type": 2,
+            "codename": "view_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 9,
+        "fields": {
+            "name": "Can add group",
+            "content_type": 3,
+            "codename": "add_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 10,
+        "fields": {
+            "name": "Can change group",
+            "content_type": 3,
+            "codename": "change_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 11,
+        "fields": {
+            "name": "Can delete group",
+            "content_type": 3,
+            "codename": "delete_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 12,
+        "fields": {
+            "name": "Can view group",
+            "content_type": 3,
+            "codename": "view_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 13,
+        "fields": {
+            "name": "Can add user",
+            "content_type": 4,
+            "codename": "add_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 14,
+        "fields": {
+            "name": "Can change user",
+            "content_type": 4,
+            "codename": "change_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 15,
+        "fields": {
+            "name": "Can delete user",
+            "content_type": 4,
+            "codename": "delete_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 16,
+        "fields": {
+            "name": "Can view user",
+            "content_type": 4,
+            "codename": "view_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 17,
+        "fields": {
+            "name": "Can add content type",
+            "content_type": 5,
+            "codename": "add_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 18,
+        "fields": {
+            "name": "Can change content type",
+            "content_type": 5,
+            "codename": "change_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 19,
+        "fields": {
+            "name": "Can delete content type",
+            "content_type": 5,
+            "codename": "delete_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 20,
+        "fields": {
+            "name": "Can view content type",
+            "content_type": 5,
+            "codename": "view_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 21,
+        "fields": {
+            "name": "Can add session",
+            "content_type": 6,
+            "codename": "add_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 22,
+        "fields": {
+            "name": "Can change session",
+            "content_type": 6,
+            "codename": "change_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 23,
+        "fields": {
+            "name": "Can delete session",
+            "content_type": 6,
+            "codename": "delete_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 24,
+        "fields": {
+            "name": "Can view session",
+            "content_type": 6,
+            "codename": "view_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 25,
+        "fields": {
+            "name": "Can add industry",
+            "content_type": 7,
+            "codename": "add_industry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 26,
+        "fields": {
+            "name": "Can change industry",
+            "content_type": 7,
+            "codename": "change_industry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 27,
+        "fields": {
+            "name": "Can delete industry",
+            "content_type": 7,
+            "codename": "delete_industry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 28,
+        "fields": {
+            "name": "Can view industry",
+            "content_type": 7,
+            "codename": "view_industry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 29,
+        "fields": {
+            "name": "Can add skill",
+            "content_type": 8,
+            "codename": "add_skill"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 30,
+        "fields": {
+            "name": "Can change skill",
+            "content_type": 8,
+            "codename": "change_skill"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 31,
+        "fields": {
+            "name": "Can delete skill",
+            "content_type": 8,
+            "codename": "delete_skill"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 32,
+        "fields": {
+            "name": "Can view skill",
+            "content_type": 8,
+            "codename": "view_skill"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 33,
+        "fields": {
+            "name": "Can add profile",
+            "content_type": 9,
+            "codename": "add_profile"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 34,
+        "fields": {
+            "name": "Can change profile",
+            "content_type": 9,
+            "codename": "change_profile"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 35,
+        "fields": {
+            "name": "Can delete profile",
+            "content_type": 9,
+            "codename": "delete_profile"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 36,
+        "fields": {
+            "name": "Can view profile",
+            "content_type": 9,
+            "codename": "view_profile"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 37,
+        "fields": {
+            "name": "Can add experience",
+            "content_type": 10,
+            "codename": "add_experience"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 38,
+        "fields": {
+            "name": "Can change experience",
+            "content_type": 10,
+            "codename": "change_experience"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 39,
+        "fields": {
+            "name": "Can delete experience",
+            "content_type": 10,
+            "codename": "delete_experience"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 40,
+        "fields": {
+            "name": "Can view experience",
+            "content_type": 10,
+            "codename": "view_experience"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 41,
+        "fields": {
+            "name": "Can add enquiry",
+            "content_type": 11,
+            "codename": "add_enquiry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 42,
+        "fields": {
+            "name": "Can change enquiry",
+            "content_type": 11,
+            "codename": "change_enquiry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 43,
+        "fields": {
+            "name": "Can delete enquiry",
+            "content_type": 11,
+            "codename": "delete_enquiry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 44,
+        "fields": {
+            "name": "Can view enquiry",
+            "content_type": 11,
+            "codename": "view_enquiry"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 45,
+        "fields": {
+            "name": "Can add education",
+            "content_type": 12,
+            "codename": "add_education"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 46,
+        "fields": {
+            "name": "Can change education",
+            "content_type": 12,
+            "codename": "change_education"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 47,
+        "fields": {
+            "name": "Can delete education",
+            "content_type": 12,
+            "codename": "delete_education"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 48,
+        "fields": {
+            "name": "Can view education",
+            "content_type": 12,
+            "codename": "view_education"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 49,
+        "fields": {
+            "name": "Can add client",
+            "content_type": 13,
+            "codename": "add_client"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 50,
+        "fields": {
+            "name": "Can change client",
+            "content_type": 13,
+            "codename": "change_client"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 51,
+        "fields": {
+            "name": "Can delete client",
+            "content_type": 13,
+            "codename": "delete_client"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 52,
+        "fields": {
+            "name": "Can view client",
+            "content_type": 13,
+            "codename": "view_client"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 53,
+        "fields": {
+            "name": "Can add certificates",
+            "content_type": 14,
+            "codename": "add_certificates"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 54,
+        "fields": {
+            "name": "Can change certificates",
+            "content_type": 14,
+            "codename": "change_certificates"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 55,
+        "fields": {
+            "name": "Can delete certificates",
+            "content_type": 14,
+            "codename": "delete_certificates"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 56,
+        "fields": {
+            "name": "Can view certificates",
+            "content_type": 14,
+            "codename": "view_certificates"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 57,
+        "fields": {
+            "name": "Can add project",
+            "content_type": 15,
+            "codename": "add_project"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 58,
+        "fields": {
+            "name": "Can change project",
+            "content_type": 15,
+            "codename": "change_project"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 59,
+        "fields": {
+            "name": "Can delete project",
+            "content_type": 15,
+            "codename": "delete_project"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 60,
+        "fields": {
+            "name": "Can view project",
+            "content_type": 15,
+            "codename": "view_project"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 61,
+        "fields": {
+            "name": "Can add publication",
+            "content_type": 16,
+            "codename": "add_publication"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 62,
+        "fields": {
+            "name": "Can change publication",
+            "content_type": 16,
+            "codename": "change_publication"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 63,
+        "fields": {
+            "name": "Can delete publication",
+            "content_type": 16,
+            "codename": "delete_publication"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 64,
+        "fields": {
+            "name": "Can view publication",
+            "content_type": 16,
+            "codename": "view_publication"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 65,
+        "fields": {
+            "name": "Can add company category",
+            "content_type": 17,
+            "codename": "add_companycategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 66,
+        "fields": {
+            "name": "Can change company category",
+            "content_type": 17,
+            "codename": "change_companycategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 67,
+        "fields": {
+            "name": "Can delete company category",
+            "content_type": 17,
+            "codename": "delete_companycategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 68,
+        "fields": {
+            "name": "Can view company category",
+            "content_type": 17,
+            "codename": "view_companycategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 69,
+        "fields": {
+            "name": "Can add associated company",
+            "content_type": 18,
+            "codename": "add_associatedcompany"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 70,
+        "fields": {
+            "name": "Can change associated company",
+            "content_type": 18,
+            "codename": "change_associatedcompany"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 71,
+        "fields": {
+            "name": "Can delete associated company",
+            "content_type": 18,
+            "codename": "delete_associatedcompany"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 72,
+        "fields": {
+            "name": "Can view associated company",
+            "content_type": 18,
+            "codename": "view_associatedcompany"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 73,
+        "fields": {
+            "name": "Can add testimonial",
+            "content_type": 19,
+            "codename": "add_testimonial"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 74,
+        "fields": {
+            "name": "Can change testimonial",
+            "content_type": 19,
+            "codename": "change_testimonial"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 75,
+        "fields": {
+            "name": "Can delete testimonial",
+            "content_type": 19,
+            "codename": "delete_testimonial"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 76,
+        "fields": {
+            "name": "Can view testimonial",
+            "content_type": 19,
+            "codename": "view_testimonial"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 77,
+        "fields": {
+            "name": "Can add insights category",
+            "content_type": 20,
+            "codename": "add_insightscategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 78,
+        "fields": {
+            "name": "Can change insights category",
+            "content_type": 20,
+            "codename": "change_insightscategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 79,
+        "fields": {
+            "name": "Can delete insights category",
+            "content_type": 20,
+            "codename": "delete_insightscategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 80,
+        "fields": {
+            "name": "Can view insights category",
+            "content_type": 20,
+            "codename": "view_insightscategory"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 81,
+        "fields": {
+            "name": "Can add insights",
+            "content_type": 21,
+            "codename": "add_insights"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 82,
+        "fields": {
+            "name": "Can change insights",
+            "content_type": 21,
+            "codename": "change_insights"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 83,
+        "fields": {
+            "name": "Can delete insights",
+            "content_type": 21,
+            "codename": "delete_insights"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 84,
+        "fields": {
+            "name": "Can view insights",
+            "content_type": 21,
+            "codename": "view_insights"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 85,
+        "fields": {
+            "name": "Can add faq",
+            "content_type": 22,
+            "codename": "add_faq"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 86,
+        "fields": {
+            "name": "Can change faq",
+            "content_type": 22,
+            "codename": "change_faq"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 87,
+        "fields": {
+            "name": "Can delete faq",
+            "content_type": 22,
+            "codename": "delete_faq"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 88,
+        "fields": {
+            "name": "Can view faq",
+            "content_type": 22,
+            "codename": "view_faq"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 89,
+        "fields": {
+            "name": "Can add application",
+            "content_type": 23,
+            "codename": "add_application"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 90,
+        "fields": {
+            "name": "Can change application",
+            "content_type": 23,
+            "codename": "change_application"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 91,
+        "fields": {
+            "name": "Can delete application",
+            "content_type": 23,
+            "codename": "delete_application"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 92,
+        "fields": {
+            "name": "Can view application",
+            "content_type": 23,
+            "codename": "view_application"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 93,
+        "fields": {
+            "name": "Can add access token",
+            "content_type": 24,
+            "codename": "add_accesstoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 94,
+        "fields": {
+            "name": "Can change access token",
+            "content_type": 24,
+            "codename": "change_accesstoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 95,
+        "fields": {
+            "name": "Can delete access token",
+            "content_type": 24,
+            "codename": "delete_accesstoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 96,
+        "fields": {
+            "name": "Can view access token",
+            "content_type": 24,
+            "codename": "view_accesstoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 97,
+        "fields": {
+            "name": "Can add grant",
+            "content_type": 25,
+            "codename": "add_grant"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 98,
+        "fields": {
+            "name": "Can change grant",
+            "content_type": 25,
+            "codename": "change_grant"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 99,
+        "fields": {
+            "name": "Can delete grant",
+            "content_type": 25,
+            "codename": "delete_grant"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 100,
+        "fields": {
+            "name": "Can view grant",
+            "content_type": 25,
+            "codename": "view_grant"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 101,
+        "fields": {
+            "name": "Can add refresh token",
+            "content_type": 26,
+            "codename": "add_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 102,
+        "fields": {
+            "name": "Can change refresh token",
+            "content_type": 26,
+            "codename": "change_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 103,
+        "fields": {
+            "name": "Can delete refresh token",
+            "content_type": 26,
+            "codename": "delete_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 104,
+        "fields": {
+            "name": "Can view refresh token",
+            "content_type": 26,
+            "codename": "view_refreshtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 105,
+        "fields": {
+            "name": "Can add id token",
+            "content_type": 27,
+            "codename": "add_idtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 106,
+        "fields": {
+            "name": "Can change id token",
+            "content_type": 27,
+            "codename": "change_idtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 107,
+        "fields": {
+            "name": "Can delete id token",
+            "content_type": 27,
+            "codename": "delete_idtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 108,
+        "fields": {
+            "name": "Can view id token",
+            "content_type": 27,
+            "codename": "view_idtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 109,
+        "fields": {
+            "name": "Can add association",
+            "content_type": 28,
+            "codename": "add_association"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 110,
+        "fields": {
+            "name": "Can change association",
+            "content_type": 28,
+            "codename": "change_association"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 111,
+        "fields": {
+            "name": "Can delete association",
+            "content_type": 28,
+            "codename": "delete_association"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 112,
+        "fields": {
+            "name": "Can view association",
+            "content_type": 28,
+            "codename": "view_association"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 113,
+        "fields": {
+            "name": "Can add code",
+            "content_type": 29,
+            "codename": "add_code"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 114,
+        "fields": {
+            "name": "Can change code",
+            "content_type": 29,
+            "codename": "change_code"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 115,
+        "fields": {
+            "name": "Can delete code",
+            "content_type": 29,
+            "codename": "delete_code"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 116,
+        "fields": {
+            "name": "Can view code",
+            "content_type": 29,
+            "codename": "view_code"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 117,
+        "fields": {
+            "name": "Can add nonce",
+            "content_type": 30,
+            "codename": "add_nonce"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 118,
+        "fields": {
+            "name": "Can change nonce",
+            "content_type": 30,
+            "codename": "change_nonce"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 119,
+        "fields": {
+            "name": "Can delete nonce",
+            "content_type": 30,
+            "codename": "delete_nonce"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 120,
+        "fields": {
+            "name": "Can view nonce",
+            "content_type": 30,
+            "codename": "view_nonce"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 121,
+        "fields": {
+            "name": "Can add user social auth",
+            "content_type": 31,
+            "codename": "add_usersocialauth"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 122,
+        "fields": {
+            "name": "Can change user social auth",
+            "content_type": 31,
+            "codename": "change_usersocialauth"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 123,
+        "fields": {
+            "name": "Can delete user social auth",
+            "content_type": 31,
+            "codename": "delete_usersocialauth"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 124,
+        "fields": {
+            "name": "Can view user social auth",
+            "content_type": 31,
+            "codename": "view_usersocialauth"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 125,
+        "fields": {
+            "name": "Can add partial",
+            "content_type": 32,
+            "codename": "add_partial"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 126,
+        "fields": {
+            "name": "Can change partial",
+            "content_type": 32,
+            "codename": "change_partial"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 127,
+        "fields": {
+            "name": "Can delete partial",
+            "content_type": 32,
+            "codename": "delete_partial"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 128,
+        "fields": {
+            "name": "Can view partial",
+            "content_type": 32,
+            "codename": "view_partial"
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$dN4Au3eFPcdZA0GWOiTSo2$8rhIFOOQ0gRtBUg1uxPYaYZc1QmajkIMIt3O6dlwlxM=",
+            "last_login": "2025-03-06T12:47:30Z",
+            "is_superuser": true,
+            "username": "mahi",
+            "first_name": "",
+            "last_name": "",
+            "email": "mahimaverma3112@gmail.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2025-03-04T12:00:10Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "!pxpiEKpOpjrmaibkCDfTF2kDBDiN69I2jQWeZwZH",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "ef16141958904de59613488a36680b68",
+            "first_name": "Mahima ",
+            "last_name": "Verma",
+            "email": "mahimavermakumari@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-03-04T12:54:42.321Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$870000$G9Ul75zmNmpLYNF7fZ7ny7$UzEMtJ/cP+PZs8+QJZRdTzYqJWov4Scm5WKDrOvi5/s=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "Sophia0Chris",
+            "first_name": "Sophia",
+            "last_name": "Chris",
+            "email": "sophiachris@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2025-03-11T05:41:49Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 1,
+        "fields": {
+            "app_label": "admin",
+            "model": "logentry"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 2,
+        "fields": {
+            "app_label": "auth",
+            "model": "permission"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 3,
+        "fields": {
+            "app_label": "auth",
+            "model": "group"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 4,
+        "fields": {
+            "app_label": "auth",
+            "model": "user"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 5,
+        "fields": {
+            "app_label": "contenttypes",
+            "model": "contenttype"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 6,
+        "fields": {
+            "app_label": "sessions",
+            "model": "session"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 7,
+        "fields": {
+            "app_label": "talent",
+            "model": "industry"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 8,
+        "fields": {
+            "app_label": "talent",
+            "model": "skill"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 9,
+        "fields": {
+            "app_label": "talent",
+            "model": "profile"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 10,
+        "fields": {
+            "app_label": "talent",
+            "model": "experience"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 11,
+        "fields": {
+            "app_label": "talent",
+            "model": "enquiry"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 12,
+        "fields": {
+            "app_label": "talent",
+            "model": "education"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 13,
+        "fields": {
+            "app_label": "talent",
+            "model": "client"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 14,
+        "fields": {
+            "app_label": "talent",
+            "model": "certificates"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 15,
+        "fields": {
+            "app_label": "talent",
+            "model": "project"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 16,
+        "fields": {
+            "app_label": "talent",
+            "model": "publication"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 17,
+        "fields": {
+            "app_label": "insight",
+            "model": "companycategory"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 18,
+        "fields": {
+            "app_label": "insight",
+            "model": "associatedcompany"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 19,
+        "fields": {
+            "app_label": "insight",
+            "model": "testimonial"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 20,
+        "fields": {
+            "app_label": "insight",
+            "model": "insightscategory"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 21,
+        "fields": {
+            "app_label": "insight",
+            "model": "insights"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 22,
+        "fields": {
+            "app_label": "insight",
+            "model": "faq"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 23,
+        "fields": {
+            "app_label": "oauth2_provider",
+            "model": "application"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 24,
+        "fields": {
+            "app_label": "oauth2_provider",
+            "model": "accesstoken"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 25,
+        "fields": {
+            "app_label": "oauth2_provider",
+            "model": "grant"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 26,
+        "fields": {
+            "app_label": "oauth2_provider",
+            "model": "refreshtoken"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 27,
+        "fields": {
+            "app_label": "oauth2_provider",
+            "model": "idtoken"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 28,
+        "fields": {
+            "app_label": "social_django",
+            "model": "association"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 29,
+        "fields": {
+            "app_label": "social_django",
+            "model": "code"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 30,
+        "fields": {
+            "app_label": "social_django",
+            "model": "nonce"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 31,
+        "fields": {
+            "app_label": "social_django",
+            "model": "usersocialauth"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 32,
+        "fields": {
+            "app_label": "social_django",
+            "model": "partial"
+        }
+    },
+    {
+        "model": "sessions.session",
+        "pk": "7akf9r3b10xykqsczvng61h73prvo73x",
+        "fields": {
+            "session_data": ".eJxVjMsOwiAQRf-FtSG8QZfu-w1kYAapGkhKuzL-uzbpQrf3nHNfLMK21rgNWuKM7MIkO_1uCfKD2g7wDu3Wee5tXebEd4UfdPCpIz2vh_t3UGHUb-0sZCoeEM4gRPGiCEPeGCWVhuJ0CkU7FVTy5NESJYuJtHHCSh2wAHt_APcWOFk:1tqAdO:b6bVMtjHVFz_301vLOgp7sALaba0erfzNDZ88Yez4Zg",
+            "expire_date": "2025-03-20T12:47:30.172Z"
+        }
+    },
+    {
+        "model": "sessions.session",
+        "pk": "fzct0uxhks8crpobu89r4sr12fb34tl7",
+        "fields": {
+            "session_data": ".eJxVjMsOwiAQRf-FtSG8QZfu-w1kYAapGkhKuzL-uzbpQrf3nHNfLMK21rgNWuKM7MIkO_1uCfKD2g7wDu3Wee5tXebEd4UfdPCpIz2vh_t3UGHUb-0sZCoeEM4gRPGiCEPeGCWVhuJ0CkU7FVTy5NESJYuJtHHCSh2wAHt_APcWOFk:1tpQwz:j2dTA6Q6qKlkZNPZzdbQO-2kMRBCb_D6L9dupZ_kYUs",
+            "expire_date": "2025-03-18T12:00:41.349Z"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 1,
+        "fields": {
+            "name": "Python"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 2,
+        "fields": {
+            "name": "Artificial Intelligence"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 3,
+        "fields": {
+            "name": "Mathematics"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 4,
+        "fields": {
+            "name": "Differential Equations"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 5,
+        "fields": {
+            "name": "Regression Analysis"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 6,
+        "fields": {
+            "name": "Data Mining"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 7,
+        "fields": {
+            "name": "Graph Theory"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 8,
+        "fields": {
+            "name": "Data Analysis"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 9,
+        "fields": {
+            "name": "Business Statistics"
+        }
+    },
+    {
+        "model": "talent.skill",
+        "pk": 10,
+        "fields": {
+            "name": "History"
+        }
+    },
+    {
+        "model": "talent.industry",
+        "pk": 1,
+        "fields": {
+            "name": "Tech",
+            "logo": "industry_logo/tbmGLSQKZeNEkiiBRIsnu0Awi6uEmHl1T3aGoedr.jpg"
+        }
+    },
+    {
+        "model": "talent.profile",
+        "pk": 1,
+        "fields": {
+            "status": "APPROVED",
+            "auto_approve_inquiry": false,
+            "is_featured": false,
+            "user": 3,
+            "image": "profile_pics/image_1.png",
+            "headline": "Mathematician and Statistician | Expert in Pure Maths, Advance Maths, Probability-Statistics, Data Science",
+            "summary": "An AI expert with a strong background in mathematics and statistics, specializing in pure and advanced mathematics, probability, and data science. With deep analytical and problem-solving skills, they excel in developing statistical models, machine learning algorithms, and AI-driven solutions. Their expertise spans theoretical and applied mathematics, enabling them to extract meaningful insights from complex data.",
+            "location": "United States",
+            "industry": 1,
+            "website": "https://www.django-rest-framework.org/api-guide/fields/#serializermethodfield",
+            "phone": "9090909090",
+            "linkedin_url": "http://linkedin.com/sophia-chris-de",
+            "skill": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+            ]
+        }
+    },
+    {
+        "model": "talent.enquiry",
+        "pk": 1,
+        "fields": {
+            "status": "APPROVED",
+            "profile": 1,
+            "full_name": "Mahima Verma",
+            "email": "mahimaverma3112@gmail.com",
+            "mobile": 9897347469,
+            "message": "Hello i want to connect.",
+            "updated_at": "2025-03-06T13:08:41.406Z",
+            "updated_by": 1
+        }
+    },
+    {
+        "model": "insight.insightscategory",
+        "pk": 1,
+        "fields": {
+            "title": "Blog"
+        }
+    },
+    {
+        "model": "insight.insightscategory",
+        "pk": 2,
+        "fields": {
+            "title": "Interview"
+        }
+    },
+    {
+        "model": "insight.insightscategory",
+        "pk": 3,
+        "fields": {
+            "title": "Video"
+        }
+    },
+    {
+        "model": "insight.insightscategory",
+        "pk": 4,
+        "fields": {
+            "title": "Q&A"
+        }
+    },
+    {
+        "model": "insight.insights",
+        "pk": 5,
+        "fields": {
+            "title": "Generative AI",
+            "category": 1,
+            "text": "<h1 style=\"margin-left:0px;\"><strong>What is Generative AI?</strong><br><br>At first glance, generative AI looks like pure magic. But once you start to peel back the layers behind this fascinating technology, you see it for what it is: a statistical process with both impressive results and critical limitations.</h1><p style=\"margin-left:0px;\">In its broadest sense, <i>generative AI is a type of artificial intelligence that creates novel content based on patterns learned from existing data</i>. Perhaps the most obvious example of generative AI is predictive search. Google trains a large language model (LLM) on billions of search queries made by users over the years, which then tries to predict the next word in your own search query.</p><figure class=\"image image-style-align-left\"><img style=\"aspect-ratio:320/180;\" src=\"/media/th%20(1)_6OkZibp.jpg\" width=\"320\" height=\"180\"></figure>",
+            "created_at": "2025-03-10T10:25:37.192Z",
+            "created_by": 1,
+            "updated_at": "2025-03-10T10:25:37.192Z",
+            "updated_by": null,
+            "featured_image": "featured_image/tbmGLSQKZeNEkiiBRIsnu0Awi6uEmHl1T3aGoedr.jpg"
+        }
+    },
+    {
+        "model": "insight.insights",
+        "pk": 6,
+        "fields": {
+            "title": "AI",
+            "category": 1,
+            "text": "<p>&nbsp;</p>",
+            "created_at": "2025-03-11T08:12:33.228Z",
+            "created_by": 3,
+            "updated_at": "2025-03-11T08:12:33.228Z",
+            "updated_by": null,
+            "featured_image": "featured_image/tbmGLSQKZeNEkiiBRIsnu0Awi6uEmHl1T3aGoedr.jpg"
+        }
+    },
+    {
+        "model": "oauth2_provider.application",
+        "pk": 1,
+        "fields": {
+            "client_id": "mk1DwtQ6Nq5T7Wvm8G28tLVQGhCvVEThsY3uNWiM",
+            "user": 1,
+            "redirect_uris": "",
+            "post_logout_redirect_uris": "",
+            "client_type": "confidential",
+            "authorization_grant_type": "password",
+            "client_secret": "TZ1JV70GnPlYZVNOhfCf3usRokRPfr8HpJNpE998FfxIVjVLHhS1dqNZWXEn6AlmcuP7MtgNhhlxOx6cO4C6Rr1TakxFojq99Dc8QdAWnkJ4DTF1VGai2yspZeYxJbRr",
+            "hash_client_secret": false,
+            "name": "",
+            "skip_authorization": false,
+            "created": "2025-03-04T12:53:59.352Z",
+            "updated": "2025-03-04T12:53:59.352Z",
+            "algorithm": "",
+            "allowed_origins": ""
+        }
+    },
+    {
+        "model": "oauth2_provider.accesstoken",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "source_refresh_token": null,
+            "token": "1Yvd2O2I5DYGtstTw4XnQt0e49W56o",
+            "token_checksum": "122e533592b94a7661d597589f5d8bd02057c026f65df0b212f70b06acdded15",
+            "id_token": null,
+            "application": 1,
+            "expires": "2025-03-04T22:54:42.358Z",
+            "scope": "read write",
+            "created": "2025-03-04T12:54:42.359Z",
+            "updated": "2025-03-04T12:54:42.359Z"
+        }
+    },
+    {
+        "model": "oauth2_provider.refreshtoken",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "token": "W7aBofAiSDOXsP13io48CZDd226Epd",
+            "application": 1,
+            "access_token": 1,
+            "token_family": "980e0a5e-20bb-4a8b-83a8-f223cec9c799",
+            "created": "2025-03-04T12:54:42.362Z",
+            "updated": "2025-03-04T12:54:42.362Z",
+            "revoked": null
+        }
+    },
+    {
+        "model": "social_django.usersocialauth",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "provider": "linkedin-openidconnect",
+            "uid": "W7IFRyGWAK",
+            "extra_data": {
+                "auth_time": 1741092882,
+                "id_token": null,
+                "refresh_token": null,
+                "id": "W7IFRyGWAK",
+                "access_token": "AQUtOcv9cDWQeFTwkxv4snSkvuPv-r6ITgsVWN_xB5WaqGU3wmrZ965395r56oJs--fSljvDSJ31bScHopP1M6roqYFVxSpe0aQ4inAAtw_NS-fVVf67IssjDmA3FRjZ_yKP3XoD0Qr-xcxWW6VlRhS20roW3B1k4FDrZVHk_WqbzqOHoc8mL5D6yJMlF9rmxvD6o-LsPM2Wc38whBFp8oCtgx1ULv4Bi5UTcYqgTcGN7daRVbhZzSQLKfky8_6qz3PjGKCut20bZu_DwwpiDdYgIBbiXwWds2eEftdlM43JZj8Abcy6IVhGLa2opc6znbsBSsNYoozy9ugXWPtNU4TvWQKa0w",
+                "token_type": null
+            },
+            "created": "2025-03-04T12:54:42.333Z",
+            "modified": "2025-03-04T12:54:42.342Z"
+        }
+    }
+]
