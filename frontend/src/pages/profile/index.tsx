@@ -20,7 +20,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 // import { useMediaQuery } from "@/hooks/use-media-query";
-
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchProfile } from "@/reducers/profile/profileSlice";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -206,6 +207,13 @@ const ResponsiveEdit = ({
 
 // Main Profile Component
 const Profile = () => {
+  const dispatch = useAppDispatch();
+  const { profile, loading, error } = useAppSelector((state) => state.Profile);
+  useEffect(() => {
+    dispatch(fetchProfile());
+  }, [dispatch]);
+  console.log("profile", profile[0]);
+  const newprofile = profile[0];
   const [userData, setUserData] = useState({
     name: "Sophia Chris",
     title: "Senior Developer",
@@ -331,7 +339,9 @@ const Profile = () => {
             </div>
             <div className="ml-4">
               <div className="flex justify-between">
-                <h1 className="text-2xl proxima-medium">{userData.name}</h1>
+                <h1 className="text-2xl proxima-medium">
+                  {profile[0]?.user?.username}
+                </h1>
                 <Button
                   size="icon"
                   variant="ghost"
@@ -344,15 +354,17 @@ const Profile = () => {
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
                 <span className="text-gray-400 proxima-small">
-                  {userData.location}
+                  {profile[0]?.location}
                 </span>
               </div>
               <div className="mt-2">
-                <p className="proxima-medium">{userData.bio}</p>
+                <p className="proxima-medium">{profile[0]?.headline}</p>
               </div>
               <div className="flex items-center space-x-2">
                 <Linkedin className="w-5 h-5 fill-white" />
-                <span className="mt-1 proxima-large">{userData.linkedIn}</span>
+                <span className="mt-1 proxima-large">
+                  {profile[0]?.linkedin_url}
+                </span>
               </div>
             </div>
           </div>
@@ -379,12 +391,12 @@ const Profile = () => {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2">
-              {userData.skills.map((skill, index) => (
+              {profile[0]?.skill.map((s, index) => (
                 <span
                   key={index}
                   className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
                 >
-                  {skill}
+                  {s.name}
                 </span>
               ))}
             </div>
@@ -411,9 +423,9 @@ const Profile = () => {
         <div className="space-y-4">
           <div className="pl-4">
             <p>
-              {userData.fullBio.length > 200
-                ? `${userData.fullBio.substring(0, 200)}... Read More`
-                : userData.fullBio}
+              {profile[0].summary.length > 200
+                ? `${profile[0].summary.substring(0, 200)}... Read More`
+                : profile[0].summary}
             </p>
           </div>
         </div>
