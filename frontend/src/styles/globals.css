@@ -20,14 +20,34 @@
   font-family: "Proxima Nova";
   src: url("/fonts/ProximaNova-Regular.otf") format("opentype");
 }
-
+.proxima-category {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 100%;
+  letter-spacing: 0px;
+}
+.separator {
+  width: 369px;
+  height: 1;
+  opacity: 0.21;
+  border-radius: 15px;
+}
 .proxima {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 5px;
+  line-height: 148%;
+  size: 14px;
+}
+.proxima-heading1 {
   font-family: "Proxima Nova", sans-serif;
   font-weight: 600;
   font-style: normal;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   line-height: 125%;
-  size: 16px;
+  size: 14px;
 }
 .proxima-medium {
   font-family: "Proxima Nova", sans-serif;
@@ -36,6 +56,22 @@
   letter-spacing: 0px;
   line-height: 130%;
   size: 16px;
+}
+.proxima-heading2 {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+.proxima-span {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 120%;
+  letter-spacing: 0px;
+  text-align: center;
 }
 .proxima-small {
   font-family: "Proxima Nova", sans-serif;
@@ -52,6 +88,44 @@
   letter-spacing: 0px;
   line-height: 125%;
   size: 18px;
+}
+.proxima-ultimate {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 125%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+.proxima-solutions {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 119%;
+  letter-spacing: 0px;
+  text-align: center;
+}
+.proxima-faq-question {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0px;
+}
+.proxima-faq-answer {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 148%;
+  letter-spacing: 0px;
+}
+.proxima-signup {
+  font-family: "Proxima Nova", sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 33px;
+  letter-spacing: 0px;
+  text-align: center;
 }
 @media (prefers-color-scheme: dark) {
   :root {
