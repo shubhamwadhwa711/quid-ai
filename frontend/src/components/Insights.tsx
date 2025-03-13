@@ -76,18 +76,18 @@ const Insights = () => {
   return (
     <div>
       <div>
-        <h1 className="text-4xl font-semibold">
+        <h1 className="text-4xl proxima-medium">
           Quid AI <span className="text-[#425BFF] ">Insights</span>
         </h1>
       </div>
 
       <div className="p-4 space-y-8">
         {/* Categories Section */}
-        <div className="mb-4 pb-2 flex gap-4 overflow-x-auto hide-scrollbar">
+        <div className="mb-4 pb-2 flex justify-center gap-1 overflow-x-auto hide-scrollbar">
           {insightsCategory.map((insight) => (
             <button
               key={insight.id}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all backdrop-blur-md flex-shrink-0 ${
+              className={`px-4 py-2 rounded-full text-center proxima-category transition-all backdrop-blur-md flex-shrink-0 ${
                 selectedInsights === insight.title
                   ? "bg-[#425BFF] text-white"
                   : "bg-white/30"
@@ -116,7 +116,7 @@ const Insights = () => {
                         className="w-full h-full object-fill rounded-t-lg"
                       />
                       <div
-                        className="absolute top-2 left-2 text-white text-sm px-3 py-1 rounded-full"
+                        className="absolute proxima-large top-2 left-2 text-white text-sm px-3 py-1 rounded-full"
                         style={{
                           backgroundColor: getTypeColor(insight.type),
                         }}
@@ -129,10 +129,10 @@ const Insights = () => {
                       <CardDescription className="text-sm text-gray-500">
                         <div className="flex items-center gap-2">
                           <div className="bg-[#425BFF] h-2 w-2 rounded-full"></div>
-                          <div className="text-slate-400">14 Feb 2025</div>
+                          <div className="text-slate-400 proxima-medium">14 Feb 2025</div>
                         </div>
                       </CardDescription>
-                      <CardTitle className="text-lg text-white font-semibold truncate">
+                      <CardTitle className="text-lg text-white proxima-medium truncate">
                         {insight.title}
                       </CardTitle>
                     </div>

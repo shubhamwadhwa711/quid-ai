@@ -22,7 +22,7 @@ const Navbar = () => {
   console.log("Profile", session?.user?.image);
   return (
     <nav className="fixed left-0 right-0 z-50 h-16">
-      <div className="p-2 bg-gradient-to-r from-[#063373] to-[#041D3F]">
+      <div className="p-2 bg-gradient-to-br from-[#01060e] via-[#021127] to-[#01060e]">
         <div className="flex items-center h-full px-4">
           {/* Brand Logo */}
           <div className="flex-none mr-4">
