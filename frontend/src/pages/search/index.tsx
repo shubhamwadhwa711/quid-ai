@@ -15,6 +15,7 @@ import {
   X,
   CheckCircle,
   Check,
+  SlidersHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -420,13 +421,11 @@ const Search = () => {
           <Button
             onClick={handleFilterToggle}
             className="absolute right-4 rounded-full p-2 bg-transparent hover:bg-gray-700/20"
-          >
-            <Filter
-              className={`h-5 w-5 ${
-                showFilters ? "text-blue-500" : "text-gray-400"
-              }`}
-            />
-          </Button>
+          ></Button>
+          <SlidersHorizontal
+            strokeWidth={1}
+            className="text-white w-12 h-10 p-2 m-2 bg-[#425BFF] rounded-full"
+          />
         </label>
 
         {showFilters && (
@@ -528,7 +527,7 @@ const Search = () => {
       <div className=" w-full overflow-x-auto hide-scrollbar px-4">
         <div className="mx-4 flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-          <h1 className="font-bold text-xl">Top AI Talents</h1>
+          <h1 className="proxima-medium text-xl">Top AI Talents</h1>
         </div>
         <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
           {talentData.map((talent) => (
@@ -545,10 +544,12 @@ const Search = () => {
                   />
                 </Avatar>
               </div>
-              <CardHeader className="mt-8 flex flex-col items-center">
-                <CardTitle>{talent.name}</CardTitle>
-                <CardDescription>{talent.location}</CardDescription>
-                <p>{talent.role}</p>
+              <CardHeader className="mt-8  flex flex-col items-center">
+                <CardTitle className="proxima-medium">{talent.name}</CardTitle>
+                <CardDescription className="proxima-small">
+                  {talent.location}
+                </CardDescription>
+                <p className="proxima-medium">{talent.role}</p>
               </CardHeader>
               <CardContent className="text-center">
                 <div>
@@ -558,7 +559,7 @@ const Search = () => {
                       .map((skill, index) => (
                         <Badge
                           key={index}
-                          className="h-5 text-sm rounded-full bg-white/20 font-medium transition-all duration-300"
+                          className="h-5 text-sm rounded-full bg-white/20 proxima-small transition-all duration-300"
                         >
                           {skill}
                         </Badge>
@@ -571,7 +572,7 @@ const Search = () => {
                   <div className="flex justify-center items-center gap-4">
                     <Button
                       onClick={handleConnectForm}
-                      className="rounded-3xl px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
+                      className="rounded-3xl proxima-large px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
                     >
                       Connect <MoveRight />
                     </Button>
@@ -580,12 +581,13 @@ const Search = () => {
                       onClick={() =>
                         window.open(talent.socialLinks.linkedin, "_blank")
                       }
+                      variant="none"
                     >
                       <Linkedin />
                     </Button>
                   </div>
                   <div className="flex items-center mt-2">
-                    <h3 className="text-sm ">Featured Clients</h3>
+                    <h3 className="text-sm proxima-medium">Featured Clients</h3>
                     <Separator orientation="vertical" className="h-4" />
                     <div className="w-full overflow-x-auto hide-scrollbar">
                       <div className="w-full relative">
