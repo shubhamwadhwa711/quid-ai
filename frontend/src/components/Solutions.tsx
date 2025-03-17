@@ -14,9 +14,9 @@ const Solutions = () => {
   }, [dispatch]);
   console.log("Solutions", Solutions);
   return (
-    <div className="relative w-full ">
+    <div className="relative w-full min-h-screen flex items-center justify-center">
       {/* Background Image Container */}
-      <div className="absolute -top-40 left-0 w-full h-[50vh] flex justify-center">
+      <div className="absolute -top-60 left-0 w-full h-[50vh] flex justify-center">
         <img
           src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
           alt="Spiral Background"
@@ -25,23 +25,20 @@ const Solutions = () => {
       </div>
 
       {/* Content Container */}
-      <div className="relative z-10 container">
+      <div className="relative -mt-96 z-10 container flex flex-col items-center justify-center gap-6">
         {/* Hero Text Section */}
-        <div className="space-y-6 py-6">
-          <div className="flex flex-col justify-center items-center text-center">
-            <h1 className="text-3xl proxima-ultimate">
-              The <span className="text-[#425BFF]">Ultimate AI </span>
-              Solutions for Your Business
-            </h1>
-            <p className="mt-4 text-lg proxima-small">
-              We've expert in these multiple domains
-            </p>
-          </div>
+        <div className="text-center">
+          <h1 className="text-3xl proxima-bold leading-tight">
+            The <span className="text-[#425BFF]">Ultimate AI </span>
+            <span className="block -mt-6">Solutions for Your</span>
+            <span className="block -mt-6">Business</span>
+          </h1>
+          <p className="mt-1">We've expert in these multiple domains</p>
         </div>
 
         {/* Solutions Grid */}
-        <div className="w-full overflow-x-auto hide-scrollbar pb-8">
-          <div className="grid grid-cols-3  gap-x-1 gap-y-3 min-w-[320px] max-w-5xl">
+        <div className="w-full flex justify-center overflow-x-auto hide-scrollbar pb-8">
+          <div className="grid grid-cols-3 gap-x-2 gap-y-3">
             {Solutions.map((solution) => (
               <Card
                 key={solution.id}
@@ -53,7 +50,7 @@ const Solutions = () => {
                   className="w-8 h-8 md:w-10 md:h-10 object-cover"
                 />
                 <CardHeader className="p-2">
-                  <CardTitle className="text-white proxima-solutions">
+                  <CardTitle className="text-white text-xs font-semibold">
                     {solution.name}
                   </CardTitle>
                 </CardHeader>
@@ -61,7 +58,8 @@ const Solutions = () => {
             ))}
           </div>
         </div>
-        <Button className="px-8 py-6 proxima-large rounded-full bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white">
+
+        <Button className="px-6 py-6 proxima-bold text-xl rounded-full bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white">
           Get Connected For Free
           <svg
             width="18"
@@ -73,9 +71,9 @@ const Solutions = () => {
             <path
               d="M1 7H17M17 7L11 1M17 7L11 13"
               stroke="white"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </Button>

@@ -39,34 +39,37 @@ const FAQ = () => {
   console.log("FAQ", FAQ);
   return (
     <div className="w-full px-2">
-      <div className="space-y-6">
-        <h1 className="proxima-ultimate mb-2">
+      <div className="-mt-10">
+        <h1 className="text-3xl proxima-bold mb-2">
           Have any <span className="text-[#425BFF]">Questions</span>
         </h1>
-        <p className="text-gray-300 text-lg proxima-small  mb-4">
+        <p className=" text-base proxima-FAQ  mb-4">
           Read our FAQs if you have queries
         </p>
-        <Separator orientation="horizontal" className="mb-6" />
+        <Separator orientation="horizontal" />
       </div>
 
       <Accordion type="single" collapsible className="w-full">
         {FAQ.map((item) => (
           <AccordionItem key={item.id} value={`item-${item.id}`}>
-            <AccordionTrigger className="text-left border-b  hover:no-underline">
-              <span className="text-lg flex items-center proxima-faq-question justify-between w-full">
+            <AccordionTrigger className="text-left border-b border-gray-700 hover:no-underline">
+              <span className="text- flex items-center proxima-bold justify-between w-full">
                 {item.question}
               </span>
             </AccordionTrigger>
-            <AccordionContent className="text-lg proxima-faq-answer">
+            <AccordionContent className="proxima-FAQ mt-2">
               {item.answer}
             </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
+
       <div>
         <Button className="bg-gradient-to-r px-6 py-6 mt-4 proxima-large rounded-full from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
           <div className="flex justify-center gap-2  items-center">
-            <span>All Questions & Answers</span>
+            <span className="proxima-bold text-lg">
+              All Questions & Answers
+            </span>
             <svg
               width="18"
               height="14"

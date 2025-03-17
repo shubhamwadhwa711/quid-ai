@@ -48,17 +48,19 @@ const cardData = [
 ];
 const Hero = () => {
   return (
-    <div className="">
-      <div className="space-y-6 text-center mb-10">
-        <h1 className="text-sm proxima-heading1">
+    <div className=" flex flex-col items-center">
+      <div className="space-y-4 text-center mb-10">
+        <h1 className="text-sm proxima-regular">
           WORLD'S LARGEST AI THINK TANK
         </h1>
-        <h2 className="proxima-heading2">
-          AI Expertise
-          <span className="proxima-span"> On Demand</span>
+
+        <h2 className="text-3xl">
+          <span className="proxima-bold"> AI Expertise</span>
+          <span className=""> On </span>
+          <span className="block -mt-4"> Demand </span>
         </h2>
         <div>
-          <span className="proxima-small block">
+          <span className="block">
             From strategy to implementation, we provide
           </span>
           <span className="block mt-1">
@@ -73,7 +75,7 @@ const Hero = () => {
           <div className="grid grid-cols-1 gap-3">
             <Card className="relative bg-gradient-to-br border-none from-[#7C2BD3]  to-[#075AA8] text-white h-[170px] w-[180px] overflow-hidden">
               <img
-                src="https://s3-alpha-sig.figma.com/img/554e/c14b/77d60e160046e44beff4d7387d8ad26d?Expires=1742774400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=QldYa7bBlo6Idjp0~5X7vLAYkXd-Lqc2cx38iBbPSR6eKsNlgUX5toO1vRCCiH9gjMtL0wzYCi4ClzSAM-~NO46VYLKe2kmEqCG9OB~BnoGUdSa2mXFy3LXifJ8FQdmVn2qYICmv-UpZy0VUU88Ee8XQ-j21uYK1dsqt9WH4QStkK8e3i70J6ed~lLQUrh4-xrmvYLyLRX3ySOaVGa6DCjG~a5Gfm4ROd1TLK-f72EBYSnJ4Tq25pjV2rdOqablHHwJinBs4n7rC7-KcAF9zmkMcAcyF13p0IdyQMh72RxNJ7AIWmxvf2AQKBjm5QHGpEZQ~1ceETuucTZgcKP-D4g__"
+                 src="https://s3-alpha-sig.figma.com/img/554e/c14b/77d60e160046e44beff4d7387d8ad26d?Expires=1742774400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=QldYa7bBlo6Idjp0~5X7vLAYkXd-Lqc2cx38iBbPSR6eKsNlgUX5toO1vRCCiH9gjMtL0wzYCi4ClzSAM-~NO46VYLKe2kmEqCG9OB~BnoGUdSa2mXFy3LXifJ8FQdmVn2qYICmv-UpZy0VUU88Ee8XQ-j21uYK1dsqt9WH4QStkK8e3i70J6ed~lLQUrh4-xrmvYLyLRX3ySOaVGa6DCjG~a5Gfm4ROd1TLK-f72EBYSnJ4Tq25pjV2rdOqablHHwJinBs4n7rC7-KcAF9zmkMcAcyF13p0IdyQMh72RxNJ7AIWmxvf2AQKBjm5QHGpEZQ~1ceETuucTZgcKP-D4g__"
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-10"
               />
