@@ -23,6 +23,7 @@ const Brands = () => {
   console.error("error", error);
   console.log("companies", companies);
   console.log("companycategory", companyCategory);
+  console.log("NEXT_BACKEND_URL",process.env.NEXT_BACKEND_URL);
   return (
     <div className="">
       <div className="relative border h-52 -mt-4 rounded-xl ">

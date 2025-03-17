@@ -16,7 +16,7 @@ const getTypeColor = (type: string) => {
 };
 
 const Insights = () => {
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
   const dispatch = useAppDispatch();
 
   const { insightsCategory, loading, error } = useAppSelector(
@@ -68,7 +68,7 @@ const Insights = () => {
             <div className="flex overflow-x-auto hide-scrollbar">
               <div className="flex gap-4 min-w-max px-1 pb-4">
                 {insightsLoading ? (
-                  <p className="text-white">Loading...</p>
+                  <p className="text-white proxima-regular">Loading...</p>
                 ) : insightsError ? (
                   <p className="text-red-500">Error: {insightsError}</p>
                 ) : (
