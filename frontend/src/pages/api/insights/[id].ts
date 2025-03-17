@@ -9,7 +9,7 @@ export default async function handler(
   console.log("ID",{id});
   try {
     const response = await axios.get(
-      `${process.env.BACKEND_URL}/insight-category/${id}/insight`,
+      `${process.env.NEXT_BACKEND_URL}/insight-category/${id}/insight`,
       {
         headers: { "Content-Type": "application/json" },
       }
