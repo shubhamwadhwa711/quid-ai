@@ -13,7 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 
-export default function FiltersDrawer({
+export default function FilterDrawer({
   showFilters,
   setShowFilters,
   handleFilterToggle,
