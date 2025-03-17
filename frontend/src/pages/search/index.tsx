@@ -271,6 +271,310 @@ const talentData = [
       },
     ],
   },
+  {
+    id: 4,
+    name: "Sophia Chris",
+    location: "United States",
+    avatar:
+      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+    role: "Mathematician and Statistician",
+    skills: {
+      technical: [
+        "Mathematics",
+        "Statistics",
+        "Data Analysis",
+        "R",
+        "Python",
+        "Machine Learning",
+      ],
+      softSkills: [
+        // "Problem Solving",
+        // "Research",
+        // "Critical Thinking",
+        // "Communication",
+      ],
+      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
+    },
+
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sophiachris",
+    },
+    featuredClients: [
+      {
+        name: "discord",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
+      },
+      {
+        name: "meta",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
+      },
+      {
+        name: "netflix",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
+      },
+      {
+        name: "intel",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
+      },
+      {
+        name: "google",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
+      },
+      {
+        name: "amazon",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
+      },
+      {
+        name: "microsoft",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
+      },
+      {
+        name: "lakme",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
+      },
+      {
+        name: "samsung",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+      },
+    ],
+  },
+  {
+    id: 5,
+    name: "Sophia Chris",
+    location: "United States",
+    avatar:
+      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+    role: "Mathematician and Statistician",
+    skills: {
+      technical: [
+        "Mathematics",
+        "Statistics",
+        "Data Analysis",
+        "R",
+        "Python",
+        "Machine Learning",
+      ],
+      softSkills: [
+        // "Problem Solving",
+        // "Research",
+        // "Critical Thinking",
+        // "Communication",
+      ],
+      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
+    },
+
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sophiachris",
+    },
+    featuredClients: [
+      {
+        name: "discord",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
+      },
+      {
+        name: "meta",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
+      },
+      {
+        name: "netflix",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
+      },
+      {
+        name: "intel",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
+      },
+      {
+        name: "google",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
+      },
+      {
+        name: "amazon",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
+      },
+      {
+        name: "microsoft",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
+      },
+      {
+        name: "lakme",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
+      },
+      {
+        name: "samsung",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: "Sophia Chris",
+    location: "United States",
+    avatar:
+      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+    role: "Mathematician and Statistician",
+    skills: {
+      technical: [
+        "Mathematics",
+        "Statistics",
+        "Data Analysis",
+        "R",
+        "Python",
+        "Machine Learning",
+      ],
+      softSkills: [
+        // "Problem Solving",
+        // "Research",
+        // "Critical Thinking",
+        // "Communication",
+      ],
+      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
+    },
+
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sophiachris",
+    },
+    featuredClients: [
+      {
+        name: "discord",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
+      },
+      {
+        name: "meta",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
+      },
+      {
+        name: "netflix",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
+      },
+      {
+        name: "intel",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
+      },
+      {
+        name: "google",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
+      },
+      {
+        name: "amazon",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
+      },
+      {
+        name: "microsoft",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
+      },
+      {
+        name: "lakme",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
+      },
+      {
+        name: "samsung",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+      },
+    ],
+  },
+  {
+    id: 7,
+    name: "Sophia Chris",
+    location: "United States",
+    avatar:
+      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+    role: "Mathematician and Statistician",
+    skills: {
+      technical: [
+        "Mathematics",
+        "Statistics",
+        "Data Analysis",
+        "R",
+        "Python",
+        "Machine Learning",
+      ],
+      softSkills: [
+        // "Problem Solving",
+        // "Research",
+        // "Critical Thinking",
+        // "Communication",
+      ],
+      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
+    },
+
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sophiachris",
+    },
+    featuredClients: [
+      {
+        name: "discord",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
+      },
+      {
+        name: "meta",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
+      },
+      {
+        name: "netflix",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
+      },
+      {
+        name: "intel",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
+      },
+      {
+        name: "google",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
+      },
+      {
+        name: "amazon",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
+      },
+      {
+        name: "microsoft",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
+      },
+      {
+        name: "lakme",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
+      },
+      {
+        name: "samsung",
+        image:
+          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+      },
+    ],
+  },
 ];
 
 const Search = () => {
