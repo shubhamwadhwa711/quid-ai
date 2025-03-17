@@ -40,9 +40,9 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import FiltersDrawer from "@/components/FilterDrawer";
+import FilterDrawer from "@/components/FilterDrawer";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { useMediaQuery } from "usehooks-ts";
+
 const talentData = [
   {
     id: 1,
@@ -640,7 +640,7 @@ const Search = () => {
         </label>
 
         {showFilters && (
-          <FiltersDrawer
+          <FilterDrawer
             showFilters={showFilters}
             setShowFilters={setShowFilters}
             handleFilterToggle={handleFilterToggle}
