@@ -10,8 +10,8 @@ const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET!,
   providers: [
     LinkedInProvider({
-      clientId: process.env.LINKEDIN_CLIENT_ID || "",
-      clientSecret: process.env.LINKEDIN_CLIENT_SECRET || "",
+      clientId: process.env.LINKEDIN_CLIENT_ID!,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
       profile: (profile: LinkedInProfile) => ({
