@@ -40,7 +40,9 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-
+import FiltersDrawer from "@/components/FilterDrawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { useMediaQuery } from "usehooks-ts";
 const talentData = [
   {
     id: 1,
@@ -270,65 +272,6 @@ const talentData = [
     ],
   },
 ];
-const solutions = [
-  {
-    id: 1,
-    label: "Healthcare & Pharma",
-    image:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/xbnlyaxtqa1lqdlsag3u.png",
-  },
-  {
-    id: 2,
-    label: "Hospitality Management",
-    image:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/zfa2mfxyhuqmd4tfrno8.png",
-  },
-  {
-    id: 3,
-    label: "Banks & Fintech",
-    image:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/ebvdoqqr1boilamfsqwn.png",
-  },
-  {
-    id: 4,
-    label: "Marketing Experts",
-    image:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/qmkwqvruzkvpgsz9pbnz.png",
-  },
-  {
-    id: 5,
-    label: "Corporate World",
-    image:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/oachy0hnhep4hly7kyfe.png",
-  },
-  {
-    id: 6,
-    label: "Events & Training",
-    image:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/rx5tv3bg7ow1jwyhdp1v.png",
-  },
-];
-// Extract all unique skills from talent data
-const getAllSkills = () => {
-  const allSkills = new Set();
-  talentData.forEach((talent) => {
-    Object.values(talent.skills)
-      .flat()
-      .forEach((skill) => {
-        allSkills.add(skill);
-      });
-  });
-  return Array.from(allSkills);
-};
-
-// Extract all unique locations
-const getAllLocations = () => {
-  const locations = new Set();
-  talentData.forEach((talent) => {
-    locations.add(talent.location);
-  });
-  return Array.from(locations);
-};
 
 const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -348,42 +291,6 @@ const Search = () => {
   });
   const handleFilterToggle = () => {
     setShowFilters(!showFilters);
-  };
-
-  const handleSkillSelect = (skill) => {
-    if (selectedFilters.skills.includes(skill)) {
-      setSelectedFilters({
-        ...selectedFilters,
-        skills: selectedFilters.skills.filter((s) => s !== skill),
-      });
-    } else {
-      setSelectedFilters({
-        ...selectedFilters,
-        skills: [...selectedFilters.skills, skill],
-      });
-    }
-  };
-
-  const handleLocationChange = (location) => {
-    setSelectedFilters({
-      ...selectedFilters,
-      location,
-    });
-  };
-
-  const handleRoleChange = (specialization) => {
-    setSelectedFilters({
-      ...selectedFilters,
-      specialization,
-    });
-  };
-
-  const clearFilters = () => {
-    setSelectedFilters({
-      skills: [],
-      location: "",
-      specialization: "",
-    });
   };
 
   const handleConnectForm = (talent) => {
@@ -429,91 +336,11 @@ const Search = () => {
         </label>
 
         {showFilters && (
-          <div className="w-full bg-white/5 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 border border-white/10">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-white">Filters</h3>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  className="text-xs text-gray-300 hover:text-white"
-                  onClick={clearFilters}
-                >
-                  Clear All
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="p-1 hover:bg-gray-700/20 rounded-full"
-                  onClick={handleFilterToggle}
-                >
-                  <X className="h-4 w-4 text-gray-300" />
-                </Button>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm text-gray-300">
-                Specialization Sector
-              </label>
-
-              <div className="flex gap-2 overflow-x-auto">
-                {solutions.map((solution) => (
-                  <Card
-                    key={solution.id}
-                    className={`h-28 w-32 p-2  transition-all duration-200 hover:border-gray-500 ${
-                      selectedFilters.specialization === solution.label
-                        ? "border-[#7C2BD3] bg-gradient-to-r from-[#7C2BD3]/10 to-[#075AA8]/10"
-                        : "bg-white/5 border-gray-700"
-                    }`}
-                  >
-                    <Button
-                      variant="ghost"
-                      className="w-full h-full p-3 flex flex-col items-center justify-center text-sm text-white font-medium"
-                      onClick={() =>
-                        handleRoleChange(
-                          solution.label === selectedFilters.specialization
-                            ? "all"
-                            : solution.label
-                        )
-                      }
-                    >
-                      <img src={solution.image} alt="" />
-                      {solution.label}
-                    </Button>
-                  </Card>
-                ))}
-              </div>
-            </div>
-            <div className="grid grid-cols-12 mx-2 my-4">
-              <div className="col-span-4 flex flex-col">
-                <h1 className="mx-2">Filters By</h1>
-                {["Country", "Studies", "Client", "Project"].map(
-                  (filter, index) => (
-                    <Badge
-                      key={index}
-                      className="w-28 bg-[#545C6C] p-2 rounded-3xl m-1"
-                    >
-                      {filter}
-                    </Badge>
-                  )
-                )}
-              </div>
-              <div className="col-span-8 my-4">
-                <label className="relative flex items-center gap-3 px-4 py-2 rounded-3xl">
-                  <SearchIcon className="absolute left-4 text-gray-400 mx-2" />
-                  <Input
-                    type="text"
-                    placeholder="Search Country"
-                    className="pl-10 pr-4 py-2 w-full outline-none border bg-transparent focus:ring-2 focus:ring-blue-500 rounded-3xl"
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <Button className="rounded-3xl px-6 py-2 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8]">
-                Apply Filters
-              </Button>
-            </div>
-          </div>
+          <FiltersDrawer
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+            handleFilterToggle={handleFilterToggle}
+          />
         )}
       </div>
 
