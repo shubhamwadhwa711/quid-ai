@@ -7,6 +7,9 @@ const withPWA = require("next-pwa")({
 });
 
 const nextConfig = withPWA({
+  env:{
+    NEXT_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL
+  },
   reactStrictMode: false, // Keep it outside PWA config
   typescript: {
     ignoreBuildErrors: true,
