@@ -49,7 +49,7 @@ const talentData = [
     name: "Sophia Chris",
     location: "United States",
     avatar:
-      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
     role: "Mathematician and Statistician",
     skills: {
       technical: [
@@ -124,7 +124,7 @@ const talentData = [
     name: "Sophia Chris",
     location: "United States",
     avatar:
-      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
     role: "Mathematician and Statistician",
     skills: {
       technical: [
@@ -200,7 +200,7 @@ const talentData = [
     name: "Sophia Chris",
     location: "United States",
     avatar:
-      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
     role: "Mathematician and Statistician",
     skills: {
       technical: [
@@ -276,7 +276,7 @@ const talentData = [
     name: "Sophia Chris",
     location: "United States",
     avatar:
-      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
     role: "Mathematician and Statistician",
     skills: {
       technical: [
@@ -352,7 +352,7 @@ const talentData = [
     name: "Sophia Chris",
     location: "United States",
     avatar:
-      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
     role: "Mathematician and Statistician",
     skills: {
       technical: [
@@ -428,7 +428,7 @@ const talentData = [
     name: "Sophia Chris",
     location: "United States",
     avatar:
-      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
     role: "Mathematician and Statistician",
     skills: {
       technical: [
@@ -504,7 +504,7 @@ const talentData = [
     name: "Sophia Chris",
     location: "United States",
     avatar:
-      "https://s3-alpha-sig.figma.com/img/62f2/9fb8/c20f7bac95d577ddcab770a7f8841303?Expires=1741564800&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=tNjvOMdq8NalM5x8Q94PUCz~pdH1zcdoqCbx6TZF~7obMlU7JAC~f436a-NtLE5HpsCaMshcZuC5XN9JOcfdn7zjzI168bUhSpy1HIC-HzcNyesB6Ad0~FPxx2Ms6ROuiYXYAoFKb3CFVWOx4i1QgcDSDdyrAiqpHAI1DAyvUhRHlZX6F2qhu-ZP47peL5ejE8RTD9u39ULymoJtXQF6bChQqrtihKivumFLWgJPn5Io6iQT~t40AzdjKC9kkfZuYD-IsBtVUmCPvzMlZvqqRkR4HaaHELAFVRbtVm3I1rAbvj9CDf9mvmVErZn1JkOizIeu3V--yqWXPM6lhUczgQ__",
+      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
     role: "Mathematician and Statistician",
     skills: {
       technical: [
