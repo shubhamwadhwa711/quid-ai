@@ -7,8 +7,8 @@ const withPWA = require("next-pwa")({
 });
 
 const nextConfig = withPWA({
-  env:{
-    NEXT_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL
+  env: {
+    NEXT_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   },
   reactStrictMode: false, // Keep it outside PWA config
   typescript: {
@@ -16,12 +16,17 @@ const nextConfig = withPWA({
   },
   swcMinify: true,
   images: {
-    domains: ["media.licdn.com"],
+    domains: ["media.licdn.com", "s3-alpha-sig.figma.com"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "media.licdn.com",
         pathname: "/dms/image/**",
+      },
+      {
+        protocol: "https",
+        hostname: "s3-alpha-sig.figma.com",
+        pathname: "/img/**",
       },
     ],
   },
