@@ -16,7 +16,11 @@ const nextConfig = withPWA({
   },
   swcMinify: true,
   images: {
-    domains: ["media.licdn.com", "s3-alpha-sig.figma.com"],
+    domains: [
+      "media.licdn.com",
+      "s3-alpha-sig.figma.com",
+      "res.cloudinary.com",
+    ],
     remotePatterns: [
       {
         protocol: "https",
@@ -27,6 +31,11 @@ const nextConfig = withPWA({
         protocol: "https",
         hostname: "s3-alpha-sig.figma.com",
         pathname: "/img/**",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dgz1duuwu/image/upload/**",
       },
     ],
   },
