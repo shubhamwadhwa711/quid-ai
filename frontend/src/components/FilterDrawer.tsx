@@ -244,7 +244,7 @@ export default function FilterDrawer({
               {solutions.map((solution) => (
                 <Card
                   key={solution.id}
-                  className="bg-white/10 border-[#545C6C] flex flex-col items-center justify-center px-6 h-28 w-28"
+                  className="bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] border-[#545C6C] flex flex-col items-center justify-center px-6 h-28 w-28"
                 >
                   <img
                     src={solution.image}

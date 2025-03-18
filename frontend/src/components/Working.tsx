@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 const Working = () => {
   return (
     <div className="space-y-6 flex flex-col justify-center items-center">
-      <div className="-mt-96">
+      <div className="">
         <h1 className="text-3xl proxima-bold ">
           How It <span className="text-[#425BFF]">Works</span>
         </h1>

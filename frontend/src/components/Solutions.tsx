@@ -14,7 +14,7 @@ const Solutions = () => {
   }, [dispatch]);
   console.log("Solutions", Solutions);
   return (
-    <div className="relative w-full min-h-screen flex items-center justify-center">
+    <div className="relative w-full flex items-center justify-center">
       {/* Background Image Container */}
       <div className="absolute -top-60 left-0 w-full h-[50vh] flex justify-center">
         <img
@@ -25,7 +25,7 @@ const Solutions = () => {
       </div>
 
       {/* Content Container */}
-      <div className="relative -mt-96 z-10 container flex flex-col items-center justify-center gap-6">
+      <div className="relative container flex flex-col items-center justify-center gap-6">
         {/* Hero Text Section */}
         <div className="text-center">
           <h1 className="text-3xl proxima-bold leading-tight">

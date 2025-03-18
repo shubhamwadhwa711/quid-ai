@@ -3,6 +3,7 @@ import { Card, CardDescription, CardTitle } from "./ui/card";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchInsightCategory } from "@/reducers/insights/category/insightscategorySlice";
 import { fetchInsights } from "@/reducers/insights/insightsSlice";
+import { SkeletonCards } from "./SkeletonCard";
 
 const getTypeColor = (type: string) => {
   switch (type.toLowerCase()) {
@@ -22,9 +23,11 @@ const Insights = () => {
   const { insightsCategory, loading, error } = useAppSelector(
     (state) => state.insightsCategory
   );
-  const { insights, loading: insightsLoading, error: insightsError } = useAppSelector(
-    (state) => state.insights
-  );
+  const {
+    insights,
+    loading: insightsLoading,
+    error: insightsError,
+  } = useAppSelector((state) => state.insights);
 
   useEffect(() => {
     dispatch(fetchInsightCategory());
@@ -66,16 +69,27 @@ const Insights = () => {
         <div className="w-full">
           <div className="relative">
             <div className="flex overflow-x-auto hide-scrollbar">
-              <div className="flex gap-4 min-w-max px-1 pb-4">
+              <div className="flex ml-4 gap-4 min-w-max px-1 pb-4">
                 {insightsLoading ? (
-                  <p className="text-white proxima-regular">Loading...</p>
+                  <SkeletonCards />
                 ) : insightsError ? (
-                  <p className="text-red-500">Error: {insightsError}</p>
+                  <p className="text-red-500 h-56">Error: {insightsError}</p>
+                ) : insights.length === 0 ? (
+                  // <Card className="bg-gray-800 flex-shrink-0 w-60 h-56 ">
+                  //   <div className="h-3/5 bg-gray-700 rounded-t-lg"></div>
+                  //   <div className="h-2/5 flex flex-col justify-between p-4">
+                  //     <div className="h-4 bg-gray-600 rounded w-3/4"></div>
+                  //     <div className="h-6 bg-gray-700 rounded w-full"></div>
+                  //   </div>
+                  // </Card>
+                  <div className="w-60 h-56 text-center">
+                    <h1>No Data available</h1>
+                  </div>
                 ) : (
                   insights.map((insight) => (
                     <Card
                       key={insight.id}
-                      className="hover:shadow-md bg-gray-800 transition flex-shrink-0 w-60 h-56"
+                      className="hover:shadow-md bg-gray-800  transition flex-shrink-0 w-60 h-56"
                     >
                       <div className="relative h-3/5">
                         <img
@@ -83,26 +97,18 @@ const Insights = () => {
                           alt={insight.title}
                           className="w-full h-full object-fill rounded-t-lg"
                         />
-                        {/* <div
-                          className="absolute proxima-large top-2 left-2 text-white text-sm px-3 py-1 rounded-full"
-                          style={{
-                            backgroundColor: getTypeColor(insight.type),
-                          }}
-                        >
-                          {insight.type}
-                        </div> */}
                       </div>
 
-                      <div className="h-2/5 flex flex-col justify-between p-4">
+                      <div className="h-2/5 flex  flex-col justify-between p-4">
                         <CardDescription className="text-sm text-gray-500">
                           <div className="flex items-center gap-2">
                             <div className="bg-[#425BFF] h-2 w-2 rounded-full"></div>
-                            <div className="text-slate-400 proxima-medium">
+                            <div className="text-slate-400 proxima-bold">
                               14 Feb 2025
                             </div>
                           </div>
                         </CardDescription>
-                        <CardTitle className="text-lg text-white proxima-medium truncate">
+                        <CardTitle className="text-sm text-start text-white proxima-FAQ">
                           {insight.title}
                         </CardTitle>
                       </div>

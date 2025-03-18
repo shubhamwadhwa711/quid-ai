@@ -49,16 +49,18 @@ const FAQ = () => {
         <Separator orientation="horizontal" />
       </div>
 
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion type="single" collapsible className="w-full ">
         {FAQ.map((item) => (
-          <AccordionItem key={item.id} value={`item-${item.id}`}>
-            <AccordionTrigger className="text-left border-b border-gray-700 hover:no-underline">
-              <span className="text- flex items-center proxima-bold justify-between w-full">
-                {item.question}
-              </span>
+          <AccordionItem
+            key={item.id}
+            className="border-b last:border-b-0 border-gray-700"
+            value={`item-${item.id}`}
+          >
+            <AccordionTrigger className="  hover:no-underline">
+              <span className=" proxima-bold w-full">{item.question}</span>
             </AccordionTrigger>
-            <AccordionContent className="proxima-FAQ mt-2">
-              {item.answer}
+            <AccordionContent className="proxima-FAQ">
+              <span>{item.answer}</span>
             </AccordionContent>
           </AccordionItem>
         ))}

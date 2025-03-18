@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle } from "./ui/card";
 const Signup = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <Card className="bg-white/10  border-[#545C6C] ">
+      <Card className="bg-white/10  border-[#545C6C] mx-4">
         <CardHeader className="p-0">
           <img
             src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740048424/quidAi/rjrwhzfaf1kclwfppmbw.png"

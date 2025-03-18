@@ -20,7 +20,7 @@ export default function Home() {
         backgroundPosition: "top center", // Keeps image aligned at the top
       }}
     >
-      <div className="  px-4 py-24  ">
+      <div className=" py-24  ">
         <div className="space-y-16   text-center">
           {/* Hero Section */}
           <Hero />
