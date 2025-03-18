@@ -42,6 +42,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import FilterDrawer from "@/components/FilterDrawer";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { ExpertiseIcon } from "@/components/icons/ExpertiseIcon";
+import { AcademicIcon } from "@/components/icons/AcademicIcon";
+import { CountryIcon } from "@/components/icons/CountryIcon";
+import { ClientsIcon } from "@/components/icons/ClientsIcon";
+import { LanguagesIcon } from "@/components/icons/LanguagesIcon";
+import { AvailableToIcon } from "@/components/icons/AvailableToIcon";
 
 const talentData = [
   {
@@ -576,7 +582,38 @@ const talentData = [
     ],
   },
 ];
-
+const QuickFilters = [
+  {
+    id: 1,
+    icon: "/Icons/Expertise.png",
+    label: "Expertise",
+  },
+  {
+    id: 2,
+    icon: "/Icons/Academic.png",
+    label: "Academic",
+  },
+  {
+    id: 3,
+    icon: "/Icons/Country.png",
+    label: "Country",
+  },
+  {
+    id: 4,
+    icon: "/Icons/Client.png",
+    label: "Clients",
+  },
+  {
+    id: 5,
+    icon: "/Icons/Languages.png",
+    label: "Languages",
+  },
+  {
+    id: 6,
+    icon: "/Icons/AvailableTo.png",
+    label: "Available to",
+  },
+];
 const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showConnectForm, setShowConnectForm] = useState(false);
@@ -621,7 +658,7 @@ const Search = () => {
   };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
-      <div className="w-11/12 my-20 flex flex-col gap-4">
+      <div className="my-20 flex flex-col gap-4">
         <label className="relative flex items-center gap-3 px-4 py-2 rounded-3xl">
           <SearchIcon className="absolute left-4 text-gray-400 mx-2" />
           <Input
@@ -638,13 +675,41 @@ const Search = () => {
             className="text-white w-12 h-10 p-2 m-2 bg-[#425BFF] rounded-full"
           />
         </label>
-
+        <div className="">
+          <div className="mx-1 flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+            <h1 className="proxima-bold text-xl text-white">
+              Quick filters by
+            </h1>
+          </div>
+          <div className="w-full px-2">
+            <div className="grid grid-rows-2 grid-flow-col gap-2 hide-scrollbar">
+              {QuickFilters.map(({ id, icon, label }) => (
+                <Card
+                  key={id}
+                  className="h-16 w-28 flex flex-col align-middle justify-center items-center border-none bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]"
+                >
+                  <CardTitle>
+                    <img src={icon} alt="" />
+                  </CardTitle>
+                  <CardDescription className="text-white proxima-bold">
+                    {label}
+                  </CardDescription>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
         {showFilters && (
-          <FilterDrawer
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
-            handleFilterToggle={handleFilterToggle}
-          />
+          <Drawer open={showFilters} onOpenChange={setShowFilters}>
+            <DrawerContent>
+              <FilterDrawer
+                showFilters={showFilters}
+                setShowFilters={setShowFilters}
+                handleFilterToggle={handleFilterToggle}
+              />
+            </DrawerContent>
+          </Drawer>
         )}
       </div>
 
@@ -655,10 +720,10 @@ const Search = () => {
           className="w-full h-full object-cover"
         />
       </div> */}
-      <div className=" w-full overflow-x-auto hide-scrollbar px-4">
-        <div className="mx-4 flex items-center gap-2">
+      <div className="-mt-10 w-full overflow-x-auto hide-scrollbar px-4">
+        <div className="mx-1 flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-          <h1 className="proxima-medium text-xl">Top AI Talents</h1>
+          <h1 className="proxima-bold text-xl text-white">Top AI Talents</h1>
         </div>
         <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
           {talentData.map((talent) => (
@@ -680,7 +745,7 @@ const Search = () => {
                 <CardDescription className="proxima-small">
                   {talent.location}
                 </CardDescription>
-                <p className="proxima-medium">{talent.role}</p>
+                <p className="proxima-bold">{talent.role}</p>
               </CardHeader>
               <CardContent className="text-center">
                 <div>
@@ -703,9 +768,24 @@ const Search = () => {
                   <div className="flex justify-center items-center gap-4">
                     <Button
                       onClick={handleConnectForm}
-                      className="rounded-3xl proxima-large px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
+                      className="rounded-3xl proxima-bold px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
                     >
-                      Connect <MoveRight />
+                      Connect
+                      <svg
+                        width="18"
+                        height="14"
+                        viewBox="0 0 18 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 7H17M17 7L11 1M17 7L11 13"
+                          stroke="white"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
                     </Button>
                     <Button
                       className="rounded-full h-12 w-12 border flex items-center justify-center"
@@ -743,7 +823,9 @@ const Search = () => {
         <div className="mt-10 mb-20">
           <div className="mx-4 flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-            <h1 className="font-bold text-xl">AI Talents from US</h1>
+            <h1 className="proxima-bold text-xl text-white">
+              AI Talents from US
+            </h1>
           </div>
           <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
             {talentData.map((talent) => (
