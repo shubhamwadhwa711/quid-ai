@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Edit, Linkedin, MapPin, Share2, X } from "lucide-react";
+import {
+  Edit,
+  Edit2Icon,
+  Linkedin,
+  MapPin,
+  Pencil,
+  Share2,
+  X,
+} from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -22,6 +30,7 @@ import {
 // import { useMediaQuery } from "@/hooks/use-media-query";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile } from "@/reducers/profile/profileSlice";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -317,7 +326,7 @@ const Profile = () => {
   const handleSaveData = (newData) => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
-
+  const handleEditProject = () => {};
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2">
       {/* Main profile card */}
@@ -423,9 +432,9 @@ const Profile = () => {
         <div className="space-y-4">
           <div className="pl-4">
             <p>
-              {profile[0].summary.length > 200
-                ? `${profile[0].summary.substring(0, 200)}... Read More`
-                : profile[0].summary}
+              {profile[0]?.summary?.length > 200
+                ? `${profile[0]?.summary?.substring(0, 200)}... Read More`
+                : profile[0]?.summary}
             </p>
           </div>
         </div>
@@ -556,22 +565,30 @@ const Profile = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           {userData.projects.map((project, index) => (
-            <div key={index} className="bg-white/5 rounded-lg p-4">
-              <h3 className="font-medium mb-2">{project.title}</h3>
-              <p className="text-sm text-gray-300 mb-2">
-                {project.description}
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {project.tags?.map((tag, tagIndex) => (
-                  <span
-                    key={tagIndex}
-                    className="text-xs px-2 py-1 bg-white/10 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
+            <Card
+              key={index}
+              className="hover:shadow-md relative bg-gray-800  transition flex-shrink-0 w-60 h-56"
+            >
+              <div className="relative h-4/5">
+                <img
+                  src={project.title}
+                  alt={project.title}
+                  className="w-full h-full object-fill rounded-t-lg"
+                />
               </div>
-            </div>
+              <Button
+                variant="none"
+                onClick={handleEditProject}
+                className="absolute bg-white rounded-full p-2 top-1 right-1"
+              >
+                <Edit className="h-6 w-6 text-black" />
+              </Button>
+              <div className="h-1/5 flex  flex-col justify-between p-4">
+                <CardTitle className="text-sm text-start text-white proxima-FAQ">
+                  {project.title}
+                </CardTitle>
+              </div>
+            </Card>
           ))}
         </div>
       </div>
