@@ -29,8 +29,9 @@ import {
 } from "@/components/ui/dialog";
 // import { useMediaQuery } from "@/hooks/use-media-query";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProfile } from "@/reducers/profile/profileSlice";
+import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import ReadMore from "@/components/ReadMore";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -219,44 +220,18 @@ const Profile = () => {
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
   useEffect(() => {
+    // console.log("dispatching profile...");
     dispatch(fetchProfile());
   }, [dispatch]);
-  console.log("profile", profile[0]);
-  const newprofile = profile[0];
-  const [userData, setUserData] = useState({
-    name: "Sophia Chris",
-    title: "Senior Developer",
-    location: "San Francisco, CA",
-    bio: "Mathematician and Statistician | Expert in Pure Maths, Advance Maths, Probability-Statistics, Data Science",
-    fullBio:
-      "An AI expert with a strong background in mathematics and statistics, specializing in pure and advanced mathematics, probability, and data science. With deep analytical and problem-solving skills, they excel in developing statistical models, machine learning algorithms, and AI-driven solutions. Their expertise spans theoretical and applied mathematics, enabling them to extract meaningful insights from complex data.",
-    linkedIn: "linkedin.com/sophia-chris-de",
-    skills: [
-      "Artificial Intelligence",
-      "Mathematics",
-      "Python",
-      "Differential Equations",
-      "Regression Analysis",
-      "Graph Theory",
-      "Data Analysis",
-    ],
-    languages: ["English", "Spanish", "French"],
-    contact: "jane.doe@example.com",
-    available: ["Teach", "Advice", "Speak", "Be Interviewed"],
-    academics: ["Masters", "PhD"],
-    projects: [
-      {
-        title: "Project Title Here",
-        description: "Project description goes here",
-        tags: ["Mathematics", "Python"],
-      },
-    ],
-    featuredClients: ["Discord", "Meta", "Netflix", "Amazon"],
-  });
-
+  // console.log("profile", profile);
+  const [userData, setUserData] = useState<Profile | null>(null);
+  console.log("userData", userData);
+  console.log("profile[0]", profile[0]);
   // State for controlling which popup is currently open
   const [activePopup, setActivePopup] = useState(null);
-
+  useEffect(() => {
+    setUserData(profile[0]);
+  }, [profile]);
   // Define handlers for different popups
   const popupConfigs = {
     profile: {
@@ -327,6 +302,7 @@ const Profile = () => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
   const handleEditProject = () => {};
+  console.log("Animta", userData);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2">
       {/* Main profile card */}
@@ -378,7 +354,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="mt-6 p-2">
-            <Button className="w-full bg-gradient-to-r text-lg proxima from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2">
+            <Button className="w-full bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2">
               Share Profile
               <Share2 size={40} className="ml-2" />
             </Button>
@@ -388,7 +364,7 @@ const Profile = () => {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
                 <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-                <h2 className="text-xl proxima">EXPERTISE</h2>
+                <h2 className="text-xl proxima-regular">EXPERTISE</h2>
               </div>
               <Button
                 size="icon"
@@ -400,7 +376,7 @@ const Profile = () => {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2">
-              {profile[0]?.skill.map((s, index) => (
+              {userData?.skill.map((s, index) => (
                 <span
                   key={index}
                   className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -418,7 +394,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">BIO</h2>
+            <h2 className="text-xl proxima-regular">BIO</h2>
           </div>
           <Button
             size="icon"
@@ -431,11 +407,7 @@ const Profile = () => {
         </div>
         <div className="space-y-4">
           <div className="pl-4">
-            <p>
-              {profile[0]?.summary?.length > 200
-                ? `${profile[0]?.summary?.substring(0, 200)}... Read More`
-                : profile[0]?.summary}
-            </p>
+            <ReadMore text={userData?.summary}/>
           </div>
         </div>
       </div>
@@ -444,7 +416,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">LANGUAGE</h2>
+            <h2 className="text-xl proxima-regular">LANGUAGE</h2>
           </div>
           <Button
             size="icon"
@@ -456,12 +428,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.languages.map((language, index) => (
+          {userData?.languages?.map((language, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {language}
+              {language.name}
             </span>
           ))}
         </div>
@@ -471,7 +443,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">ACADEMICS</h2>
+            <h2 className="text-xl proxima-regular">ACADEMICS</h2>
           </div>
           <Button
             size="icon"
@@ -483,12 +455,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.academics.map((academic, index) => (
+          {userData?.education.map((edu, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {academic}
+              {edu.description}
             </span>
           ))}
         </div>
@@ -498,7 +470,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">AVAILABLE TO</h2>
+            <h2 className="text-xl proxima-regular">AVAILABLE TO</h2>
           </div>
           <Button
             size="icon"
@@ -510,12 +482,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.available.map((aval, index) => (
+          {userData?.availability?.map((aval, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {aval}
+              {aval.name}
             </span>
           ))}
         </div>
@@ -525,7 +497,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">FEATURED CLIENTS</h2>
+            <h2 className="text-xl proxima-regular">FEATURED CLIENTS</h2>
           </div>
           <Button
             size="icon"
@@ -537,12 +509,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.featuredClients.map((client, index) => (
+          {userData?.client.map((cli, index) => (
             <span
-              key={index}
+              key={cli.id}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {client}
+              {cli.name}
             </span>
           ))}
         </div>
@@ -552,7 +524,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">RECENT PROJECTS</h2>
+            <h2 className="text-xl proxima-regular">RECENT PROJECTS</h2>
           </div>
           <Button
             size="icon"
@@ -564,7 +536,7 @@ const Profile = () => {
           </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          {userData.projects.map((project, index) => (
+          {userData?.projects?.map((project, index) => (
             <Card
               key={index}
               className="hover:shadow-md relative bg-gray-800  transition flex-shrink-0 w-60 h-56"
