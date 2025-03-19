@@ -16,6 +16,7 @@ import {
   CheckCircle,
   Check,
   SlidersHorizontal,
+  Router,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -29,15 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import FilterDrawer from "@/components/FilterDrawer";
@@ -48,633 +41,256 @@ import { CountryIcon } from "@/components/icons/CountryIcon";
 import { ClientsIcon } from "@/components/icons/ClientsIcon";
 import { LanguagesIcon } from "@/components/icons/LanguagesIcon";
 import { AvailableToIcon } from "@/components/icons/AvailableToIcon";
-
+import { useRouter } from "next/navigation";
+import TalentCard from "@/components/TalentCard";
 const talentData = [
   {
     id: 1,
-    name: "Sophia Chris",
-    location: "United States",
-    avatar:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
-    role: "Mathematician and Statistician",
-    skills: {
-      technical: [
-        "Mathematics",
-        "Statistics",
-        "Data Analysis",
-        "R",
-        "Python",
-        "Machine Learning",
-      ],
-      softSkills: [
-        // "Problem Solving",
-        // "Research",
-        // "Critical Thinking",
-        // "Communication",
-      ],
-      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
+    user: {
+      id: 2,
+      username: "Anita",
+      email: "anita@gmail.com",
+      first_name: "Anita",
+      last_name: "Verma",
     },
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sophiachris",
-    },
-    featuredClients: [
+    skill: [
       {
-        name: "discord",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
+        id: 1,
+        name: "Python",
       },
       {
-        name: "meta",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
+        id: 2,
+        name: "Artificial Intelligence",
       },
       {
-        name: "netflix",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
+        id: 3,
+        name: "Mathematics",
       },
       {
-        name: "intel",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
+        id: 4,
+        name: "Differential Equations",
       },
       {
-        name: "google",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
+        id: 5,
+        name: "Regression Analysis",
       },
       {
-        name: "amazon",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
+        id: 6,
+        name: "Data Mining",
       },
       {
-        name: "microsoft",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
+        id: 7,
+        name: "Graph Theory",
       },
       {
-        name: "lakme",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
+        id: 8,
+        name: "Data Analysis",
       },
       {
-        name: "samsung",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+        id: 9,
+        name: "Business Statistics",
       },
     ],
-  },
-  {
-    id: 2,
-    name: "Sophia Chris",
-    location: "United States",
-    avatar:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
-    role: "Mathematician and Statistician",
-    skills: {
-      technical: [
-        "Mathematics",
-        "Statistics",
-        "Data Analysis",
-        "R",
-        "Python",
-        "Machine Learning",
-      ],
-      softSkills: [
-        // "Problem Solving",
-        // "Research",
-        // "Critical Thinking",
-        // "Communication",
-      ],
-      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
-    },
-
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sophiachris",
-    },
-    featuredClients: [
+    education: [
       {
-        name: "discord",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
+        id: 1,
+        school: "Goel",
+        degree: "Masters",
+        field_of_study: "Chemical",
+        start_year: 2020,
+        end_year: 2024,
+        description: "I have done my B.Pharma",
+        profile: 1,
       },
       {
-        name: "meta",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
-      },
-      {
-        name: "netflix",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
-      },
-      {
-        name: "intel",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
-      },
-      {
-        name: "google",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
-      },
-      {
-        name: "amazon",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
-      },
-      {
-        name: "microsoft",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
-      },
-      {
-        name: "lakme",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
-      },
-      {
-        name: "samsung",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+        id: 2,
+        school: "REC",
+        degree: "Phd",
+        field_of_study: "Chemical",
+        start_year: 2020,
+        end_year: 2024,
+        description: "I have done my B.Pharma",
+        profile: 1,
       },
     ],
-  },
-  {
-    id: 3,
-    name: "Sophia Chris",
-    location: "United States",
-    avatar:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
-    role: "Mathematician and Statistician",
-    skills: {
-      technical: [
-        "Mathematics",
-        "Statistics",
-        "Data Analysis",
-        "R",
-        "Python",
-        "Machine Learning",
-      ],
-      softSkills: [
-        // "Problem Solving",
-        // "Research",
-        // "Critical Thinking",
-        // "Communication",
-      ],
-      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
-    },
-
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sophiachris",
-    },
-    featuredClients: [
+    projects: [
       {
-        name: "discord",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
+        id: 2,
+        title: "AI",
+        description: "Ai scanner",
+        url: "",
+        start_date: "2025-03-19",
+        end_date: "2025-03-30",
+        profile: 1,
       },
       {
-        name: "meta",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
+        id: 3,
+        title: "AI scanner",
+        description: "Ai scanner",
+        url: null,
+        start_date: "2025-03-19",
+        end_date: "2025-03-19",
+        profile: 1,
       },
       {
-        name: "netflix",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
-      },
-      {
-        name: "intel",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
-      },
-      {
-        name: "google",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
-      },
-      {
-        name: "amazon",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
-      },
-      {
-        name: "microsoft",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
-      },
-      {
-        name: "lakme",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
-      },
-      {
-        name: "samsung",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+        id: 4,
+        title: "ML project",
+        description: "new Ml",
+        url: null,
+        start_date: "2025-03-19",
+        end_date: "2025-03-19",
+        profile: 1,
       },
     ],
-  },
-  {
-    id: 4,
-    name: "Sophia Chris",
-    location: "United States",
-    avatar:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
-    role: "Mathematician and Statistician",
-    skills: {
-      technical: [
-        "Mathematics",
-        "Statistics",
-        "Data Analysis",
-        "R",
-        "Python",
-        "Machine Learning",
-      ],
-      softSkills: [
-        // "Problem Solving",
-        // "Research",
-        // "Critical Thinking",
-        // "Communication",
-      ],
-      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
-    },
-
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sophiachris",
-    },
-    featuredClients: [
+    client: [
       {
-        name: "discord",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
-      },
-      {
-        name: "meta",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
-      },
-      {
-        name: "netflix",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
-      },
-      {
-        name: "intel",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
-      },
-      {
-        name: "google",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
-      },
-      {
-        name: "amazon",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
-      },
-      {
-        name: "microsoft",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
-      },
-      {
-        name: "lakme",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
-      },
-      {
-        name: "samsung",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
+        id: 1,
+        name: "Google",
+        profile: 1,
       },
     ],
-  },
-  {
-    id: 5,
-    name: "Sophia Chris",
+    image: "",
+    headline:
+      "Mathematician and Statistician | Expert in Pure Maths, Advance Maths, Probability-Statistics, Data Science",
+    summary:
+      "An AI expert with a strong background in mathematics and statistics, specializing in pure and advanced mathematics, probability, and data science. With deep analytical and problem-solving skills, they excel in developing statistical models, machine learning algorithms, and AI-driven solutions. Their expertise spans theoretical and applied mathematics, enabling them to extract meaningful insights from complex data.",
     location: "United States",
-    avatar:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
-    role: "Mathematician and Statistician",
-    skills: {
-      technical: [
-        "Mathematics",
-        "Statistics",
-        "Data Analysis",
-        "R",
-        "Python",
-        "Machine Learning",
-      ],
-      softSkills: [
-        // "Problem Solving",
-        // "Research",
-        // "Critical Thinking",
-        // "Communication",
-      ],
-      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
-    },
-
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sophiachris",
-    },
-    featuredClients: [
-      {
-        name: "discord",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
-      },
-      {
-        name: "meta",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
-      },
-      {
-        name: "netflix",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
-      },
-      {
-        name: "intel",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
-      },
-      {
-        name: "google",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
-      },
-      {
-        name: "amazon",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
-      },
-      {
-        name: "microsoft",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
-      },
-      {
-        name: "lakme",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
-      },
-      {
-        name: "samsung",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
-      },
-    ],
-  },
-  {
-    id: 6,
-    name: "Sophia Chris",
-    location: "United States",
-    avatar:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
-    role: "Mathematician and Statistician",
-    skills: {
-      technical: [
-        "Mathematics",
-        "Statistics",
-        "Data Analysis",
-        "R",
-        "Python",
-        "Machine Learning",
-      ],
-      softSkills: [
-        // "Problem Solving",
-        // "Research",
-        // "Critical Thinking",
-        // "Communication",
-      ],
-      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
-    },
-
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sophiachris",
-    },
-    featuredClients: [
-      {
-        name: "discord",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
-      },
-      {
-        name: "meta",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
-      },
-      {
-        name: "netflix",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
-      },
-      {
-        name: "intel",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
-      },
-      {
-        name: "google",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
-      },
-      {
-        name: "amazon",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
-      },
-      {
-        name: "microsoft",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
-      },
-      {
-        name: "lakme",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
-      },
-      {
-        name: "samsung",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
-      },
-    ],
-  },
-  {
-    id: 7,
-    name: "Sophia Chris",
-    location: "United States",
-    avatar:
-      "https://res.cloudinary.com/dgz1duuwu/image/upload/v1742271138/quidAi/byosx8laiwg81m7g5prh.png",
-    role: "Mathematician and Statistician",
-    skills: {
-      technical: [
-        "Mathematics",
-        "Statistics",
-        "Data Analysis",
-        "R",
-        "Python",
-        "Machine Learning",
-      ],
-      softSkills: [
-        // "Problem Solving",
-        // "Research",
-        // "Critical Thinking",
-        // "Communication",
-      ],
-      tools: ["MATLAB", "SPSS", "Tableau", "SQL", "Excel"],
-    },
-
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/sophiachris",
-    },
-    featuredClients: [
-      {
-        name: "discord",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/r3lkfnldpgbpmzxfx8fy.png",
-      },
-      {
-        name: "meta",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/lm7tk69xjecwryeozuum.png",
-      },
-      {
-        name: "netflix",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ol7ht5zbzvwfmxttw7yy.png",
-      },
-      {
-        name: "intel",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/pfan7ykyt117mulrg3iq.png",
-      },
-      {
-        name: "google",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948328/quidAi/fktdz4tzrgz3ontonz69.png",
-      },
-      {
-        name: "amazon",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/ngzmyrjzatvjwsvn0wdb.png",
-      },
-      {
-        name: "microsoft",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/i8prphmo6qg6rnliopeh.png",
-      },
-      {
-        name: "lakme",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/beujzp1m5a11fblem753.png",
-      },
-      {
-        name: "samsung",
-        image:
-          "https://res.cloudinary.com/dgz1duuwu/image/upload/v1739948327/quidAi/y4r3yorp7jdcrvg3vrxy.png",
-      },
-    ],
-  },
-];
-const QuickFilters = [
-  {
-    id: 1,
-    icon: "/Icons/Expertise.png",
-    label: "Expertise",
-  },
-  {
-    id: 2,
-    icon: "/Icons/Academic.png",
-    label: "Academic",
-  },
-  {
-    id: 3,
-    icon: "/Icons/Country.png",
-    label: "Country",
-  },
-  {
-    id: 4,
-    icon: "/Icons/Client.png",
-    label: "Clients",
-  },
-  {
-    id: 5,
-    icon: "/Icons/Languages.png",
-    label: "Languages",
-  },
-  {
-    id: 6,
-    icon: "/Icons/AvailableTo.png",
-    label: "Available to",
+    linkedin_url: "http://linkedin.com/sophia-chris-de",
+    industry: 1,
   },
 ];
 const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
-  const [showConnectForm, setShowConnectForm] = useState(false);
-  const [selectedTalent, setSelectedTalent] = useState(null);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const [selectedFilters, setSelectedFilters] = useState({
     skills: [],
-    location: "",
-    specialization: "",
+    academics: [],
+    countries: [],
+    languages: [],
+    clients: [],
+    availability: [],
   });
-  const [connectForm, setConnectForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-    project: "",
-  });
+
+  const router = useRouter();
   const handleFilterToggle = () => {
     setShowFilters(!showFilters);
   };
 
-  const handleConnectForm = (talent) => {
-    setSelectedTalent(talent);
-    setShowConnectForm(!showConnectForm);
-  };
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setConnectForm({
-      ...connectForm,
-      [name]: value,
+  const QuickFilters = [
+    {
+      id: 1,
+      icon: "/Icons/Expertise.png",
+      label: "Expertise",
+    },
+    {
+      id: 2,
+      icon: "/Icons/Academic.png",
+      label: "Academic",
+    },
+    {
+      id: 3,
+      icon: "/Icons/Country.png",
+      label: "Country",
+    },
+    {
+      id: 4,
+      icon: "/Icons/Client.png",
+      label: "Clients",
+    },
+    {
+      id: 5,
+      icon: "/Icons/Languages.png",
+      label: "Languages",
+    },
+    {
+      id: 6,
+      icon: "/Icons/AvailableTo.png",
+      label: "Available to",
+    },
+  ];
+  const removeFilter = (key: string, value?: string) => {
+    setSelectedFilters((prevFilters) => {
+      if (key === "skills") {
+        return {
+          ...prevFilters,
+          skills: prevFilters.skills.filter((skill) => skill !== value),
+        };
+      } else if (key === "languages") {
+        return {
+          ...prevFilters,
+          languages: prevFilters.languages.filter(
+            (language) => language !== value
+          ),
+        };
+      } else if (key === "countries") {
+        return {
+          ...prevFilters,
+          countries: prevFilters.countries.filter(
+            (country) => country !== value
+          ),
+        };
+      } else if (key === "availability") {
+        return {
+          ...prevFilters,
+          availability: prevFilters.availability.filter(
+            (aval) => aval !== value
+          ),
+        };
+      } else if (key === "clients") {
+        return {
+          ...prevFilters,
+          clients: prevFilters.clients.filter((cli) => cli !== value),
+        };
+      } else if (key === "academics") {
+        return {
+          ...prevFilters,
+          academics: prevFilters.academics.filter((aca) => aca !== value),
+        };
+      } else {
+        return {
+          ...prevFilters,
+          [key]: "",
+        };
+      }
     });
   };
-  const handleSubmitConnect = () => {
-    // Here you would typically handle the form submission to your backend
-    console.log("Form submitted:", connectForm);
 
-    // Show thank you message
-    setFormSubmitted(true);
-
-    // Optional: Reset form
-    setConnectForm({ name: "", email: "", message: "" });
-  };
+  console.log("Filter selection", selectedFilters);
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <div className="my-20 flex flex-col gap-4">
-        <label className="relative flex items-center gap-3 px-4 py-2 rounded-3xl">
-          <SearchIcon className="absolute left-4 text-gray-400 mx-2" />
-          <Input
-            type="text"
-            placeholder="Search talent..."
-            className="pl-10 pr-4 py-2 w-full outline-none border bg-transparent focus:ring-2 focus:ring-blue-500 rounded-3xl"
-          />
+    <div className=" flex flex-col items-center justify-center">
+      <div className="my-20 w-full flex flex-col gap-2">
+        <div className="flex px-2 md:px-4 lg:px-6 max-w-xl gap-2">
+          <div className=" border   flex w-full items-center rounded-3xl">
+            <SearchIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <Input
+              type="text"
+              placeholder="Search talent..."
+              className="flex h-10 w-full border-none focus-visible:ring-0 rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
           <Button
+            size="icon"
+            variant="none"
             onClick={handleFilterToggle}
-            className="absolute right-4 rounded-full p-2 bg-transparent hover:bg-gray-700/20"
-          ></Button>
-          <SlidersHorizontal
-            strokeWidth={1}
-            className="text-white w-12 h-10 p-2 m-2 bg-[#425BFF] rounded-full"
-          />
-        </label>
+            className="h-10 w-12  rounded-full bg-[#425BFF]"
+          >
+            <svg
+              width="29"
+              height="29"
+              viewBox="0 0 29 29"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ height: "90%", width: "90%" }}
+            >
+              <path
+                d="M25.5476 8.28571H10.3572M7.59525 8.28571H3.45239M25.5476 22.0952H10.3572M7.59525 22.0952H3.45239M18.6429 15.1905H3.45239M25.5476 15.1905H21.4048M8.9762 5.5238C9.34245 5.5238 9.6937 5.6693 9.95268 5.92828C10.2117 6.18725 10.3572 6.5385 10.3572 6.90476V9.66666C10.3572 10.0329 10.2117 10.3842 9.95268 10.6431C9.6937 10.9021 9.34245 11.0476 8.9762 11.0476C8.60995 11.0476 8.2587 10.9021 7.99972 10.6431C7.74074 10.3842 7.59525 10.0329 7.59525 9.66666V6.90476C7.59525 6.5385 7.74074 6.18725 7.99972 5.92828C8.2587 5.6693 8.60995 5.5238 8.9762 5.5238ZM8.9762 19.3333C9.34245 19.3333 9.6937 19.4788 9.95268 19.7378C10.2117 19.9968 10.3572 20.348 10.3572 20.7143V23.4762C10.3572 23.8424 10.2117 24.1937 9.95268 24.4527C9.6937 24.7116 9.34245 24.8571 8.9762 24.8571C8.60995 24.8571 8.2587 24.7116 7.99972 24.4527C7.74074 24.1937 7.59525 23.8424 7.59525 23.4762V20.7143C7.59525 20.348 7.74074 19.9968 7.99972 19.7378C8.2587 19.4788 8.60995 19.3333 8.9762 19.3333ZM20.0238 12.4286C20.3901 12.4286 20.7413 12.5741 21.0003 12.833C21.2593 13.092 21.4048 13.4433 21.4048 13.8095V16.5714C21.4048 16.9377 21.2593 17.2889 21.0003 17.5479C20.7413 17.8069 20.3901 17.9524 20.0238 17.9524C19.6576 17.9524 19.3063 17.8069 19.0473 17.5479C18.7884 17.2889 18.6429 16.9377 18.6429 16.5714V13.8095C18.6429 13.4433 18.7884 13.092 19.0473 12.833C19.3063 12.5741 19.6576 12.4286 20.0238 12.4286Z"
+                stroke="white"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </Button>
+        </div>
         <div className="">
           <div className="mx-1 flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
@@ -682,12 +298,12 @@ const Search = () => {
               Quick filters by
             </h1>
           </div>
-          <div className="w-full px-2">
-            <div className="grid grid-rows-2 grid-flow-col gap-2 hide-scrollbar">
+          <div className="w-full px-2 md:px-4 lg:px-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6   gap-2 hide-scrollbar">
               {QuickFilters.map(({ id, icon, label }) => (
                 <Card
                   key={id}
-                  className="h-16 w-28 flex flex-col align-middle justify-center items-center border-none bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]"
+                  className="min-h-16 min-w-28 flex flex-col align-middle justify-center items-center border-none bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]"
                 >
                   <CardTitle>
                     <img src={icon} alt="" />
@@ -700,6 +316,104 @@ const Search = () => {
             </div>
           </div>
         </div>
+        <div className="flex gap-2 max-w-sm hide-scrollbar overflow-x-scroll mx-2">
+          {/* <div className="flex flex-wrap gap-2 mt-4"> */}
+          {selectedFilters?.skills?.map((skill) => (
+            <Badge
+              key={skill}
+              className="flex bg-white/20 items-center text-nowrap rounded-3xl"
+            >
+              <span className="text-xs proxima-bold">{skill}</span>
+              <button
+                onClick={() => removeFilter("skills", skill)}
+                className="ml-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </Badge>
+          ))}
+          {/* </div> */}
+          {/* <div className="flex flex-wrap gap-2 mt-2"> */}
+          {selectedFilters?.languages?.map((language) => (
+            <Badge
+              key={language}
+              className="flex bg-white/20 items-center text-nowrap px-2 py-1 rounded-full"
+            >
+              <span className="text-xs proxima-bold">{language}</span>
+              <button
+                onClick={() => removeFilter("languages", language)}
+                className="ml-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </Badge>
+          ))}
+          {/* </div> */}
+          {/* <div className="flex flex-wrap gap-2 mt-2"> */}
+          {selectedFilters?.countries?.map((country) => (
+            <Badge
+              key={country}
+              className="flex bg-white/20 items-center text-nowrap px-2 py-1 rounded-full"
+            >
+              <span className="text-xs proxima-bold">{country}</span>
+              <button
+                onClick={() => removeFilter("countries", country)}
+                className="ml-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </Badge>
+          ))}
+          {/* </div> */}
+          {/* <div className="flex flex-wrap gap-2 mt-4"> */}
+          {selectedFilters?.availability?.map((aval) => (
+            <Badge
+              key={aval}
+              className="flex bg-white/20 items-center text-nowrap px-2 py-1 rounded-full"
+            >
+              <span className="text-xs proxima-bold">{aval}</span>
+              <button
+                onClick={() => removeFilter("availability", aval)}
+                className="ml-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </Badge>
+          ))}
+          {/* </div> */}
+          {/* <div className="flex flex-wrap gap-2 mt-4"> */}
+          {selectedFilters?.clients?.map((cli) => (
+            <Badge
+              key={cli}
+              className="flex bg-white/20 items-center text-nowrap px-2 py-1 rounded-full"
+            >
+              <span className="text-xs proxima-bold">{cli}</span>
+              <button
+                onClick={() => removeFilter("clients", cli)}
+                className="ml-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </Badge>
+          ))}
+          {/* </div> */}
+          {/* <div className="flex flex-wrap gap-2 mt-4"> */}
+          {selectedFilters?.academics?.map((aca) => (
+            <Badge
+              key={aca}
+              className="flex bg-white/20 items-center text-nowrap px-2 py-1 rounded-full"
+            >
+              <span className="text-xs proxima-bold">{aca}</span>
+              <button
+                onClick={() => removeFilter("academics", aca)}
+                className="ml-2"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </Badge>
+          ))}
+          {/* </div> */}
+        </div>
         {showFilters && (
           <Drawer open={showFilters} onOpenChange={setShowFilters}>
             <DrawerContent>
@@ -707,6 +421,7 @@ const Search = () => {
                 showFilters={showFilters}
                 setShowFilters={setShowFilters}
                 handleFilterToggle={handleFilterToggle}
+                setSelectedFilters={setSelectedFilters}
               />
             </DrawerContent>
           </Drawer>
@@ -727,97 +442,7 @@ const Search = () => {
         </div>
         <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
           {talentData.map((talent) => (
-            <Card
-              key={talent.id}
-              className="bg-white/10 h-96 w-80 border-none max-w-md relative text-white mt-20"
-            >
-              <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 z-10">
-                <Avatar className="w-24 h-24 shadow-lg ">
-                  <AvatarImage
-                    src={talent.avatar}
-                    alt={talent.name}
-                    className="object-cover"
-                  />
-                </Avatar>
-              </div>
-              <CardHeader className="mt-8  flex flex-col items-center">
-                <CardTitle className="proxima-medium">{talent.name}</CardTitle>
-                <CardDescription className="proxima-small">
-                  {talent.location}
-                </CardDescription>
-                <p className="proxima-bold">{talent.role}</p>
-              </CardHeader>
-              <CardContent className="text-center">
-                <div>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {Object.values(talent.skills)
-                      .flat()
-                      .map((skill, index) => (
-                        <Badge
-                          key={index}
-                          className="h-5 text-sm rounded-full bg-white/20 proxima-small transition-all duration-300"
-                        >
-                          {skill}
-                        </Badge>
-                      ))}
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <div className="w-full flex -mt-2 flex-col">
-                  <div className="flex justify-center items-center gap-4">
-                    <Button
-                      onClick={handleConnectForm}
-                      className="rounded-3xl proxima-bold px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
-                    >
-                      Connect
-                      <svg
-                        width="18"
-                        height="14"
-                        viewBox="0 0 18 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M1 7H17M17 7L11 1M17 7L11 13"
-                          stroke="white"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </Button>
-                    <Button
-                      className="rounded-full h-12 w-12 border flex items-center justify-center"
-                      onClick={() =>
-                        window.open(talent.socialLinks.linkedin, "_blank")
-                      }
-                      variant="none"
-                    >
-                      <Linkedin />
-                    </Button>
-                  </div>
-                  <div className="flex items-center mt-2">
-                    <h3 className="text-sm proxima-medium">Featured Clients</h3>
-                    <Separator orientation="vertical" className="h-4" />
-                    <div className="w-full overflow-x-auto hide-scrollbar">
-                      <div className="w-full relative">
-                        <div className="flex items-center">
-                          {talent.featuredClients.map((client, index) => (
-                            <img
-                              key={index}
-                              src={client.image}
-                              alt={client.name}
-                              className="h-8 w-20 object-contain inline-block ms-2"
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardFooter>
-            </Card>
+            <TalentCard talent={talent} />
           ))}
         </div>
         <div className="mt-10 mb-20">
@@ -829,170 +454,10 @@ const Search = () => {
           </div>
           <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
             {talentData.map((talent) => (
-              <Card
-                key={talent.id}
-                className="bg-white/10 h-96 w-80 border-none max-w-md relative text-white mt-20"
-              >
-                <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 z-10">
-                  <Avatar className="w-24 h-24 shadow-lg ">
-                    <AvatarImage
-                      src={talent.avatar}
-                      alt={talent.name}
-                      className="object-cover"
-                    />
-                  </Avatar>
-                </div>
-                <CardHeader className="mt-8 flex flex-col items-center">
-                  <CardTitle>{talent.name}</CardTitle>
-                  <CardDescription>{talent.location}</CardDescription>
-                  <p>{talent.role}</p>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <div>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {Object.values(talent.skills)
-                        .flat()
-                        .map((skill, index) => (
-                          <Badge
-                            key={index}
-                            className="h-5 text-sm rounded-full bg-white/20 font-medium transition-all duration-300"
-                          >
-                            {skill}
-                          </Badge>
-                        ))}
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <div className="w-full flex -mt-2 flex-col">
-                    <div className="flex justify-center items-center gap-4">
-                      <Button className="rounded-3xl px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2">
-                        Connect <MoveRight />
-                      </Button>
-                      <Button
-                        className="rounded-full h-12 w-12 border flex items-center justify-center"
-                        onClick={() =>
-                          window.open(talent.socialLinks.linkedin, "_blank")
-                        }
-                      >
-                        <Linkedin />
-                      </Button>
-                    </div>
-                    <div className="flex items-center mt-2">
-                      <h3 className="text-sm ">Featured Clients</h3>
-                      <Separator orientation="vertical" className="h-4" />
-                      <div className="w-full overflow-x-auto hide-scrollbar">
-                        <div className="w-full relative">
-                          <div className="flex items-center">
-                            {talent.featuredClients.map((client, index) => (
-                              <img
-                                key={index}
-                                src={client.image}
-                                alt={client.name}
-                                className="h-8 w-20 object-contain inline-block ms-2"
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardFooter>
-              </Card>
+              <TalentCard talent={talent} />
             ))}
           </div>
         </div>
-        <Dialog open={showConnectForm} onOpenChange={setShowConnectForm}>
-          <DialogContent className="sm:max-w-md bg-gradient-to-t  from-black  via-blue-950  to-black  border-white/20 text-white">
-            {!formSubmitted ? (
-              <>
-                <DialogHeader>
-                  <DialogTitle className="text-xl text-center font-semibold">
-                    Connect Now
-                  </DialogTitle>
-                  <DialogDescription className="text-gray-300">
-                    Send a message to start collaborating with this AI talent.
-                  </DialogDescription>
-                </DialogHeader>
-
-                <div className="grid gap-4">
-                  <Separator className="bg-white/20" />
-
-                  <div className="grid gap-4">
-                    <div>
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Your Name</Label>
-                        <Input
-                          id="name"
-                          name="name"
-                          value={connectForm.name}
-                          onChange={handleFormChange}
-                          className="bg-white/5 border-white/10 rounded-3xl focus:border-purple-500"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Your Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={connectForm.email}
-                        onChange={handleFormChange}
-                        className="bg-white/5 border-white/10 rounded-3xl focus:border-purple-500"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="message">Message</Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={connectForm.message}
-                        onChange={handleFormChange}
-                        placeholder="Describe your project or what you'd like to collaborate on..."
-                        className="bg-white/5 border-white/10 focus:border-purple-500 min-h-24"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <DialogFooter className="flex justify-center mt-4">
-                  <Button
-                    onClick={handleSubmitConnect}
-                    className="rounded-3xl px-8 py-3 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] w-full"
-                  >
-                    Send Request <MoveRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </DialogFooter>
-              </>
-            ) : (
-              // Thank you message after submission
-              <div className="py-8 flex flex-col items-center justify-center text-center">
-                <div className="relative flex justify-center items-center">
-                  <div className="h-16 w-16 flex justify-center items-center rounded-full bg-gradient-to-b from-[#7C2BD3] to-[#075AA8] relative z-10">
-                    <Check className="h-6 w-8 text-white" />
-                  </div>
-                  <div className="absolute h-24 w-24 rounded-full bg-[#7C2BD3]/30 z-0"></div>
-                  <div className="absolute h-32 w-32 rounded-full bg-[#7C2BD3]/20 z-[-1]"></div>
-                </div>
-
-                <DialogTitle className="text-xl font-semibold mb-2 mt-14">
-                  Thank You!
-                </DialogTitle>
-                <DialogDescription className="text-white max-w-xs mx-auto">
-                  Your message has been sent successfully. <br />
-                  AI expert will get back to you soon.
-                </DialogDescription>
-                <DialogFooter className="mt-4">
-                  <Button className="rounded-3xl px-8 py-3 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] w-full">
-                    Continue Searching <MoveRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </DialogFooter>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
       </div>
     </div>
   );
