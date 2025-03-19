@@ -22,11 +22,28 @@ interface Client {
   name: string;
   profile: number;
 }
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  url: string;
+  start_date: string;
+  end_date: string;
+  profile: number;
+}
 interface Skill {
   id: number;
   name: string;
 }
-interface Profile {
+interface Availability {
+  id: number;
+  name: string;
+}
+interface Language {
+  id: number;
+  name: string;
+}
+export interface Profile {
   id: number;
   title: string;
   user: User;
@@ -35,9 +52,12 @@ interface Profile {
   client: Client[];
   image: string;
   headline: string;
-  summary: string;
+  summary?: string ;
   location: string;
   linkedin_url: string;
+  projects: Project[];
+  availability?: Availability[];
+  languages?: Language[];
 }
 
 interface ProfileState {
@@ -57,14 +77,14 @@ const initialState: ProfileState = {
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue }) => {
+    console.log("Fetching profile...");
     try {
-      console.log("Fetching profile...");
       const response = await axios.get("/api/profile");
       console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to profile companies"
+        error.response?.data?.message || "Failed to profile"
       );
     }
   }
