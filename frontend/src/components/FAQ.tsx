@@ -38,8 +38,8 @@ const FAQ = () => {
 
   console.log("FAQ", FAQ);
   return (
-    <div className="w-full px-2">
-      <div className="-mt-10">
+    <div className="px-2 ">
+      <div className="-mt-10 ">
         <h1 className="text-3xl proxima-bold mb-2">
           Have any <span className="text-[#425BFF]">Questions</span>
         </h1>

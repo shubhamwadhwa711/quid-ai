@@ -37,7 +37,7 @@ const Brands = () => {
   }, [selectedCategory, dispatch]);
 
   return (
-    <div className="relative mx-3 border h-52 -mt-4 rounded-xl">
+    <div className="relative mx-3 border md:w-[80%] h-52 -mt-4 rounded-xl">
       {/* Title */}
       <h1 className="absolute proxima-regular -top-5 left-1/2 -translate-x-1/2 text-nowrap px-2 py-2 bg-gradient-to-r from-[#08081b] to-[#0F0F30] text-white z-10">
         WORKED WITH TOP BRANDS

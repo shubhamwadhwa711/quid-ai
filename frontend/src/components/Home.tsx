@@ -10,7 +10,7 @@ import Working from "@/components/Working";
 export default function Home() {
   return (
     <main
-      className="min-h-screen  text-white bg-no-repeat bg-top"
+      className="min-h-screen  text-white bg-no-repeat bg-top "
       style={{
         backgroundImage: `
           linear-gradient(to top, rgba(13, 18, 46, 0.8), rgba(13, 18, 46, 0.6)),
@@ -21,7 +21,7 @@ export default function Home() {
       }}
     >
       <div className=" py-24  ">
-        <div className="space-y-16   text-center">
+        <div className="space-y-16  md:min-h-screen md:flex md:flex-col md:items-center  text-center">
           {/* Hero Section */}
           <Hero />
           {/* Brands */}

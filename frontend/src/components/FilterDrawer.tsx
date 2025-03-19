@@ -17,11 +17,18 @@ export default function FilterDrawer({
   showFilters,
   setShowFilters,
   handleFilterToggle,
+  setSelectedFilters, 
 }: any) {
   const [open, setOpen] = useState(false);
-  const [selectedExpertise, setSelectedExpertise] = useState(["Mathematics"]);
   const [activeFilterCategory, setActiveFilterCategory] = useState("Expertise");
-
+  const [selectedExpertise, setSelectedExpertise] = useState<string[]>([]);
+  const [selectedAcademics, setSelectedAcademics] = useState<string[]>([]);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [selectedClients, setSelectedClients] = useState<string[]>([]);
+  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  
   // Filter categories with isSelected property
   const [filterCategories, setFilterCategories] = useState([
     { id: "Expertise", label: "Expertise", isSelected: true },
@@ -32,12 +39,7 @@ export default function FilterDrawer({
     { id: "Available To", label: "Available To", isSelected: false },
   ]);
 
-  const [selectedFilters, setSelectedFilters] = useState({
-    skills: [],
-    location: "",
-    specialization: "",
-  });
-
+  // Solutions data
   const solutions = [
     {
       id: 1,
@@ -77,7 +79,7 @@ export default function FilterDrawer({
     },
   ];
 
-  // Sample talent data (to replace the undefined talentData)
+  // Sample talent data
   const talentData = [
     {
       id: 1,
@@ -99,29 +101,7 @@ export default function FilterDrawer({
     },
   ];
 
-  // Specialization sectors
-  const sectors = [
-    {
-      id: "healthcare",
-      label: "Healthcare & Pharma",
-      icon: "❤️",
-      color: "bg-purple-500",
-    },
-    {
-      id: "hospitality",
-      label: "Hospitality Management",
-      icon: "🏨",
-      color: "bg-gray-700",
-    },
-    {
-      id: "finance",
-      label: "Banks & Fintech",
-      icon: "💰",
-      color: "bg-gray-700",
-    },
-  ];
-
-  // Expertise options
+  // Filter options
   const expertiseOptions = [
     { id: "ai", label: "Artificial Intelligence" },
     { id: "math", label: "Mathematics" },
@@ -133,74 +113,73 @@ export default function FilterDrawer({
     { id: "socialmedia", label: "Social Media Manager" },
   ];
 
-  const toggleExpertise = (id) => {
-    if (selectedExpertise.includes(id)) {
-      setSelectedExpertise(selectedExpertise.filter((item) => item !== id));
+  const academicOptions = [
+    { id: "phd", label: "PhD" },
+    { id: "masters", label: "Masters" },
+    { id: "bachelors", label: "Bachelors" },
+    { id: "diploma", label: "Diploma" },
+    { id: "certificate", label: "Certificate" },
+  ];
+
+  const countries = [
+    "USA", "Canada", "UK", "Germany", "France", "Japan", 
+    "Australia", "India", "China", "Brazil", "Spain", "Italy"
+  ];
+
+  const clientsOptions = [
+    { id: "startup", label: "Startups" },
+    { id: "enterprise", label: "Enterprise" },
+    { id: "govt", label: "Government" },
+    { id: "nonprofit", label: "Non-profit" },
+    { id: "education", label: "Educational Institutions" },
+  ];
+
+  const languages = [
+    "English", "Spanish", "French", "German", "Mandarin", 
+    "Hindi", "Arabic", "Russian", "Portuguese", "Japanese"
+  ];
+
+  const availabilityOptions = [
+    { id: "fulltime", label: "Full-time" },
+    { id: "parttime", label: "Part-time" },
+    { id: "contract", label: "Contract" },
+    { id: "freelance", label: "Freelance" },
+    { id: "remote", label: "Remote" },
+    { id: "onsite", label: "On-site" },
+  ];
+
+  const toggleExpertise = (label) => {
+    if (selectedExpertise.includes(label)) {
+      setSelectedExpertise(selectedExpertise.filter((item) => item !== label));
     } else {
-      setSelectedExpertise([...selectedExpertise, id]);
+      setSelectedExpertise([...selectedExpertise, label]);
     }
   };
 
-  const handleLocationChange = (location) => {
-    setSelectedFilters({
-      ...selectedFilters,
-      location,
-    });
-  };
-
-  // Extract all unique skills from talent data
-  const getAllSkills = () => {
-    const allSkills = new Set();
-    talentData.forEach((talent) => {
-      Object.values(talent.skills)
-        .flat()
-        .forEach((skill) => {
-          allSkills.add(skill);
-        });
-    });
-    return Array.from(allSkills);
-  };
-
-  // Extract all unique locations
-  const getAllLocations = () => {
-    const locations = new Set();
-    talentData.forEach((talent) => {
-      locations.add(talent.location);
-    });
-    return Array.from(locations);
-  };
-
-  const handleRoleChange = (specialization) => {
-    setSelectedFilters({
-      ...selectedFilters,
-      specialization,
-    });
-  };
-
-  const clearFilters = () => {
-    setSelectedFilters({
-      skills: [],
-      location: "",
-      specialization: "",
-    });
-    setSelectedExpertise([]);
-  };
-
-  const handleSkillSelect = (skill) => {
-    if (selectedFilters.skills.includes(skill)) {
-      setSelectedFilters({
-        ...selectedFilters,
-        skills: selectedFilters.skills.filter((s) => s !== skill),
-      });
+  const toggleAcademics = (label) => {
+    if (selectedAcademics.includes(label)) {
+      setSelectedAcademics(selectedAcademics.filter((item) => item !== label));
     } else {
-      setSelectedFilters({
-        ...selectedFilters,
-        skills: [...selectedFilters.skills, skill],
-      });
+      setSelectedAcademics([...selectedAcademics, label]);
     }
   };
 
-  // Add the missing handleFilterSelect function
+  const toggleClients = (label) => {
+    if (selectedClients.includes(label)) {
+      setSelectedClients(selectedClients.filter((item) => item !== label));
+    } else {
+      setSelectedClients([...selectedClients, label]);
+    }
+  };
+
+  const toggleAvailability = (label) => {
+    if (selectedAvailability.includes(label)) {
+      setSelectedAvailability(selectedAvailability.filter((item) => item !== label));
+    } else {
+      setSelectedAvailability([...selectedAvailability, label]);
+    }
+  };
+
   const handleFilterSelect = (filterId) => {
     setFilterCategories(
       filterCategories.map((filter) => ({
@@ -209,11 +188,157 @@ export default function FilterDrawer({
       }))
     );
     setActiveFilterCategory(filterId);
+    setSearchQuery(""); // Reset search query when changing filter
+  };
+
+  const clearFilters = () => {
+    setSelectedExpertise([]);
+    setSelectedAcademics([]);
+    setSelectedCountries([]);
+    setSelectedLanguages([]);
+    setSelectedClients([]);
+    setSelectedAvailability([]);
+    setSelectedFilters({
+      skills: [],
+      academics: [],
+      countries: [],
+      languages: [],
+      clients: [],
+      availability: [],
+    });
+  };
+
+  const applyFilters = () => {
+    setSelectedFilters({
+      skills: selectedExpertise,
+      academics: selectedAcademics,
+      countries: selectedCountries,
+      languages: selectedLanguages,
+      clients: selectedClients,
+      availability: selectedAvailability,
+    });
+    setShowFilters(false);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Filter the options based on search query
+  const getFilteredOptions = (options) => {
+    if (!searchQuery) return options;
+    return options.filter(option => 
+      typeof option === 'string' 
+        ? option.toLowerCase().includes(searchQuery.toLowerCase())
+        : option.label.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  // Render filter options based on active category
+  const renderFilterOptions = () => {
+    switch (activeFilterCategory) {
+      case "Expertise":
+        return getFilteredOptions(expertiseOptions).map((option) => (
+          <div
+            key={option.id}
+            className="flex items-center gap-2 p-2 rounded-md"
+            onClick={() => toggleExpertise(option.label)}
+          >
+            <Checkbox
+              checked={selectedExpertise.includes(option.label)}
+              onCheckedChange={() => toggleExpertise(option.label)}
+            />
+            <span className="text-gray-400 text-xs">{option.label}</span>
+          </div>
+        ));
+      case "Academics":
+        return getFilteredOptions(academicOptions).map((option) => (
+          <div
+            key={option.id}
+            className="flex items-center gap-2 p-2 rounded-md"
+            onClick={() => toggleAcademics(option.label)}
+          >
+            <Checkbox
+              checked={selectedAcademics.includes(option.label)}
+              onCheckedChange={() => toggleAcademics(option.label)}
+            />
+            <span className="text-gray-400 text-xs">{option.label}</span>
+          </div>
+        ));
+      case "Country":
+        return getFilteredOptions(countries).map((country) => (
+          <div
+            key={country}
+            className="flex items-center gap-2 p-2 rounded-md"
+          >
+            <Checkbox
+              checked={selectedCountries.includes(country)}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelectedCountries([...selectedCountries, country]);
+                } else {
+                  setSelectedCountries(selectedCountries.filter(c => c !== country));
+                }
+              }}
+            />
+            <span className="text-gray-400 text-xs">{country}</span>
+          </div>
+        ));
+      case "Clients":
+        return getFilteredOptions(clientsOptions).map((option) => (
+          <div
+            key={option.id}
+            className="flex items-center gap-2 p-2 rounded-md"
+            onClick={() => toggleClients(option.label)}
+          >
+            <Checkbox
+              checked={selectedClients.includes(option.label)}
+              onCheckedChange={() => toggleClients(option.label)}
+            />
+            <span className="text-gray-400 text-xs">{option.label}</span>
+          </div>
+        ));
+      case "Languages":
+        return getFilteredOptions(languages).map((language) => (
+          <div
+            key={language}
+            className="flex items-center gap-2 p-2 rounded-md"
+          >
+            <Checkbox
+              checked={selectedLanguages.includes(language)}
+              onCheckedChange={(checked) => {
+                if (checked) {
+                  setSelectedLanguages([...selectedLanguages, language]);
+                } else {
+                  setSelectedLanguages(selectedLanguages.filter(l => l !== language));
+                }
+              }}
+            />
+            <span className="text-gray-400 text-xs">{language}</span>
+          </div>
+        ));
+      case "Available To":
+        return getFilteredOptions(availabilityOptions).map((option) => (
+          <div
+            key={option.id}
+            className="flex items-center gap-2 p-2 rounded-md"
+            onClick={() => toggleAvailability(option.label)}
+          >
+            <Checkbox
+              checked={selectedAvailability.includes(option.label)}
+              onCheckedChange={() => toggleAvailability(option.label)}
+            />
+            <span className="text-gray-400 text-xs">{option.label}</span>
+          </div>
+        ));
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="w-full bg-white/5 backdrop-blur-md rounded-2xl  px-2 py-2 transition-all duration-300 border border-white/10">
-      <div className="flex justify-between  items-center mb-4">
+    <div className="w-full  bg-gradient-to-br from-black via-[#0F0F30] to-[#0F0F30] backdrop-blur-md rounded-2xl px-2 py-2 transition-all duration-300">
+      <div className="flex  justify-between items-center mb-4">
         <h3 className="text-lg proxima-bold text-center text-white">Filters</h3>
         <div className="flex gap-2">
           <Button
@@ -235,7 +360,7 @@ export default function FilterDrawer({
 
       {showFilters && (
         <>
-          <div className="space-y-2 ">
+          <div className="space-y-2">
             <label className="text-sm proxima-bold text-gray-300">
               Specialization Sector
             </label>
@@ -261,7 +386,7 @@ export default function FilterDrawer({
             </div>
           </div>
 
-          <div className="grid grid-cols-12 gap-4 my-4">
+          <div className="grid grid-cols-12 gap-4 my-4  ">
             <div className="col-span-4 flex flex-col items-center">
               <h1 className="mx-2 text-sm text-center proxima-bold text-white">
                 Filters By
@@ -283,41 +408,25 @@ export default function FilterDrawer({
               ))}
             </div>
 
-            <div className="col-span-8 ml-2 my-4  ">
+            <div className="col-span-8 ml-2 my-4">
               <label className="relative flex items-center gap-3 px-4 py-2 rounded-3xl">
                 <SearchIcon className="absolute left- text-gray-400 mx-2" />
                 <Input
                   type="text"
-                  placeholder="Search Country"
+                  placeholder={`Search ${activeFilterCategory}`}
                   className="pl-10 pr-4 py-2 w-full outline-none border bg-transparent focus:ring-2 focus:ring-blue-500 rounded-3xl"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                 />
               </label>
-              <div>
-                {expertiseOptions.map((Expertise) => {
-                  const isChecked = selectedExpertise.includes(Expertise.label);
-                  return (
-                    <div
-                      key={Expertise.id}
-                      className="flex items-center gap-2 p-2 rounded-md"
-                      onClick={() => toggleExpertise(Expertise.label)}
-                    >
-                      <Checkbox
-                        checked={isChecked}
-                        onCheckedChange={() => toggleExpertise(Expertise.label)}
-                        className={`${isChecked ? "" : ""}`}
-                      />
-                      <span className="text-gray-400 text-xs ">
-                        {Expertise.label}
-                      </span>
-                    </div>
-                  );
-                })}
+              <div className=" overflow-y-auto">
+                {renderFilterOptions()}
               </div>
             </div>
           </div>
 
           <div className="mt-6 flex justify-end">
-            <Button className="rounded-3xl px-6 py-2 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8]">
+            <Button onClick={applyFilters} className="rounded-3xl px-6 py-2 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8]">
               Apply Filters
             </Button>
           </div>
