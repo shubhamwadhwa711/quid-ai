@@ -47,7 +47,7 @@ class IndustrySerializer(serializers.ModelSerializer):
 class EnquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Enquiry
-        exclude =['status', 'updated_by','updated_at'] 
+        exclude =['status', 'updated_by','updated_at', 'mobile'] 
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -55,11 +55,22 @@ class ClientSerializer(serializers.ModelSerializer):
         model = Client
         fields = '__all__'
 
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = '__all__'
+
+class AvailableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AvailableTo
+        fields = '__all__'
 
 
 class ProfileRelatedSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     skill = SkillSerializer(many=True, read_only=True)
+    language = LanguageSerializer(many=True, read_only=True)
+    available_to = AvailableSerializer(many=True, read_only=True)
     education= EducationSerializer(many=True,read_only=True)
     projects = ProjectSerializer(many=True,read_only=True)
     client = ClientSerializer(many=True,read_only=True)

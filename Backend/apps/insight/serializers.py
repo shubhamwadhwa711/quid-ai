@@ -26,7 +26,7 @@ class InsightsCategorySerializer(serializers.ModelSerializer):
 class InsightsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Insights
-        exclude = ['text','updated_at','updated_by','created_by']                       
+        exclude = ['updated_at','updated_by','created_by']                       
 
 class FaqSerializer(serializers.ModelSerializer):
     class Meta:
