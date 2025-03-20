@@ -23,10 +23,10 @@ const initialState: CompanyState = {
 // Async Thunk to fetch company data
 export const fetchCompanies = createAsyncThunk(
   "company/fetchCompanies",
-  async (_, { rejectWithValue }) => {
+  async (id : number, { rejectWithValue }) => {
     try {
       console.log("Fetching companies...");
-      const response = await axios.get("/api/company"); 
+      const response = await axios.get(`/api/company/${id}`); 
       console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {

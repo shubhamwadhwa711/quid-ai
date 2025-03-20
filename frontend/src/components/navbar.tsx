@@ -22,7 +22,7 @@ const Navbar = () => {
   console.log("Profile", session?.user?.image);
   return (
     <nav className="fixed left-0 right-0 z-50 h-16">
-      <div className="p-2 bg-gradient-to-r from-[#063373] to-[#041D3F]">
+      <div className="p-2 bg-gradient-to-br from-[#01060e] via-[#021127] to-[#01060e]">
         <div className="flex items-center h-full px-4">
           {/* Brand Logo */}
           <div className="flex-none mr-4">
@@ -40,7 +40,7 @@ const Navbar = () => {
           {/* Navigation Items - Only hidden on small screens */}
           <div className="hidden sm:flex flex-grow justify-center">
             <div className="grid grid-cols-5 h-full">
-              {menuItems.map(({ icon: Icon, label, href }) => {
+              {menuItems.map(({ icon, label, href }) => {
                 const isActive = pathname === href;
                 return (
                   <Link
@@ -51,14 +51,14 @@ const Navbar = () => {
                       isActive ? "border-primary text-white" : "text-white"
                     )}
                   >
-                    <Icon className="w-5 h-5 text-white" />
+                    {icon}
                     <span className="text-sm">{label}</span>
                   </Link>
                 );
               })}
 
               {/* Add Menu Button inside the same grid */}
-              <Drawer>
+              {/* <Drawer>
                 <DrawerTrigger asChild>
                   <button className="flex gap-2 items-center justify-center text-white">
                     <Menu className="w-6 h-6" />
@@ -92,7 +92,7 @@ const Navbar = () => {
                     </Button>
                   </DrawerClose>
                 </DrawerContent>
-              </Drawer>
+              </Drawer> */}
             </div>
           </div>
 

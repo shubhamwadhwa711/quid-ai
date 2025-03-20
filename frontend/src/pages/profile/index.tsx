@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Edit, Linkedin, MapPin, Share2, X } from "lucide-react";
+import {
+  Edit,
+  Edit2Icon,
+  Linkedin,
+  MapPin,
+  Pencil,
+  Share2,
+  X,
+} from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -20,7 +28,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 // import { useMediaQuery } from "@/hooks/use-media-query";
-
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import ReadMore from "@/components/ReadMore";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -206,40 +217,21 @@ const ResponsiveEdit = ({
 
 // Main Profile Component
 const Profile = () => {
-  const [userData, setUserData] = useState({
-    name: "Sophia Chris",
-    title: "Senior Developer",
-    location: "San Francisco, CA",
-    bio: "Mathematician and Statistician | Expert in Pure Maths, Advance Maths, Probability-Statistics, Data Science",
-    fullBio:
-      "An AI expert with a strong background in mathematics and statistics, specializing in pure and advanced mathematics, probability, and data science. With deep analytical and problem-solving skills, they excel in developing statistical models, machine learning algorithms, and AI-driven solutions. Their expertise spans theoretical and applied mathematics, enabling them to extract meaningful insights from complex data.",
-    linkedIn: "linkedin.com/sophia-chris-de",
-    skills: [
-      "Artificial Intelligence",
-      "Mathematics",
-      "Python",
-      "Differential Equations",
-      "Regression Analysis",
-      "Graph Theory",
-      "Data Analysis",
-    ],
-    languages: ["English", "Spanish", "French"],
-    contact: "jane.doe@example.com",
-    available: ["Teach", "Advice", "Speak", "Be Interviewed"],
-    academics: ["Masters", "PhD"],
-    projects: [
-      {
-        title: "Project Title Here",
-        description: "Project description goes here",
-        tags: ["Mathematics", "Python"],
-      },
-    ],
-    featuredClients: ["Discord", "Meta", "Netflix", "Amazon"],
-  });
-
+  const dispatch = useAppDispatch();
+  const { profile, loading, error } = useAppSelector((state) => state.Profile);
+  useEffect(() => {
+    // console.log("dispatching profile...");
+    dispatch(fetchProfile());
+  }, [dispatch]);
+  // console.log("profile", profile);
+  const [userData, setUserData] = useState<Profile | null>(null);
+  console.log("userData", userData);
+  console.log("profile[0]", profile[0]);
   // State for controlling which popup is currently open
   const [activePopup, setActivePopup] = useState(null);
-
+  useEffect(() => {
+    setUserData(profile[0]);
+  }, [profile]);
   // Define handlers for different popups
   const popupConfigs = {
     profile: {
@@ -309,7 +301,8 @@ const Profile = () => {
   const handleSaveData = (newData) => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
-
+  const handleEditProject = () => {};
+  console.log("Animta", userData);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2">
       {/* Main profile card */}
@@ -331,7 +324,9 @@ const Profile = () => {
             </div>
             <div className="ml-4">
               <div className="flex justify-between">
-                <h1 className="text-2xl proxima-medium">{userData.name}</h1>
+                <h1 className="text-2xl proxima-medium">
+                  {profile[0]?.user?.username}
+                </h1>
                 <Button
                   size="icon"
                   variant="ghost"
@@ -344,20 +339,22 @@ const Profile = () => {
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
                 <span className="text-gray-400 proxima-small">
-                  {userData.location}
+                  {profile[0]?.location}
                 </span>
               </div>
               <div className="mt-2">
-                <p className="proxima-medium">{userData.bio}</p>
+                <p className="proxima-medium">{profile[0]?.headline}</p>
               </div>
               <div className="flex items-center space-x-2">
                 <Linkedin className="w-5 h-5 fill-white" />
-                <span className="mt-1 proxima-large">{userData.linkedIn}</span>
+                <span className="mt-1 proxima-large">
+                  {profile[0]?.linkedin_url}
+                </span>
               </div>
             </div>
           </div>
           <div className="mt-6 p-2">
-            <Button className="w-full bg-gradient-to-r text-lg proxima from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2">
+            <Button className="w-full bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2">
               Share Profile
               <Share2 size={40} className="ml-2" />
             </Button>
@@ -367,7 +364,7 @@ const Profile = () => {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
                 <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-                <h2 className="text-xl proxima">EXPERTISE</h2>
+                <h2 className="text-xl proxima-regular">EXPERTISE</h2>
               </div>
               <Button
                 size="icon"
@@ -379,12 +376,12 @@ const Profile = () => {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2">
-              {userData.skills.map((skill, index) => (
+              {userData?.skill.map((s, index) => (
                 <span
                   key={index}
                   className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
                 >
-                  {skill}
+                  {s.name}
                 </span>
               ))}
             </div>
@@ -397,7 +394,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">BIO</h2>
+            <h2 className="text-xl proxima-regular">BIO</h2>
           </div>
           <Button
             size="icon"
@@ -410,11 +407,7 @@ const Profile = () => {
         </div>
         <div className="space-y-4">
           <div className="pl-4">
-            <p>
-              {userData.fullBio.length > 200
-                ? `${userData.fullBio.substring(0, 200)}... Read More`
-                : userData.fullBio}
-            </p>
+            <ReadMore text={userData?.summary}/>
           </div>
         </div>
       </div>
@@ -423,7 +416,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">LANGUAGE</h2>
+            <h2 className="text-xl proxima-regular">LANGUAGE</h2>
           </div>
           <Button
             size="icon"
@@ -435,12 +428,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.languages.map((language, index) => (
+          {userData?.languages?.map((language, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {language}
+              {language.name}
             </span>
           ))}
         </div>
@@ -450,7 +443,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">ACADEMICS</h2>
+            <h2 className="text-xl proxima-regular">ACADEMICS</h2>
           </div>
           <Button
             size="icon"
@@ -462,12 +455,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.academics.map((academic, index) => (
+          {userData?.education.map((edu, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {academic}
+              {edu.description}
             </span>
           ))}
         </div>
@@ -477,7 +470,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">AVAILABLE TO</h2>
+            <h2 className="text-xl proxima-regular">AVAILABLE TO</h2>
           </div>
           <Button
             size="icon"
@@ -489,12 +482,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.available.map((aval, index) => (
+          {userData?.availability?.map((aval, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {aval}
+              {aval.name}
             </span>
           ))}
         </div>
@@ -504,7 +497,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">FEATURED CLIENTS</h2>
+            <h2 className="text-xl proxima-regular">FEATURED CLIENTS</h2>
           </div>
           <Button
             size="icon"
@@ -516,12 +509,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.featuredClients.map((client, index) => (
+          {userData?.client.map((cli, index) => (
             <span
-              key={index}
+              key={cli.id}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {client}
+              {cli.name}
             </span>
           ))}
         </div>
@@ -531,7 +524,7 @@ const Profile = () => {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center space-x-2">
             <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima">RECENT PROJECTS</h2>
+            <h2 className="text-xl proxima-regular">RECENT PROJECTS</h2>
           </div>
           <Button
             size="icon"
@@ -543,23 +536,31 @@ const Profile = () => {
           </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          {userData.projects.map((project, index) => (
-            <div key={index} className="bg-white/5 rounded-lg p-4">
-              <h3 className="font-medium mb-2">{project.title}</h3>
-              <p className="text-sm text-gray-300 mb-2">
-                {project.description}
-              </p>
-              <div className="flex flex-wrap gap-1">
-                {project.tags?.map((tag, tagIndex) => (
-                  <span
-                    key={tagIndex}
-                    className="text-xs px-2 py-1 bg-white/10 rounded-full"
-                  >
-                    {tag}
-                  </span>
-                ))}
+          {userData?.projects?.map((project, index) => (
+            <Card
+              key={index}
+              className="hover:shadow-md relative bg-gray-800  transition flex-shrink-0 w-60 h-56"
+            >
+              <div className="relative h-4/5">
+                <img
+                  src={project.title}
+                  alt={project.title}
+                  className="w-full h-full object-fill rounded-t-lg"
+                />
               </div>
-            </div>
+              <Button
+                variant="none"
+                onClick={handleEditProject}
+                className="absolute bg-white rounded-full p-2 top-1 right-1"
+              >
+                <Edit className="h-6 w-6 text-black" />
+              </Button>
+              <div className="h-1/5 flex  flex-col justify-between p-4">
+                <CardTitle className="text-sm text-start text-white proxima-FAQ">
+                  {project.title}
+                </CardTitle>
+              </div>
+            </Card>
           ))}
         </div>
       </div>

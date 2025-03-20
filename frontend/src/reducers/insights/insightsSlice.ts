@@ -3,17 +3,20 @@ import axios from "axios";
 interface Insights {
   id: number;
   title: string;
+  created_at:string;
+  featured_image:string;
+  category:number;
 }
 
 interface InsightsState {
-  insightsCategory: Insights[];
+  insights: Insights[];
   loading: boolean;
   error: string | null;
 }
 
 // Initial state
 const initialState: InsightsState = {
-  insightsCategory: [],
+  insights: [],
   loading: false,
   error: null,
 };
@@ -21,20 +24,19 @@ const initialState: InsightsState = {
 // Async Thunk to fetch company data
 export const fetchInsights = createAsyncThunk(
   "insight/fetchInsights",
-  async (_, { rejectWithValue }) => {
+  async (id: number, { rejectWithValue }) => {
     try {
-      console.log("Fetching companies...");
-      const response = await axios.get("/api/insights/category");
-      console.log("Companies fetched:", response.data);
+      console.log("Fetching Insights...");
+      const response = await axios.get(`/api/insights/${id}`);
+      console.log("Insights fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch companies"
+        error.response?.data?.message || "Failed to fetch insights"
       );
     }
   }
 );
-
 // Create the slice
 const insightsSlice = createSlice({
   name: "insights",
@@ -48,7 +50,7 @@ const insightsSlice = createSlice({
       })
       .addCase(fetchInsights.fulfilled, (state, action) => {
         state.loading = false;
-        state.insightsCategory = action.payload;
+        state.insights = action.payload;
       })
       .addCase(fetchInsights.rejected, (state, action) => {
         state.loading = false;

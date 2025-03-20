@@ -6,7 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const response = await axios.get(`${process.env.BACKEND_URL}/industry`, {
+    const response = await axios.get(`${process.env.NEXT_BACKEND_URL}/industry`, {
       headers: { "Content-Type": "application/json" },
     });
 

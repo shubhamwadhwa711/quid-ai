@@ -1,41 +1,82 @@
+import React from "react";
 import { Check } from "lucide-react";
-const about = [
-  {
-    id: 1,
-    label: "Get matched with AI expert in minutes",
-  },
-  {
-    id: 2,
-    label: "Dedicated 24/7 customer service team for your queries",
-  },
-  {
-    id: 3,
-    label: "Enjoy a simple, easy-to-use matching experience",
-  },
-  {
-    id: 4,
-    label: "Get quality work done quickly and within budget",
-  },
-];
+
 const About = () => {
+  const about = [
+    {
+      id: 1,
+      label: (
+        <>
+          Get matched with AI expert in
+          <br />
+          minutes.
+        </>
+      ),
+    },
+    {
+      id: 2,
+      label: (
+        <>
+          Dedicated 24/7 customer
+          <br />
+          service team for your queries.
+        </>
+      ),
+    },
+    {
+      id: 3,
+      label: (
+        <>
+          Enjoy a simple, easy-to-use
+          <br />
+          matching experience.
+        </>
+      ),
+    },
+    {
+      id: 4,
+      label: (
+        <>
+          Get quality work done quickly
+          <br />
+          and within budget.
+        </>
+      ),
+    },
+  ];
+
   return (
-    <div className="space-y-10">
-      <h1 className="text-4xl font-semibold">
-        What & Why <span className="text-[#425BFF]">Quid AI</span>
-      </h1>
-      <p>
-        We offer a platform with top AI Experts. Work with the best talent
-        worldwide on our secure. flexible,and seamless platform
-      </p>
-      <div>
-        {about.map((about) => (
-          <div key={about.id} className="flex items-center space-x-10">
-            <Check className="h-8 w-8  text-[#F8984C]" />
-            <div key={about.id} className="text-lg">
-              {about.label}
-            </div>
+    <div className="flex flex-col  justify-center items-center ">
+      <div className=" -mt-6  text-white px-6 py-8 rounded-lg max-w-md">
+        <div className="space-y-6">
+          <div className="text-start">
+            <h1 className="text-3xl font-bold mb-4">
+              What & Why <span className="text-blue-500">Quid AI</span>
+            </h1>
+            <p className="text-lg leading-relaxed">
+              We offer a platform with top AI
+              <br />
+              Experts. Work with the best talent
+              <br />
+              worldwide on our secure, flexible,
+              <br />
+              and seamless platform.
+            </p>
           </div>
-        ))}
+
+          <div className="space-y-4">
+            {about.map((item) => (
+              <div key={item.id} className="flex items-start text-start gap-6">
+                <Check
+                  size={28}
+                  strokeWidth={4}
+                  className="text-orange-400 flex-shrink-0 mt-1"
+                />
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

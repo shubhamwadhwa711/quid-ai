@@ -2,8 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { id } = req.query; // get id from URL
+  console.log("COmpnay ID",{id});
   try {
-    const response = await axios.get(`${process.env.BACKEND_URL}/all-company`, {
+    const response = await axios.get(`${process.env.NEXT_BACKEND_URL}/category/${id}/company`, {
       headers: { "Content-Type": "application/json" },
     });
 
