@@ -18,7 +18,13 @@ class AvailableTo(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     
     def __str__(self):
-        return self.name    
+        return self.name  
+
+class Country(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name      
 
 class Industry(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -40,7 +46,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     headline = models.CharField(max_length=255,null=True, blank=True)  
     summary = models.TextField(blank=True, null=True)
-    location = models.CharField(max_length=255, blank=True, null=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True, blank=True)
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE, null=True, blank=True)
     website = models.URLField(blank=True, null=True)
     skill = models.ManyToManyField(Skill)
