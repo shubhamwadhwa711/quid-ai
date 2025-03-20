@@ -19,7 +19,7 @@
 
     {
         "model": "talent.project",
-        "pk": 1,
+        "pk": 2,
         "fields": {
             "profile": 2,
             "title": "Movie Recommendation System",
@@ -38,7 +38,7 @@
 
     {
         "model": "talent.project",
-        "pk": 1,
+        "pk": 3,
         "fields": {
             "profile": 2,
             "title": "Hospital Management System",
@@ -56,7 +56,7 @@
 
     {
         "model": "talent.project",
-        "pk": 1,
+        "pk": 4,
         "fields": {
             "profile": 2,
             "title": "Library Management System",
@@ -74,7 +74,7 @@
 
     {
         "model": "talent.project",
-        "pk": 1,
+        "pk": 5,
         "fields": {
             "profile": 2,
             "title": "Dancing Robot",
