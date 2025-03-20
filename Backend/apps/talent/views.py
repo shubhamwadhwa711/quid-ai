@@ -4,10 +4,12 @@ from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import *
+from .filters import ProfileFilter
+
 
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
-
+from rest_framework.filters import SearchFilter
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -26,7 +28,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.filter(status="APPROVED")
     serializer_class = ProfileSerializer
     filter_backends = [DjangoFilterBackend]  
-    filterset_fields = ['location', 'user__first_name', 'industry', 'skill']  
+    filterset_class = ProfileFilter  # Use the custom filter class 
+   
 
 class EducationViewSet(viewsets.ModelViewSet):
     """
@@ -103,7 +106,7 @@ class EnquiryViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Enquiry.objects.all()
     serializer_class = EnquirySerializer
-    http_method_names = ['post']
+    http_method_names = ['post','get']
     
 class ProfileEnquiry(viewsets.ModelViewSet):
     """
