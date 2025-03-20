@@ -15,6 +15,8 @@ class Command(BaseCommand):
 
         call_command('loaddata', 'user.json')
         call_command('loaddata', 'skill.json')
+        call_command('loaddata', 'language.json')
+        call_command('loaddata', 'available_to.json')
         call_command('loaddata', 'industry.json')
         call_command('loaddata', 'profile.json')
         call_command('loaddata', 'certificate.json')
