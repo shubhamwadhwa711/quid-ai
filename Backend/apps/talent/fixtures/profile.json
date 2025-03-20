@@ -27,6 +27,20 @@
                 7,
                 8,
                 9
+            ],
+            "language": [
+                1,
+                2,
+                3,
+                4
+                
+            ],
+            "available_to": [
+                1,
+                2,
+                3,
+                4
+                
             ]
         }
     },
@@ -51,7 +65,19 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]
     }
 },
 
@@ -74,7 +100,21 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2,
+                3
+                
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 },
 
@@ -96,7 +136,21 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2,
+                3,
+                4
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 },
 
@@ -119,7 +173,18 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1
+               
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 },
 
@@ -142,7 +207,21 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2,
+                3,
+                4
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 },
 
@@ -165,7 +244,21 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2,
+                3,
+                4
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 },
 
@@ -188,7 +281,21 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2,
+                3,
+                4
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 },
 
@@ -212,7 +319,21 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2,
+                3,
+                4
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 },
 
@@ -234,7 +355,21 @@
         "linkedin_url": "https://www.docker.com/blog/how-to-dockerize-django-app/",
         "skill": [
             1
-        ]
+        ],
+        "language": [
+                1,
+                2,
+                3,
+                4
+                
+            ],
+        "available_to": [
+                1,
+                2,
+                3,
+                4
+                
+            ]    
     }
 }
 

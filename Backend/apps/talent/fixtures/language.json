@@ -1,0 +1,30 @@
+[
+    {
+    "model": "talent.language",
+    "pk": 1,
+    "fields": {
+        "name": "French"
+    }
+},
+{
+    "model": "talent.language",
+    "pk": 2,
+    "fields": {
+        "name": "English"
+    }
+},
+{
+    "model": "talent.language",
+    "pk": 3,
+    "fields": {
+        "name": "Hindi"
+    }
+},
+{
+    "model": "talent.language",
+    "pk": 4,
+    "fields": {
+        "name": "Punjabi"
+    }
+}
+]

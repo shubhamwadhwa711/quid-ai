@@ -1,0 +1,30 @@
+[
+    {
+    "model": "talent.availableto",
+    "pk": 1,
+    "fields": {
+        "name": "Teach"
+    }
+},
+{
+    "model": "talent.availableto",
+    "pk": 2,
+    "fields": {
+        "name": "Advice"
+    }
+},
+{
+    "model": "talent.availableto",
+    "pk": 3,
+    "fields": {
+        "name": "Speak"
+    }
+},
+{
+    "model": "talent.availableto",
+    "pk": 4,
+    "fields": {
+        "name": "Be Interviewed"
+    }
+}
+]
