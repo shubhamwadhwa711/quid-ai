@@ -8,6 +8,18 @@ class Skill(models.Model):
     def __str__(self):
         return self.name
     
+class Language(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
+    
+class AvailableTo(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    
+    def __str__(self):
+        return self.name    
+
 class Industry(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     logo = models.ImageField(upload_to='industry_logo/', null=True, blank=True)
@@ -32,6 +44,8 @@ class Profile(models.Model):
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE, null=True, blank=True)
     website = models.URLField(blank=True, null=True)
     skill = models.ManyToManyField(Skill)
+    language = models.ManyToManyField(Language)
+    available_to = models.ManyToManyField(AvailableTo)
     phone = models.CharField(max_length=20, blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
 
@@ -74,6 +88,8 @@ class Certificates(models.Model):
 class Project(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='projects')
     title = models.CharField(max_length=255)
+    tag = models.ManyToManyField(Skill)
+    image = models.ImageField(upload_to='project/', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     start_date = models.DateField()
@@ -92,6 +108,7 @@ class Publication(models.Model):
 class Client(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name='client')
     name = models.CharField(max_length=80, null=True, blank=True )
+    client = models.ImageField(upload_to='client/', blank=True, null=True)
 
     def __str__(self):
         return self.name   
@@ -109,7 +126,7 @@ class Enquiry(models.Model):
     mobile = models.IntegerField(null=True)
     message = models.TextField()
     updated_at = models.DateTimeField(auto_now=True)
-    updated_by =models.ForeignKey(User, on_delete=models.CASCADE, related_name='enquiry_updated_by_user') 
+    updated_by =models.ForeignKey(User, on_delete=models.CASCADE, related_name='enquiry_updated_by_user',null=True) 
     
     def __str__(self):
         return self.full_name   
