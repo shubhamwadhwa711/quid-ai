@@ -14,7 +14,7 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = '__all__'        
 
 class ProfileSerializer(serializers.ModelSerializer):
-    # skill = SkillSerializer(many=True)
+    skill = SkillSerializer(many=True)
     class Meta:
         model = Profile
         exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
@@ -60,6 +60,11 @@ class LanguageSerializer(serializers.ModelSerializer):
         model = Language
         fields = '__all__'
 
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = '__all__'        
+
 class AvailableSerializer(serializers.ModelSerializer):
     class Meta:
         model = AvailableTo
@@ -69,6 +74,8 @@ class AvailableSerializer(serializers.ModelSerializer):
 class ProfileRelatedSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     skill = SkillSerializer(many=True, read_only=True)
+    industry = IndustrySerializer(read_only=True)
+    country = CountrySerializer(read_only=True)
     language = LanguageSerializer(many=True, read_only=True)
     available_to = AvailableSerializer(many=True, read_only=True)
     education= EducationSerializer(many=True,read_only=True)
