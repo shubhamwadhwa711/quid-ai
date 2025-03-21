@@ -23,6 +23,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import ConnectDrawer from "@/components/ConnectDialog";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -246,79 +247,8 @@ const Talent = () => {
     featuredClients: ["Discord", "Meta", "Netflix", "Amazon"],
   });
 
-  // State for controlling which popup is currently open
-  const [activePopup, setActivePopup] = useState(null);
+  const [showConnectForm, setShowConnectForm] = useState();
 
-  // Define handlers for different popups
-  const popupConfigs = {
-    profile: {
-      title: "Profile",
-      fields: [
-        { key: "name", type: "text", placeholder: "Full Name" },
-        { key: "title", type: "text", placeholder: "Job Title" },
-        { key: "location", type: "text", placeholder: "Location" },
-        { key: "bio", type: "text", placeholder: "Short Bio" },
-        { key: "linkedIn", type: "text", placeholder: "LinkedIn URL" },
-      ],
-    },
-    bio: {
-      title: "Bio",
-      fields: [
-        {
-          key: "fullBio",
-          type: "textarea",
-          placeholder: "Enter your full bio here",
-        },
-      ],
-    },
-    expertise: {
-      title: "Expertise",
-      fields: [{ key: "skills", type: "tags", label: "Skill" }],
-    },
-    language: {
-      title: "Language",
-      fields: [{ key: "languages", type: "tags", label: "Language" }],
-    },
-    academics: {
-      title: "Academics",
-      fields: [
-        { key: "academics", type: "tags", label: "Academic Credential" },
-      ],
-    },
-    available: {
-      title: "Available To",
-      fields: [{ key: "available", type: "tags", label: "Availability" }],
-    },
-    clients: {
-      title: "Featured Clients",
-      fields: [{ key: "featuredClients", type: "tags", label: "Client" }],
-    },
-    project: {
-      title: "Project",
-      fields: [
-        { key: "projectTitle", type: "text", placeholder: "Project Title" },
-        {
-          key: "projectDescription",
-          type: "textarea",
-          placeholder: "Project Description",
-        },
-        { key: "projectTags", type: "tags", label: "Tag" },
-      ],
-    },
-  };
-
-  const handleOpenPopup = (popupName) => {
-    setActivePopup(popupName);
-  };
-
-  const handleClosePopup = () => {
-    setActivePopup(null);
-  };
-
-  const handleSaveData = (newData) => {
-    setUserData((prev) => ({ ...prev, ...newData }));
-  };
-  const handleEditProject = () => {};
   return (
     <div className=" flex flex-col items-center justify-center p-2">
       {/* Main profile card */}
@@ -347,7 +277,6 @@ const Talent = () => {
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 rounded-full"
-                  onClick={() => handleOpenPopup("profile")}
                 ></Button>
               </div>
               <div className="flex items-center mt-1">
@@ -357,7 +286,14 @@ const Talent = () => {
                 </span>
               </div>
               <div className="mt-2">
-                <p className="proxima-medium">{profile[0]?.headline}</p>
+                <p className="font-semibold text-sm">{profile[0]?.headline}</p>
+              </div>
+              <div className=" absolute top-24 right-0  flex justify-center">
+                <img
+                  src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+                  alt="Spiral Background"
+                  className="w-full h-full object-fill"
+                />
               </div>
               <div className="flex items-center space-x-2">
                 <Linkedin className="w-5 h-5 fill-white" />
@@ -367,8 +303,12 @@ const Talent = () => {
               </div>
             </div>
           </div>
-          <div className="mt-6 p-2">
-            <Button className="w-full bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2">
+          <div className="p-2">
+            <Button
+             
+              onClick={() => setShowConnectForm(true)}
+              className="w-full bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2"
+            >
               Connect
               {/* <Share2 size={40} className="ml-2" /> */}
             </Button>
@@ -384,7 +324,6 @@ const Talent = () => {
                 size="icon"
                 variant="ghost"
                 className="h-8 w-8 rounded-full"
-                onClick={() => handleOpenPopup("expertise")}
               ></Button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -412,7 +351,6 @@ const Talent = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenPopup("bio")}
           ></Button>
         </div>
         <div className="space-y-4">
@@ -436,7 +374,6 @@ const Talent = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenPopup("language")}
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -461,7 +398,6 @@ const Talent = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenPopup("academics")}
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -486,7 +422,6 @@ const Talent = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenPopup("available")}
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -511,7 +446,6 @@ const Talent = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenPopup("clients")}
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -536,7 +470,6 @@ const Talent = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenPopup("project")}
           ></Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -554,7 +487,6 @@ const Talent = () => {
               </div>
               <Button
                 variant="none"
-                onClick={handleEditProject}
                 className="absolute bg-white rounded-full p-2 top-1 right-1"
               ></Button>
               <div className="h-1/5 flex  flex-col justify-between p-4">
@@ -568,7 +500,7 @@ const Talent = () => {
       </div>
 
       {/* Responsive Edit Modal/Drawer */}
-      {activePopup && (
+      {/* {activePopup && (
         <ResponsiveEdit
           isOpen={true}
           onClose={handleClosePopup}
@@ -576,6 +508,13 @@ const Talent = () => {
           fields={popupConfigs[activePopup].fields}
           currentValues={userData}
           onSave={handleSaveData}
+        />
+      )} */}
+      {showConnectForm && (
+        <ConnectDrawer
+          talentId={profile[0].id}
+          showConnectForm={showConnectForm}
+          setShowConnectForm={setShowConnectForm}
         />
       )}
     </div>

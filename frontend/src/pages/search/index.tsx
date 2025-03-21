@@ -299,7 +299,7 @@ const Search = () => {
             </h1>
           </div>
           <div className="w-full px-2 md:px-4 lg:px-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6   gap-2 hide-scrollbar">
+            <div className="grid grid-cols-2  sm:grid-cols-3    gap-2 hide-scrollbar">
               {QuickFilters.map(({ id, icon, label }) => (
                 <Card
                   key={id}
@@ -435,10 +435,17 @@ const Search = () => {
           className="w-full h-full object-cover"
         />
       </div> */}
-      <div className="-mt-10 w-full overflow-x-auto hide-scrollbar px-4">
+      <div className="-mt-10 w-full relative overflow-x-auto  hide-scrollbar px-4">
         <div className="mx-1 flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-orange-500"></div>
           <h1 className="proxima-bold text-xl text-white">Top AI Talents</h1>
+        </div>
+        <div className=" absolute top-0 right-0  flex justify-center">
+          <img
+            src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+            alt="Spiral Background"
+            className="w-full h-full object-fill"
+          />
         </div>
         <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
           {talentData.map((talent) => (

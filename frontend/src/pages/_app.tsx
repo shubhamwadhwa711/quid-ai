@@ -26,15 +26,14 @@ export default function App({
             <img src="/quid-icon.png" alt="Splash Screen" className="w-64" />
           </div>
         ) : (
-          <div className="relative min-h-screen bg-[#0b0f2a]">
+          <div className="relative min-h-screen ">
             {/* Background gradients */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0F0F30] to-[#0F0F30]"></div>
-            
+            <div className="absolute  inset-0 bg-gradient-to-br from-black via-[#0F0F30] to-[#0F0F30]"></div>
+
             {/* Dotted pattern overlay */}
-           
-            
+
             {/* Main content */}
-            <div className="relative z-10">
+            <div className="relative max-w-md w-full justify-self-center z-10">
               <Navbar />
               <Component {...pageProps} />
               <BottomNav />

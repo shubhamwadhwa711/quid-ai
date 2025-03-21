@@ -226,7 +226,7 @@ const Profile = () => {
   // console.log("profile", profile);
   const [userData, setUserData] = useState<Profile | null>(null);
   console.log("userData", userData);
-  console.log("profile[0]", profile[0]);
+  console.log("userData", userData);
   // State for controlling which popup is currently open
   const [activePopup, setActivePopup] = useState(null);
   useEffect(() => {
@@ -302,7 +302,7 @@ const Profile = () => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
   const handleEditProject = () => {};
-  console.log("Animta", userData);
+  console.log("UserData", userData);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2">
       {/* Main profile card */}
@@ -325,7 +325,7 @@ const Profile = () => {
             <div className="ml-4">
               <div className="flex justify-between">
                 <h1 className="text-2xl proxima-medium">
-                  {profile[0]?.user?.username}
+                  {userData?.user?.username}
                 </h1>
                 <Button
                   size="icon"
@@ -339,16 +339,23 @@ const Profile = () => {
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
                 <span className="text-gray-400 proxima-small">
-                  {profile[0]?.location}
+                  {userData?.location}
                 </span>
               </div>
               <div className="mt-2">
-                <p className="proxima-medium">{profile[0]?.headline}</p>
+                <p className="font-semibold text-sm">{userData?.headline}</p>
+              </div>
+              <div className=" absolute top-24 right-0  flex justify-center">
+                <img
+                  src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+                  alt="Spiral Background"
+                  className="w-full h-full object-fill"
+                />
               </div>
               <div className="flex items-center space-x-2">
                 <Linkedin className="w-5 h-5 fill-white" />
                 <span className="mt-1 proxima-large">
-                  {profile[0]?.linkedin_url}
+                  {userData?.linkedin_url}
                 </span>
               </div>
             </div>
@@ -407,7 +414,7 @@ const Profile = () => {
         </div>
         <div className="space-y-4">
           <div className="pl-4">
-            <ReadMore text={userData?.summary}/>
+            <ReadMore text={userData?.summary} />
           </div>
         </div>
       </div>
@@ -428,12 +435,12 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData?.languages?.map((language, index) => (
+          {userData?.language?.map((lang, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {language.name}
+              {lang.name}
             </span>
           ))}
         </div>
@@ -460,7 +467,7 @@ const Profile = () => {
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {edu.description}
+              {edu.degree}
             </span>
           ))}
         </div>
@@ -482,7 +489,7 @@ const Profile = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData?.availability?.map((aval, index) => (
+          {userData?.available_to?.map((aval, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
