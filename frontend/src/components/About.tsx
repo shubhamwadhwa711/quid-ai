@@ -47,10 +47,10 @@ const About = () => {
 
   return (
     <div className="flex flex-col  justify-center items-center ">
-      <div className=" -mt-6  text-white px-6 py-8 rounded-lg max-w-md">
+      <div className=" -mt-6  text-white  py-8 rounded-lg ">
         <div className="space-y-6">
           <div className="text-start">
-            <h1 className="text-3xl font-bold mb-4">
+            <h1 className="text-3xl proxima-bold mb-4">
               What & Why <span className="text-blue-500">Quid AI</span>
             </h1>
             <p className="text-lg leading-relaxed">
@@ -64,7 +64,7 @@ const About = () => {
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4  md:text-base lg:text-lg xl:text-xl">
             {about.map((item) => (
               <div key={item.id} className="flex items-start text-start gap-6">
                 <Check

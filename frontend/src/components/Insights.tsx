@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchInsightCategory } from "@/reducers/insights/category/insightscategorySlice";
 import { fetchInsights } from "@/reducers/insights/insightsSlice";
 import { SkeletonCards } from "./SkeletonCard";
-
+import { useRouter } from "next/navigation";
 const getTypeColor = (type: string) => {
   switch (type.toLowerCase()) {
     case "interview":
@@ -19,7 +19,7 @@ const getTypeColor = (type: string) => {
 const Insights = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
   const dispatch = useAppDispatch();
-
+  const router = useRouter();
   const { insightsCategory, loading, error } = useAppSelector(
     (state) => state.insightsCategory
   );
@@ -42,7 +42,7 @@ const Insights = () => {
   return (
     <div className="">
       <div>
-        <h1 className="text-3xl proxima-bold -mt-3">
+        <h1 className="text-3xl text-center proxima-bold -mt-3">
           Quid AI <span className="text-[#425BFF] ">Insights</span>
         </h1>
       </div>
@@ -88,6 +88,7 @@ const Insights = () => {
                 ) : (
                   insights.map((insight) => (
                     <Card
+                    onClick={() => router.push(`insights/${insight.category}/${insight.id}`)}
                       key={insight.id}
                       className="hover:shadow-md bg-gray-800  transition flex-shrink-0 w-60 h-56"
                     >

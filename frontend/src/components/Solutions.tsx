@@ -4,7 +4,9 @@ import { Card, CardHeader, CardTitle } from "./ui/card";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchSolutions } from "@/reducers/solutions/solutionSlice";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 const Solutions = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { Solutions, loading, error } = useAppSelector(
     (state) => state.Solutions
@@ -59,7 +61,10 @@ const Solutions = () => {
           </div>
         </div>
 
-        <Button className="px-6 py-6 proxima-bold text-xl rounded-full bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white">
+        <Button
+          onClick={() => router.push("/search")}
+          className="px-6 py-6 proxima-bold text-xl rounded-full bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
+        >
           Get Connected For Free
           <svg
             width="18"

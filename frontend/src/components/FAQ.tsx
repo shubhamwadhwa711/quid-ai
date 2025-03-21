@@ -10,6 +10,7 @@ import { fetchFAQ } from "@/reducers/faq/faqSlice";
 import { useEffect } from "react";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
+
 const faq = [
   {
     id: 1,
@@ -40,10 +41,10 @@ const FAQ = () => {
   return (
     <div className="px-2 ">
       <div className="-mt-10 ">
-        <h1 className="text-3xl proxima-bold mb-2">
+        <h1 className="text-3xl text-center proxima-bold mb-2">
           Have any <span className="text-[#425BFF]">Questions</span>
         </h1>
-        <p className=" text-base proxima-FAQ  mb-4">
+        <p className=" text-base text-center proxima-FAQ  mb-4">
           Read our FAQs if you have queries
         </p>
         <Separator orientation="horizontal" />
@@ -66,7 +67,7 @@ const FAQ = () => {
         ))}
       </Accordion>
 
-      <div>
+      <div className="flex flex-col justify-center items-center">
         <Button className="bg-gradient-to-r px-6 py-6 mt-4 proxima-large rounded-full from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
           <div className="flex justify-center gap-2  items-center">
             <span className="proxima-bold text-lg">

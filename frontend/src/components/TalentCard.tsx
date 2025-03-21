@@ -125,6 +125,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
         </div>
         
         <ConnectDialog
+          talentId={talent.id}
           showConnectForm={showConnectForm}
           setShowConnectForm={setShowConnectForm}
         />
