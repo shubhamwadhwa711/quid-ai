@@ -24,6 +24,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import ConnectDrawer from "@/components/ConnectDialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -250,43 +251,42 @@ const Talent = () => {
   const [showConnectForm, setShowConnectForm] = useState();
 
   return (
-    <div className=" flex flex-col items-center justify-center p-2">
+    <div className="text-white flex flex-col items-center justify-center p-2">
       {/* Main profile card */}
-      <div className="w-full max-w-2xl rounded-xl overflow-hidden">
+      <div className="w-full rounded-xl">
         {/* Cover photo area */}
         <div className="h-32"></div>
 
         {/* Profile content */}
-        <div className="p-2">
+        <div className="">
           {/* Profile header with image on left, name/location on right */}
           <div className="flex flex-row -mt-16">
             {/* Profile image (left) */}
-            <div className="h-32 w-32 flex-shrink-0 rounded-full overflow-hidden border-4 border-white shadow-md">
-              <img
-                src="/api/placeholder/128/128"
-                alt="Profile"
-                className="h-full w-full object-cover"
-              />
+            <div className="h-32 w-32 flex-shrink-0 rounded-full">
+              <Avatar className="h-full w-full">
+                <AvatarImage src={profile[0]?.image} />
+                <AvatarFallback>{profile[0]?.user?.username}</AvatarFallback>
+              </Avatar>
             </div>
             <div className="ml-4">
               <div className="flex justify-between">
                 <h1 className="text-2xl proxima-medium">
                   {profile[0]?.user?.username}
                 </h1>
-                <Button
+                {/* <Button
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 rounded-full"
-                ></Button>
+                ></Button> */}
               </div>
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
-                <span className="text-gray-400 proxima-small">
-                  {profile[0]?.location}
-                </span>
+                <span className="">{profile[0]?.location}</span>
               </div>
-              <div className="mt-2">
-                <p className="font-semibold text-sm">{profile[0]?.headline}</p>
+              <div className="mt-2 w-full pr-2">
+                <p className=" w-full text-xs font-semibold">
+                  {profile[0]?.headline}
+                </p>
               </div>
               <div className=" absolute top-24 right-0  flex justify-center">
                 <img
@@ -295,17 +295,18 @@ const Talent = () => {
                   className="w-full h-full object-fill"
                 />
               </div>
-              <div className="flex items-center space-x-2">
-                <Linkedin className="w-5 h-5 fill-white" />
-                <span className="mt-1 proxima-large">
-                  {profile[0]?.linkedin_url}
-                </span>
+              <div className="">
+                <div className="flex  items-center gap-2 ">
+                  <img src="/Icons/linkdein.png" alt="" />
+                  <span className=" text-xs mt-2 font-bold  text-nowrap">
+                    {profile[0]?.linkedin_url.slice(7)}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="p-2">
+          <div className="p-2 mt-4">
             <Button
-             
               onClick={() => setShowConnectForm(true)}
               className="w-full bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2"
             >
@@ -485,10 +486,7 @@ const Talent = () => {
                   className="w-full h-full object-fill rounded-t-lg"
                 />
               </div>
-              <Button
-                variant="none"
-                className="absolute bg-white rounded-full p-2 top-1 right-1"
-              ></Button>
+
               <div className="h-1/5 flex  flex-col justify-between p-4">
                 <CardTitle className="text-sm text-start text-white proxima-FAQ">
                   {project.title}

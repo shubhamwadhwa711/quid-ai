@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -43,125 +43,27 @@ import { LanguagesIcon } from "@/components/icons/LanguagesIcon";
 import { AvailableToIcon } from "@/components/icons/AvailableToIcon";
 import { useRouter } from "next/navigation";
 import TalentCard from "@/components/TalentCard";
-const talentData = [
-  {
-    id: 1,
-    user: {
-      id: 2,
-      username: "Anita",
-      email: "anita@gmail.com",
-      first_name: "Anita",
-      last_name: "Verma",
-    },
-    skill: [
-      {
-        id: 1,
-        name: "Python",
-      },
-      {
-        id: 2,
-        name: "Artificial Intelligence",
-      },
-      {
-        id: 3,
-        name: "Mathematics",
-      },
-      {
-        id: 4,
-        name: "Differential Equations",
-      },
-      {
-        id: 5,
-        name: "Regression Analysis",
-      },
-      {
-        id: 6,
-        name: "Data Mining",
-      },
-      {
-        id: 7,
-        name: "Graph Theory",
-      },
-      {
-        id: 8,
-        name: "Data Analysis",
-      },
-      {
-        id: 9,
-        name: "Business Statistics",
-      },
-    ],
-    education: [
-      {
-        id: 1,
-        school: "Goel",
-        degree: "Masters",
-        field_of_study: "Chemical",
-        start_year: 2020,
-        end_year: 2024,
-        description: "I have done my B.Pharma",
-        profile: 1,
-      },
-      {
-        id: 2,
-        school: "REC",
-        degree: "Phd",
-        field_of_study: "Chemical",
-        start_year: 2020,
-        end_year: 2024,
-        description: "I have done my B.Pharma",
-        profile: 1,
-      },
-    ],
-    projects: [
-      {
-        id: 2,
-        title: "AI",
-        description: "Ai scanner",
-        url: "",
-        start_date: "2025-03-19",
-        end_date: "2025-03-30",
-        profile: 1,
-      },
-      {
-        id: 3,
-        title: "AI scanner",
-        description: "Ai scanner",
-        url: null,
-        start_date: "2025-03-19",
-        end_date: "2025-03-19",
-        profile: 1,
-      },
-      {
-        id: 4,
-        title: "ML project",
-        description: "new Ml",
-        url: null,
-        start_date: "2025-03-19",
-        end_date: "2025-03-19",
-        profile: 1,
-      },
-    ],
-    client: [
-      {
-        id: 1,
-        name: "Google",
-        profile: 1,
-      },
-    ],
-    image: "",
-    headline:
-      "Mathematician and Statistician | Expert in Pure Maths, Advance Maths, Probability-Statistics, Data Science",
-    summary:
-      "An AI expert with a strong background in mathematics and statistics, specializing in pure and advanced mathematics, probability, and data science. With deep analytical and problem-solving skills, they excel in developing statistical models, machine learning algorithms, and AI-driven solutions. Their expertise spans theoretical and applied mathematics, enabling them to extract meaningful insights from complex data.",
-    location: "United States",
-    linkedin_url: "http://linkedin.com/sophia-chris-de",
-    industry: 1,
-  },
-];
+import { profile } from "console";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
+
 const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
-
+  const dispatch = useAppDispatch();
+  const { profile, loading, error } = useAppSelector((state) => state.Profile);
+  useEffect(() => {
+    // console.log("dispatching profile...");
+    dispatch(fetchProfile());
+  }, [dispatch]);
+  // console.log("profile", profile);
+  const [userData, setUserData] = useState<Profile[] | null>(null);
+  console.log("userData", userData);
+  console.log("userData", userData);
+  // State for controlling which popup is currently open
+  const [activePopup, setActivePopup] = useState(null);
+  useEffect(() => {
+    setUserData(profile);
+  }, [profile]);
   const [selectedFilters, setSelectedFilters] = useState({
     skills: [],
     academics: [],
@@ -254,8 +156,8 @@ const Search = () => {
       }
     });
   };
-
   console.log("Filter selection", selectedFilters);
+  console.log("userData", userData);
   return (
     <div className=" flex flex-col items-center justify-center">
       <div className="my-20 w-full flex flex-col gap-2">
@@ -448,7 +350,7 @@ const Search = () => {
           />
         </div>
         <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
-          {talentData.map((talent) => (
+          {userData?.map((talent) => (
             <TalentCard talent={talent} />
           ))}
         </div>
@@ -460,7 +362,7 @@ const Search = () => {
             </h1>
           </div>
           <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
-            {talentData.map((talent) => (
+            {userData?.map((talent) => (
               <TalentCard talent={talent} />
             ))}
           </div>
