@@ -35,6 +35,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
     setSelectedTalent(talent);
     setShowConnectForm(true);
   };
+  console.log("talent image", talent.image);
   return (
     <Card
       key={talent.id}
@@ -123,7 +124,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
             </div>
           </div>
         </div>
-        
+
         <ConnectDialog
           talentId={talent.id}
           showConnectForm={showConnectForm}
