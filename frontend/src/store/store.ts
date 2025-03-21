@@ -7,6 +7,8 @@ import InsightCategoryReducer from "@/reducers/insights/category/insightscategor
 import InsightsReducer from "@/reducers/insights/insightsSlice";
 import SolutionsReducer from "@/reducers/solutions/solutionSlice";
 import ProfileReducer from "@/reducers/profile/profileSlice";
+import EnquiryReducer from "@/reducers/enquiry/enquirySlice";
+import BlogsReducer from "@/reducers/blogs/BlogSlice";
 export const store = configureStore({
   reducer: {
     company: companyReducer,
@@ -16,6 +18,8 @@ export const store = configureStore({
     insightsCategory: InsightCategoryReducer,
     Solutions: SolutionsReducer,
     Profile: ProfileReducer,
+    Enquiry: EnquiryReducer,
+    Blogs: BlogsReducer,
   },
 });
 
