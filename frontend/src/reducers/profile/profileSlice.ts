@@ -56,7 +56,7 @@ export interface Profile {
   location: string;
   linkedin_url: string;
   projects: Project[];
-  availability?: Availability[];
+  available_to?: Availability[];
   languages?: Language[];
 }
 
