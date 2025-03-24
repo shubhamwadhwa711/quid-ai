@@ -27,8 +27,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Profile.objects.filter(status="APPROVED")
     serializer_class = ProfileSerializer
-    filter_backends = [DjangoFilterBackend]  
-    filterset_class = ProfileFilter  # Use the custom filter class 
+    # filter_backends = [DjangoFilterBackend, SearchFilter]  
+    # filterset_class = ProfileFilter  # Use the custom filter class 
+    # search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree']
    
 
 class EducationViewSet(viewsets.ModelViewSet):
@@ -132,7 +133,45 @@ class ProfileRelatedViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Profile.objects.filter(status="APPROVED")
     serializer_class = ProfileRelatedSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]  
+    filterset_class = ProfileFilter  # Use the custom filter class 
+    search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree']
     
+class SkillViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer  
+    http_method_names = ['get']     
+
+class LanguageViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer  
+    http_method_names = ['get','post','patch']     
+
+class AvailableToViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = AvailableTo.objects.all()
+    serializer_class = AvailableSerializer 
+    http_method_names = ['get']    
+
+class CountryViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer 
+    http_method_names = ['get']        
+
+class ClientViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer 
+    http_method_names = ['get']           
+
+class AcademicViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Education.objects.all()
+    serializer_class = EducationSerializer 
+    http_method_names = ['get']    
 
 
 

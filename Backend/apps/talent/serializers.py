@@ -22,7 +22,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Education
-        fields = '__all__'
+        fields = ['degree']
 
 class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,6 +51,7 @@ class EnquirySerializer(serializers.ModelSerializer):
 
 
 class ClientSerializer(serializers.ModelSerializer):
+    # profile = ProfileSerializer(read_only=True)
     class Meta:
         model = Client
         fields = '__all__'
