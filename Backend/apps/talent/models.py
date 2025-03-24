@@ -46,17 +46,17 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     headline = models.CharField(max_length=255,null=True, blank=True)  
     summary = models.TextField(blank=True, null=True)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True, blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True, blank=True, related_name='country')
     industry = models.ForeignKey(Industry, on_delete=models.CASCADE, null=True, blank=True)
     website = models.URLField(blank=True, null=True)
     skill = models.ManyToManyField(Skill)
-    language = models.ManyToManyField(Language)
+    language = models.ManyToManyField(Language) 
     available_to = models.ManyToManyField(AvailableTo)
     phone = models.CharField(max_length=20, blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username if self.user else "Unnamed Profile"
 
 class Experience(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='experiences')
@@ -118,6 +118,8 @@ class Client(models.Model):
 
     def __str__(self):
         return self.name   
+    
+    
 
 class Enquiry(models.Model):
     STATUS = (
