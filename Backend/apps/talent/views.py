@@ -27,9 +27,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Profile.objects.filter(status="APPROVED")
     serializer_class = ProfileSerializer
-    # filter_backends = [DjangoFilterBackend, SearchFilter]  
-    # filterset_class = ProfileFilter  # Use the custom filter class 
-    # search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree']
+   
    
 
 class EducationViewSet(viewsets.ModelViewSet):
@@ -141,13 +139,18 @@ class SkillViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer  
-    http_method_names = ['get']     
+    http_method_names = ['get'] 
+    filter_backends = [SearchFilter]  
+    search_fields = ['name']    
 
 class LanguageViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Language.objects.all()
     serializer_class = LanguageSerializer  
-    http_method_names = ['get','post','patch']     
+    http_method_names = ['get','post','patch']
+    filter_backends = [SearchFilter]  
+    search_fields = ['name']    
+     
 
 class AvailableToViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
