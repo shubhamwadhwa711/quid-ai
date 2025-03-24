@@ -14,13 +14,29 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = '__all__'        
 
 class ProfileSerializer(serializers.ModelSerializer):
-    skill = SkillSerializer(many=True)
+    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
+    user = UserSerializer()
     class Meta:
         model = Profile
         exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
 
+    def update(self, instance, validated_data):
+        # Handle updating nested fields
+        if 'user' in validated_data:
+            user_data = validated_data.pop('user')
+            user_instance = instance.user  # Get the associated user
+            user_serializer = UserSerializer(user_instance, data=user_data, partial=True)
+            if user_serializer.is_valid():
+                user_serializer.save()
+            else:
+                raise serializers.ValidationError(user_serializer.errors)
+
+        # Update instance with remaining fields
+        return super().update(instance, validated_data)       
+
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:
+        
         model = Education
         fields = ['degree']
 
@@ -76,7 +92,7 @@ class ProfileRelatedSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     skill = SkillSerializer(many=True, read_only=True)
     industry = IndustrySerializer(read_only=True)
-    country = CountrySerializer(read_only=True)
+    country = CountrySerializer()
     language = LanguageSerializer(many=True, read_only=True)
     available_to = AvailableSerializer(many=True, read_only=True)
     education= EducationSerializer(many=True,read_only=True)
@@ -86,3 +102,5 @@ class ProfileRelatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
+
+     
