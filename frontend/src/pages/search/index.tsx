@@ -46,9 +46,13 @@ import TalentCard from "@/components/TalentCard";
 import { profile } from "console";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
+import QuickFilterDrawer from "@/components/QuickFilterDrawer";
 
 const Search = () => {
   const [showFilters, setShowFilters] = useState(false);
+  const [showQuickFilters, setShowQuickFilters] = useState(false);
+  const [ActiveQuickFilterCategory, setActiveQuickFilterCategory] =
+    useState(null);
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
   useEffect(() => {
@@ -78,6 +82,14 @@ const Search = () => {
     setShowFilters(!showFilters);
   };
 
+  const handleQuickFilterToggle = (filterLabel: string) => {
+    setActiveQuickFilterCategory(filterLabel);
+    setShowQuickFilters(!showQuickFilters);
+  };
+  const closeFilter = () => {
+    setActiveQuickFilterCategory(null);
+    setShowFilters(false);
+  };
   const QuickFilters = [
     {
       id: 1,
@@ -158,6 +170,7 @@ const Search = () => {
   };
   console.log("Filter selection", selectedFilters);
   console.log("userData", userData);
+  console.log("showQuickFilter", showQuickFilters);
   return (
     <div className=" flex flex-col items-center justify-center">
       <div className="my-20 w-full flex flex-col gap-2">
@@ -204,6 +217,10 @@ const Search = () => {
             <div className="grid grid-cols-2  sm:grid-cols-3    gap-2 hide-scrollbar">
               {QuickFilters.map(({ id, icon, label }) => (
                 <Card
+                  onClick={() => {
+                    setActiveQuickFilterCategory(label); // Set active category based on clicked filter
+                    setShowFilters(true);
+                  }}
                   key={id}
                   className="min-h-16 min-w-28 flex flex-col align-middle justify-center items-center border-none bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]"
                 >
@@ -317,17 +334,32 @@ const Search = () => {
           {/* </div> */}
         </div>
         {showFilters && (
-          <Drawer open={showFilters} onOpenChange={setShowFilters}>
+          <Drawer open={showFilters} onOpenChange={closeFilter}>
             <DrawerContent>
               <FilterDrawer
-                showFilters={showFilters}
-                setShowFilters={setShowFilters}
+                showFilters={ActiveQuickFilterCategory ? false : true}
+                setShowFilters={closeFilter}
                 handleFilterToggle={handleFilterToggle}
                 setSelectedFilters={setSelectedFilters}
+                initialFilter={ActiveQuickFilterCategory}
               />
             </DrawerContent>
           </Drawer>
         )}
+        {/* {showQuickFilters && (
+          <Drawer open={showQuickFilters} onOpenChange={setShowQuickFilters}>
+            <DrawerContent>
+              <QuickFilterDrawer
+                showQuickFilters={showQuickFilters}
+                setShowQuickFilters={setShowQuickFilters}
+                handleQuickFilterToggle={handleQuickFilterToggle}
+                setSelectedFilters={setSelectedFilters}
+                ActiveQuickFilterCategory={ActiveQuickFilterCategory}
+
+              />
+            </DrawerContent>
+          </Drawer>
+        )} */}
       </div>
 
       {/* <div className="absolute top-10 left-50 w-full  flex justify-center">
