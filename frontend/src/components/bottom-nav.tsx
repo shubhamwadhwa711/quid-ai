@@ -20,7 +20,7 @@ import { LearnIcon } from "./icons/LearnIcon";
 import { MenuIcon } from "./icons/MenuIcon";
 export const menuItems = [
   {
-    icon: <HomeIcon />,
+    icon: <HomeIcon/>,
     label: "Home",
     href: "/",
   },
@@ -31,8 +31,8 @@ export const menuItems = [
   },
   {
     icon: <LearnIcon />,
-    label: "Learn",
-    href: "/learn",
+    label: "Insights",
+    href: "/insights",
   },
   {
     icon: <MenuIcon />,
@@ -46,24 +46,58 @@ export function BottomNav() {
   const { data: session } = useSession();
 
   return (
-    <nav className="fixed bottom-3 left-0 right-0 z-50 mx-2 h-16 sm:hidden border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
-      <div className="grid h-full max-w-md grid-cols-4">
+    <nav className="fixed bottom-3 left-0 right-0 z-50  h-16  w-full max-w-md justify-self-center border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
+      <div className="grid h-full grid-cols-4">
         {menuItems.map(({ icon, label, href }) => {
           const isActive = pathname === href;
 
-          return (
+          return label === "Menu" ? (
+            <Drawer key={label}>
+              <DrawerTrigger asChild>
+                <button className="flex flex-col items-center gap-1 px-4 py-2 border-b-2 border-transparent transition-colors duration-300 text-white">
+                  {icon}
+                  <span className="text-sm">{label}</span>
+                </button>
+              </DrawerTrigger>
+              <DrawerContent className="bg-gray-900  text-white">
+                <DrawerHeader>
+                  <DrawerTitle className="text-white">Menu</DrawerTitle>
+                </DrawerHeader>
+                <ul className="p-4 space-y-2">
+                  <li>
+                    <a href="/settings" className="block text-white">
+                      Settings
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/profile" className="block text-white">
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/logout" className="block text-white">
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+                <DrawerClose>
+                  <Button variant="outline" className="w-full mt-4">
+                    Close
+                  </Button>
+                </DrawerClose>
+              </DrawerContent>
+            </Drawer>
+          ) : (
             <Link
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center justify-center px-3 transition-colors duration-300",
+                "flex flex-col items-center gap-1 ",
                 isActive ? "border-primary text-white" : "text-white"
               )}
             >
-              <div className="flex items-center justify-center">
-               {icon}
-              </div>
-              <span className="text-[10px] sm:text-xs mt-1">{label}</span>
+              {icon}
+              <span className="text-sm">{label}</span>
             </Link>
           );
         })}
@@ -80,7 +114,7 @@ export function BottomNav() {
             <DrawerHeader>
               <DrawerTitle>Menu</DrawerTitle>
             </DrawerHeader> */}
-            {/* <ul className="p-4 space-y-2">
+        {/* <ul className="p-4 space-y-2">
               {session ? (
                 <>
                   <div className="text-center text-sm flex flex-col items-center gap-2">
@@ -123,7 +157,7 @@ export function BottomNav() {
                 </Button>
               )}
             </ul> */}
-            {/* <DrawerClose>
+        {/* <DrawerClose>
               <Button variant="outline" className="w-full mt-4">
                 Close
               </Button>

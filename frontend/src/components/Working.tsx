@@ -1,7 +1,9 @@
 import { ArrowRight, MoveRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 const Working = () => {
+  const router = useRouter();
   return (
     <div className="space-y-6 flex flex-col justify-center items-center">
       <div className="">
@@ -21,7 +23,7 @@ const Working = () => {
         />
       </div>
       <div>
-        <Button className="px-8 py-6 proxima-bold text-xl rounded-3xl bg-gradient-to-r text-white from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
+        <Button onClick={()=>router.push("/search")} className="px-8 py-6 proxima-bold text-xl rounded-3xl bg-gradient-to-r text-white from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
           <div className="flex justify-center items-center gap-2">
             Search AI Experts
             <svg

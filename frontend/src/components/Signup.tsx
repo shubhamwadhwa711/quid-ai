@@ -1,11 +1,12 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardTitle } from "./ui/card";
-
+import { useRouter } from "next/navigation";
 const Signup = () => {
+  const router = useRouter();
   return (
-    <div className="flex flex-col justify-center items-center">
-      <Card className="bg-white/10  border-[#545C6C] mx-4">
+    <div className="flex flex-col  justify-center items-center">
+      <Card className="bg-white/10 mb-16 border-[#545C6C] mx-4">
         <CardHeader className="p-0">
           <img
             src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740048424/quidAi/rjrwhzfaf1kclwfppmbw.png"
@@ -20,8 +21,11 @@ const Signup = () => {
             </div>
           </CardTitle>
         </CardHeader>
-        <div className="mt-4">
-          <Button className="px-10 py-6 rounded-3xl proxima-large bg-gradient-to-r mb-8 from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
+        <div className="mt-4 flex flex-col justify-center items-center">
+          <Button
+            onClick={() => router.push("/search")}
+            className="px-10 py-6 rounded-3xl proxima-large bg-gradient-to-r mb-8 from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]"
+          >
             <div className="flex justify-center items-center gap-2">
               <span className="proxima-bold text-xl">Search AI Experts</span>
               <svg

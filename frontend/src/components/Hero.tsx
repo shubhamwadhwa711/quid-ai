@@ -48,7 +48,7 @@ const cardData = [
 ];
 const Hero = () => {
   return (
-    <div className="flex flex-col w-full items-center">
+    <div className="flex flex-col w-full  items-center">
       <div className="space-y-4 text-center mb-10">
         <h1 className="text-sm proxima-regular">
           WORLD'S LARGEST AI THINK TANK

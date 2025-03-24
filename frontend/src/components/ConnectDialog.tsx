@@ -12,17 +12,26 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Check, MoveRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "./ui/textarea";
-
-const ConnectDrawer = ({ showConnectForm, setShowConnectForm }) => {
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchEnquiry } from "@/reducers/enquiry/enquirySlice";
+const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [connectForm, setConnectForm] = useState({
-    name: "",
+    full_name: "",
     email: "",
     message: "",
-    project: "",
+    profile: talentId,
   });
+  const dispatch = useAppDispatch();
+
+  const { enquiry, loading, error } = useAppSelector((state) => state.Enquiry);
+
+  // useEffect(() => {
+  //   dispatch(fetchEnquiry());
+  // }, [dispatch,id]);
+
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setConnectForm({
@@ -32,13 +41,13 @@ const ConnectDrawer = ({ showConnectForm, setShowConnectForm }) => {
   };
   const handleSubmitConnect = () => {
     // Here you would typically handle the form submission to your backend
+    dispatch(fetchEnquiry(connectForm));
     console.log("Form submitted:", connectForm);
-
     // Show thank you message
     setFormSubmitted(true);
 
     // Optional: Reset form
-    setConnectForm({ name: "", email: "", message: "", project: "" });
+    setConnectForm({ profile: "", full_name: "", email: "", message: "" });
   };
   return (
     <Drawer open={showConnectForm} onOpenChange={setShowConnectForm}>
@@ -56,10 +65,10 @@ const ConnectDrawer = ({ showConnectForm, setShowConnectForm }) => {
                 <div>
                   <div className="space-y-2">
                     <Input
-                      id="name"
-                      name="name"
+                      id="full_name"
+                      name="full_name"
                       placeholder="Your Name"
-                      value={connectForm.name}
+                      value={connectForm.full_name}
                       onChange={handleFormChange}
                       className="bg-white/5 border-white/10 rounded-3xl focus:border-purple-500"
                     />
