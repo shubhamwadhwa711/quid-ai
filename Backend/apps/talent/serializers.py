@@ -15,6 +15,7 @@ class SkillSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
+    skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True)
     user = UserSerializer()
     class Meta:
         model = Profile
@@ -51,6 +52,7 @@ class CertificationSerializer(serializers.ModelSerializer):
         fields = '__all__'  
 
 class ProjectSerializer(serializers.ModelSerializer):
+    tag = SkillSerializer(read_only=True, many=True)
     class Meta:
         model = Project
         fields = '__all__'                        
