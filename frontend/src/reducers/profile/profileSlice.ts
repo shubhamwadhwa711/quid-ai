@@ -20,11 +20,13 @@ interface Education {
 interface Client {
   id: number;
   name: string;
+  client:string;
   profile: number;
 }
 interface Project {
   id: number;
   title: string;
+  image:string;
   description: string;
   url: string;
   start_date: string;
