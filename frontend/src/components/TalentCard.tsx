@@ -114,8 +114,8 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
                   {talent?.client?.map((cli, index) => (
                     <img
                       key={index}
-                      src={cli.name}
-                      alt={cli.name}
+                      src={cli?.client}
+                      alt={cli?.name}
                       className="h-8 w-20 object-contain inline-block ms-2"
                     />
                   ))}
