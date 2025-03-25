@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Linkedin, MapPin, Pencil, Share2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import {
   Drawer,
   DrawerClose,
@@ -21,7 +22,7 @@ import {
 } from "@/components/ui/dialog";
 // import { useMediaQuery } from "@/hooks/use-media-query";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProfile } from "@/reducers/profile/profileSlice";
+import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import ConnectDrawer from "@/components/ConnectDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -73,7 +74,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 ">
       {fields.map((field) => (
         <div key={field.key} className="space-y-2">
           {field.type === "text" && (
@@ -213,45 +214,22 @@ const Talent = () => {
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
   useEffect(() => {
+    // console.log("dispatching profile...");
     dispatch(fetchProfile());
   }, [dispatch]);
-  console.log("profile", profile[0]);
-  const newprofile = profile[0];
-  const [userData, setUserData] = useState({
-    name: "Sophia Chris",
-    title: "Senior Developer",
-    location: "San Francisco, CA",
-    bio: "Mathematician and Statistician | Expert in Pure Maths, Advance Maths, Probability-Statistics, Data Science",
-    fullBio:
-      "An AI expert with a strong background in mathematics and statistics, specializing in pure and advanced mathematics, probability, and data science. With deep analytical and problem-solving skills, they excel in developing statistical models, machine learning algorithms, and AI-driven solutions. Their expertise spans theoretical and applied mathematics, enabling them to extract meaningful insights from complex data.",
-    linkedIn: "linkedin.com/sophia-chris-de",
-    skills: [
-      "Artificial Intelligence",
-      "Mathematics",
-      "Python",
-      "Differential Equations",
-      "Regression Analysis",
-      "Graph Theory",
-      "Data Analysis",
-    ],
-    languages: ["English", "Spanish", "French"],
-    contact: "jane.doe@example.com",
-    available: ["Teach", "Advice", "Speak", "Be Interviewed"],
-    academics: ["Masters", "PhD"],
-    projects: [
-      {
-        title: "Project Title Here",
-        description: "Project description goes here",
-        tags: ["Mathematics", "Python"],
-      },
-    ],
-    featuredClients: ["Discord", "Meta", "Netflix", "Amazon"],
-  });
-
+  // console.log("profile", profile);
+  const [userData, setUserData] = useState<Profile | null>(null);
+  console.log("userData", userData);
+  console.log("userData", userData);
+  // State for controlling which popup is currently open
+  const router = useRouter();
+  useEffect(() => {
+    setUserData(profile[0]);
+  }, [profile]);
   const [showConnectForm, setShowConnectForm] = useState();
 
   return (
-    <div className="text-white flex flex-col items-center justify-center p-2">
+    <div className="text-white flex flex-col items-center justify-center p-2 pb-20">
       {/* Main profile card */}
       <div className="w-full rounded-xl">
         {/* Cover photo area */}
@@ -264,14 +242,14 @@ const Talent = () => {
             {/* Profile image (left) */}
             <div className="h-32 w-32 flex-shrink-0 rounded-full">
               <Avatar className="h-full w-full">
-                <AvatarImage src={profile[0]?.image} />
-                <AvatarFallback>{profile[0]?.user?.username}</AvatarFallback>
+                <AvatarImage src={userData?.image} />
+                <AvatarFallback>{userData?.user?.username}</AvatarFallback>
               </Avatar>
             </div>
             <div className="ml-4">
               <div className="flex justify-between">
                 <h1 className="text-2xl proxima-medium">
-                  {profile[0]?.user?.username}
+                  {userData?.user?.username}
                 </h1>
                 {/* <Button
                   size="icon"
@@ -281,11 +259,11 @@ const Talent = () => {
               </div>
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
-                <span className="">{profile[0]?.location}</span>
+                <span className="">{userData?.location}</span>
               </div>
               <div className="mt-2 w-full pr-2">
                 <p className=" w-full text-xs font-semibold">
-                  {profile[0]?.headline}
+                  {userData?.headline}
                 </p>
               </div>
               <div className=" absolute top-24 right-0  flex justify-center">
@@ -299,7 +277,7 @@ const Talent = () => {
                 <div className="flex  items-center gap-2 ">
                   <img src="/Icons/linkdein.png" alt="" />
                   <span className=" text-xs mt-2 font-bold  text-nowrap">
-                    {profile[0]?.linkedin_url.slice(7)}
+                    {userData?.linkedin_url.slice(7)}
                   </span>
                 </div>
               </div>
@@ -328,7 +306,7 @@ const Talent = () => {
               ></Button>
             </div>
             <div className="flex flex-wrap gap-2">
-              {profile[0]?.skill.map((s, index) => (
+              {userData?.skill.map((s, index) => (
                 <span
                   key={index}
                   className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -357,9 +335,9 @@ const Talent = () => {
         <div className="space-y-4">
           <div className="pl-4">
             <p>
-              {profile[0]?.summary?.length > 200
-                ? `${profile[0]?.summary?.substring(0, 200)}... Read More`
-                : profile[0]?.summary}
+              {userData?.summary?.length > 200
+                ? `${userData?.summary?.substring(0, 200)}... Read More`
+                : userData?.summary}
             </p>
           </div>
         </div>
@@ -378,12 +356,12 @@ const Talent = () => {
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.languages.map((language, index) => (
+          {userData?.language?.map((lang, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {language}
+              {lang.name}
             </span>
           ))}
         </div>
@@ -402,12 +380,12 @@ const Talent = () => {
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.academics.map((academic, index) => (
+          {userData?.education.map((edu, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {academic}
+              {edu.degree}
             </span>
           ))}
         </div>
@@ -426,12 +404,12 @@ const Talent = () => {
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.available.map((aval, index) => (
+          {userData?.available_to?.map((aval) => (
             <span
-              key={index}
+              key={aval.id}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {aval}
+              {aval.name}
             </span>
           ))}
         </div>
@@ -450,12 +428,12 @@ const Talent = () => {
           ></Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData.featuredClients.map((client, index) => (
+          {userData?.client.map((cli) => (
             <span
-              key={index}
+              key={cli.id}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
             >
-              {client}
+              {cli.name}
             </span>
           ))}
         </div>
@@ -473,22 +451,23 @@ const Talent = () => {
             className="h-8 w-8 rounded-full"
           ></Button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          {userData.projects.map((project, index) => (
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4">
+          {userData?.projects.map((project, index) => (
             <Card
+              onClick={()=>router.push(`/talent/${userData?.id}/project/${project.id}`)}
               key={index}
-              className="hover:shadow-md relative bg-gray-800  transition flex-shrink-0 w-60 h-56"
+              className=" hover:shadow-md border-none relative bg-gray-800  transition flex-shrink-0 w-44 h-48"
             >
               <div className="relative h-4/5">
                 <img
-                  src={project.title}
+                  src={project?.image}
                   alt={project.title}
                   className="w-full h-full object-fill rounded-t-lg"
                 />
               </div>
 
-              <div className="h-1/5 flex  flex-col justify-between p-4">
-                <CardTitle className="text-sm text-start text-white proxima-FAQ">
+              <div className="h-1/5 flex  flex-col justify-between p-1">
+                <CardTitle className="text-xs text-center text-wrap text-white">
                   {project.title}
                 </CardTitle>
               </div>
@@ -510,7 +489,7 @@ const Talent = () => {
       )} */}
       {showConnectForm && (
         <ConnectDrawer
-          talentId={profile[0].id}
+          talentId={userData?.id}
           showConnectForm={showConnectForm}
           setShowConnectForm={setShowConnectForm}
         />
