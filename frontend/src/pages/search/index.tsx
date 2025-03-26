@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -17,7 +17,6 @@ import TalentCard from "@/components/TalentCard";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
 import FilterDrawer from "@/components/FilterDrawer";
-import { postFilter } from "@/reducers/filter/filterSlice";
 interface Filter {
   expertise: string[];
   academics: string[];
@@ -26,6 +25,13 @@ interface Filter {
   clients: string[];
   available_to: string[];
 }
+type FilterCategory =
+  | "expertise"
+  | "academics"
+  | "country"
+  | "languages"
+  | "clients"
+  | "available_to";
 const Search = () => {
   // State for selected filters
   const [selectedExpertise, setSelectedExpertise] = useState<string[]>([]);
@@ -36,6 +42,7 @@ const Search = () => {
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>(
     []
   );
+  const [isFilterApplied, setIsFilterApplied] = useState<boolean>(false);
   const [selectedFilters, setSelectedFilters] = useState<Filter>({
     expertise: [],
     academics: [],
@@ -53,12 +60,16 @@ const Search = () => {
   // Redux and data states
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
-  const [userData, setUserData] = useState<Profile[] | null>(null);
+  // const { filter, filterloading, filtererror } = useAppSelector(
+  //   (state) => state.PostFilter
+  // );
 
+  const [userData, setUserData] = useState<Profile[] | null>(null);
+  // const [filterUsers, setFilterUsers] = useState<Profile[] | null>(filter);
   // Fetch profile on component mount
   useEffect(() => {
-    dispatch(fetchProfile());
-  }, [dispatch]);
+    dispatch(fetchProfile(selectedFilters));
+  }, [dispatch, selectedFilters]);
 
   // Update userData when profile changes
   useEffect(() => {
@@ -85,59 +96,65 @@ const Search = () => {
     { id: 6, icon: "/Icons/AvailableTo.png", label: "Available to" },
   ];
 
-  // Remove individual filter
-  const removeFilter = (category: string, value: string) => {
-    switch (category) {
-      case "skills":
-        setSelectedExpertise((prev) => prev.filter((item) => item !== value));
-        break;
-      case "academics":
-        setSelectedAcademics((prev) => prev.filter((item) => item !== value));
-        break;
-      case "countries":
-        setSelectedCountries((prev) => prev.filter((item) => item !== value));
-        break;
-      case "languages":
-        setSelectedLanguages((prev) => prev.filter((item) => item !== value));
-        break;
-      case "clients":
-        setSelectedClients((prev) => prev.filter((item) => item !== value));
-        break;
-      case "availability":
-        setSelectedAvailability((prev) =>
-          prev.filter((item) => item !== value)
+  const updateFilter = useCallback(
+    (category: FilterCategory, value: string, isAdding: boolean) => {
+      setSelectedFilters((prev) => {
+        const updatedFilters = {
+          ...prev,
+          [category]: isAdding
+            ? [...prev[category], value.toLowerCase()]
+            : prev[category].filter((item) => item !== value.toLowerCase()),
+        };
+  
+        // Check if any filter category has items
+        const hasActiveFilters = Object.values(updatedFilters).some(
+          (categoryFilters) => categoryFilters.length > 0
         );
-        break;
-    }
-  };
-
+  
+        // Set isFilterApplied based on whether there are any active filters
+        setIsFilterApplied(hasActiveFilters);
+  
+        return updatedFilters;
+      });
+    },
+    []
+  );
   // Apply filters and update selected filters
   const applyFilters = () => {
     // Close the filter drawer
     setShowFilters(false);
-    setSelectedFilters((prevFilters) => {
-      return {
-        ...prevFilters,
-        expertise: selectedExpertise,
-        academics: selectedAcademics,
-        country: selectedCountries,
-        languages: selectedLanguages,
-        clients: selectedClients,
-        available_to: selectedAvailability,
-      };
-    });
-    dispatch(
-      postFilter({
-        expertise: selectedExpertise,
-        academics: selectedAcademics,
-        country: selectedCountries,
-        languages: selectedLanguages,
-        clients: selectedClients,
-        available_to: selectedAvailability,
-      })
-    );
+
+    // Function to convert array elements to lowercase
+    const toLowerCaseArray = (arr: string[]) =>
+      arr.map((item) => item.toLowerCase());
+
+    const updatedFilters = {
+      expertise: toLowerCaseArray(selectedExpertise),
+      academics: toLowerCaseArray(selectedAcademics),
+      country: toLowerCaseArray(selectedCountries),
+      languages: toLowerCaseArray(selectedLanguages),
+      clients: toLowerCaseArray(selectedClients),
+      available_to: toLowerCaseArray(selectedAvailability),
+    };
+    // setIsFilterApplied(true);
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      ...updatedFilters,
+    }));
   };
-  
+  const clearFilters = useCallback(() => {
+    setSelectedFilters({
+      expertise: [],
+      academics: [],
+      country: [],
+      languages: [],
+      clients: [],
+      available_to: [],
+    });
+    setIsFilterApplied(false);
+    console.log("clearedFilters");
+  }, []);
+  console.log("isFilterApplied", isFilterApplied);
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="my-20 w-full flex flex-col gap-2">
@@ -174,8 +191,6 @@ const Search = () => {
             </svg>
           </Button>
         </div>
-
-        {/* Quick filters section */}
         <div>
           <div className="mx-1 flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
@@ -208,45 +223,24 @@ const Search = () => {
 
         {/* Selected filters badges */}
         <div className="flex gap-2 max-w-sm hide-scrollbar overflow-x-scroll mx-2">
-          {[
-            ...selectedExpertise.map((skill) => ({
-              category: "skills",
-              value: skill,
-            })),
-            ...selectedAcademics.map((academic) => ({
-              category: "academics",
-              value: academic,
-            })),
-            ...selectedCountries.map((country) => ({
-              category: "countries",
-              value: country,
-            })),
-            ...selectedLanguages.map((language) => ({
-              category: "languages",
-              value: language,
-            })),
-            ...selectedClients.map((client) => ({
-              category: "clients",
-              value: client,
-            })),
-            ...selectedAvailability.map((availability) => ({
-              category: "availability",
-              value: availability,
-            })),
-          ].map((filter) => (
-            <Badge
-              key={`${filter.category}-${filter.value}`}
-              className="flex bg-white/20 items-center text-nowrap rounded-3xl"
-            >
-              <span className="text-xs proxima-bold">{filter.value}</span>
-              <button
-                onClick={() => removeFilter(filter.category, filter.value)}
-                className="ml-2"
+          {Object.entries(selectedFilters).map(([category, values]) =>
+            values.map((value) => (
+              <Badge
+                key={`${category}-${value}`}
+                className="flex bg-white/20 items-center text-nowrap rounded-3xl"
               >
-                <X className="h-4 w-4" />
-              </button>
-            </Badge>
-          ))}
+                <span className="text-xs proxima-bold">
+                  {value.charAt(0).toUpperCase() + value.slice(1)}
+                </span>
+                <button
+                  onClick={() => updateFilter(category, value, false)}
+                  className="ml-2"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </Badge>
+            ))
+          )}
         </div>
 
         {/* Filter Drawer */}
@@ -260,44 +254,51 @@ const Search = () => {
                 initialFilter={activeQuickFilterCategory}
                 applyFilters={applyFilters}
                 // Pass all state setters and current states
-                selectedExpertise={selectedExpertise}
-                selectedAcademics={selectedAcademics}
-                selectedCountries={selectedCountries}
-                selectedLanguages={selectedLanguages}
-                selectedClients={selectedClients}
-                selectedAvailability={selectedAvailability}
-                setSelectedExpertise={setSelectedExpertise}
-                setSelectedAcademics={setSelectedAcademics}
-                setSelectedCountries={setSelectedCountries}
-                setSelectedLanguages={setSelectedLanguages}
-                setSelectedClients={setSelectedClients}
-                setSelectedAvailability={setSelectedAvailability}
+
+                updateFilter={updateFilter}
+                selectedFilters={selectedFilters}
+                clearFilters={clearFilters}
               />
             </DrawerContent>
           </Drawer>
         )}
 
         {/* Talent Cards Section */}
-        <div className=" w-full relative overflow-x-auto hide-scrollbar px-4">
-          <div className="mx-1 flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-            <h1 className="proxima-bold text-xl text-white">Top AI Talents</h1>
+        <div>
+          <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
+            <div className="mx-1 flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+              <h1 className="proxima-bold text-xl text-white">
+                {" "}
+                Top AI Talents{" "}
+              </h1>
+            </div>
+            <div
+              className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
+                isFilterApplied ? "grid-cols-1" : "grid-flow-col auto-cols-max"
+              } gap-2`}
+            >
+              {userData?.map((talent) => (
+                <TalentCard key={talent.id} talent={talent} />
+              ))}
+            </div>
           </div>
-          <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
-            {userData?.map((talent) => (
-              <TalentCard key={talent.id} talent={talent} />
-            ))}
-          </div>
-        </div>
-        <div className=" w-full relative overflow-x-auto hide-scrollbar px-4">
-          <div className="mx-1 flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-            <h1 className="proxima-bold text-xl text-white">Talents from US</h1>
-          </div>
-          <div className="w-full overflow-x-auto hide-scrollbar px-4 grid grid-flow-col auto-cols-max gap-2">
-            {userData?.map((talent) => (
-              <TalentCard key={talent.id} talent={talent} />
-            ))}
+          <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
+            <div className="mx-1 flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+              <h1 className="proxima-bold text-xl text-white">
+                Talents from US
+              </h1>
+            </div>
+            <div
+              className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
+                isFilterApplied ? "grid-cols-1" : "grid-flow-col auto-cols-max"
+              } gap-2`}
+            >
+              {userData?.map((talent) => (
+                <TalentCard key={talent.id} talent={talent} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
