@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -27,18 +27,10 @@ export default function FilterDrawer({
 
   initialFilter,
   applyFilters,
-  selectedExpertise,
-  selectedAcademics,
-  selectedCountries,
-  selectedLanguages,
-  selectedClients,
-  selectedAvailability,
-  setSelectedExpertise,
-  setSelectedAcademics,
-  setSelectedCountries,
-  setSelectedLanguages,
-  setSelectedClients,
-  setSelectedAvailability,
+
+  updateFilter,
+  selectedFilters,
+  clearFilters,
 }: any) {
   const [open, setOpen] = useState(false);
   const [activeFilterCategory, setActiveFilterCategory] = useState(
@@ -86,12 +78,12 @@ export default function FilterDrawer({
   console.log("showFilters", showFilters);
   // Filter categories with isSelected property
   const [filterCategories, setFilterCategories] = useState([
-    { id: "Expertise", label: "Expertise" },
-    { id: "Academic", label: "Academic" },
-    { id: "Country", label: "Country" },
-    { id: "Clients", label: "Clients" },
-    { id: "Languages", label: "Languages" },
-    { id: "Available to", label: "Available to" },
+    { id: "expertise", label: "Expertise" },
+    { id: "academic", label: "Academic" },
+    { id: "country", label: "Country" },
+    { id: "clients", label: "Clients" },
+    { id: "languages", label: "Languages" },
+    { id: "available_to", label: "Available to" },
   ]);
 
   // Solutions data
@@ -134,40 +126,6 @@ export default function FilterDrawer({
     },
   ];
 
-  const toggleExpertise = (label) => {
-    if (selectedExpertise.includes(label)) {
-      setSelectedExpertise(selectedExpertise.filter((item) => item !== label));
-    } else {
-      setSelectedExpertise([...selectedExpertise, label]);
-    }
-  };
-
-  const toggleAcademics = (label) => {
-    if (selectedAcademics.includes(label)) {
-      setSelectedAcademics(selectedAcademics.filter((item) => item !== label));
-    } else {
-      setSelectedAcademics([...selectedAcademics, label]);
-    }
-  };
-
-  const toggleClients = (label) => {
-    if (selectedClients.includes(label)) {
-      setSelectedClients(selectedClients.filter((item) => item !== label));
-    } else {
-      setSelectedClients([...selectedClients, label]);
-    }
-  };
-
-  const toggleAvailability = (label) => {
-    if (selectedAvailability.includes(label)) {
-      setSelectedAvailability(
-        selectedAvailability.filter((item) => item !== label)
-      );
-    } else {
-      setSelectedAvailability([...selectedAvailability, label]);
-    }
-  };
-
   const handleFilterSelect = (filterlabel) => {
     console.log("filterlabel", filterlabel);
     setActiveFilterCategory(filterlabel);
@@ -176,15 +134,6 @@ export default function FilterDrawer({
   const handleSector = (sectorLabel: string) => {
     console.log("sectorLabel", sectorLabel);
     setSelectedSector(sectorLabel);
-  };
-
-  const clearFilters = () => {
-    setSelectedExpertise([]);
-    setSelectedAcademics([]);
-    setSelectedCountries([]);
-    setSelectedLanguages([]);
-    setSelectedClients([]);
-    setSelectedAvailability([]);
   };
 
   const handleSearchChange = (e) => {
@@ -198,24 +147,30 @@ export default function FilterDrawer({
     return options.filter((option) =>
       typeof option === "string"
         ? option.toLowerCase().includes(searchQuery.toLowerCase())
-        : option.label.toLowerCase().includes(searchQuery.toLowerCase())
+        : option.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
 
   // Render filter options based on active category
   const renderFilterOptions = () => {
-    console.log("activeFilterCategory", activeFilterCategory);
+    // console.log("activeFilterCategory", activeFilterCategory);
+    console.log("selectedFilters", selectedFilters);
+    console.log("selectedFilterslang", selectedFilters.languages);
+
     switch (activeFilterCategory) {
       case "Expertise":
         return getFilteredOptions(expertise).map((option) => (
           <div
             key={option.id}
             className="flex items-center gap-2 p-2 rounded-md"
-            onClick={() => toggleExpertise(option.name)}
           >
             <Checkbox
-              checked={selectedExpertise.includes(option.name)}
-              onCheckedChange={() => toggleExpertise(option.name)}
+              checked={selectedFilters.expertise.includes(
+                option.name.toLowerCase()
+              )}
+              onCheckedChange={(checked) =>
+                updateFilter("expertise", option.name, checked)
+              }
             />
             <span className="text-gray-400 text-xs">{option.name}</span>
           </div>
@@ -225,11 +180,14 @@ export default function FilterDrawer({
           <div
             key={option.id}
             className="flex items-center gap-2 p-2 rounded-md"
-            onClick={() => toggleAcademics(option.degree)}
           >
             <Checkbox
-              checked={selectedAcademics.includes(option.degree)}
-              onCheckedChange={() => toggleAcademics(option.degree)}
+              checked={selectedFilters.academics.includes(
+                option.name.toLowerCase()
+              )}
+              onCheckedChange={(checked) =>
+                updateFilter("academic", option.name, checked)
+              }
             />
             <span className="text-gray-400 text-xs">{option.degree}</span>
           </div>
@@ -238,21 +196,12 @@ export default function FilterDrawer({
         return getFilteredOptions(country).map((count) => (
           <div key={count} className="flex items-center gap-2 p-2 rounded-md">
             <Checkbox
-              checked={selectedCountries.includes(count.name.toLowerCase())}
-              onCheckedChange={(checked) => {
-                if (checked) {
-                  setSelectedCountries([
-                    ...selectedCountries,
-                    count.name.toLowerCase(),
-                  ]);
-                } else {
-                  setSelectedCountries(
-                    selectedCountries.filter(
-                      (c) => c !== count.name.toLowerCase()
-                    )
-                  );
-                }
-              }}
+              checked={selectedFilters.country.includes(
+                count.name.toLowerCase()
+              )}
+              onCheckedChange={(checked) =>
+                updateFilter("country", count.name, checked)
+              }
             />
             <span className="text-gray-400 text-xs">{count.name}</span>
           </div>
@@ -262,11 +211,14 @@ export default function FilterDrawer({
           <div
             key={option.id}
             className="flex items-center gap-2 p-2 rounded-md"
-            onClick={() => toggleClients(option.name)}
           >
             <Checkbox
-              checked={selectedClients.includes(option.name)}
-              onCheckedChange={() => toggleClients(option.name)}
+              checked={selectedFilters.clients.includes(
+                option.name.toLowerCase()
+              )}
+              onCheckedChange={(checked) =>
+                updateFilter("clients", option.name, checked)
+              }
             />
             <span className="text-gray-400 text-xs">{option.name}</span>
           </div>
@@ -275,16 +227,12 @@ export default function FilterDrawer({
         return getFilteredOptions(language).map((lang) => (
           <div key={lang.id} className="flex items-center gap-2 p-2 rounded-md">
             <Checkbox
-              checked={selectedLanguages.includes(lang.name)}
-              onCheckedChange={(checked) => {
-                if (checked) {
-                  setSelectedLanguages([...selectedLanguages, lang.name]);
-                } else {
-                  setSelectedLanguages(
-                    selectedLanguages.filter((l) => l !== lang.name)
-                  );
-                }
-              }}
+              checked={selectedFilters.languages.includes(
+                lang.name.toLowerCase()
+              )}
+              onCheckedChange={(checked) =>
+                updateFilter("languages", lang.name, checked)
+              }
             />
             <span className="text-gray-400 text-xs">{lang.name}</span>
           </div>
@@ -294,11 +242,14 @@ export default function FilterDrawer({
           <div
             key={option.id}
             className="flex items-center gap-2 p-2 rounded-md"
-            onClick={() => toggleAvailability(option.name)}
           >
             <Checkbox
-              checked={selectedAvailability.includes(option.name)}
-              onCheckedChange={() => toggleAvailability(option.name)}
+              checked={selectedFilters.available_to.includes(
+                option.name.toLowerCase()
+              )}
+              onCheckedChange={(checked) =>
+                updateFilter("available_to", option.name, checked)
+              }
             />
             <span className="text-gray-400 text-xs">{option.name}</span>
           </div>
@@ -406,14 +357,14 @@ export default function FilterDrawer({
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end">
+      {/* <div className="mt-6 flex justify-end">
         <Button
           onClick={applyFilters}
           className="rounded-3xl px-6 py-2 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8]"
         >
           Apply Filters
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

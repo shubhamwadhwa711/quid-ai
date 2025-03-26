@@ -58,7 +58,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
           {talent?.user?.first_name} {talent?.user?.last_name}
         </CardTitle>
         <CardDescription className="text-xs">
-          {talent?.location}
+          {talent?.country?.name}
         </CardDescription>
         <span className="text-sm proxima-FAQ">{talent.headline}</span>
       </CardHeader>
