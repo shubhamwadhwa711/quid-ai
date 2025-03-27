@@ -8,11 +8,25 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id','username','email','first_name','last_name']
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['full_name'] = f"{instance.first_name} {instance.last_name}"    
+        return data
+    
+    def to_internal_value(self, data):
+        full_name = data.pop('full_name', None)
+        if full_name:
+            first_name, last_name = full_name.split()
+            data['first_name']= first_name
+            data['last_name']= last_name
+        return super().to_internal_value(data)    
+
+
+
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = '__all__'        
-
 class ProfileSerializer(serializers.ModelSerializer):
     country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
     skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True)
@@ -55,7 +69,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     tag = SkillSerializer(read_only=True, many=True)
     class Meta:
         model = Project
-        fields = '__all__'                        
+        fields = '__all__'  
+
+class ProjectEditSerializer(serializers.ModelSerializer):
+    tag = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True)
+    class Meta:
+        model = Project
+        fields = '__all__'                                  
 
 class IndustrySerializer(serializers.ModelSerializer):
     class Meta:
