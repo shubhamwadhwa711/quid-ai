@@ -20,11 +20,13 @@ interface Education {
 interface Client {
   id: number;
   name: string;
+  client:string;
   profile: number;
 }
 interface Project {
   id: number;
   title: string;
+  image:string;
   description: string;
   url: string;
   start_date: string;
@@ -76,10 +78,12 @@ const initialState: ProfileState = {
 // Async Thunk to fetch company data
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
-  async (_, { rejectWithValue }) => {
+  async (FilterData, { rejectWithValue }) => {
     console.log("Fetching profile...");
     try {
-      const response = await axios.get("/api/profile");
+      const response = await axios.get("/api/profile",{
+        params: FilterData,
+      });
       console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {

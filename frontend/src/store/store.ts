@@ -9,6 +9,14 @@ import SolutionsReducer from "@/reducers/solutions/solutionSlice";
 import ProfileReducer from "@/reducers/profile/profileSlice";
 import EnquiryReducer from "@/reducers/enquiry/enquirySlice";
 import BlogsReducer from "@/reducers/blogs/BlogSlice";
+import AcademicsReducer from "@/reducers/filter/academics/academicsSlice";
+import ExpertiseReducer from "@/reducers/filter/expertise/expertiseSlice";
+import CountryReducer from "@/reducers/filter/country/countrySlice";
+import ClientReducer from "@/reducers/filter/client/clientSlice";
+import LanguageReducer from "@/reducers/filter/language/languageSlice";
+import AvailableToReducer from "@/reducers/filter/availableto/availabletoSlice";
+import ProjectReducer from "@/reducers/project/projectSlice";
+
 export const store = configureStore({
   reducer: {
     company: companyReducer,
@@ -20,6 +28,13 @@ export const store = configureStore({
     Profile: ProfileReducer,
     Enquiry: EnquiryReducer,
     Blogs: BlogsReducer,
+    Expertise: ExpertiseReducer,
+    Academics: AcademicsReducer,
+    Country: CountryReducer,
+    Client: ClientReducer,
+    Language: LanguageReducer,
+    AvailableTo: AvailableToReducer,
+    Project: ProjectReducer,
   },
 });
 

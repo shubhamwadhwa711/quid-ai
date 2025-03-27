@@ -58,7 +58,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
           {talent?.user?.first_name} {talent?.user?.last_name}
         </CardTitle>
         <CardDescription className="text-xs">
-          {talent?.location}
+          {talent?.country?.name}
         </CardDescription>
         <span className="text-sm proxima-FAQ">{talent.headline}</span>
       </CardHeader>
@@ -114,8 +114,8 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
                   {talent?.client?.map((cli, index) => (
                     <img
                       key={index}
-                      src={cli.name}
-                      alt={cli.name}
+                      src={cli?.client}
+                      alt={cli?.name}
                       className="h-8 w-20 object-contain inline-block ms-2"
                     />
                   ))}

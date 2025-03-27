@@ -31,6 +31,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import get from "lodash/get";
 import ReadMore from "@/components/ReadMore";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
@@ -52,8 +53,31 @@ const useCustomMediaQuery = (query) => {
 
 // EditContent component to be used in both Dialog and Drawer
 const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
-  const [formData, setFormData] = useState(currentValues);
+  console.log(title, fields, currentValues);
+  const [formData, setFormData] = useState({});
   const [tagInput, setTagInput] = useState("");
+  const [currentField, setCurrentField] = useState(null);
+
+  // Initialize form data when currentValues changes
+  useEffect(() => {
+    const initialData = {};
+    fields.forEach((field) => {
+      if (field.type === "tags") {
+        // For tag fields, use the array from currentValues or create an empty array
+        initialData[field.key] = currentValues[field.key]
+          ? currentValues[field.key].map((item) => item.name || item)
+          : [];
+      } else {
+        // For text/textarea fields, use the value directly
+
+        console.log("currentValues.user", currentValues.user);
+        console.log("field.accessor", get(currentValues, field.accessor, ""));
+        initialData[field.key] = get(currentValues, field.accessor, "");
+      }
+    });
+    // console.log("initialData", initialData);
+    setFormData(initialData);
+  }, [currentValues, fields]);
 
   const handleChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -65,6 +89,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     const newTags = [...(formData[field] || []), tagInput.trim()];
     setFormData((prev) => ({ ...prev, [field]: newTags }));
     setTagInput("");
+    setCurrentField(null);
   };
 
   const handleTagRemove = (field, index) => {
@@ -80,7 +105,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 px-4">
       {fields.map((field) => (
         <div key={field.key} className="space-y-2">
           {field.type === "text" && (
@@ -108,17 +133,22 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
                 <input
                   type="text"
                   value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
+                  onChange={(e) => {
+                    setTagInput(e.target.value);
+                    setCurrentField(field.key);
+                  }}
                   placeholder={`Add ${field.label}`}
                   className="flex-1 p-2 bg-[#262640] text-white rounded-lg border-none focus:ring-2 focus:ring-[#7C2BD3]"
                 />
-                <Button
-                  type="button"
-                  onClick={() => handleTagAdd(field.key)}
-                  className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
-                >
-                  Add
-                </Button>
+                {currentField === field.key && (
+                  <Button
+                    type="button"
+                    onClick={() => handleTagAdd(field.key)}
+                    className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
+                  >
+                    Add
+                  </Button>
+                )}
               </div>
 
               <div className="flex flex-wrap gap-2 mt-2">
@@ -154,67 +184,6 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   );
 };
 
-// Responsive Edit Component that shows Drawer on mobile and Dialog on desktop
-const ResponsiveEdit = ({
-  isOpen,
-  onClose,
-  title,
-  fields,
-  currentValues,
-  onSave,
-}) => {
-  // Use the custom hook if shadcn's useMediaQuery is not available
-  const isDesktop = useCustomMediaQuery("(min-width: 768px)");
-
-  if (!isOpen) return null;
-
-  if (isDesktop) {
-    return (
-      <Dialog open={isOpen} onOpenChange={() => onClose()}>
-        <DialogContent className="bg-[#1A1A2E] text-white border-[#262640] max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-xl">Edit {title}</DialogTitle>
-          </DialogHeader>
-
-          <EditContent
-            title={title}
-            fields={fields}
-            currentValues={currentValues}
-            onSave={onSave}
-            onClose={onClose}
-          />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer open={isOpen} onOpenChange={() => onClose()}>
-      <DrawerContent className="bg-[#1A1A2E] text-white">
-        <DrawerHeader>
-          <DrawerTitle className="text-xl">Edit {title}</DrawerTitle>
-        </DrawerHeader>
-
-        <div className="px-4">
-          <EditContent
-            title={title}
-            fields={fields}
-            currentValues={currentValues}
-            onSave={onSave}
-            onClose={onClose}
-          />
-        </div>
-
-        <DrawerFooter className="mt-2">
-          <DrawerClose asChild>
-            <Button variant="ghost">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-};
-
 // Main Profile Component
 const Profile = () => {
   const dispatch = useAppDispatch();
@@ -237,11 +206,26 @@ const Profile = () => {
     profile: {
       title: "Profile",
       fields: [
-        { key: "name", type: "text", placeholder: "Full Name" },
-        { key: "title", type: "text", placeholder: "Job Title" },
-        { key: "location", type: "text", placeholder: "Location" },
-        { key: "bio", type: "text", placeholder: "Short Bio" },
-        { key: "linkedIn", type: "text", placeholder: "LinkedIn URL" },
+        {
+          key: "name",
+          type: "text",
+          placeholder: "Full Name",
+          accessor: "user.username",
+        },
+        // // { key: "title", type: "text", placeholder: "Job Title" },
+        {
+          key: "location",
+          type: "text",
+          placeholder: "Location",
+          accessor: "country.name",
+        },
+        {
+          key: "bio",
+          type: "text",
+          placeholder: "Short Bio",
+          accessor: "headline",
+        },
+        // { key: "linkedIn", type: "text", placeholder: "LinkedIn URL" },
       ],
     },
     bio: {
@@ -251,6 +235,7 @@ const Profile = () => {
           key: "fullBio",
           type: "textarea",
           placeholder: "Enter your full bio here",
+          accessor:"summary"
         },
       ],
     },
@@ -345,13 +330,13 @@ const Profile = () => {
               <div className="mt-2">
                 <p className="font-semibold text-sm">{userData?.headline}</p>
               </div>
-              <div className=" absolute top-24 right-0  flex justify-center">
+              {/* <div className=" absolute top-24 right-0  flex justify-center">
                 <img
                   src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
                   alt="Spiral Background"
                   className="w-full h-full object-fill"
                 />
-              </div>
+              </div> */}
               <div className="flex items-center space-x-2">
                 <Linkedin className="w-5 h-5 fill-white" />
                 <span className="mt-1 proxima-large">
@@ -572,16 +557,30 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Responsive Edit Modal/Drawer */}
       {activePopup && (
-        <ResponsiveEdit
-          isOpen={true}
-          onClose={handleClosePopup}
-          title={popupConfigs[activePopup].title}
-          fields={popupConfigs[activePopup].fields}
-          currentValues={userData}
-          onSave={handleSaveData}
-        />
+        <Drawer open={true} onOpenChange={handleClosePopup}>
+          <DrawerContent className="bg-[#1A1A2E] text-white">
+            <DrawerHeader>
+              <DrawerTitle className="text-xl">
+                Edit {popupConfigs[activePopup].title}
+              </DrawerTitle>
+            </DrawerHeader>
+
+            <EditContent
+              title={popupConfigs[activePopup].title}
+              fields={popupConfigs[activePopup].fields}
+              currentValues={userData}
+              onSave={handleSaveData}
+              onClose={handleClosePopup}
+            />
+
+            <DrawerFooter>
+              <DrawerClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       )}
     </div>
   );
