@@ -10,6 +10,7 @@ from .filters import ProfileFilter
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
+# from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -81,14 +82,32 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [AllowAny]
     serializer_class =ProjectSerializer    
-
+   
+    
     """
     Restricts the returned project to a given profile,
     by filtering against a `pk` URL parameter.
     """
     def get_queryset(self):
         profile_id = self.kwargs['profile_pk']
-        return Project.objects.filter(profile_id=profile_id , profile__status="APPROVED")         
+        return Project.objects.filter(profile_id=profile_id , profile__status="APPROVED") 
+
+
+class ProjectEditViewSet(viewsets.ModelViewSet):
+    """
+    API view to for updation
+    """
+    permission_classes = [AllowAny]
+    serializer_class =ProjectEditSerializer    
+   
+    
+    """
+    Restricts the returned project to a given profile,
+    by filtering against a `pk` URL parameter.
+    """
+    def get_queryset(self):
+        profile_id = self.kwargs['profile_pk']
+        return Project.objects.filter(profile_id=profile_id , profile__status="APPROVED")             
 
 class IndustryViewSet(viewsets.ModelViewSet):
     """
