@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from .ckeditorconfig import *
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -79,6 +80,7 @@ INSTALLED_APPS = [
     'apps.insight',
     'apps.user',
     'django_ckeditor_5',
+    # 'ckeditor_uploader',
     'drf_yasg',
     'oauth2_provider',
     'social_django',
@@ -224,7 +226,8 @@ STATICFILES_DIRS = [
 
 
 # Base url to serve media files
-MEDIA_URL = '/media/'
+
+MEDIA_URL = "media/"
 
 # Path where media is stored'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
@@ -233,109 +236,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-
-customColorPalette = [
-        {
-            'color': 'hsl(4, 90%, 58%)',
-            'label': 'Red'
-        },
-        {
-            'color': 'hsl(340, 82%, 52%)',
-            'label': 'Pink'
-        },
-        {
-            'color': 'hsl(291, 64%, 42%)',
-            'label': 'Purple'
-        },
-        {
-            'color': 'hsl(262, 52%, 47%)',
-            'label': 'Deep Purple'
-        },
-        {
-            'color': 'hsl(231, 48%, 48%)',
-            'label': 'Indigo'
-        },
-        {
-            'color': 'hsl(207, 90%, 54%)',
-            'label': 'Blue'
-        },
-    ]
-
-
-CKEDITOR_5_CONFIGS = {
-    'default': {
-        'toolbar': {
-            'items': ['heading', '|', 'bold', 'italic', 'link',
-                      'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
-                    }
-
-    },
-    'extends': {
-        'blockToolbar': [
-            'paragraph', 'heading1', 'heading2', 'heading3',
-            '|',
-            'bulletedList', 'numberedList',
-            '|',
-            'blockQuote',
-        ],
-        'toolbar': {
-            'items': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                      'code','subscript', 'superscript', 'highlight', '|', 'codeBlock', 'sourceEditing', 'insertImage',
-                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable',
-                    ],
-            'shouldNotGroupWhenFull': True
-        },
-        'image': {
-            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
-                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
-            'styles': [
-                'full',
-                'side',
-                'alignLeft',
-                'alignRight',
-                'alignCenter',
-            ]
-
-        },
-        'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties' ],
-            'tableProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            },
-            'tableCellProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            }
-        },
-        'heading' : {
-            'options': [
-                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
-                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
-                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
-                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
-            ]
-        }
-    },
-    'list': {
-        'properties': {
-            'styles': 'true',
-            'startIndex': 'true',
-            'reversed': 'true',
-        }
-    }
-}
-
-# Define a constant in settings.py to specify file upload permissions
-CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated", "any"
-
-
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -362,10 +262,10 @@ SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET = 'WPL_AP1.JrR1Bj2R52WqAzbG.rJoiiA=='
 
 # CELERY SETTINGS
 
-CELERY_BROKER_URL = 'redis://redis-qa:6379'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_Task_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 
-CELERY_RESULT_BACKEND = 'redis://redis-qa:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
