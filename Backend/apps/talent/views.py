@@ -152,7 +152,7 @@ class ProfileRelatedViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileRelatedSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]  
     filterset_class = ProfileFilter  # Use the custom filter class 
-    search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree']
+    search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree','industry__name']
     
 class SkillViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]

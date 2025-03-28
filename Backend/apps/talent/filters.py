@@ -8,10 +8,11 @@ class ProfileFilter(django_filters.FilterSet):
     languages = django_filters.CharFilter(field_name="language__name", lookup_expr='icontains')
     available_to = django_filters.CharFilter(field_name="available_to__name", lookup_expr='icontains')
     country = django_filters.CharFilter(field_name="country__name", lookup_expr='icontains')
+    industry = django_filters.CharFilter(field_name="industry__name", lookup_expr='icontains')
     
 
     class Meta:
         model = Profile
-        fields = ['expertise', 'academics','clients','languages','available_to', 'country' ]
+        fields = ['expertise', 'academics','clients','languages','available_to', 'country','industry' ]
 
     
