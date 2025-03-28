@@ -24,6 +24,7 @@ interface Filter {
   languages: string[];
   clients: string[];
   available_to: string[];
+  industry?: string;
 }
 type FilterCategory =
   | "expertise"
@@ -31,7 +32,9 @@ type FilterCategory =
   | "country"
   | "languages"
   | "clients"
-  | "available_to";
+  | "available_to"
+  | "industry";
+
 const Search = () => {
   // State for selected filters
   const [selectedExpertise, setSelectedExpertise] = useState<string[]>([]);
@@ -42,6 +45,7 @@ const Search = () => {
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>(
     []
   );
+  const [selectedIndustry, setSelectedIndustry] = useState<string>();
   const [isFilterApplied, setIsFilterApplied] = useState<boolean>(false);
   const [selectedFilters, setSelectedFilters] = useState<Filter>({
     expertise: [],
@@ -50,9 +54,28 @@ const Search = () => {
     languages: [],
     clients: [],
     available_to: [],
+    industry: "",
   });
   // State for filter drawer
   const [showFilters, setShowFilters] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const onSearch = (query: string) => {
+    console.log("Searching for:", query);
+    dispatch(fetchProfile({ search: query }));
+  };
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (typeof onSearch === "function") {
+        onSearch(searchTerm);
+      } else {
+        console.error("onSearch is not a function", onSearch);
+      }
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [searchTerm]);
+
   const [activeQuickFilterCategory, setActiveQuickFilterCategory] = useState<
     string | null
   >(null);
@@ -69,7 +92,7 @@ const Search = () => {
   // Fetch profile on component mount
   useEffect(() => {
     dispatch(fetchProfile(selectedFilters));
-  }, [dispatch, selectedFilters]);
+  }, [dispatch, JSON.stringify(selectedFilters)]);
 
   // Update userData when profile changes
   useEffect(() => {
@@ -105,15 +128,15 @@ const Search = () => {
             ? [...prev[category], value.toLowerCase()]
             : prev[category].filter((item) => item !== value.toLowerCase()),
         };
-  
+
         // Check if any filter category has items
         const hasActiveFilters = Object.values(updatedFilters).some(
           (categoryFilters) => categoryFilters.length > 0
         );
-  
+
         // Set isFilterApplied based on whether there are any active filters
         setIsFilterApplied(hasActiveFilters);
-  
+
         return updatedFilters;
       });
     },
@@ -135,6 +158,7 @@ const Search = () => {
       languages: toLowerCaseArray(selectedLanguages),
       clients: toLowerCaseArray(selectedClients),
       available_to: toLowerCaseArray(selectedAvailability),
+      industry: selectedIndustry,
     };
     // setIsFilterApplied(true);
     setSelectedFilters((prevFilters) => ({
@@ -150,7 +174,9 @@ const Search = () => {
       languages: [],
       clients: [],
       available_to: [],
+      industry: "",
     });
+    setSelectedIndustry("");
     setIsFilterApplied(false);
     console.log("clearedFilters");
   }, []);
@@ -165,6 +191,8 @@ const Search = () => {
             <Input
               type="text"
               placeholder="Search talent..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="flex h-10 w-full border-none focus-visible:ring-0 rounded-md bg-transparent py-3 text-sm outline-none"
             />
           </div>
@@ -223,23 +251,25 @@ const Search = () => {
 
         {/* Selected filters badges */}
         <div className="flex gap-2 max-w-sm hide-scrollbar overflow-x-scroll mx-2">
-          {Object.entries(selectedFilters).map(([category, values]) =>
-            values.map((value) => (
-              <Badge
-                key={`${category}-${value}`}
-                className="flex bg-white/20 items-center text-nowrap rounded-3xl"
-              >
-                <span className="text-xs proxima-bold">
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
-                </span>
-                <button
-                  onClick={() => updateFilter(category, value, false)}
-                  className="ml-2"
+          {Object.entries(selectedFilters).map(
+            ([category, values]) =>
+              category !== "industry" &&
+              values.map((value) => (
+                <Badge
+                  key={`${category}-${value}`}
+                  className="flex bg-white/20 items-center text-nowrap rounded-3xl"
                 >
-                  <X className="h-4 w-4" />
-                </button>
-              </Badge>
-            ))
+                  <span className="text-xs proxima-bold">
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </span>
+                  <button
+                    onClick={() => updateFilter(category, value, false)}
+                    className="ml-2"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </Badge>
+              ))
           )}
         </div>
 
@@ -253,8 +283,9 @@ const Search = () => {
                 handleFilterToggle={handleFilterToggle}
                 initialFilter={activeQuickFilterCategory}
                 applyFilters={applyFilters}
-                // Pass all state setters and current states
-
+                setSelectedFilters={setSelectedFilters}
+                selectedIndustry={selectedIndustry}
+                setSelectedIndustry={setSelectedIndustry}
                 updateFilter={updateFilter}
                 selectedFilters={selectedFilters}
                 clearFilters={clearFilters}

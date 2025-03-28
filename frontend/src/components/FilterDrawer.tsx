@@ -19,6 +19,8 @@ import { fetchCountry } from "@/reducers/filter/country/countrySlice";
 import { fetchClient } from "@/reducers/filter/client/clientSlice";
 import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
 import { fetchAvailableTo } from "@/reducers/filter/availableto/availabletoSlice";
+import { fetchProfile } from "@/reducers/profile/profileSlice";
+import { fetchSolutions } from "@/reducers/solutions/solutionSlice";
 export default function FilterDrawer({
   showFilters,
   setShowFilters,
@@ -27,7 +29,9 @@ export default function FilterDrawer({
 
   initialFilter,
   applyFilters,
-
+  setSelectedFilters,
+  selectedIndustry,
+  setSelectedIndustry,
   updateFilter,
   selectedFilters,
   clearFilters,
@@ -35,9 +39,6 @@ export default function FilterDrawer({
   const [open, setOpen] = useState(false);
   const [activeFilterCategory, setActiveFilterCategory] = useState(
     initialFilter ?? "Expertise"
-  );
-  const [selectedSector, setSelectedSector] = useState<string>(
-    "Healthcare & Pharma"
   );
 
   const dispatch = useAppDispatch();
@@ -66,6 +67,7 @@ export default function FilterDrawer({
     dispatch(fetchClient());
     dispatch(fetchLanguage());
     dispatch(fetchAvailableTo());
+    dispatch(fetchSolutions());
   }, [dispatch]);
   console.log("academics", academics);
   console.log("expertise", expertise);
@@ -85,57 +87,29 @@ export default function FilterDrawer({
     { id: "languages", label: "Languages" },
     { id: "available_to", label: "Available to" },
   ]);
-
-  // Solutions data
-  const solutions = [
-    {
-      id: 1,
-      label: "Healthcare & Pharma",
-      image:
-        "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/xbnlyaxtqa1lqdlsag3u.png",
-    },
-    {
-      id: 2,
-      label: "Hospitality Management",
-      image:
-        "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/zfa2mfxyhuqmd4tfrno8.png",
-    },
-    {
-      id: 3,
-      label: "Banks & Fintech",
-      image:
-        "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/ebvdoqqr1boilamfsqwn.png",
-    },
-    {
-      id: 4,
-      label: "Marketing Experts",
-      image:
-        "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/qmkwqvruzkvpgsz9pbnz.png",
-    },
-    {
-      id: 5,
-      label: "Corporate World",
-      image:
-        "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/oachy0hnhep4hly7kyfe.png",
-    },
-    {
-      id: 6,
-      label: "Events & Training",
-      image:
-        "https://res.cloudinary.com/dgz1duuwu/image/upload/v1740032757/quidAi/rx5tv3bg7ow1jwyhdp1v.png",
-    },
-  ];
+ const { Solutions, loading, error } = useAppSelector(
+    (state) => state.Solutions
+  );
+ 
+  
 
   const handleFilterSelect = (filterlabel) => {
     console.log("filterlabel", filterlabel);
     setActiveFilterCategory(filterlabel);
     setSearchQuery(""); // Reset search query when changing filter
   };
-  const handleSector = (sectorLabel: string) => {
-    console.log("sectorLabel", sectorLabel);
-    setSelectedSector(sectorLabel);
-  };
 
+  const handleSector = (sectorLabel: string) => {
+    setSelectedIndustry(sectorLabel);
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      industry: sectorLabel,
+    }));
+  };
+  useEffect(() => {
+    dispatch(fetchProfile(selectedFilters));
+  }, [selectedFilters]);
+  console.log("selectedFilters", selectedFilters);
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -150,7 +124,7 @@ export default function FilterDrawer({
         : option.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
-
+console.log("Solutions",Solutions)
   // Render filter options based on active category
   const renderFilterOptions = () => {
     // console.log("activeFilterCategory", activeFilterCategory);
@@ -295,24 +269,24 @@ export default function FilterDrawer({
           </label>
 
           <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-            {solutions.map((solution) => (
+            {Solutions.map((solution) => (
               <Card
                 key={solution.id}
-                className={`h-28 w-28 px-6 rounded-3xl m-1 border-none proxima-bold flex flex-col text-wrap justify-center items-center ${
-                  solution.label == selectedSector
+                className={`h-28 w-28 p-10 rounded-xl  border-none  flex flex-col text-wrap justify-center items-center ${
+                  solution.name == selectedIndustry
                     ? "bg-gradient-to-r  from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
                     : "bg-[#545C6C] text-white"
                 }`}
-                onClick={() => handleSector(solution.label)}
+                onClick={() => handleSector(solution.name)}
               >
                 <img
-                  src={solution.image}
-                  alt={solution.label}
-                  className="w-8 h-8 object-cover"
+                  src={solution.logo}
+                  alt={solution.name}
+                  className="w-10 h-10"
                 />
                 <CardHeader className="p-2">
                   <CardTitle className="text-white text-xs font-medium break-words text-center leading-tight line-clamp-3">
-                    {solution.label}
+                    {solution.name}
                   </CardTitle>
                 </CardHeader>
               </Card>

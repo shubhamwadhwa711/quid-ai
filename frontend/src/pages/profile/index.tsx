@@ -33,6 +33,15 @@ import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import get from "lodash/get";
 import ReadMore from "@/components/ReadMore";
+import { NameIcon } from "@/components/icons/NameIcon";
+import { LocationIcon } from "@/components/icons/LocationIcon";
+import { SummaryIcon } from "@/components/icons/SummaryIcon";
+import { BioIcon } from "@/components/icons/BioIcon";
+import { ExpertiseIcon } from "@/components/icons/ExpertiseIcon";
+import { BulbIcon } from "@/components/icons/BulbIcon";
+import { updateProfile } from "@/reducers/UpdateProfile/updateProfileSlice";
+import { Badge } from "@/components/ui/badge";
+import ProjectEditForm from "@/components/ProjectEditForm";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -57,7 +66,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [formData, setFormData] = useState({});
   const [tagInput, setTagInput] = useState("");
   const [currentField, setCurrentField] = useState(null);
-
+  const dispatch = useAppDispatch();
   // Initialize form data when currentValues changes
   useEffect(() => {
     const initialData = {};
@@ -103,33 +112,50 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     onSave(formData);
     onClose();
   };
-
+  const handleUpdate = () => {
+    console.log("ID", currentValues.id);
+    console.log("formData", formData);
+    dispatch(updateProfile({ id: currentValues.id, data: formData }));
+  };
   return (
     <form onSubmit={handleSubmit} className="space-y-4 px-4">
       {fields.map((field) => (
         <div key={field.key} className="space-y-2">
           {field.type === "text" && (
-            <input
-              type="text"
-              value={formData[field.key] || ""}
-              onChange={(e) => handleChange(field.key, e.target.value)}
-              placeholder={field.placeholder || `Enter ${field.label}`}
-              className="w-full p-2 bg-[#262640] text-white rounded-lg border-none focus:ring-2 focus:ring-[#7C2BD3]"
-            />
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-3 flex items-center text-white">
+                {field.icon}
+              </div>
+              <input
+                type="text"
+                value={formData[field.key] || ""}
+                onChange={(e) => handleChange(field.key, e.target.value)}
+                placeholder={field.placeholder || `Enter ${field.label}`}
+                className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg border-none focus:ring-2 focus:ring-[#7C2BD3]"
+              />
+            </div>
           )}
 
           {field.type === "textarea" && (
-            <textarea
-              value={formData[field.key] || ""}
-              onChange={(e) => handleChange(field.key, e.target.value)}
-              placeholder={field.placeholder || `Enter ${field.label}`}
-              className="w-full p-2 bg-[#262640] text-white rounded-lg min-h-[100px] border-none focus:ring-2 focus:ring-[#7C2BD3]"
-            />
+            <div className="relative w-full flex">
+              <div className="absolute inset-y-0 left-3 flex items-start pt-2 text-white">
+                {field.icon}
+              </div>
+              <textarea
+                value={formData[field.key] || ""}
+                onChange={(e) => handleChange(field.key, e.target.value)}
+                placeholder={field.placeholder || `Enter ${field.label}`}
+                className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg min-h-[200px]   border-none focus:ring-2 focus:ring-[#7C2BD3]"
+              />
+            </div>
           )}
 
           {field.type === "tags" && (
             <div className="space-y-2">
-              <div className="flex gap-2">
+              <div className="relative w-full">
+                <div className="absolute inset-y-0 left-3 flex items-center text-white">
+                  {field.icon}
+                </div>
                 <input
                   type="text"
                   value={tagInput}
@@ -138,47 +164,89 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
                     setCurrentField(field.key);
                   }}
                   placeholder={`Add ${field.label}`}
-                  className="flex-1 p-2 bg-[#262640] text-white rounded-lg border-none focus:ring-2 focus:ring-[#7C2BD3]"
+                  className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
                 />
-                {currentField === field.key && (
-                  <Button
-                    type="button"
-                    onClick={() => handleTagAdd(field.key)}
-                    className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
-                  >
-                    Add
-                  </Button>
-                )}
               </div>
 
-              <div className="flex flex-wrap gap-2 mt-2">
-                {formData[field.key]?.map((tag, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center px-3 py-1 rounded-3xl bg-white/20 text-sm"
+              {currentField === field.key && (
+                <Button
+                  type="button"
+                  onClick={() => handleTagAdd(field.key)}
+                  className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
+                >
+                  Add
+                </Button>
+              )}
+
+              {/* **Badges displayed below the input field** */}
+              <div className="flex flex-wrap gap-2 pt-4">
+                {currentValues[field.accessor]?.map((item) => (
+                  <Badge
+                    key={item.id}
+                    variant="none"
+                    className="border-none text-xs whitespace-nowrap rounded-3xl bg-white/30 flex items-center "
                   >
-                    {tag}
+                    <span>{item.name}</span>
                     <Button
                       type="button"
                       variant="ghost"
-                      onClick={() => handleTagRemove(field.key, index)}
-                      className="h-5 w-5 ml-1 p-0"
+                      onClick={() => handleTagRemove(field.key, item.id)}
+                      className="h-4 w-4 p-0 ml-1"
                     >
-                      <X size={12} />
+                      <X size={10} />
                     </Button>
-                  </div>
+                  </Badge>
                 ))}
               </div>
+            </div>
+          )}
+          {field.key === "projectTags" && (
+            <div className="flex flex-wrap gap-2">
+              {currentValues.projects.flatMap((project) =>
+                project.tag.map((t) => (
+                  <Badge
+                    key={t.id}
+                    variant="none"
+                    className="border-none text-xs whitespace-nowrap rounded-3xl bg-white/30 flex items-center"
+                  >
+                    <span>{t.name}</span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => handleTagRemove("projectTags", t)}
+                      className="h-4 w-4 p-0 ml-1"
+                    >
+                      <X size={10} />
+                    </Button>
+                  </Badge>
+                ))
+              )}
             </div>
           )}
         </div>
       ))}
 
       <Button
+        onClick={handleUpdate}
         type="submit"
-        className="w-full bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] text-white rounded-full py-2"
+        className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1  from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
       >
         Update {title}
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 12H20M20 12L14 6M20 12L14 18"
+            stroke="white"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </Button>
     </form>
   );
@@ -186,6 +254,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
 // Main Profile Component
 const Profile = () => {
+  const [selectedProject, setselectedProject] = useState(null);
+  const [openProjectEditForm, setOpenProjectEditForm] = useState(false);
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
   useEffect(() => {
@@ -211,6 +281,7 @@ const Profile = () => {
           type: "text",
           placeholder: "Full Name",
           accessor: "user.username",
+          icon: <NameIcon />,
         },
         // // { key: "title", type: "text", placeholder: "Job Title" },
         {
@@ -218,12 +289,14 @@ const Profile = () => {
           type: "text",
           placeholder: "Location",
           accessor: "country.name",
+          icon: <LocationIcon />,
         },
         {
-          key: "bio",
-          type: "text",
+          key: "headline",
+          type: "textarea",
           placeholder: "Short Bio",
           accessor: "headline",
+          icon: <SummaryIcon />,
         },
         // { key: "linkedIn", type: "text", placeholder: "LinkedIn URL" },
       ],
@@ -235,42 +308,95 @@ const Profile = () => {
           key: "fullBio",
           type: "textarea",
           placeholder: "Enter your full bio here",
-          accessor:"summary"
+          accessor: "summary",
+          icon: <BioIcon />,
         },
       ],
     },
     expertise: {
       title: "Expertise",
-      fields: [{ key: "skills", type: "tags", label: "Skill" }],
+      fields: [
+        {
+          key: "skill",
+          type: "tags",
+          label: "Skill",
+          accessor: "skill",
+          icon: <BulbIcon />,
+        },
+      ],
     },
     language: {
       title: "Language",
-      fields: [{ key: "languages", type: "tags", label: "Language" }],
+      fields: [
+        {
+          key: "languages",
+          type: "tags",
+          label: "Language",
+          accessor: "language",
+          icon: <BulbIcon />,
+        },
+      ],
     },
     academics: {
       title: "Academics",
       fields: [
-        { key: "academics", type: "tags", label: "Academic Credential" },
+        {
+          key: "academics",
+          type: "tags",
+          label: "Academic Credential",
+          accessor: "education",
+          icon: <BulbIcon />,
+        },
       ],
     },
     available: {
       title: "Available To",
-      fields: [{ key: "available", type: "tags", label: "Availability" }],
+      fields: [
+        {
+          key: "available",
+          type: "tags",
+          label: "Availability",
+          accessor: "available_to",
+          icon: <BulbIcon />,
+        },
+      ],
     },
     clients: {
       title: "Featured Clients",
-      fields: [{ key: "featuredClients", type: "tags", label: "Client" }],
+      fields: [
+        {
+          key: "featuredClients",
+          type: "tags",
+          label: "Client",
+          accessor: "client",
+          icon: <BulbIcon />,
+        },
+      ],
     },
     project: {
       title: "Project",
       fields: [
-        { key: "projectTitle", type: "text", placeholder: "Project Title" },
+        {
+          key: "projectTitle",
+          type: "text",
+          placeholder: "Project Title",
+          accessor: "projectTitle",
+          icon: <NameIcon />,
+        },
         {
           key: "projectDescription",
           type: "textarea",
           placeholder: "Project Description",
+          accessor: "projectDescription",
+          icon: <BioIcon />,
         },
-        { key: "projectTags", type: "tags", label: "Tag" },
+        {
+          key: "projectTags",
+          type: "tags",
+          label: "Tag",
+          accessor: "projectTags",
+          icon: <BulbIcon />,
+        },
       ],
     },
   };
@@ -286,10 +412,18 @@ const Profile = () => {
   const handleSaveData = (newData) => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
-  const handleEditProject = () => {};
+  const handleOpenProjectEditForm = (project) => {
+    console.log("Project", project);
+    setselectedProject(project);
+    setOpenProjectEditForm(true);
+  };
+  const handleProjectUpdate = (updatedProject) => {
+    // Your logic to update the project, e.g., API call or state update
+    console.log(updatedProject);
+  };
   console.log("UserData", userData);
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-2">
+    <div className="min-h-screen flex flex-col items-center justify-center p-2 pb-20">
       {/* Main profile card */}
       <div className="w-full max-w-2xl rounded-xl overflow-hidden">
         {/* Cover photo area */}
@@ -300,9 +434,9 @@ const Profile = () => {
           {/* Profile header with image on left, name/location on right */}
           <div className="flex flex-row -mt-16">
             {/* Profile image (left) */}
-            <div className="h-32 w-32 flex-shrink-0 rounded-full overflow-hidden border-4 border-white shadow-md">
+            <div className="h-32 w-32 flex-shrink-0 rounded-full overflow-hidden  border-2 shadow-md">
               <img
-                src="/api/placeholder/128/128"
+                src={userData?.image}
                 alt="Profile"
                 className="h-full w-full object-cover"
               />
@@ -324,7 +458,7 @@ const Profile = () => {
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
                 <span className="text-gray-400 proxima-small">
-                  {userData?.location}
+                  {userData?.country.name}
                 </span>
               </div>
               <div className="mt-2">
@@ -339,8 +473,8 @@ const Profile = () => {
               </div> */}
               <div className="flex items-center space-x-2">
                 <Linkedin className="w-5 h-5 fill-white" />
-                <span className="mt-1 proxima-large">
-                  {userData?.linkedin_url}
+                <span className=" text-xs mt-2 font-bold  text-nowrap">
+                  {userData?.linkedin_url.slice(7)}
                 </span>
               </div>
             </div>
@@ -522,33 +656,33 @@ const Profile = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenPopup("project")}
+            onClick={() => handleOpenProjectEditForm({title:null, description:null, tags:[]})}
           >
             <Edit size={16} />
           </Button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4">
           {userData?.projects?.map((project, index) => (
             <Card
               key={index}
-              className="hover:shadow-md relative bg-gray-800  transition flex-shrink-0 w-60 h-56"
+              className="hover:shadow-md border-none relative bg-gray-800  transition flex-shrink-0 w-44 h-48"
             >
               <div className="relative h-4/5">
                 <img
-                  src={project.title}
-                  alt={project.title}
+                  src={project?.image}
+                  alt={project?.title}
                   className="w-full h-full object-fill rounded-t-lg"
                 />
               </div>
               <Button
                 variant="none"
-                onClick={handleEditProject}
+                onClick={() => handleOpenProjectEditForm(project)}
                 className="absolute bg-white rounded-full p-2 top-1 right-1"
               >
                 <Edit className="h-6 w-6 text-black" />
               </Button>
-              <div className="h-1/5 flex  flex-col justify-between p-4">
-                <CardTitle className="text-sm text-start text-white proxima-FAQ">
+              <div className="h-1/5 flex  flex-col justify-between p-1">
+                <CardTitle className="text-xs text-center text-wrap text-white ">
                   {project.title}
                 </CardTitle>
               </div>
@@ -559,29 +693,68 @@ const Profile = () => {
 
       {activePopup && (
         <Drawer open={true} onOpenChange={handleClosePopup}>
-          <DrawerContent className="bg-[#1A1A2E] text-white">
-            <DrawerHeader>
+          <DrawerContent className="mx-auto max-w-md bg-gradient-to-br h-4/5 rounded-3xl from-black via-[#0F0F30] to-[#0F0F30] text-white">
+            <DrawerHeader className="relative flex justify-center">
               <DrawerTitle className="text-xl">
-                Edit {popupConfigs[activePopup].title}
+                Edit {popupConfigs[activePopup]?.title}
               </DrawerTitle>
+              <DrawerClose asChild>
+                <Button variant="none" className="absolute right-4 top-2">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.9998 8.40005L2.0998 13.3C1.91647 13.4834 1.68314 13.575 1.3998 13.575C1.11647 13.575 0.883138 13.4834 0.699804 13.3C0.516471 13.1167 0.424805 12.8834 0.424805 12.6C0.424805 12.3167 0.516471 12.0834 0.699804 11.9L5.5998 7.00005L0.699804 2.10005C0.516471 1.91672 0.424805 1.68338 0.424805 1.40005C0.424805 1.11672 0.516471 0.883382 0.699804 0.700048C0.883138 0.516715 1.11647 0.425049 1.3998 0.425049C1.68314 0.425049 1.91647 0.516715 2.0998 0.700048L6.9998 5.60005L11.8998 0.700048C12.0831 0.516715 12.3165 0.425049 12.5998 0.425049C12.8831 0.425049 13.1165 0.516715 13.2998 0.700048C13.4831 0.883382 13.5748 1.11672 13.5748 1.40005C13.5748 1.68338 13.4831 1.91672 13.2998 2.10005L8.3998 7.00005L13.2998 11.9C13.4831 12.0834 13.5748 12.3167 13.5748 12.6C13.5748 12.8834 13.4831 13.1167 13.2998 13.3C13.1165 13.4834 12.8831 13.575 12.5998 13.575C12.3165 13.575 12.0831 13.4834 11.8998 13.3L6.9998 8.40005Z"
+                      fill="white"
+                    />
+                  </svg>
+                </Button>
+              </DrawerClose>
             </DrawerHeader>
-
             <EditContent
-              title={popupConfigs[activePopup].title}
+              title={popupConfigs[activePopup]?.title}
               fields={popupConfigs[activePopup].fields}
               currentValues={userData}
               onSave={handleSaveData}
               onClose={handleClosePopup}
             />
 
-            <DrawerFooter>
-              <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DrawerClose>
-            </DrawerFooter>
+            <DrawerFooter></DrawerFooter>
           </DrawerContent>
         </Drawer>
       )}
+
+      <Drawer open={openProjectEditForm} onOpenChange={setOpenProjectEditForm}>
+        <DrawerContent className="mx-auto max-w-md bg-gradient-to-br rounded-t-3xl h-4/5 from-black via-[#0F0F30] to-[#0F0F30] text-white">
+          <DrawerHeader className="relative flex justify-center">
+            <DrawerTitle>Edit Project</DrawerTitle>
+            <DrawerClose asChild>
+              <Button variant="none" className="absolute right-4 top-2">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M6.9998 8.40005L2.0998 13.3C1.91647 13.4834 1.68314 13.575 1.3998 13.575C1.11647 13.575 0.883138 13.4834 0.699804 13.3C0.516471 13.1167 0.424805 12.8834 0.424805 12.6C0.424805 12.3167 0.516471 12.0834 0.699804 11.9L5.5998 7.00005L0.699804 2.10005C0.516471 1.91672 0.424805 1.68338 0.424805 1.40005C0.424805 1.11672 0.516471 0.883382 0.699804 0.700048C0.883138 0.516715 1.11647 0.425049 1.3998 0.425049C1.68314 0.425049 1.91647 0.516715 2.0998 0.700048L6.9998 5.60005L11.8998 0.700048C12.0831 0.516715 12.3165 0.425049 12.5998 0.425049C12.8831 0.425049 13.1165 0.516715 13.2998 0.700048C13.4831 0.883382 13.5748 1.11672 13.5748 1.40005C13.5748 1.68338 13.4831 1.91672 13.2998 2.10005L8.3998 7.00005L13.2998 11.9C13.4831 12.0834 13.5748 12.3167 13.5748 12.6C13.5748 12.8834 13.4831 13.1167 13.2998 13.3C13.1165 13.4834 12.8831 13.575 12.5998 13.575C12.3165 13.575 12.0831 13.4834 11.8998 13.3L6.9998 8.40005Z"
+                    fill="white"
+                  />
+                </svg>
+              </Button>
+            </DrawerClose>
+          </DrawerHeader>
+          <ProjectEditForm
+            project={selectedProject}
+            onUpdate={handleProjectUpdate}
+          />
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };

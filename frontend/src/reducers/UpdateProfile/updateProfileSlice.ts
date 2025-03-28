@@ -7,15 +7,6 @@ interface User {
   first_name: string;
   last_name: string;
 }
-interface Industry {
-  id: number;
-  name: string;
-  logo: string;
-}
-interface Country {
-  id: number;
-  name: string;
-}
 interface Education {
   id: 1;
   school: string;
@@ -25,6 +16,15 @@ interface Education {
   end_year: number;
   description: string;
   profile: number;
+}
+interface Industry {
+  id: number;
+  name: string;
+  logo: string;
+}
+interface Country {
+  id: number;
+  name: string;
 }
 interface Client {
   id: number;
@@ -86,44 +86,47 @@ const initialState: ProfileState = {
 };
 
 // Async Thunk to fetch company data
-export const fetchProfile = createAsyncThunk(
-  "profile/fetchProfile",
-  async (FilterData, { rejectWithValue }) => {
-    console.log("Fetching profile...",FilterData);
+export const updateProfile = createAsyncThunk(
+  "profile/updateProfile",
+  async ({ id, data }, { rejectWithValue }) => {
+    console.log("updating profile id...", id);
+    console.log("updating profile Data...", data);
     try {
-      const response = await axios.get("/api/profile", {
-        params: FilterData,
+      const response = await axios.patch(`/api/updateprofile/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      console.log("profile fetched:", response.data);
+      console.log("profile updated:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to profile"
+        error.response?.data?.message || "Failed to update profile"
       );
     }
   }
 );
 
 // Create the slice
-const profileSlice = createSlice({
+const updateprofileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProfile.pending, (state) => {
+      .addCase(updateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchProfile.fulfilled, (state, action) => {
+      .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.profile = action.payload;
       })
-      .addCase(fetchProfile.rejected, (state, action) => {
+      .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
   },
 });
 
-export default profileSlice.reducer;
+export default updateprofileSlice.reducer;

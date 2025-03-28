@@ -16,7 +16,7 @@ import ClientReducer from "@/reducers/filter/client/clientSlice";
 import LanguageReducer from "@/reducers/filter/language/languageSlice";
 import AvailableToReducer from "@/reducers/filter/availableto/availabletoSlice";
 import ProjectReducer from "@/reducers/project/projectSlice";
-
+import UpdateProfileReducer from "@/reducers/UpdateProfile/updateProfileSlice";
 export const store = configureStore({
   reducer: {
     company: companyReducer,
@@ -35,6 +35,7 @@ export const store = configureStore({
     Language: LanguageReducer,
     AvailableTo: AvailableToReducer,
     Project: ProjectReducer,
+    UpdateProfile: UpdateProfileReducer,
   },
 });
 

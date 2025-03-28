@@ -1,3 +1,4 @@
+import axios from "axios";
 import NextAuth, { AuthOptions } from "next-auth";
 import LinkedInProvider, {
   LinkedInProfile,
@@ -14,12 +15,14 @@ const authOptions: AuthOptions = {
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
-      profile: (profile: LinkedInProfile) => ({
-        id: profile.sub,
-        name: profile.name,
-        email: profile.email,
-        image: profile.picture,
-      }),
+      profile: (profile: LinkedInProfile) => {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
       wellKnown:
         "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
@@ -35,7 +38,26 @@ const authOptions: AuthOptions = {
     signIn: "/auth/signin",
     error: "/auth/error",
   },
-
+  cookies: {
+    csrfToken: {
+      name: "next-auth.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+      },
+    },
+    state: {
+      name: "next-auth.state",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+      },
+    },
+  },
   callbacks: {
     async jwt({ token, account, profile }) {
       // More secure token generation
@@ -49,15 +71,29 @@ const authOptions: AuthOptions = {
       return token;
     },
     async signIn({ user, profile, account }) {
-      console.log(
-        "user :",
-        user,
-        " profile : ",
-        profile,
-        " account : ",
-        account
-      );
-      return true;
+      console.log("user:", user, "profile:", profile, "account:", account);
+
+      // try {
+      //   // Send the access token to your backend for conversion
+      //   const response = await axios.post(
+      //     `${process.env.NEXT_BACKEND_URL}/auth/convert-token/`,
+      //     {
+      //       token: account?.access_token,
+      //       backend: "linkedin-openidconnect",
+      //       client_id: "W2yvaPdHqcds03minUhtZ2d6L6XGhEDJ0c2gsGSO",
+      //       client_secret:
+      //         "gTWL2MLjxZUEjT0VZKICk3o6PsWgWi8rydEcEM2bOcag1FXYz2whIB13FEGlAJnNFWyViKn2AEpajS82aCLuFuwTOVuXao5PcrZ1WvXFFOiYvJzPXJ27PWUpOf4zYJUk",
+      //       grant_type: "convert_token",
+      //     }
+      //   );
+
+      //   console.log("Token exchange successful:", response.data);
+      // } catch (error) {
+      //   console.error("Token exchange failed:", error.response?.data || error);
+      //   return false; // Reject the sign-in if the backend call fails
+      // }
+
+      return true; // Proceed with sign-in if successful
     },
     async session({ session, token }) {
       // Attach additional information to session
