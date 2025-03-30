@@ -14,5 +14,6 @@ services:
       quid-ai-nw:
     volumes:
       - ../frontend:/app
+      - /app/node_modules
     command: sh -c "ls && npm run dev"
 
