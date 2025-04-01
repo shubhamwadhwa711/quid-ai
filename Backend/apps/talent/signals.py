@@ -17,11 +17,11 @@ def profile_approve(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Enquiry)
 def send_approval_email(sender, instance, **kwargs):
-    if instance.status == "APPROVED":  
-        subject = "Your Enquiry Has Been Approved"
-        message = "Hello, your enquiry has been approved!"
-        sender_email = settings.DEFAULT_FROM_EMAIL
-        recipient_email = [instance.email]
+    if instance.status == "APPROVED" or instance.profile.auto_approve_inquiry == True:  
+        subject = f"Hey {instance.profile.user.first_name}, {instance.full_name} wants to connect you!"
+        message = instance.message
+        sender_email = instance.email
+        recipient_email = [instance.profile.user.email]
         
         send_mail_enq.delay(subject, message, sender_email, recipient_email)    
 
