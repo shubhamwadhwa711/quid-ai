@@ -17,7 +17,7 @@ def profile_approve(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Enquiry)
 def send_approval_email(sender, instance, **kwargs):
-    if instance.status == "APPROVED" or instance.profile.auto_approve_inquiry == True:  
+    if instance.status == "APPROVED":  
         subject = f"Hey {instance.profile.user.first_name}, {instance.full_name} wants to connect you!"
         message = instance.message
         sender_email = instance.email
