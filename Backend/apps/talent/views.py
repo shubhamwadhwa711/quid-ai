@@ -1,6 +1,7 @@
 # views.py
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializers import *
@@ -153,6 +154,26 @@ class ProfileRelatedViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]  
     filterset_class = ProfileFilter  # Use the custom filter class 
     search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree','industry__name']
+
+class TopProfileViewSet(viewsets.ModelViewSet):
+    """
+    API view to list, create, delete and update all profile.
+    """
+    permission_classes = [AllowAny]
+    queryset = Profile.objects.filter(Q(status="APPROVED") & (Q(auto_approve_inquiry=True) | Q(is_featured=True)))
+    serializer_class = ProfileRelatedSerializer
+    http_method_names=['get']
+
+
+class UsProfileViewSet(viewsets.ModelViewSet):
+    """
+    API view to list, create, delete and update all profile.
+    """
+    permission_classes = [AllowAny]
+    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(country__name="United States"))
+    serializer_class = ProfileRelatedSerializer
+    http_method_names=['get']
+
     
 class SkillViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
