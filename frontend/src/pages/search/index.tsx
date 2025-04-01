@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation";
 import TalentCard from "@/components/TalentCard";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
+import { fetchAIProfile } from "@/reducers/ai-talent/ai-talent";
+import { fetchUSProfile } from "@/reducers/us-talent/us-talentSlice";
 import FilterDrawer from "@/components/FilterDrawer";
 interface Filter {
   expertise: string[];
@@ -47,6 +49,7 @@ const Search = () => {
   );
   const [selectedIndustry, setSelectedIndustry] = useState<string>();
   const [isFilterApplied, setIsFilterApplied] = useState<boolean>(false);
+  const [isSearchApplied, setIsSearchApplied] = useState<boolean>(false);
   const [selectedFilters, setSelectedFilters] = useState<Filter>({
     expertise: [],
     academics: [],
@@ -61,7 +64,10 @@ const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const onSearch = (query: string) => {
     console.log("Searching for:", query);
-    dispatch(fetchProfile({ search: query }));
+    if (query) {
+      setIsSearchApplied(true);
+      dispatch(fetchProfile({ search: query }));
+    }
   };
 
   useEffect(() => {
@@ -72,7 +78,7 @@ const Search = () => {
         console.error("onSearch is not a function", onSearch);
       }
     }, 300);
-
+    setIsSearchApplied(false);
     return () => clearTimeout(delay);
   }, [searchTerm]);
 
@@ -82,14 +88,21 @@ const Search = () => {
 
   // Redux and data states
   const dispatch = useAppDispatch();
-  const { profile, loading, error } = useAppSelector((state) => state.Profile);
+  const { profile } = useAppSelector((state) => state.Profile);
+  const { aiprofile } = useAppSelector((state) => state.AIProfile);
+  const { usprofile } = useAppSelector((state) => state.USProfile);
   // const { filter, filterloading, filtererror } = useAppSelector(
   //   (state) => state.PostFilter
   // );
-
+  console.log("aiProfile", aiprofile);
+  console.log("usProfile", usprofile);
   const [userData, setUserData] = useState<Profile[] | null>(null);
   // const [filterUsers, setFilterUsers] = useState<Profile[] | null>(filter);
   // Fetch profile on component mount
+  useEffect(() => {
+    dispatch(fetchAIProfile());
+    dispatch(fetchUSProfile());
+  }, [dispatch]);
   useEffect(() => {
     dispatch(fetchProfile(selectedFilters));
   }, [dispatch, JSON.stringify(selectedFilters)]);
@@ -181,6 +194,8 @@ const Search = () => {
     console.log("clearedFilters");
   }, []);
   console.log("isFilterApplied", isFilterApplied);
+  console.log("isSearchApllied", isSearchApplied);
+  console.log("profile", profile);
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="my-20 w-full flex flex-col gap-2">
@@ -296,41 +311,68 @@ const Search = () => {
 
         {/* Talent Cards Section */}
         <div>
-          <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
-            <div className="mx-1 flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-              <h1 className="proxima-bold text-xl text-white">
-                {" "}
-                Top AI Talents{" "}
-              </h1>
+          {isSearchApplied ? (
+            <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
+              <div className="mx-1 flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                <h1 className="proxima-bold text-xl text-white">
+                  Talents from US
+                </h1>
+              </div>
+              <div
+                className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
+                  isSearchApplied
+                    ? "grid-cols-1"
+                    : "grid-flow-col auto-cols-max"
+                } gap-2`}
+              >
+                {profile?.map((talent) => (
+                  <TalentCard key={talent.id} talent={talent} />
+                ))}
+              </div>
             </div>
-            <div
-              className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
-                isFilterApplied ? "grid-cols-1" : "grid-flow-col auto-cols-max"
-              } gap-2`}
-            >
-              {userData?.map((talent) => (
-                <TalentCard key={talent.id} talent={talent} />
-              ))}
-            </div>
-          </div>
-          <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
-            <div className="mx-1 flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-              <h1 className="proxima-bold text-xl text-white">
-                Talents from US
-              </h1>
-            </div>
-            <div
-              className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
-                isFilterApplied ? "grid-cols-1" : "grid-flow-col auto-cols-max"
-              } gap-2`}
-            >
-              {userData?.map((talent) => (
-                <TalentCard key={talent.id} talent={talent} />
-              ))}
-            </div>
-          </div>
+          ) : (
+            <>
+              <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
+                <div className="mx-1 flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                  <h1 className="proxima-bold text-xl text-white">
+                    Top AI Talents
+                  </h1>
+                </div>
+                <div
+                  className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
+                    isFilterApplied
+                      ? "grid-cols-1"
+                      : "grid-flow-col auto-cols-max"
+                  } gap-2`}
+                >
+                  {aiprofile?.map((talent) => (
+                    <TalentCard key={talent.id} talent={talent} />
+                  ))}
+                </div>
+              </div>
+              <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
+                <div className="mx-1 flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                  <h1 className="proxima-bold text-xl text-white">
+                    Talents from US
+                  </h1>
+                </div>
+                <div
+                  className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
+                    isFilterApplied
+                      ? "grid-cols-1"
+                      : "grid-flow-col auto-cols-max"
+                  } gap-2`}
+                >
+                  {usprofile?.map((talent) => (
+                    <TalentCard key={talent.id} talent={talent} />
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

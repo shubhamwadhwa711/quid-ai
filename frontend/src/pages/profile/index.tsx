@@ -74,7 +74,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       if (field.type === "tags") {
         // For tag fields, use the array from currentValues or create an empty array
         initialData[field.key] = currentValues[field.key]
-          ? currentValues[field.key].map((item) => item.name || item)
+          ? currentValues[field.key].map((item) => item.name || item.id)
           : [];
       } else {
         // For text/textarea fields, use the value directly
@@ -115,7 +115,13 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const handleUpdate = () => {
     console.log("ID", currentValues.id);
     console.log("formData", formData);
-    dispatch(updateProfile({ id: currentValues.id, data: formData }));
+    const updatedData = { ...formData };
+    // if (currentValues.country) {
+    //   updatedData.country = currentValues.country.id;
+    // }
+
+    console.log("updatedData", updatedData);
+    dispatch(updateProfile({ id: currentValues.id, data: updatedData }));
   };
   return (
     <form onSubmit={handleSubmit} className="space-y-4 px-4">
@@ -277,17 +283,17 @@ const Profile = () => {
       title: "Profile",
       fields: [
         {
-          key: "name",
+          key: "full_name",
           type: "text",
           placeholder: "Full Name",
-          accessor: "user.username",
+          accessor: "user.full_name",
           icon: <NameIcon />,
         },
         // // { key: "title", type: "text", placeholder: "Job Title" },
         {
-          key: "location",
+          key: "country",
           type: "text",
-          placeholder: "Location",
+          placeholder: "country",
           accessor: "country.name",
           icon: <LocationIcon />,
         },
@@ -305,7 +311,7 @@ const Profile = () => {
       title: "Bio",
       fields: [
         {
-          key: "fullBio",
+          key: "summary",
           type: "textarea",
           placeholder: "Enter your full bio here",
           accessor: "summary",
@@ -444,7 +450,7 @@ const Profile = () => {
             <div className="ml-4">
               <div className="flex justify-between">
                 <h1 className="text-2xl proxima-medium">
-                  {userData?.user?.username}
+                  {userData?.user?.full_name}
                 </h1>
                 <Button
                   size="icon"
@@ -656,7 +662,13 @@ const Profile = () => {
             size="icon"
             variant="ghost"
             className="h-8 w-8 rounded-full"
-            onClick={() => handleOpenProjectEditForm({title:null, description:null, tags:[]})}
+            onClick={() =>
+              handleOpenProjectEditForm({
+                title: null,
+                description: null,
+                tags: [],
+              })
+            }
           >
             <Edit size={16} />
           </Button>
