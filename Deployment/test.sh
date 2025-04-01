@@ -2,4 +2,6 @@
       -f docker-compose.yml \
       -f dev-compose-files/docker-compose.backend.yml \
       -f dev-compose-files/docker-compose.frontend.yml \
+      -f dev-compose-files/docker-compose.redis.yml \
+      -f dev-compose-files/docker-compose.celery.yml \
       "$@"
