@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ENVIRONMENT = 'DEV'
-ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com']
+ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.189']
 
 CSRF_TRUSTED_ORIGINS = [
     "https://api-quidai.shubpy.com",
