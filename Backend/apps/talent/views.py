@@ -208,7 +208,9 @@ class CountryViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Country.objects.all()
     serializer_class = CountrySerializer 
-    http_method_names = ['get']        
+    http_method_names = ['get'] 
+    filter_backends = [SearchFilter]  
+    search_fields = ['name']         
 
 class ClientViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
