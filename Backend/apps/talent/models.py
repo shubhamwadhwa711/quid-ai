@@ -57,6 +57,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username if self.user else "Unnamed Profile"
+    @property
+    def first_name(self):
+        return self.user.first_name
+    
+    @property
+    def last_name(self):
+        return self.user.last_name
+    
+    
+    
 
 class Experience(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='experiences')
