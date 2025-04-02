@@ -4,22 +4,25 @@ from .models import *
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only = True)
+    
     class Meta:
         model = User
         fields = ['id','username','email','first_name','last_name']
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['full_name'] = f"{instance.first_name} {instance.last_name}"    
-        return data
+       
+
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     data['full_name'] = f"{instance.first_name} {instance.last_name}"    
+    #     return data
     
-    def to_internal_value(self, data):
-        full_name = data.pop('full_name', None)
-        if full_name:
-            first_name, last_name = full_name.split()
-            data['first_name']= first_name
-            data['last_name']= last_name
-        return super().to_internal_value(data)    
+    # def to_internal_value(self, data):
+    #     full_name = data.pop('full_name', None)
+    #     if full_name:
+    #         first_name, last_name = full_name.split()
+    #         data['first_name']= first_name
+    #         data['last_name']= last_name
+    #     return super().to_internal_value(data)    
 
 
 
@@ -28,23 +31,31 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         fields = '__all__'        
 class ProfileSerializer(serializers.ModelSerializer):
-    country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
-    skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True)
-    user = UserSerializer()
+    first_name = serializers.CharField(max_length=100, required =True)
+    last_name = serializers.CharField(max_length=100, required =True)
+    # country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
+    # skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True)
+    # user = UserSerializer()
     class Meta:
         model = Profile
         exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
+        # fields = ['first_name', 'country','skill','user']
 
+    def to_representation(self, instance):
+        return ProfileRelatedSerializer(instance).data
+    
+        # data = super().to_representation(instance)
+        # data['full_name'] = f"{instance.first_name} {instance.last_name}"    
+        # return data
+   
     def update(self, instance, validated_data):
         # Handle updating nested fields
-        if 'user' in validated_data:
-            user_data = validated_data.pop('user')
-            user_instance = instance.user  # Get the associated user
-            user_serializer = UserSerializer(user_instance, data=user_data, partial=True)
-            if user_serializer.is_valid():
-                user_serializer.save()
-            else:
-                raise serializers.ValidationError(user_serializer.errors)
+        
+        first_name = validated_data.pop('first_name')
+        last_name = validated_data.pop('last_name')
+        instance.user.first_name = first_name
+        instance.user.last_name = last_name
+        instance.user.save()
 
         # Update instance with remaining fields
         return super().update(instance, validated_data)       
