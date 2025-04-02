@@ -29,12 +29,28 @@ class UserSerializer(serializers.ModelSerializer):
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
-        fields = '__all__'        
+        fields = '__all__'    
+
+    # def create(self, validated_data):
+    #     # Create the skill
+    #     skill = Skill.objects.create(**validated_data)
+        
+    #     # Get the user from the request
+    #     user = self.context['request'].user
+        
+    #     # Check if the user has a profile
+    #     if hasattr(user, 'profile'):
+    #         # Add the newly created skill to the user's profile
+    #         user.profile.skill.add(skill)
+        
+    #     return skill
+
+
 class ProfileSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(max_length=100, required =True)
-    last_name = serializers.CharField(max_length=100, required =True)
+    first_name = serializers.CharField(max_length=100, required =False)
+    last_name = serializers.CharField(max_length=100, required =False, allow_blank=True)
     # country = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all())
-    # skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True)
+    skill = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True)
     # user = UserSerializer()
     class Meta:
         model = Profile
@@ -42,7 +58,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         # fields = ['first_name', 'country','skill','user']
 
     def to_representation(self, instance):
-        return ProfileRelatedSerializer(instance).data
+        request = self.context.get('request')
+        return ProfileRelatedSerializer(instance, context={'request': request}).data
     
         # data = super().to_representation(instance)
         # data['full_name'] = f"{instance.first_name} {instance.last_name}"    
@@ -50,11 +67,16 @@ class ProfileSerializer(serializers.ModelSerializer):
    
     def update(self, instance, validated_data):
         # Handle updating nested fields
+        if validated_data.get('first_name',None):
+            first_name = validated_data.pop('first_name')
+            instance.user.first_name = first_name
         
-        first_name = validated_data.pop('first_name')
-        last_name = validated_data.pop('last_name')
-        instance.user.first_name = first_name
-        instance.user.last_name = last_name
+        if "last_name" in validated_data.keys():
+            last_name = validated_data.pop('last_name')
+            instance.user.last_name = last_name
+
+
+
         instance.user.save()
 
         # Update instance with remaining fields
