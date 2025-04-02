@@ -29,6 +29,12 @@ class ProfileViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Profile.objects.filter(status="APPROVED")
     serializer_class = ProfileSerializer
+
+    # def get_serializer_class(self):
+    #     print(self.request.method)
+    #     if self.request.method == 'GET':
+    #         return ProfileRelatedSerializer
+    #     return super().get_serializer_class()
    
    
 
