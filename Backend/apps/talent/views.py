@@ -185,7 +185,7 @@ class SkillViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer  
-    http_method_names = ['get'] 
+    http_method_names = ['get','post'] 
     filter_backends = [SearchFilter]  
     search_fields = ['name']    
 
