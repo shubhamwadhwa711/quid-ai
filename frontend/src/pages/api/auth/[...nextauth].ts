@@ -62,24 +62,25 @@ const authOptions: AuthOptions = {
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
-      async profile(profile: LinkedInProfile) {
+      async profile(profile: LinkedInProfile,tokens: any) {
+        console.log("Tokens",tokens);
         try {
           const response = await axios.post(
             `${process.env.NEXT_BACKEND_URL}/auth/convert-token/`,
             {
               grant_type: "convert_token",
-              backend: "oidc",
+              backend: "linkedin-openidconnect",
               client_id: process.env.SSO_CLIENT_ID,
               client_secret:process.env.SSO_CLIENT_SECRET,
-              token: profile?.access_token,
+              token: tokens?.access_token,
             }
           );
           console.log("Token exchange successful:", response.data);
           const qProfile = response.data;
           return {
-            id: qProfile.id,
+            id: qProfile.id ?? 1,
             user: {
-              id: qProfile.id,
+              id: qProfile.id ?? 1,
               name: qProfile.name,
               email: qProfile.email,
               image: qProfile.picture,
