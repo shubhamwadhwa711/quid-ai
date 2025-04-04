@@ -6,10 +6,9 @@ export default async function handler(
     res: NextApiResponse
   ) {
    console.log("req.query", req.query);
-    
     try {
       const response = await axios.get(
-        `${process.env.NEXT_BACKEND_URL}/profile`,
+        `${process.env.NEXT_BACKEND_URL}/country`,
         {
           params: req.query,
           paramsSerializer: (params) => {
