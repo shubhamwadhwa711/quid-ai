@@ -21,10 +21,12 @@ const initialState: LanguageState = {
 // Async Thunk to fetch company data
 export const fetchLanguage = createAsyncThunk(
   "language/fetchLanguage",
-  async (_, { rejectWithValue }) => {
+  async (SearchData: { search: string }, { rejectWithValue }) => {
     try {
-      console.log("Fetching language...");
-      const response = await axios.get("/api/filter/language");
+      console.log("Fetching language...", SearchData);
+      const response = await axios.get("/api/filter/language", {
+        params: SearchData,
+      });
       console.log("languages fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -34,7 +36,23 @@ export const fetchLanguage = createAsyncThunk(
     }
   }
 );
-
+export const updateProfile = createAsyncThunk(
+  "profile/updateProfile",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(`/api/updateLanguage/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update profile"
+      );
+    }
+  }
+);
 // Create the slice
 const languageSlice = createSlice({
   name: "language",

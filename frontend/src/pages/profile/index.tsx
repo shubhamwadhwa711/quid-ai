@@ -27,9 +27,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import CountrySearch from "@/components/CountrySearch";
 // import { useMediaQuery } from "@/hooks/use-media-query";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
+import {
+  fetchProfile,
+  Profile,
+  updateProfile,
+} from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import get from "lodash/get";
 import ReadMore from "@/components/ReadMore";
@@ -39,9 +44,11 @@ import { SummaryIcon } from "@/components/icons/SummaryIcon";
 import { BioIcon } from "@/components/icons/BioIcon";
 import { ExpertiseIcon } from "@/components/icons/ExpertiseIcon";
 import { BulbIcon } from "@/components/icons/BulbIcon";
-import { updateProfile } from "@/reducers/UpdateProfile/updateProfileSlice";
 import { Badge } from "@/components/ui/badge";
 import ProjectEditForm from "@/components/ProjectEditForm";
+import SkillSearch from "@/components/SkillSearch";
+import LanguageSearch from "@/components/LanguageSearch";
+import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -62,6 +69,16 @@ const useCustomMediaQuery = (query) => {
 
 // EditContent component to be used in both Dialog and Drawer
 const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [skills, setSkills] = useState<{ id: number; name: string }[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<[]>(currentValues.skill);
+  const [selectedlanguages, setSelectedLanguages] = useState<
+    { id: number; name: string }[]
+  >(currentValues.language);
+  const [academics, setAcademics] = useState<{ id: number; name: string }[]>(
+    []
+  );
+  const [fullName, setFullName] = useState<string | null>(null);
   console.log(title, fields, currentValues);
   const [formData, setFormData] = useState({});
   const [tagInput, setTagInput] = useState("");
@@ -71,20 +88,24 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   useEffect(() => {
     const initialData = {};
     fields.forEach((field) => {
-      if (field.type === "tags") {
+      if (field.key === "fullName") {
+        // Combine first and last name for the fullName field
+        initialData[field.key] = `${currentValues.user?.first_name || ""} ${
+          currentValues.user?.last_name || ""
+        }`.trim();
+      } else if (field.type === "tags") {
         // For tag fields, use the array from currentValues or create an empty array
         initialData[field.key] = currentValues[field.key]
           ? currentValues[field.key].map((item) => item.name || item.id)
           : [];
       } else {
         // For text/textarea fields, use the value directly
-
         console.log("currentValues.user", currentValues.user);
         console.log("field.accessor", get(currentValues, field.accessor, ""));
         initialData[field.key] = get(currentValues, field.accessor, "");
       }
     });
-    // console.log("initialData", initialData);
+    console.log("initialData", initialData);
     setFormData(initialData);
   }, [currentValues, fields]);
 
@@ -106,7 +127,25 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     newTags.splice(index, 1);
     setFormData((prev) => ({ ...prev, [field]: newTags }));
   };
+  const handleSelectSkill = (skill) => {
+    console.log("handleSelectSkill", skill);
+    setSelectedSkills((prev) => [...prev, skill]);
+  };
 
+  const handleRemoveSkill = (skillId: number) => {
+    setSelectedSkills((prev) => prev.filter((skill) => skill.id !== skillId));
+  };
+  const handleSelectLanguage = (language) => {
+    console.log("handleSelectLanguage", language);
+    setSelectedLanguages((prev) => [...prev, language]);
+  };
+
+  const handleRemoveLanguage = (languageId: number) => {
+    console.log("handleRemoveLanguage", languageId);
+    setSelectedLanguages((prev) =>
+      prev.filter((lang) => lang.id !== languageId)
+    );
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
@@ -115,31 +154,60 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const handleUpdate = () => {
     console.log("ID", currentValues.id);
     console.log("formData", formData);
+
     const updatedData = { ...formData };
-    // if (currentValues.country) {
-    //   updatedData.country = currentValues.country.id;
-    // }
+    console.log("currentValue", currentValues);
+    if(formData.skill){
+      updatedData.skill = selectedSkills.map((skill) => skill.id);
+    }
+    // Ensure country is passed as an ID
+    if (formData.country) {
+      updatedData.country = selectedCountry.id;
+    }
+    if(formData.languages){ 
+      // selectedlanguages.map((lang) => lang.id)
+      updatedData.language = selectedlanguages.map((lang) => lang.id);
+    }
+    // Split fullName into firstName and lastName
+    if (formData.fullName) {
+      const nameParts = formData.fullName.trim().split(" ");
+      updatedData.first_name = nameParts[0];
+      updatedData.last_name = nameParts.slice(1).join(" ") || ""; // Handle cases where there's no last name
+      delete updatedData.fullName; // Remove fullName after splitting
+    }
 
     console.log("updatedData", updatedData);
+    console.log("selectedlanguages",selectedlanguages)
     dispatch(updateProfile({ id: currentValues.id, data: updatedData }));
   };
+  console.log("currentValues",currentValues)
   return (
     <form onSubmit={handleSubmit} className="space-y-4 px-4">
       {fields.map((field) => (
         <div key={field.key} className="space-y-2">
-          {field.type === "text" && (
-            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-3 flex items-center text-white">
-                {field.icon}
+          {field.key === "country" ? (
+            <CountrySearch
+              selectedCountry={selectedCountry}
+              onChange={(country) => {
+                setSelectedCountry(country);
+              }}
+              icon={field.icon}
+            />
+          ) : (
+            field.type === "text" && (
+              <div className="relative w-full">
+                <div className="absolute inset-y-0 left-3 flex items-center text-white">
+                  {field.icon}
+                </div>
+                <input
+                  type="text"
+                  value={formData[field.key] || ""}
+                  onChange={(e) => handleChange(field.key, e.target.value)}
+                  placeholder={field.placeholder || `Enter ${field.label}`}
+                  className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg border-none focus:ring-2 focus:ring-[#7C2BD3]"
+                />
               </div>
-              <input
-                type="text"
-                value={formData[field.key] || ""}
-                onChange={(e) => handleChange(field.key, e.target.value)}
-                placeholder={field.placeholder || `Enter ${field.label}`}
-                className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg border-none focus:ring-2 focus:ring-[#7C2BD3]"
-              />
-            </div>
+            )
           )}
 
           {field.type === "textarea" && (
@@ -151,61 +219,58 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
                 value={formData[field.key] || ""}
                 onChange={(e) => handleChange(field.key, e.target.value)}
                 placeholder={field.placeholder || `Enter ${field.label}`}
-                className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg min-h-[200px]   border-none focus:ring-2 focus:ring-[#7C2BD3]"
+                className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg min-h-[200px] border-none focus:ring-2 focus:ring-[#7C2BD3]"
               />
             </div>
           )}
 
           {field.type === "tags" && (
             <div className="space-y-2">
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-3 flex items-center text-white">
-                  {field.icon}
-                </div>
-                <input
-                  type="text"
-                  value={tagInput}
-                  onChange={(e) => {
-                    setTagInput(e.target.value);
-                    setCurrentField(field.key);
-                  }}
-                  placeholder={`Add ${field.label}`}
-                  className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
+              {field.key === "skill" && (
+                <SkillSearch
+                  selectedSkills={selectedSkills}
+                  onSelectSkill={handleSelectSkill}
+                  onRemoveSkill={handleRemoveSkill}
                 />
-              </div>
-
-              {currentField === field.key && (
-                <Button
-                  type="button"
-                  onClick={() => handleTagAdd(field.key)}
-                  className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
-                >
-                  Add
-                </Button>
               )}
 
-              {/* **Badges displayed below the input field** */}
-              <div className="flex flex-wrap gap-2 pt-4">
+              {/* {field.key === "academics" && (
+                <TechnologySearch
+                  selectedTechnologies={currentValues[field.accessor] || []}
+                />
+              )} */}
+
+              {field.key === "languages" && (
+                <LanguageSearch
+                  selectedLanguages={selectedlanguages}
+                  onSelectLanguage={handleSelectLanguage}
+                  onRemoveLanguage={handleRemoveLanguage}
+                />
+              )}
+
+              {/* Badges displayed below the input field */}
+              {/* <div className="flex flex-wrap gap-2 pt-4">
                 {currentValues[field.accessor]?.map((item) => (
                   <Badge
                     key={item.id}
                     variant="none"
-                    className="border-none text-xs whitespace-nowrap rounded-3xl bg-white/30 flex items-center "
+                    className="border-none text-xs whitespace-nowrap rounded-3xl bg-white/30 flex items-center"
                   >
                     <span>{item.name}</span>
                     <Button
                       type="button"
                       variant="ghost"
-                      onClick={() => handleTagRemove(field.key, item.id)}
+                      onClick={() => handleTagRemove(field.name, item.id)}
                       className="h-4 w-4 p-0 ml-1"
                     >
                       <X size={10} />
                     </Button>
                   </Badge>
                 ))}
-              </div>
+              </div> */}
             </div>
           )}
+
           {field.key === "projectTags" && (
             <div className="flex flex-wrap gap-2">
               {currentValues.projects.flatMap((project) =>
@@ -235,7 +300,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       <Button
         onClick={handleUpdate}
         type="submit"
-        className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1  from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
+        className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1 from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
       >
         Update {title}
         <svg
@@ -248,9 +313,9 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
           <path
             d="M4 12H20M20 12L14 6M20 12L14 18"
             stroke="white"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </Button>
@@ -283,10 +348,10 @@ const Profile = () => {
       title: "Profile",
       fields: [
         {
-          key: "full_name",
+          key: "fullName",
           type: "text",
           placeholder: "Full Name",
-          accessor: "user.full_name",
+          accessor: "fullName",
           icon: <NameIcon />,
         },
         // // { key: "title", type: "text", placeholder: "Job Title" },
@@ -450,7 +515,7 @@ const Profile = () => {
             <div className="ml-4">
               <div className="flex justify-between">
                 <h1 className="text-2xl proxima-medium">
-                  {userData?.user?.full_name}
+                  {userData?.user?.first_name} {userData?.user?.last_name}
                 </h1>
                 <Button
                   size="icon"

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
 interface User {
   id: number;
   username: string;
@@ -7,17 +8,20 @@ interface User {
   first_name: string;
   last_name: string;
 }
+
 interface Industry {
   id: number;
   name: string;
   logo: string;
 }
+
 interface Country {
   id: number;
   name: string;
 }
+
 interface Education {
-  id: 1;
+  id: number;
   school: string;
   degree: string;
   field_of_study: string;
@@ -26,12 +30,14 @@ interface Education {
   description: string;
   profile: number;
 }
+
 interface Client {
   id: number;
   name: string;
   client: string;
   profile: number;
 }
+
 interface Project {
   id: number;
   title: string;
@@ -42,18 +48,22 @@ interface Project {
   end_date: string;
   profile: number;
 }
+
 interface Skill {
   id: number;
   name: string;
 }
+
 interface Availability {
   id: number;
   name: string;
 }
+
 interface Language {
   id: number;
   name: string;
 }
+
 export interface Profile {
   id: number;
   title: string;
@@ -78,33 +88,49 @@ interface ProfileState {
   error: string | null;
 }
 
-// Initial state
 const initialState: ProfileState = {
   profile: [],
   loading: false,
   error: null,
 };
 
-// Async Thunk to fetch company data
+// Async Thunk to fetch profile data
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (FilterData, { rejectWithValue }) => {
-    console.log("Fetching profile...",FilterData);
     try {
       const response = await axios.get("/api/profile", {
         params: FilterData,
       });
-      console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to profile"
+        error.response?.data?.message || "Failed to fetch profile"
       );
     }
   }
 );
 
-// Create the slice
+// Async Thunk to update profile data
+export const updateProfile = createAsyncThunk(
+  "profile/updateProfile",
+  async ({ id, data }: { id: number; data: Partial<Profile> }, { rejectWithValue }) => {
+    console.log("Updating profile...", id, data);
+    try {
+      const response = await axios.patch(`/api/updateprofile/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update profile"
+      );
+    }
+  }
+);
+
 const profileSlice = createSlice({
   name: "profile",
   initialState,
@@ -120,6 +146,20 @@ const profileSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.profile = state.profile.map((profile) =>
+          profile.id === action.payload.id ? action.payload : profile
+        );
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
