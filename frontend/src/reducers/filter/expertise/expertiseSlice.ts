@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
 interface Expertise {
   id: number;
   name: string;
@@ -18,18 +19,37 @@ const initialState: ExpertiseState = {
   error: null,
 };
 
-// Async Thunk to fetch company data
-export const fetchExpertise = createAsyncThunk(
+// Async Thunk to fetch expertise data
+export const fetchExpertise = createAsyncThunk<Expertise[], Record<string, any>>(
   "expertise/fetchExpertise",
-  async (_, { rejectWithValue }) => {
+  async (searchData, { rejectWithValue }) => {
     try {
-      console.log("Fetching expertise...");
-      const response = await axios.get("/api/filter/expertise");
-      console.log("expertise fetched:", response.data);
+      console.log("Fetching expertise with params:", searchData);
+      const response = await axios.get("/api/filter/expertise", {
+        params: searchData,
+      });
+      console.log("Expertise fetched successfully:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch expertise"
+      );
+    }
+  }
+);
+
+// Async Thunk to post new expertise data
+export const postExpertise = createAsyncThunk<Expertise, Expertise>(
+  "expertise/postExpertise",
+  async (data, { rejectWithValue }) => {
+    try {
+      console.log("Posting new expertise:", data);
+      const response = await axios.post("/api/create-skill", data);
+      console.log("Expertise added successfully:", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to add expertise"
       );
     }
   }
@@ -42,6 +62,7 @@ const expertiseSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Fetch expertise cases
       .addCase(fetchExpertise.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -51,6 +72,20 @@ const expertiseSlice = createSlice({
         state.expertise = action.payload;
       })
       .addCase(fetchExpertise.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Post expertise cases
+      .addCase(postExpertise.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(postExpertise.fulfilled, (state, action) => {
+        state.loading = false;
+        state.expertise.push(action.payload); // Append instead of overwrite
+      })
+      .addCase(postExpertise.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
