@@ -829,6 +829,7 @@ const Profile = () => {
           <ProjectEditForm
             project={selectedProject}
             onUpdate={handleProjectUpdate}
+            currentValues={userData}
           />
         </DrawerContent>
       </Drawer>

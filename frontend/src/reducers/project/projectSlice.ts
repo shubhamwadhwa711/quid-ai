@@ -48,6 +48,24 @@ export const fetchProject = createAsyncThunk(
   }
 );
 
+export const updateProject = createAsyncThunk(
+  "project/updateProject",
+  async ({ pid,prid,formData }, { rejectWithValue }) => {
+    console.log("updateProject id", { pid,prid });
+    console.log(" updateProject formData", formData);
+    try {
+      console.log("Fetching updateProject...");
+      const response = await axios.patch(`/api/edit-project/${pid}/${prid}`,formData);
+      console.log("fetchProject fetched:", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch fetchProject"
+      );
+    }
+  }
+);
+
 // Create the slice
 const projectSlice = createSlice({
   name: "project",
@@ -64,6 +82,18 @@ const projectSlice = createSlice({
         state.project = action.payload;
       })
       .addCase(fetchProject.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateProject.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProject.fulfilled, (state, action) => {
+        state.loading = false;
+        state.project = action.payload;
+      })
+      .addCase(updateProject.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
