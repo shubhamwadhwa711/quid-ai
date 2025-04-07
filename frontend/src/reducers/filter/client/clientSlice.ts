@@ -23,10 +23,12 @@ const initialState: ClientState = {
 // Async Thunk to fetch company data
 export const fetchClient = createAsyncThunk(
   "client/fetchClient",
-  async (_, { rejectWithValue }) => {
+  async (SearchData, { rejectWithValue }) => {
     try {
       console.log("Fetching client...");
-      const response = await axios.get("/api/filter/client");
+      const response = await axios.get("/api/filter/client", {
+        params: SearchData,
+      });
       console.log("client fetched:", response.data);
       return response.data;
     } catch (error: any) {

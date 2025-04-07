@@ -84,6 +84,9 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [selectedAvailable, setSelectedAvailable] = useState<
     { id: number; name: string }[]
   >(currentValues.available_to);
+  const [selectedClients, setSelectedClients] = useState<[]>(
+    currentValues.client
+  );
   const [fullName, setFullName] = useState<string | null>(null);
   console.log(title, fields, currentValues);
   const [formData, setFormData] = useState({});
@@ -270,16 +273,17 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
               )}
 
               {field.key === "featuredClients" && (
-               
-               <ClientSearch
-               selectedClients={selectedClients}
-               onChange={(updatedClients) => setSelectedClients(updatedClients)}
-               onRemoveClient={(clientToRemove) =>
-                 setSelectedClients((prev) =>
-                   prev.filter((client) => client.id !== clientToRemove.id)
-                 )
-               }
-             />
+                <ClientSearch
+                  selectedClients={selectedClients}
+                  onChange={(updatedClients) =>
+                    setSelectedClients(updatedClients)
+                  }
+                  onRemoveClient={(clientToRemove) =>
+                    setSelectedClients((prev) =>
+                      prev.filter((client) => client.id !== clientToRemove.id)
+                    )
+                  }
+                />
               )}
 
               {field.key === "languages" && (
