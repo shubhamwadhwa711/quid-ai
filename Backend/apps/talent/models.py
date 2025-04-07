@@ -56,7 +56,7 @@ class Profile(models.Model):
     linkedin_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        return self.user.username if self.user else "Unnamed Profile"
+        return self.user.first_name 
     @property
     def first_name(self):
         return self.user.first_name

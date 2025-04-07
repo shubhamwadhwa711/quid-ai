@@ -49,6 +49,8 @@ import ProjectEditForm from "@/components/ProjectEditForm";
 import SkillSearch from "@/components/SkillSearch";
 import LanguageSearch from "@/components/LanguageSearch";
 import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
+import AcademicsSearch from "@/components/AcademicsSearch";
+import { AvailableTo } from "@/components/AvailableToSelect";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -75,9 +77,12 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [selectedlanguages, setSelectedLanguages] = useState<
     { id: number; name: string }[]
   >(currentValues.language);
-  const [academics, setAcademics] = useState<{ id: number; name: string }[]>(
-    []
-  );
+  const [selectedAcademics, setSelectedAcademics] = useState<
+    { id: number; degree: string }[]
+  >(currentValues.education);
+  const [selectedAvailable, setSelectedAvailable] = useState<
+    { id: number; name: string }[]
+  >(currentValues.available_to);
   const [fullName, setFullName] = useState<string | null>(null);
   console.log(title, fields, currentValues);
   const [formData, setFormData] = useState({});
@@ -146,6 +151,18 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       prev.filter((lang) => lang.id !== languageId)
     );
   };
+  const handleSelectAcademic = (academic) => {
+    console.log("handleSelectAcademic", academic);
+    setSelectedAcademics((prev) => [...prev, academic]);
+  };
+
+  const handleRemoveAcademic = (id: number) => {
+    setSelectedAcademics((prev) => prev.filter((a) => a.id !== id));
+  };
+  const handleAvailableOnChange = (availability) => {
+    console.log("availability", availability);
+    setSelectedAvailable(availability);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
@@ -157,14 +174,23 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
     const updatedData = { ...formData };
     console.log("currentValue", currentValues);
-    if(formData.skill){
+    if (formData.available) {
+      updatedData.available_to = selectedAvailable.map((aval) => aval.id);
+    }
+    if (formData.skill) {
       updatedData.skill = selectedSkills.map((skill) => skill.id);
+    }
+    if (formData.academics) {
+      console.log("formData.academics", formData.academics);
+      updatedData.academics = selectedAcademics.map(
+        (academic) => academic.degree
+      );
     }
     // Ensure country is passed as an ID
     if (formData.country) {
       updatedData.country = selectedCountry.id;
     }
-    if(formData.languages){ 
+    if (formData.languages) {
       // selectedlanguages.map((lang) => lang.id)
       updatedData.language = selectedlanguages.map((lang) => lang.id);
     }
@@ -177,10 +203,10 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     }
 
     console.log("updatedData", updatedData);
-    console.log("selectedlanguages",selectedlanguages)
+    console.log("selectedlanguages", selectedlanguages);
     dispatch(updateProfile({ id: currentValues.id, data: updatedData }));
   };
-  console.log("currentValues",currentValues)
+  console.log("currentValues", currentValues);
   return (
     <form onSubmit={handleSubmit} className="space-y-4 px-4">
       {fields.map((field) => (
@@ -234,17 +260,26 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
                 />
               )}
 
-              {/* {field.key === "academics" && (
-                <TechnologySearch
-                  selectedTechnologies={currentValues[field.accessor] || []}
+              {field.key === "academics" && (
+                <AcademicsSearch
+                  profileID={currentValues.id}
+                  selectedAcademics={selectedAcademics}
+                  onSelectAcademics={handleSelectAcademic}
                 />
-              )} */}
+              )}
 
               {field.key === "languages" && (
                 <LanguageSearch
                   selectedLanguages={selectedlanguages}
                   onSelectLanguage={handleSelectLanguage}
                   onRemoveLanguage={handleRemoveLanguage}
+                />
+              )}
+
+              {field.key === "available" && (
+                <AvailableTo
+                  defaultSelected={currentValues.available_to}
+                  onChange={handleAvailableOnChange}
                 />
               )}
 

@@ -1,7 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Academics {
-  degree:string;
+  id: number;
+  school: string;
+  degree: string;
+  field_of_study: string;
+  start_year: string;
+  end_year: string;
+  description: string;
+  profile: number;
 }
 
 interface AcademicsState {
