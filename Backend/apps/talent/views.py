@@ -52,6 +52,23 @@ class EducationViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         profile_id = self.kwargs['profile_pk']
         return Education.objects.filter(profile_id=profile_id , profile__status="APPROVED")  
+    
+
+class FeatureClientViewSet(viewsets.ModelViewSet):
+    """
+    API view to list, create, delete and update education.
+    """
+    permission_classes = [AllowAny]
+    serializer_class = ClientSerializer   
+
+    """
+    Restricts the returned education to a given profile,
+    by filtering against a `pk` URL parameter.
+    """
+    def get_queryset(self):
+        profile_id = self.kwargs['profile_pk']
+        return Client.objects.filter(profile_id=profile_id , profile__status="APPROVED")  
+
 
 class ExperienceViewSet(viewsets.ModelViewSet):
     """
