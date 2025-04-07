@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Check, ChevronDown, User, X, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchClient } from "@/reducers/filter/client/clientSlice";
+import { fetchClient, postClient } from "@/reducers/filter/client/clientSlice";
 import { useAppSelector, useAppDispatch } from "@/store/store";
 
 const ClientSearch = ({
@@ -16,7 +16,7 @@ const ClientSearch = ({
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
   const dispatch = useAppDispatch();
-  const { client } = useAppSelector((state) => state.Client);
+  const { clients } = useAppSelector((state) => state.Client);
 
   // Debounce logic
   useEffect(() => {
@@ -64,10 +64,10 @@ const ClientSearch = ({
   };
 
   const handleAddClient = () => {
-    
+    dispatch(postClient({ name: searchTerm }));
   };
 
-  const clientExists = client?.some(
+  const clientExists = clients?.some(
     (c) => c.name.toLowerCase() === searchTerm.toLowerCase()
   );
 
@@ -136,8 +136,8 @@ const ClientSearch = ({
           ref={dropdownRef}
           className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-[#1E1E38] rounded-md shadow-lg border border-[#3A3A5A]"
         >
-          {client?.length > 0 ? (
-            client.map((cli) => (
+          {clients?.length > 0 ? (
+            clients.map((cli) => (
               <div
                 key={cli.id}
                 onClick={() => handleSelectClient(cli)}
