@@ -16,6 +16,7 @@ const ProjectEditForm = ({ project, onUpdate, currentValues }) => {
     projectTags: project.tag || [],
   });
   const [projectImage, setProjectImage] = useState(project.image || null);
+  const [projectFile, setProjectFile] = useState<File>(null);
   const [tagInput, setTagInput] = useState("");
   const [currentField, setCurrentField] = useState(null);
   const dispatch = useAppDispatch();
@@ -77,7 +78,9 @@ const ProjectEditForm = ({ project, onUpdate, currentValues }) => {
   };
 
   const handleTagRemove = (tagToRemove) => {
-    const updatedTags = formData.projectTags.filter((tag) => tag.id !== tagToRemove.id);
+    const updatedTags = formData.projectTags.filter(
+      (tag) => tag.id !== tagToRemove.id
+    );
 
     setFormData((prev) => ({
       ...prev,
@@ -93,15 +96,7 @@ const ProjectEditForm = ({ project, onUpdate, currentValues }) => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProjectImage(reader.result);
-        onUpdate({
-          ...project,
-          image: reader.result,
-        });
-      };
-      reader.readAsDataURL(file);
+      setProjectFile(file);
     }
   };
 
@@ -112,17 +107,22 @@ const ProjectEditForm = ({ project, onUpdate, currentValues }) => {
     submissionData.append("title", formData.projectTitle);
     submissionData.append("description", formData.projectDescription);
 
-    // Append each tag
     formData.projectTags.forEach((tag) => {
-      submissionData.append("tag", tag.name);
+      submissionData.append("tag", tag.id);
     });
 
-    // Append image if available
-    if (projectImage) {
-      submissionData.append("image", projectImage);
+    if (projectFile) {
+      submissionData.append("image", projectFile);
     }
+    console.log("submissionData", submissionData);
 
-    dispatch(updateProject({ pid: currentValues.id, prid: project.id, formData: submissionData }));
+    dispatch(
+      updateProject({
+        pid: currentValues.id,
+        prid: project.id,
+        formData: submissionData,
+      })
+    );
   };
 
   return (
@@ -173,13 +173,21 @@ const ProjectEditForm = ({ project, onUpdate, currentValues }) => {
                 />
               </div>
 
-              <Button type="button" onClick={handleTagAdd} className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]">
+              <Button
+                type="button"
+                onClick={handleTagAdd}
+                className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
+              >
                 Add
               </Button>
 
               <div className="flex flex-wrap gap-2">
                 {formData.projectTags.map((item) => (
-                  <Badge key={item.id} variant="none" className="border-none text-xs rounded-3xl bg-white/30 flex items-center">
+                  <Badge
+                    key={item.id}
+                    variant="none"
+                    className="border-none text-xs rounded-3xl bg-white/30 flex items-center"
+                  >
                     <span>{item.name}</span>
                     <Button
                       type="button"
@@ -198,14 +206,34 @@ const ProjectEditForm = ({ project, onUpdate, currentValues }) => {
       ))}
 
       <div className="mb-4">
-        <input type="file" id="projectImageUpload" accept="image/*" onChange={handleImageUpload} className="hidden" />
-        <label htmlFor="projectImageUpload" className="flex items-center h-24 justify-center w-full p-4 border-2 border-dashed border-gray-700 rounded-lg cursor-pointer hover:border-purple-500">
-          {projectImage ? <img src={projectImage} alt="Project" className="max-h-20 w-full object-cover rounded-lg" /> : <ImageIcon size={40} />}
+        <input
+          type="file"
+          id="projectImageUpload"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className="hidden"
+        />
+        <label
+          htmlFor="projectImageUpload"
+          className="flex items-center h-24 justify-center w-full p-4 border-2 border-dashed border-gray-700 rounded-lg cursor-pointer hover:border-purple-500"
+        >
+          {projectImage ? (
+            <img
+              src={projectImage}
+              alt="Project"
+              className="max-h-20 w-full object-cover rounded-lg"
+            />
+          ) : (
+            <ImageIcon size={40} />
+          )}
         </label>
       </div>
 
       <div className="fixed bottom-1 left-1/2 transform -translate-x-1/2 w-full">
-        <Button type="submit" className="w-11/12 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] text-white rounded-full">
+        <Button
+          type="submit"
+          className="w-11/12 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] text-white rounded-full"
+        >
           Update Project
         </Button>
       </div>

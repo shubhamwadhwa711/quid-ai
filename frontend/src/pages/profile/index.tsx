@@ -51,6 +51,7 @@ import LanguageSearch from "@/components/LanguageSearch";
 import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
 import AcademicsSearch from "@/components/AcademicsSearch";
 import { AvailableTo } from "@/components/AvailableToSelect";
+import ClientSearch from "@/components/ClientSearch";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -83,6 +84,9 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [selectedAvailable, setSelectedAvailable] = useState<
     { id: number; name: string }[]
   >(currentValues.available_to);
+  const [selectedClients, setSelectedClients] = useState<[]>(
+    currentValues.client
+  );
   const [fullName, setFullName] = useState<string | null>(null);
   console.log(title, fields, currentValues);
   const [formData, setFormData] = useState({});
@@ -265,6 +269,20 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
                   profileID={currentValues.id}
                   selectedAcademics={selectedAcademics}
                   onSelectAcademics={handleSelectAcademic}
+                />
+              )}
+
+              {field.key === "featuredClients" && (
+                <ClientSearch
+                  selectedClients={selectedClients}
+                  onChange={(updatedClients) =>
+                    setSelectedClients(updatedClients)
+                  }
+                  onRemoveClient={(clientToRemove) =>
+                    setSelectedClients((prev) =>
+                      prev.filter((client) => client.id !== clientToRemove.id)
+                    )
+                  }
                 />
               )}
 

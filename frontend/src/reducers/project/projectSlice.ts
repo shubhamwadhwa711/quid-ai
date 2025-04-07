@@ -1,21 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Tags {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 interface Project {
-    id: number;
-    title: string;
-    image:string;
-    description: string;
-    url: string;
-    start_date: string;
-    end_date: string;
-    profile: number;
-    tag: Tags[];
-
-  }
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  url: string;
+  start_date: string;
+  end_date: string;
+  profile: number;
+  tag: Tags[];
+}
 
 interface ProjectState {
   project: Project;
@@ -33,8 +32,8 @@ const initialState: ProjectState = {
 // Async Thunk to fetch company data
 export const fetchProject = createAsyncThunk(
   "project/fetchProject",
-  async ({ tid,pid }, { rejectWithValue }) => {
-    console.log("fetchProject id", { tid,pid });
+  async ({ tid, pid }, { rejectWithValue }) => {
+    console.log("fetchProject id", { tid, pid });
     try {
       console.log("Fetching fetchProject...");
       const response = await axios.get(`/api/project/${tid}/${pid}`);
@@ -50,12 +49,18 @@ export const fetchProject = createAsyncThunk(
 
 export const updateProject = createAsyncThunk(
   "project/updateProject",
-  async ({ pid,prid,formData }, { rejectWithValue }) => {
-    console.log("updateProject id", { pid,prid });
+  async ({ pid, prid, formData }, { rejectWithValue }) => {
+    console.log("updateProject id", { pid, prid });
     console.log(" updateProject formData", formData);
     try {
       console.log("Fetching updateProject...");
-      const response = await axios.patch(`/api/edit-project/${pid}/${prid}`,formData);
+      const response = await axios.patch(
+        `/api/edit-project/${pid}/${prid}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       console.log("fetchProject fetched:", response.data);
       return response.data;
     } catch (error: any) {
