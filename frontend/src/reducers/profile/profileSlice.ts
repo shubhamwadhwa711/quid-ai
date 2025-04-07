@@ -114,7 +114,10 @@ export const fetchProfile = createAsyncThunk(
 // Async Thunk to update profile data
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
-  async ({ id, data }: { id: number; data: Partial<Profile> }, { rejectWithValue }) => {
+  async (
+    { id, data }: { id: number; data: Partial<Profile> },
+    { rejectWithValue }
+  ) => {
     console.log("Updating profile...", id, data);
     try {
       const response = await axios.patch(`/api/updateprofile/${id}`, data, {
@@ -126,6 +129,74 @@ export const updateProfile = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to update profile"
+      );
+    }
+  }
+);
+
+export const updateAcademics = createAsyncThunk(
+  "profile/updateProfile",
+  async (
+    { id, eid, data }: { id: number; eid: number; data: Partial<Education> },
+    { rejectWithValue }
+  ) => {
+    console.log("Updating profile...", id, data);
+    try {
+      const response = await axios.patch(
+        `/api/update-academics/${id}/${eid}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update profile"
+      );
+    }
+  }
+);
+
+export const postAcademics = createAsyncThunk(
+  "profile/postAcademics",
+  async (
+    { id, data }: { id: number; data: Partial<Education> },
+    { rejectWithValue ,dispatch}
+  ) => {
+    console.log("Updating profile...", id, data);
+    try {
+      const response = await axios.post(`/api/post-academics/${id}/`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      dispatch(fetchProfile())
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update profile"
+      );
+    }
+  }
+);
+
+export const removeAcademics = createAsyncThunk(
+  "profile/removeAcademics",
+  async (
+    { id, eid }: { id: number; eid: number },
+    { rejectWithValue, dispatch }
+  ) => {
+    console.log("Updating profile...", id);
+    try {
+      const response = await axios.delete(`/api/remove-academics/${id}/${eid}`);
+      dispatch(fetchProfile());
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to remove academics"
       );
     }
   }
