@@ -82,10 +82,10 @@ class Experience(models.Model):
 
 class Education(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='education')
-    school = models.CharField(max_length=255)
+    school = models.CharField(max_length=255, blank=True, null=True)
     degree = models.CharField(max_length=255, blank=True, null=True)
     field_of_study = models.CharField(max_length=255, blank=True, null=True)
-    start_year = models.IntegerField()
+    start_year = models.IntegerField(blank=True, null=True)
     end_year = models.IntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
