@@ -86,8 +86,7 @@ class EducationSerializer(serializers.ModelSerializer):
     class Meta:
         
         model = Education
-        fields = ['degree']
-
+        fields = '__all__'
 class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Experience
