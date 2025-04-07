@@ -6,19 +6,19 @@ import { X, Image as ImageIcon } from "lucide-react";
 import { NameIcon } from "./icons/NameIcon";
 import { BioIcon } from "./icons/BioIcon";
 import { BulbIcon } from "./icons/BulbIcon";
+import { updateProject } from "@/reducers/project/projectSlice";
+import { useAppDispatch } from "@/store/store";
 
-const ProjectEditForm = ({
-  project,
-  onUpdate,
-  currentValues = { projects: [] },
-}) => {
+const ProjectEditForm = ({ project, onUpdate, currentValues }) => {
   const [formData, setFormData] = useState({
     projectTitle: project.title || "",
     projectDescription: project.description || "",
+    projectTags: project.tag || [],
   });
   const [projectImage, setProjectImage] = useState(project.image || null);
   const [tagInput, setTagInput] = useState("");
   const [currentField, setCurrentField] = useState(null);
+  const dispatch = useAppDispatch();
 
   const projectFields = [
     {
@@ -63,8 +63,13 @@ const ProjectEditForm = ({
 
     const updatedProject = {
       ...project,
-      tag: [...(project.tag || []), newTag],
+      tag: [...(formData.projectTags || []), newTag],
     };
+
+    setFormData((prev) => ({
+      ...prev,
+      projectTags: updatedProject.tag,
+    }));
 
     onUpdate(updatedProject);
     setTagInput("");
@@ -72,7 +77,12 @@ const ProjectEditForm = ({
   };
 
   const handleTagRemove = (tagToRemove) => {
-    const updatedTags = project.tag.filter((tag) => tag.id !== tagToRemove.id);
+    const updatedTags = formData.projectTags.filter((tag) => tag.id !== tagToRemove.id);
+
+    setFormData((prev) => ({
+      ...prev,
+      projectTags: updatedTags,
+    }));
 
     onUpdate({
       ...project,
@@ -95,17 +105,24 @@ const ProjectEditForm = ({
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const updatedProject = {
-      ...project,
-      title: formData.projectTitle,
-      description: formData.projectDescription,
-      image: projectImage,
-    };
+    const submissionData = new FormData();
+    submissionData.append("title", formData.projectTitle);
+    submissionData.append("description", formData.projectDescription);
 
-    onUpdate(updatedProject);
+    // Append each tag
+    formData.projectTags.forEach((tag) => {
+      submissionData.append("tag", tag.name);
+    });
+
+    // Append image if available
+    if (projectImage) {
+      submissionData.append("image", projectImage);
+    }
+
+    dispatch(updateProject({ pid: currentValues.id, prid: project.id, formData: submissionData }));
   };
 
   return (
@@ -121,7 +138,7 @@ const ProjectEditForm = ({
                 type="text"
                 value={formData[field.key] || ""}
                 onChange={(e) => handleChange(field.key, e.target.value)}
-                placeholder={field.placeholder || `Enter ${field.label}`}
+                placeholder={field.placeholder}
                 className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
               />
             </div>
@@ -135,7 +152,7 @@ const ProjectEditForm = ({
               <textarea
                 value={formData[field.key] || ""}
                 onChange={(e) => handleChange(field.key, e.target.value)}
-                placeholder={field.placeholder || `Enter ${field.label}`}
+                placeholder={field.placeholder}
                 className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl h-28 border-none focus:ring-2 focus:ring-[#7C2BD3]"
               />
             </div>
@@ -150,33 +167,19 @@ const ProjectEditForm = ({
                 <input
                   type="text"
                   value={tagInput}
-                  onChange={(e) => {
-                    setTagInput(e.target.value);
-                    setCurrentField(field.key);
-                  }}
+                  onChange={(e) => setTagInput(e.target.value)}
                   placeholder={`Add ${field.label}`}
                   className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
                 />
               </div>
 
-              {currentField === field.key && (
-                <Button
-                  type="button"
-                  onClick={handleTagAdd}
-                  className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
-                >
-                  Add
-                </Button>
-              )}
+              <Button type="button" onClick={handleTagAdd} className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]">
+                Add
+              </Button>
 
-              {/* Existing tags display */}
               <div className="flex flex-wrap gap-2">
-                {project.tag?.map((item) => (
-                  <Badge
-                    key={item.id}
-                    variant="none"
-                    className="border-none text-xs whitespace-nowrap rounded-3xl bg-white/30 flex items-center"
-                  >
+                {formData.projectTags.map((item) => (
+                  <Badge key={item.id} variant="none" className="border-none text-xs rounded-3xl bg-white/30 flex items-center">
                     <span>{item.name}</span>
                     <Button
                       type="button"
@@ -194,57 +197,17 @@ const ProjectEditForm = ({
         </div>
       ))}
 
-      {/* Image Upload */}
       <div className="mb-4">
-        <input
-          type="file"
-          id="projectImageUpload"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="hidden"
-        />
-        <label
-          htmlFor="projectImageUpload"
-          className="flex items-center h-24 justify-center w-full p-4 border-2 border-dashed border-gray-700 rounded-lg cursor-pointer hover:border-purple-500 transition"
-        >
-          {projectImage ? (
-            <img
-              src={projectImage}
-              alt={project.title}
-              className="max-h-20 w-full  object-cover rounded-lg"
-            />
-          ) : (
-            <div className="flex flex-col items-center text-gray-500">
-              <ImageIcon size={40} />
-              <span className="mt-2 text-sm">Select Project Image</span>
-            </div>
-          )}
+        <input type="file" id="projectImageUpload" accept="image/*" onChange={handleImageUpload} className="hidden" />
+        <label htmlFor="projectImageUpload" className="flex items-center h-24 justify-center w-full p-4 border-2 border-dashed border-gray-700 rounded-lg cursor-pointer hover:border-purple-500">
+          {projectImage ? <img src={projectImage} alt="Project" className="max-h-20 w-full object-cover rounded-lg" /> : <ImageIcon size={40} />}
         </label>
       </div>
 
-      <div className="fixed bottom-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center w-full">
-        <Button
-          type="submit"
-          className="w-11/12 bg-gradient-to-r proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full "
-        >
+      <div className="fixed bottom-1 left-1/2 transform -translate-x-1/2 w-full">
+        <Button type="submit" className="w-11/12 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] text-white rounded-full">
           Update Project
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 12H20M20 12L14 6M20 12L14 18"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
         </Button>
-        <Button variant="none" className="">Remove Project</Button>
       </div>
     </form>
   );
