@@ -49,7 +49,7 @@ import ProjectEditForm from "@/components/ProjectEditForm";
 import SkillSearch from "@/components/SkillSearch";
 import LanguageSearch from "@/components/LanguageSearch";
 import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
-import AcademicsSearch from "@/components/AcademicsSearch";
+import AcademicsSearch from "@/components/academics/AcademicsSearch";
 import { AvailableTo } from "@/components/AvailableToSelect";
 import ClientSearch from "@/components/ClientSearch";
 // Custom hook for media query if not already available
@@ -78,9 +78,6 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [selectedlanguages, setSelectedLanguages] = useState<
     { id: number; name: string }[]
   >(currentValues.language);
-  const [selectedAcademics, setSelectedAcademics] = useState<
-    { id: number; degree: string }[]
-  >(currentValues.education);
   const [selectedAvailable, setSelectedAvailable] = useState<
     { id: number; name: string }[]
   >(currentValues.available_to);
@@ -155,14 +152,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       prev.filter((lang) => lang.id !== languageId)
     );
   };
-  const handleSelectAcademic = (academic) => {
-    console.log("handleSelectAcademic", academic);
-    setSelectedAcademics((prev) => [...prev, academic]);
-  };
 
-  const handleRemoveAcademic = (id: number) => {
-    setSelectedAcademics((prev) => prev.filter((a) => a.id !== id));
-  };
   const handleAvailableOnChange = (availability) => {
     console.log("availability", availability);
     setSelectedAvailable(availability);
@@ -183,12 +173,6 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     }
     if (formData.skill) {
       updatedData.skill = selectedSkills.map((skill) => skill.id);
-    }
-    if (formData.academics) {
-      console.log("formData.academics", formData.academics);
-      updatedData.academics = selectedAcademics.map(
-        (academic) => academic.degree
-      );
     }
     // Ensure country is passed as an ID
     if (formData.country) {
@@ -267,8 +251,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
               {field.key === "academics" && (
                 <AcademicsSearch
                   profileID={currentValues.id}
-                  selectedAcademics={selectedAcademics}
-                  onSelectAcademics={handleSelectAcademic}
+                  defaultAcademics={currentValues.education}
                 />
               )}
 
