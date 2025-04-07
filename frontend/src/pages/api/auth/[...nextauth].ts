@@ -1,4 +1,4 @@
-import NextAuth, { AuthOptions, User } from "next-auth";
+import NextAuth, { AuthOptions, TokenSet, User } from "next-auth";
 import LinkedInProvider, {
   LinkedInProfile,
 } from "next-auth/providers/linkedin";
@@ -62,27 +62,27 @@ const authOptions: AuthOptions = {
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
-      async profile(profile: LinkedInProfile) {
+      async profile(profile: LinkedInProfile,tokens:TokenSet) {
         try {
           const response = await axios.post(
             `${process.env.NEXT_BACKEND_URL}/auth/convert-token/`,
             {
               grant_type: "convert_token",
-              backend: "oidc",
+              backend: "linkedin-openidconnect",
               client_id: process.env.SSO_CLIENT_ID,
               client_secret:process.env.SSO_CLIENT_SECRET,
-              token: profile?.access_token,
+              token: tokens?.access_token,
             }
           );
           console.log("Token exchange successful:", response.data);
           const qProfile = response.data;
           return {
-            id: qProfile.id,
+            id: qProfile.id ?? 1,
             user: {
-              id: qProfile.id,
-              name: qProfile.name,
-              email: qProfile.email,
-              image: qProfile.picture,
+              id: qProfile.user.id ?? 1,
+              name: qProfile.user.first_name + qProfile.user.last_name,
+              email: qProfile.user.email,
+              image: profile.picture,
             },
             access_token: qProfile.access_token,
             refresh_token: qProfile.refresh_token,
@@ -92,7 +92,7 @@ const authOptions: AuthOptions = {
           console.error("Token exchange failed:", error.response?.data || error);
           throw new Error('Profile not found');
         }
-      },
+      }, 
       wellKnown:
         "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
