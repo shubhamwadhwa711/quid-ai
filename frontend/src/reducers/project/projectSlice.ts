@@ -4,7 +4,7 @@ interface Tags {
   id: number;
   name: string;
 }
-interface Project {
+export interface Project {
   id: number;
   title: string;
   image: string;
@@ -49,19 +49,34 @@ export const fetchProject = createAsyncThunk(
 
 export const updateProject = createAsyncThunk(
   "project/updateProject",
-  async ({ pid, prid, formData }, { rejectWithValue }) => {
-    console.log("updateProject id", { pid, prid });
-    console.log(" updateProject formData", formData);
+  async ({ pid, prid, formData }: { pid: number, prid: number, formData: FormData }, { rejectWithValue }) => {
     try {
-      console.log("Fetching updateProject...");
       const response = await axios.patch(
-        `/api/edit-project/${pid}/${prid}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/${prid}/`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      console.log("fetchProject fetched:", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch fetchProject"
+      );
+    }
+  }
+);
+export const addProject = createAsyncThunk(
+  "project/addProject",
+  async ({ pid, formData }: { pid: number, formData: FormData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

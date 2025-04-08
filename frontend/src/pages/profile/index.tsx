@@ -45,13 +45,13 @@ import { BioIcon } from "@/components/icons/BioIcon";
 import { ExpertiseIcon } from "@/components/icons/ExpertiseIcon";
 import { BulbIcon } from "@/components/icons/BulbIcon";
 import { Badge } from "@/components/ui/badge";
-import ProjectEditForm from "@/components/ProjectEditForm";
 import SkillSearch from "@/components/SkillSearch";
 import LanguageSearch from "@/components/LanguageSearch";
 import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
 import AcademicsSearch from "@/components/academics/AcademicsSearch";
 import { AvailableTo } from "@/components/AvailableToSelect";
 import ClientSearch from "@/components/ClientSearch";
+import ProjectsScreen from "@/components/projects/ProjectsScreen";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -361,8 +361,6 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
 // Main Profile Component
 const Profile = () => {
-  const [selectedProject, setselectedProject] = useState(null);
-  const [openProjectEditForm, setOpenProjectEditForm] = useState(false);
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
   useEffect(() => {
@@ -519,16 +517,6 @@ const Profile = () => {
   const handleSaveData = (newData) => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
-  const handleOpenProjectEditForm = (project) => {
-    console.log("Project", project);
-    setselectedProject(project);
-    setOpenProjectEditForm(true);
-  };
-  const handleProjectUpdate = (updatedProject) => {
-    // Your logic to update the project, e.g., API call or state update
-    console.log(updatedProject);
-  };
-  console.log("UserData", userData);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2 pb-20">
       {/* Main profile card */}
@@ -752,57 +740,7 @@ const Profile = () => {
           ))}
         </div>
       </div>
-
-      <div className="w-full max-w-2xl p-2">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center space-x-2">
-            <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima-regular">RECENT PROJECTS</h2>
-          </div>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-8 w-8 rounded-full"
-            onClick={() =>
-              handleOpenProjectEditForm({
-                title: null,
-                description: null,
-                tags: [],
-              })
-            }
-          >
-            <Edit size={16} />
-          </Button>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4">
-          {userData?.projects?.map((project, index) => (
-            <Card
-              key={index}
-              className="hover:shadow-md border-none relative bg-gray-800  transition flex-shrink-0 w-44 h-48"
-            >
-              <div className="relative h-4/5">
-                <img
-                  src={project?.image}
-                  alt={project?.title}
-                  className="w-full h-full object-fill rounded-t-lg"
-                />
-              </div>
-              <Button
-                variant="none"
-                onClick={() => handleOpenProjectEditForm(project)}
-                className="absolute bg-white rounded-full p-2 top-1 right-1"
-              >
-                <Edit className="h-6 w-6 text-black" />
-              </Button>
-              <div className="h-1/5 flex  flex-col justify-between p-1">
-                <CardTitle className="text-xs text-center text-wrap text-white ">
-                  {project.title}
-                </CardTitle>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ProjectsScreen projects={userData?.projects || []} profileId={userData?.id} />
 
       {activePopup && (
         <Drawer open={true} onOpenChange={handleClosePopup}>
@@ -840,35 +778,6 @@ const Profile = () => {
           </DrawerContent>
         </Drawer>
       )}
-
-      <Drawer open={openProjectEditForm} onOpenChange={setOpenProjectEditForm}>
-        <DrawerContent className="mx-auto max-w-md bg-gradient-to-br rounded-t-3xl h-4/5 from-black via-[#0F0F30] to-[#0F0F30] text-white">
-          <DrawerHeader className="relative flex justify-center">
-            <DrawerTitle>Edit Project</DrawerTitle>
-            <DrawerClose asChild>
-              <Button variant="none" className="absolute right-4 top-2">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M6.9998 8.40005L2.0998 13.3C1.91647 13.4834 1.68314 13.575 1.3998 13.575C1.11647 13.575 0.883138 13.4834 0.699804 13.3C0.516471 13.1167 0.424805 12.8834 0.424805 12.6C0.424805 12.3167 0.516471 12.0834 0.699804 11.9L5.5998 7.00005L0.699804 2.10005C0.516471 1.91672 0.424805 1.68338 0.424805 1.40005C0.424805 1.11672 0.516471 0.883382 0.699804 0.700048C0.883138 0.516715 1.11647 0.425049 1.3998 0.425049C1.68314 0.425049 1.91647 0.516715 2.0998 0.700048L6.9998 5.60005L11.8998 0.700048C12.0831 0.516715 12.3165 0.425049 12.5998 0.425049C12.8831 0.425049 13.1165 0.516715 13.2998 0.700048C13.4831 0.883382 13.5748 1.11672 13.5748 1.40005C13.5748 1.68338 13.4831 1.91672 13.2998 2.10005L8.3998 7.00005L13.2998 11.9C13.4831 12.0834 13.5748 12.3167 13.5748 12.6C13.5748 12.8834 13.4831 13.1167 13.2998 13.3C13.1165 13.4834 12.8831 13.575 12.5998 13.575C12.3165 13.575 12.0831 13.4834 11.8998 13.3L6.9998 8.40005Z"
-                    fill="white"
-                  />
-                </svg>
-              </Button>
-            </DrawerClose>
-          </DrawerHeader>
-          <ProjectEditForm
-            project={selectedProject}
-            onUpdate={handleProjectUpdate}
-            currentValues={userData}
-          />
-        </DrawerContent>
-      </Drawer>
     </div>
   );
 };
