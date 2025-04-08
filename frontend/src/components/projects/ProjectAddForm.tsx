@@ -166,7 +166,21 @@ export const ProjectAddForm = ({
           className="h-8 w-8 rounded-full"
           onClick={() => handleFormDrawerChange(true)}
         >
-          <PlusSquare size={16} />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8 1V15M1 8H15"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </Button>
       </DrawerTrigger>
       <DrawerContent className="mx-auto max-w-md bg-gradient-to-br rounded-t-3xl h-4/5 from-black via-[#0F0F30] to-[#0F0F30] text-white">

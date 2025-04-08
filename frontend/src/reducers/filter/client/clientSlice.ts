@@ -42,7 +42,29 @@ export const postClient = createAsyncThunk(
   "client/postClient",
   async (data: Client, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/create-client", data);
+      const response = await axios.post(`${process.env.NEXT_BACKEND_URL}/client/`, data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to post client"
+      );
+    }
+  }
+);
+
+export const updateClient = createAsyncThunk(
+  "client/updateClient",
+  async ({ id, formData }, { rejectWithValue }) => {
+    try {
+      console.log("formData", formData);
+      console.log("id", id);
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${id}/feature-client/`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -77,9 +99,21 @@ const clientSlice = createSlice({
       })
       .addCase(postClient.fulfilled, (state, action) => {
         state.loading = false;
-        state.clients = [...state.clients, action.payload]; // Add new client
+        state.clients = [...state.clients, action.payload];
       })
       .addCase(postClient.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateClient.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateClient.fulfilled, (state, action) => {
+        state.loading = false;
+        state.clients = [...state.clients, action.payload];
+      })
+      .addCase(updateClient.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
