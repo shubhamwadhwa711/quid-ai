@@ -233,9 +233,9 @@ class ClientViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Client.objects.all()
     serializer_class = ClientSerializer 
-    http_method_names = ['get','post']   
+    http_method_names = ['get','post','patch','delete']   
     filter_backends = [SearchFilter]  
-    search_fields = ['name']          
+    search_fields = ['company__name']          
 
 class AcademicViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]

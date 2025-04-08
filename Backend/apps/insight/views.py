@@ -5,6 +5,7 @@ from . serializers import *
 
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 
 
 class CompanyCategoryViewSet(viewsets.ModelViewSet):
@@ -35,7 +36,10 @@ class AllCompany(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = AssociatedCompany.objects.all()
     serializer_class = AssociatedCompanySerializer
-    http_method_names = ['get']
+    http_method_names = ['get','post']
+    filter_backends = [SearchFilter]  
+    search_fields = ['name']     
+    
 
 class Testimonial(viewsets.ModelViewSet):
     """
