@@ -11,7 +11,7 @@ const Navbar = () => {
   const router = useRouter();
 
   return (
-    <nav className="absolute left-0 right-0 z-50 h-8 max-w-md w-full justify-self-center">
+    <nav className="relative z-50 min-h-8 pt-8 max-w-md w-full justify-self-center">
       <div className="p-2 bg-gradient-to-br">
         <div className="flex items-center h-full px-4">
           {/* Brand Logo */}
