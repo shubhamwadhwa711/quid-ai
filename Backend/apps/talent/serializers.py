@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import *
+from apps.insight.models import AssociatedCompany
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only = True)
@@ -127,10 +128,15 @@ class EnquirySerializer(serializers.ModelSerializer):
 
 
 class ClientSerializer(serializers.ModelSerializer):
-    # profile = ProfileSerializer(read_only=True)
+
+    profile_name= serializers.CharField(source='profile.user.first_name', read_only=True)
+    company_name = serializers.CharField(source='company.name', read_only=True)
+ 
     class Meta:
         model = Client
-        fields = '__all__'
+        fields = ['id', 'profile', 'profile_name', 'company', 'company_name', 'is_featured']
+    
+    
 
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:

@@ -10,7 +10,7 @@ class CompanyCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AssociatedCompanySerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField()
+    category = serializers.PrimaryKeyRelatedField(queryset =CompanyCategory.objects.all())
     class Meta:
         model = AssociatedCompany
         fields = '__all__'
