@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from apps.insight.models import AssociatedCompany
 
 
 class Skill(models.Model):
@@ -31,7 +32,11 @@ class Industry(models.Model):
     logo = models.ImageField(upload_to='industry_logo/', null=True, blank=True)
     
     def __str__(self):
-        return self.name    
+        return self.name  
+
+
+        
+
 
 class Profile(models.Model):
     STATUS = (
@@ -54,6 +59,7 @@ class Profile(models.Model):
     available_to = models.ManyToManyField(AvailableTo)
     phone = models.CharField(max_length=20, blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
+    client = models.ManyToManyField(AssociatedCompany,  related_name='model', through='Client')
 
     def __str__(self):
         return self.user.first_name 
@@ -65,7 +71,16 @@ class Profile(models.Model):
     def last_name(self):
         return self.user.last_name
     
-    
+
+
+class Client(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='clients')
+    company = models.ForeignKey(AssociatedCompany, on_delete=models.CASCADE)
+    is_featured = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.company.name      
+
     
 
 class Experience(models.Model):
@@ -121,14 +136,7 @@ class Publication(models.Model):
     def __str__(self):
         return self.title  
 
-class Client(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name='client')
-    name = models.CharField(max_length=80, null=True, blank=True )
-    client = models.ImageField(upload_to='client/', blank=True, null=True)
 
-    def __str__(self):
-        return self.name   
-    
     
 
 class Enquiry(models.Model):
