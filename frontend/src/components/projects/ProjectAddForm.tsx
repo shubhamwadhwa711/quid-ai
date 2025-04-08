@@ -43,12 +43,12 @@ const PROJECT_FIELDS = [
     label: "Project Description",
   },
   {
-    key: "projectStartDate",
+    key: "projectDate",
     type: "date",
-    placeholder: "Start Date",
-    accessor: "projectStartDate",
+    placeholder: "Duration",
+    accessor: "projectDate",
     icon: <Calendar />,
-    label: "Start Date",
+    label: "Duration",
   },
   {
     key: "projectTags",
@@ -63,6 +63,7 @@ const initialFormState = {
   projectDescription: "",
   projectTags: [],
   projectStartDate: null,
+  projectEndDate: null,
 };
 export const ProjectAddForm = ({
   profileId,
@@ -123,6 +124,7 @@ export const ProjectAddForm = ({
     submissionData.append("profile", profileId);
     submissionData.append("description", formData.projectDescription);
     submissionData.append("start_date", formData.projectStartDate);
+    submissionData.append("end_date", formData.projectEndDate);
 
     formData.projectTags.forEach((tag) => {
       submissionData.append("tag", tag.id);
@@ -187,9 +189,12 @@ export const ProjectAddForm = ({
             </Button>
           </DrawerClose>
         </DrawerHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 px-4 overflow-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-6 px-4 overflow-auto"
+        >
           {PROJECT_FIELDS.map((field) => (
-            <div key={field.key} className="space-y-2">
+            <div key={field.key} className="">
               {field.type === "text" && (
                 <div className="relative w-full">
                   <div className="absolute inset-y-0 left-3 flex items-center text-white">
@@ -204,18 +209,43 @@ export const ProjectAddForm = ({
                   />
                 </div>
               )}
+
               {field.type === "date" && (
-                <div className="relative w-full">
-                  <div className="absolute inset-y-0 left-3 flex items-center text-white">
-                    {field.icon}
+                <div className="flex gap-4">
+                  <div className="flex flex-col">
+                    <h1>Start Date</h1>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-3 flex items-center text-white">
+                        {field.icon}
+                      </div>
+                      <input
+                        type="date"
+                        value={formData["projectStartDate"] || ""}
+                        onChange={(e) =>
+                          handleChange("projectStartDate", e.target.value)
+                        }
+                        placeholder={"Start Date"}
+                        className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
+                      />
+                    </div>
                   </div>
-                  <input
-                    type="date"
-                    value={formData[field.key] || ""}
-                    onChange={(e) => handleChange(field.key, e.target.value)}
-                    placeholder={field.placeholder}
-                    className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
-                  />
+                  <div className="flex flex-col">
+                    <h1>End Date</h1>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-3 flex items-center text-white">
+                        {field.icon}
+                      </div>
+                      <input
+                        type="date"
+                        value={formData["projectEndDate"] || ""}
+                        onChange={(e) =>
+                          handleChange("projectEndDate", e.target.value)
+                        }
+                        placeholder={"End Date"}
+                        className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -234,51 +264,66 @@ export const ProjectAddForm = ({
               )}
 
               {field.type === "tags" && (
-                <div className="space-y-2">
-                  <div className="relative w-full">
-                    <div className="absolute inset-y-0 left-3 flex items-center text-white">
-                      {field.icon}
-                    </div>
-                    <input
-                      type="text"
-                      value={tagInput}
-                      onChange={(e) => setTagInput(e.target.value)}
-                      placeholder={`Add ${field.label}`}
-                      className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
-                    />
+                <div className="relative w-full">
+                  <div className="absolute inset-y-0 left-3 flex items-center text-white">
+                    {field.icon}
                   </div>
-
-                  <Button
-                    type="button"
-                    onClick={handleTagAdd}
-                    className="bg-[#7C2BD3] text-white hover:bg-[#6620B0]"
-                  >
-                    Add
-                  </Button>
-
-                  <div className="flex flex-wrap gap-2">
-                    {formData.projectTags.map((item) => (
-                      <Badge
-                        key={item.id}
-                        variant="none"
-                        className="border-none text-xs rounded-3xl bg-white/30 flex items-center"
+                  <input
+                    type="text"
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    placeholder={`Add ${field.label}`}
+                    className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
+                  />
+                  <div className="absolute inset-y-0 right-1 flex items-center text-white">
+                    <Button
+                      type="button"
+                      onClick={handleTagAdd}
+                      className="bg-[#7C2BD3] text-white hover:bg-[#6620B0] h-8 w-8 rounded-full"
+                    >
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <span>{item.name}</span>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          onClick={() => handleTagRemove(item)}
-                          className="h-4 w-4 p-0 ml-1"
-                        >
-                          <X size={10} />
-                        </Button>
-                      </Badge>
-                    ))}
+                        <path
+                          d="M8 1V15M1 8H15"
+                          stroke="white"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </Button>
                   </div>
                 </div>
               )}
             </div>
           ))}
+
+          {formData.projectTags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {formData.projectTags.map((item) => (
+                <Badge
+                  key={item.id}
+                  variant="none"
+                  className="border-none text-xs rounded-3xl bg-white/30 flex items-center"
+                >
+                  <span>{item.name}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => handleTagRemove(item)}
+                    className="h-4 w-4 p-0 ml-1"
+                  >
+                    <X size={10} />
+                  </Button>
+                </Badge>
+              ))}
+            </div>
+          )}
 
           <div className="mb-4">
             <input
@@ -304,7 +349,7 @@ export const ProjectAddForm = ({
             </label>
           </div>
 
-          <div className="w-full">
+          <div className="flex justify-center w-full mb-4">
             <Button
               type="submit"
               className="w-11/12 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] text-white rounded-full"

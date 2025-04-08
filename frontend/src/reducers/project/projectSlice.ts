@@ -85,6 +85,21 @@ export const addProject = createAsyncThunk(
     }
   }
 );
+export const removeProject = createAsyncThunk(
+  "project/removeProject",
+  async ({ pid, prid }: { pid: number, prid: number }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/${prid}/`
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch fetchProject"
+      );
+    }
+  }
+);
 
 // Create the slice
 const projectSlice = createSlice({
