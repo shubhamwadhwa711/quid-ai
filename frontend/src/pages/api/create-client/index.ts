@@ -5,15 +5,17 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id, eid } = req.query;
+    console.log("req body", req.body);
   try {
-    const response = await axios.patch(
-      `${process.env.NEXT_BACKEND_URL}/profile/${id}/education/${eid}/`,
-      req.body,
+    console.log("CREATE SKILL");
+    const response = await axios.post(
+      `${process.env.NEXT_BACKEND_URL}/client/`,
+        req.body,
       {
         headers: { "Content-Type": "application/json" },
       }
     );
+    console.log(response.data);
 
     res.status(200).json(response.data);
   } catch (error: any) {

@@ -103,13 +103,27 @@ const SkillSearch: React.FC<SkillSearchProps> = ({
           className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
         />
         {isUnknownSkill && (
-          <button
+          <Button
             type="button"
             onClick={handleAddUnknownSkill}
-            className="absolute inset-y-0 right-3 flex items-center justify-center bg-[#7C2BD3] hover:bg-[#5B1FA8] text-white rounded-full p-1"
+            className="absolute inset-y-0 right-3 flex items-center justify-center bg-gradient-to-tr from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-2.5"
           >
-            <Plus size={16} />
-          </button>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8 1V15M1 8H15"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </Button>
         )}
       </div>
 

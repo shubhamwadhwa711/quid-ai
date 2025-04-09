@@ -45,12 +45,14 @@ import { BioIcon } from "@/components/icons/BioIcon";
 import { ExpertiseIcon } from "@/components/icons/ExpertiseIcon";
 import { BulbIcon } from "@/components/icons/BulbIcon";
 import { Badge } from "@/components/ui/badge";
-import ProjectEditForm from "@/components/ProjectEditForm";
 import SkillSearch from "@/components/SkillSearch";
 import LanguageSearch from "@/components/LanguageSearch";
 import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
-import AcademicsSearch from "@/components/AcademicsSearch";
+import AcademicsSearch from "@/components/academics/AcademicsSearch";
 import { AvailableTo } from "@/components/AvailableToSelect";
+import ClientSearch from "@/components/ClientSearch";
+import { updateClient } from "@/reducers/filter/client/clientSlice";
+import ProjectsScreen from "@/components/projects/ProjectsScreen";
 // Custom hook for media query if not already available
 const useCustomMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
@@ -77,12 +79,12 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [selectedlanguages, setSelectedLanguages] = useState<
     { id: number; name: string }[]
   >(currentValues.language);
-  const [selectedAcademics, setSelectedAcademics] = useState<
-    { id: number; degree: string }[]
-  >(currentValues.education);
   const [selectedAvailable, setSelectedAvailable] = useState<
     { id: number; name: string }[]
   >(currentValues.available_to);
+  const [selectedClients, setSelectedClients] = useState<[]>(
+    currentValues.client
+  );
   const [fullName, setFullName] = useState<string | null>(null);
   console.log(title, fields, currentValues);
   const [formData, setFormData] = useState({});
@@ -151,14 +153,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       prev.filter((lang) => lang.id !== languageId)
     );
   };
-  const handleSelectAcademic = (academic) => {
-    console.log("handleSelectAcademic", academic);
-    setSelectedAcademics((prev) => [...prev, academic]);
-  };
 
-  const handleRemoveAcademic = (id: number) => {
-    setSelectedAcademics((prev) => prev.filter((a) => a.id !== id));
-  };
   const handleAvailableOnChange = (availability) => {
     console.log("availability", availability);
     setSelectedAvailable(availability);
@@ -174,17 +169,21 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
     const updatedData = { ...formData };
     console.log("currentValue", currentValues);
+    if (formData.featuredClients) {
+      updatedData.featured_clients = selectedClients.map((client) => client.id);
+      dispatch(
+        updateClient({
+          id: currentValues.id,
+          formData: updatedData.featured_clients,
+        })
+      );
+      return;
+    }
     if (formData.available) {
       updatedData.available_to = selectedAvailable.map((aval) => aval.id);
     }
     if (formData.skill) {
       updatedData.skill = selectedSkills.map((skill) => skill.id);
-    }
-    if (formData.academics) {
-      console.log("formData.academics", formData.academics);
-      updatedData.academics = selectedAcademics.map(
-        (academic) => academic.degree
-      );
     }
     // Ensure country is passed as an ID
     if (formData.country) {
@@ -263,8 +262,21 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
               {field.key === "academics" && (
                 <AcademicsSearch
                   profileID={currentValues.id}
-                  selectedAcademics={selectedAcademics}
-                  onSelectAcademics={handleSelectAcademic}
+                  defaultAcademics={currentValues.education}
+                />
+              )}
+
+              {field.key === "featuredClients" && (
+                <ClientSearch
+                  selectedClients={selectedClients}
+                  onChange={(updatedClients) =>
+                    setSelectedClients(updatedClients)
+                  }
+                  onRemoveClient={(clientToRemove) =>
+                    setSelectedClients((prev) =>
+                      prev.filter((client) => client.id !== clientToRemove.id)
+                    )
+                  }
                 />
               )}
 
@@ -360,8 +372,6 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
 // Main Profile Component
 const Profile = () => {
-  const [selectedProject, setselectedProject] = useState(null);
-  const [openProjectEditForm, setOpenProjectEditForm] = useState(false);
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
   useEffect(() => {
@@ -518,16 +528,6 @@ const Profile = () => {
   const handleSaveData = (newData) => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
-  const handleOpenProjectEditForm = (project) => {
-    console.log("Project", project);
-    setselectedProject(project);
-    setOpenProjectEditForm(true);
-  };
-  const handleProjectUpdate = (updatedProject) => {
-    // Your logic to update the project, e.g., API call or state update
-    console.log(updatedProject);
-  };
-  console.log("UserData", userData);
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2 pb-20">
       {/* Main profile card */}
@@ -588,7 +588,18 @@ const Profile = () => {
           <div className="mt-6 p-2">
             <Button className="w-full bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2">
               Share Profile
-              <Share2 size={40} className="ml-2" />
+              <svg
+                width="21"
+                height="22"
+                viewBox="0 0 21 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.3531 15C16.9041 15.0017 16.4601 15.0941 16.0477 15.2717C15.6352 15.4493 15.263 15.7083 14.9531 16.0333L6.82647 11.9667C7.02638 11.3605 7.02638 10.7062 6.82647 10.1L14.9665 5.96001C15.5495 6.57443 16.3402 6.95011 17.1848 7.01405C18.0294 7.07798 18.8676 6.82559 19.5365 6.30594C20.2054 5.78628 20.6572 5.03649 20.8041 4.20229C20.9509 3.36809 20.7824 2.50909 20.3312 1.79223C19.88 1.07538 19.1784 0.551891 18.3627 0.323519C17.5471 0.0951472 16.6756 0.178206 15.9178 0.556551C15.16 0.934897 14.5699 1.5815 14.2622 2.37068C13.9546 3.15986 13.9513 4.03524 14.2531 4.82668L6.19314 8.92668C5.75783 8.39431 5.16853 8.0096 4.50601 7.82529C3.84349 7.64099 3.14018 7.6661 2.49249 7.89719C1.8448 8.12828 1.28444 8.55403 0.888212 9.11609C0.491987 9.67815 0.279297 10.349 0.279297 11.0367C0.279297 11.7244 0.491987 12.3952 0.888212 12.9573C1.28444 13.5193 1.8448 13.9451 2.49249 14.1762C3.14018 14.4073 3.84349 14.4324 4.50601 14.2481C5.16853 14.0638 5.75783 13.679 6.19314 13.1467L14.2331 17.1933C14.0969 17.558 14.0269 17.9441 14.0265 18.3333C14.0265 18.9926 14.222 19.6371 14.5882 20.1852C14.9545 20.7334 15.4751 21.1607 16.0842 21.4129C16.6933 21.6652 17.3635 21.7312 18.0101 21.6026C18.6567 21.474 19.2507 21.1565 19.7168 20.6904C20.183 20.2242 20.5005 19.6302 20.6291 18.9836C20.7577 18.337 20.6917 17.6668 20.4394 17.0577C20.1871 16.4486 19.7599 15.9281 19.2117 15.5618C18.6635 15.1955 18.0191 15 17.3598 15H17.3531ZM17.3531 1.66668C17.7487 1.66668 18.1354 1.78397 18.4643 2.00374C18.7932 2.2235 19.0495 2.53586 19.2009 2.90131C19.3523 3.26676 19.3919 3.6689 19.3147 4.05686C19.2375 4.44482 19.0471 4.80119 18.7673 5.08089C18.4876 5.3606 18.1313 5.55108 17.7433 5.62825C17.3554 5.70542 16.9532 5.66581 16.5878 5.51444C16.2223 5.36306 15.91 5.10672 15.6902 4.77782C15.4704 4.44892 15.3531 4.06224 15.3531 3.66668C15.3531 3.13624 15.5639 2.62754 15.9389 2.25246C16.314 1.87739 16.8227 1.66668 17.3531 1.66668ZM3.66647 13C3.27091 13 2.88423 12.8827 2.55533 12.663C2.22643 12.4432 1.97009 12.1308 1.81871 11.7654C1.66734 11.3999 1.62773 10.9978 1.7049 10.6098C1.78207 10.2219 1.97255 9.8655 2.25226 9.5858C2.53196 9.30609 2.88833 9.11561 3.27629 9.03844C3.66425 8.96127 4.06638 9.00088 4.43184 9.15225C4.79729 9.30363 5.10965 9.55997 5.32941 9.88887C5.54917 10.2178 5.66647 10.6044 5.66647 11C5.66647 11.5304 5.45576 12.0392 5.08068 12.4142C4.70561 12.7893 4.1969 13 3.66647 13ZM17.3531 20.3333C16.9576 20.3333 16.5709 20.216 16.242 19.9963C15.9131 19.7765 15.6568 19.4642 15.5054 19.0987C15.354 18.7333 15.3144 18.3311 15.3916 17.9432C15.4687 17.5552 15.6592 17.1988 15.9389 16.9191C16.2186 16.6394 16.575 16.4489 16.963 16.3718C17.3509 16.2946 17.7531 16.3342 18.1185 16.4856C18.484 16.637 18.7963 16.8933 19.0161 17.2222C19.2358 17.5511 19.3531 17.9378 19.3531 18.3333C19.3531 18.8638 19.1424 19.3725 18.7673 19.7476C18.3923 20.1226 17.8836 20.3333 17.3531 20.3333Z"
+                  fill="white"
+                />
+              </svg>
             </Button>
           </div>
 
@@ -751,57 +762,10 @@ const Profile = () => {
           ))}
         </div>
       </div>
-
-      <div className="w-full max-w-2xl p-2">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center space-x-2">
-            <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
-            <h2 className="text-xl proxima-regular">RECENT PROJECTS</h2>
-          </div>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-8 w-8 rounded-full"
-            onClick={() =>
-              handleOpenProjectEditForm({
-                title: null,
-                description: null,
-                tags: [],
-              })
-            }
-          >
-            <Edit size={16} />
-          </Button>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4">
-          {userData?.projects?.map((project, index) => (
-            <Card
-              key={index}
-              className="hover:shadow-md border-none relative bg-gray-800  transition flex-shrink-0 w-44 h-48"
-            >
-              <div className="relative h-4/5">
-                <img
-                  src={project?.image}
-                  alt={project?.title}
-                  className="w-full h-full object-fill rounded-t-lg"
-                />
-              </div>
-              <Button
-                variant="none"
-                onClick={() => handleOpenProjectEditForm(project)}
-                className="absolute bg-white rounded-full p-2 top-1 right-1"
-              >
-                <Edit className="h-6 w-6 text-black" />
-              </Button>
-              <div className="h-1/5 flex  flex-col justify-between p-1">
-                <CardTitle className="text-xs text-center text-wrap text-white ">
-                  {project.title}
-                </CardTitle>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
+      <ProjectsScreen
+        projects={userData?.projects || []}
+        profileId={userData?.id}
+      />
 
       {activePopup && (
         <Drawer open={true} onOpenChange={handleClosePopup}>
@@ -839,35 +803,6 @@ const Profile = () => {
           </DrawerContent>
         </Drawer>
       )}
-
-      <Drawer open={openProjectEditForm} onOpenChange={setOpenProjectEditForm}>
-        <DrawerContent className="mx-auto max-w-md bg-gradient-to-br rounded-t-3xl h-4/5 from-black via-[#0F0F30] to-[#0F0F30] text-white">
-          <DrawerHeader className="relative flex justify-center">
-            <DrawerTitle>Edit Project</DrawerTitle>
-            <DrawerClose asChild>
-              <Button variant="none" className="absolute right-4 top-2">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M6.9998 8.40005L2.0998 13.3C1.91647 13.4834 1.68314 13.575 1.3998 13.575C1.11647 13.575 0.883138 13.4834 0.699804 13.3C0.516471 13.1167 0.424805 12.8834 0.424805 12.6C0.424805 12.3167 0.516471 12.0834 0.699804 11.9L5.5998 7.00005L0.699804 2.10005C0.516471 1.91672 0.424805 1.68338 0.424805 1.40005C0.424805 1.11672 0.516471 0.883382 0.699804 0.700048C0.883138 0.516715 1.11647 0.425049 1.3998 0.425049C1.68314 0.425049 1.91647 0.516715 2.0998 0.700048L6.9998 5.60005L11.8998 0.700048C12.0831 0.516715 12.3165 0.425049 12.5998 0.425049C12.8831 0.425049 13.1165 0.516715 13.2998 0.700048C13.4831 0.883382 13.5748 1.11672 13.5748 1.40005C13.5748 1.68338 13.4831 1.91672 13.2998 2.10005L8.3998 7.00005L13.2998 11.9C13.4831 12.0834 13.5748 12.3167 13.5748 12.6C13.5748 12.8834 13.4831 13.1167 13.2998 13.3C13.1165 13.4834 12.8831 13.575 12.5998 13.575C12.3165 13.575 12.0831 13.4834 11.8998 13.3L6.9998 8.40005Z"
-                    fill="white"
-                  />
-                </svg>
-              </Button>
-            </DrawerClose>
-          </DrawerHeader>
-          <ProjectEditForm
-            project={selectedProject}
-            onUpdate={handleProjectUpdate}
-            currentValues={userData}
-          />
-        </DrawerContent>
-      </Drawer>
     </div>
   );
 };
