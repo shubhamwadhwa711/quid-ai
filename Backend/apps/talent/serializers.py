@@ -155,10 +155,14 @@ class AvailableSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ProfileClientSerializer(AssociatedCompanySerializer):
+class ProfileClientSerializer(serializers.ModelSerializer):
+    company_name = serializers.CharField(source='company.name')
+    company_logo = serializers.ImageField(source='company.logo')
+    company_category = serializers.CharField(source='company.category.title')
+   
     class Meta:
-        model = AssociatedCompany
-        fields = '__all__'
+        model = Client
+        fields = ['id', 'company_name', 'company_logo','company_category', 'is_featured']
 
 
 
@@ -171,10 +175,15 @@ class ProfileRelatedSerializer(serializers.ModelSerializer):
     available_to = AvailableSerializer(many=True, read_only=True)
     education= EducationSerializer(many=True,read_only=True)
     projects = ProjectSerializer(many=True,read_only=True)
-    client = AssociatedCompanySerializer(many=True,read_only=True)
+    clients = serializers.SerializerMethodField()
+
     
     class Meta:
         model = Profile
         exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
+
+    def get_clients(self, obj):
+        clients = obj.clients.select_related('company')
+        return ProfileClientSerializer(clients, many=True).data    
 
      
