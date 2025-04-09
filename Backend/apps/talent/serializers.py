@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import *
 from apps.insight.models import AssociatedCompany
+from apps.insight.serializers import AssociatedCompanySerializer
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only = True)
@@ -154,6 +155,13 @@ class AvailableSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ProfileClientSerializer(AssociatedCompanySerializer):
+    class Meta:
+        model = AssociatedCompany
+        fields = '__all__'
+
+
+
 class ProfileRelatedSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     skill = SkillSerializer(many=True, read_only=True)
@@ -163,7 +171,7 @@ class ProfileRelatedSerializer(serializers.ModelSerializer):
     available_to = AvailableSerializer(many=True, read_only=True)
     education= EducationSerializer(many=True,read_only=True)
     projects = ProjectSerializer(many=True,read_only=True)
-    client = ClientSerializer(many=True,read_only=True)
+    client = AssociatedCompanySerializer(many=True,read_only=True)
     
     class Meta:
         model = Profile
