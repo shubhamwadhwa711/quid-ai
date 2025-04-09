@@ -16,6 +16,11 @@ class AssociatedCompany(models.Model):
 
     def __str__(self):
         return self.name   
+    
+    # @property
+    # def is_featured(self):
+    #     return self.company.is_featured
+
 
 class Testimonial(models.Model):
     name = models.CharField(max_length=50, null=True, blank=True)
