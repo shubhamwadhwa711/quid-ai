@@ -120,11 +120,15 @@ export const updateProfile = createAsyncThunk(
   ) => {
     console.log("Updating profile...", id, data);
     try {
-      const response = await axios.patch(`/api/updateprofile/${id}`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.patch(
+        `${process.env.NEXT_BACKEND_URL}/profile/${id}/`,
+        data,
+        {
+          headers: {
+            // "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -137,20 +141,16 @@ export const updateProfile = createAsyncThunk(
 export const updateAcademics = createAsyncThunk(
   "profile/updateProfile",
   async (
-    { eid, data }: {eid: number; data: Partial<Education> },
+    { eid, data }: { eid: number; data: Partial<Education> },
     { rejectWithValue }
   ) => {
     console.log("Updating profile...", eid, data);
     try {
-      const response = await axios.patch(
-        `/api/update-academics/${eid}`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.patch(`/api/update-academics/${eid}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -184,10 +184,7 @@ export const postAcademics = createAsyncThunk(
 
 export const removeAcademics = createAsyncThunk(
   "profile/removeAcademics",
-  async (
-    { id, eid }: { id: number; eid: number },
-    { rejectWithValue }
-  ) => {
+  async ({ id, eid }: { id: number; eid: number }, { rejectWithValue }) => {
     console.log("Updating profile...", id);
     try {
       const response = await axios.delete(`/api/remove-academics/${id}/${eid}`);
@@ -231,7 +228,7 @@ const profileSlice = createSlice({
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      })
+      });
   },
 });
 

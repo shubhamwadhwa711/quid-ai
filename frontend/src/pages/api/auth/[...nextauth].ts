@@ -13,6 +13,10 @@ declare module "next-auth" {
     expires_at: number;
     error?: "RefreshAccessTokenError";
     user: User;
+    provider: {
+      profile: LinkedInProfile;
+      tokens: TokenSet;
+    };
   }
 }
 declare module "next-auth/jwt" {
@@ -22,6 +26,10 @@ declare module "next-auth/jwt" {
     expires_at: number;
     error?: "RefreshAccessTokenError";
     user: User;
+    provider: {
+      profile: LinkedInProfile;
+      tokens: TokenSet;
+    };
   }
 }
 
@@ -32,7 +40,10 @@ const isTokenValid = (expiresAt: number): boolean => {
 };
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
-    const { data, status } = await axios.post(`${process.env.NEXT_BACKEND_URL}/auth/token-refresh/`, { refresh: token.refresh });
+    const { data, status } = await axios.post(
+      `${process.env.NEXT_BACKEND_URL}/auth/token-refresh/`,
+      { refresh: token.refresh }
+    );
     if (status !== 200) {
       throw new Error("Failed to refresh token");
     }
@@ -62,7 +73,7 @@ const authOptions: AuthOptions = {
       clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
-      async profile(profile: LinkedInProfile,tokens:TokenSet) {
+      async profile(profile: LinkedInProfile, tokens: TokenSet) {
         try {
           const response = await axios.post(
             `${process.env.NEXT_BACKEND_URL}/auth/convert-token/`,
@@ -70,7 +81,7 @@ const authOptions: AuthOptions = {
               grant_type: "convert_token",
               backend: "linkedin-openidconnect",
               client_id: process.env.SSO_CLIENT_ID,
-              client_secret:process.env.SSO_CLIENT_SECRET,
+              client_secret: process.env.SSO_CLIENT_SECRET,
               token: tokens?.access_token,
             }
           );
@@ -84,15 +95,22 @@ const authOptions: AuthOptions = {
               email: qProfile.user.email,
               image: profile.picture,
             },
+            provider: {
+              profile,
+              tokens,
+            },
             access_token: qProfile.access_token,
             refresh_token: qProfile.refresh_token,
-            expires_at: Math.floor(Date.now() / 1000) + qProfile.expires_in
+            expires_at: Math.floor(Date.now() / 1000) + qProfile.expires_in,
           };
         } catch (error) {
-          console.error("Token exchange failed:", error.response?.data || error);
-          throw new Error('Profile not found');
+          console.error(
+            "Token exchange failed:",
+            error.response?.data || error
+          );
+          throw new Error("Profile not found");
         }
-      }, 
+      },
       wellKnown:
         "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
@@ -151,8 +169,8 @@ const authOptions: AuthOptions = {
         session.error = token.error;
       }
       session.access_token = token.access_token;
-      session.user=token.user;
       session.user = token.user;
+      session.provider = token.provider;
       return session;
     },
 
