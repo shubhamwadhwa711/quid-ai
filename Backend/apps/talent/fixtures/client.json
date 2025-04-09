@@ -4,8 +4,8 @@
         "pk": 1,
         "fields": {
             "profile": 1,
-            "name": "Google",
-            "client": "client/in.png"
+            "company": 1,
+            "is_featured": true
         }
     },
     {
@@ -13,8 +13,8 @@
         "pk": 2,
         "fields": {
             "profile": 2,
-            "name": "IBM",
-            "client": "client/i6.png"
+            "company": 2,
+            "is_featured": true
         }
     },
     {
@@ -22,8 +22,8 @@
         "pk": 3,
         "fields": {
             "profile": 3,
-            "name": "Shubpy",
-            "client": "client/i2.jpg"
+            "company": 3,
+            "is_featured": true
         }
     },
     {
@@ -31,8 +31,8 @@
         "pk": 4,
         "fields": {
             "profile": 4,
-            "name": "CGI",
-            "client": "client/i1.png"
+            "company": 4,
+            "is_featured": true
         }
     },
     {
@@ -40,8 +40,8 @@
         "pk": 5,
         "fields": {
             "profile": 5,
-            "name": "Facebook",
-            "client": "client/fa.png"
+            "company": 5,
+            "is_featured": true
         }
     }
 

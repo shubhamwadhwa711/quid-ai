@@ -21,7 +21,6 @@ class Command(BaseCommand):
         call_command('loaddata', 'industry.json')
         call_command('loaddata', 'profile.json')
         call_command('loaddata', 'certificate.json')
-        # call_command('loaddata', 'client.json')
         call_command('loaddata', 'education.json')
         call_command('loaddata', 'experience.json')
         call_command('loaddata', 'publication.json')
@@ -30,6 +29,7 @@ class Command(BaseCommand):
         call_command('loaddata', 'insight.json')
         call_command('loaddata', 'company-category.json')
         call_command('loaddata', 'associate-company.json')
+        call_command('loaddata', 'client.json')
         call_command('loaddata', 'faq.json')
         call_command('loaddata', 'testimonial.json')
         

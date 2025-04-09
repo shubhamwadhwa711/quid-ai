@@ -7,7 +7,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'user', UserViewSet)
-router.register(r'profile', ProfileViewSet)
+router.register(r'profile', ProfileViewSet, basename='get-profile')
 router.register(r'us-profile', UsProfileViewSet, basename='us-profile')
 router.register(r'top-profile', TopProfileViewSet, basename='top-profile')
 router.register(r'profile-related', ProfileRelatedViewSet, basename='profile-related')
