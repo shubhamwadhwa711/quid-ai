@@ -156,13 +156,13 @@ class AvailableSerializer(serializers.ModelSerializer):
 
 
 class ProfileClientSerializer(serializers.ModelSerializer):
-    company_name = serializers.CharField(source='company.name')
-    company_logo = serializers.ImageField(source='company.logo')
-    company_category = serializers.CharField(source='company.category.title')
+    name = serializers.CharField(source='company.name')
+    logo = serializers.ImageField(source='company.logo')
+    category = serializers.CharField(source='company.category.title')
    
     class Meta:
         model = Client
-        fields = ['id', 'company_name', 'company_logo','company_category', 'is_featured']
+        fields = ['id', 'name', 'logo','category', 'is_featured']
 
 
 
