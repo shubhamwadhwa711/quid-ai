@@ -175,15 +175,15 @@ class ProfileRelatedSerializer(serializers.ModelSerializer):
     available_to = AvailableSerializer(many=True, read_only=True)
     education= EducationSerializer(many=True,read_only=True)
     projects = ProjectSerializer(many=True,read_only=True)
-    clients = serializers.SerializerMethodField()
+    client = serializers.SerializerMethodField()
 
     
     class Meta:
         model = Profile
         exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
 
-    def get_clients(self, obj):
-        clients = obj.clients.select_related('company')
-        return ProfileClientSerializer(clients, many=True).data    
+    def get_client(self, obj):
+        client = obj.clients.select_related('company')
+        return ProfileClientSerializer(client, many=True).data    
 
      
