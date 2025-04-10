@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchCompanies } from "@/reducers/company/companySlice";
 import { fetchCompanyCategory } from "@/reducers/company/category/companycategorySlice";
 import { Button } from "./ui/button";
-
+import { AnimatePresence, motion } from "framer-motion";
 const Brands = () => {
   const dispatch = useAppDispatch();
 
@@ -46,33 +46,49 @@ const Brands = () => {
 
         {/* Categories */}
         <div className="my-6 mx-2 pb-2 flex   gap-1 overflow-x-scroll hide-scrollbar">
-          {companyCategory.map((category) => (
-            <Button
-              key={category.id}
-              variant="none"
-              onClick={() => setSelectedCategory(category.id)}
-              className={`py-2 w-auto h-4 proxima-bold rounded-full text-xs transition-all backdrop-blur-md ${
-                selectedCategory === category.id
-                  ? "bg-[#425BFF] text-white"
-                  : "bg-gradient-to-tr bg-white/30"
-              }`}
+          {companyCategory.map((category, index) => (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.125 * index }}
             >
-              {category.title}
-            </Button>
+              <Button
+                key={category.id}
+                variant="none"
+                onClick={() => setSelectedCategory(category.id)}
+                className={`py-2 w-auto h-4 proxima-bold rounded-full text-xs transition-all backdrop-blur-md ${
+                  selectedCategory === category.id
+                    ? "bg-[#425BFF] text-white"
+                    : "bg-gradient-to-tr bg-white/30"
+                }`}
+              >
+                {category.title}
+              </Button>
+            </motion.div>
           ))}
         </div>
 
         {/* Logos Grid */}
         <div className="grid grid-cols-3 md:grid-cols-4">
-          {companies.map((company, index) => (
-            <div key={index} className="flex items-center justify-center p-2">
-              <img
-                src={company.logo}
-                alt={`${company.name}`}
-                className="max-h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-              />
-            </div>
-          ))}
+          <AnimatePresence mode="wait">
+            {companies.map(( company ) => (
+              <motion.div
+                key={company.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="flex items-center justify-center p-2"
+              >
+                <img
+                  src={company.logo}
+                  alt={`${company.name}`}
+                  className="max-h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Check } from "lucide-react";
-
+import { motion } from "framer-motion";
 const About = () => {
   const about = [
     {
@@ -65,15 +65,26 @@ const About = () => {
           </div>
 
           <div className="space-y-4  md:text-base lg:text-lg xl:text-xl">
-            {about.map((item) => (
-              <div key={item.id} className="flex items-start text-start gap-6">
+            {about.map((item, index) => (
+              <motion.div
+                initial={{ x: -100, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                  ease: "easeOut",
+                }}
+                key={item.id}
+                className="flex items-start text-start gap-6"
+              >
                 <Check
                   size={28}
                   strokeWidth={4}
                   className="text-orange-400 flex-shrink-0 mt-1"
                 />
                 <span>{item.label}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
