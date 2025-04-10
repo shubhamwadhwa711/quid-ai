@@ -46,7 +46,7 @@ export function BottomNav() {
   const { data: session } = useSession();
 
   return (
-    <nav className="fixed bottom-3 left-0 right-0 z-50  h-16  w-full max-w-md justify-self-center border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
+    <nav className="fixed bottom-3 left-0 right-0 z-50  h-16  w-11/12 max-w-md justify-self-center border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
       <div className="grid h-full grid-cols-4">
         {menuItems.map(({ icon, label, href }) => {
           const isActive = pathname === href;
