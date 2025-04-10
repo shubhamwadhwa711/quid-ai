@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -10,7 +10,7 @@ import {
 import { Button } from "../ui/button";
 import { Calendar, PlusSquare } from "lucide-react";
 
-import { X, Image as ImageIcon } from "lucide-react";
+import { X, Image as ImageIcon, Check } from "lucide-react";
 
 import { NameIcon } from "../icons/NameIcon";
 import { BioIcon } from "../icons/BioIcon";
@@ -19,6 +19,10 @@ import { addProject } from "@/reducers/project/projectSlice";
 import { useAppDispatch } from "@/store/store";
 import { fetchProfile } from "@/reducers/profile/profileSlice";
 import { Badge } from "../ui/badge";
+import {
+  fetchExpertise,
+  postExpertise,
+} from "@/reducers/filter/expertise/expertiseSlice";
 
 type ProjectAddFormProps = {
   defaultOpen?: boolean;
@@ -73,7 +77,29 @@ export const ProjectAddForm = ({
   const [formData, setFormData] = useState(initialFormState);
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [tagInput, setTagInput] = useState("");
+  const [tagSuggestions, setTagSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const dispatch = useAppDispatch();
+
+  // Reference for debounce timer
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // Reference for tag input element for keyboard navigation
+  const tagInputRef = useRef(null);
+
+  // Fetch initial tag suggestions when the form opens
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(fetchExpertise())
+        .unwrap()
+        .then((response) => {
+          setTagSuggestions(response);
+        })
+        .catch((error) => {
+          console.error("Error fetching tag suggestions:", error);
+        });
+    }
+  }, [isOpen, dispatch]);
 
   const handleChange = (key, value) => {
     setFormData((prev) => ({
@@ -82,20 +108,168 @@ export const ProjectAddForm = ({
     }));
   };
 
-  const handleTagAdd = () => {
-    if (!tagInput.trim()) return;
+  const handleTagAdd = useCallback(
+    (tagToAdd = null) => {
+      // If a specific tag is passed, use it; otherwise use the input value
+      const tagValue = tagToAdd || tagInput.trim();
 
-    const newTag = {
-      id: Date.now(),
-      name: tagInput.trim(),
-    };
+      if (!tagValue) return;
 
-    setFormData((prev) => ({
-      ...prev,
-      projectTags: [...(prev.projectTags || []), newTag],
-    }));
+      // If it's an object with name property, use it directly
+      const tagName = typeof tagValue === "object" ? tagValue.name : tagValue;
 
-    setTagInput("");
+      // Check if tag already exists in the project tags
+      const tagExists = formData.projectTags.some(
+        (tag) => tag.name?.toLowerCase() === tagName.toLowerCase()
+      );
+
+      if (tagExists) {
+        setTagInput("");
+        setShowSuggestions(false);
+        return;
+      }
+
+      // Clear any existing debounce timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
+
+      const newTag =
+        typeof tagValue === "object" ? tagValue : { name: tagValue.trim() };
+
+      // If the tag already has an ID (from suggestions), add it directly
+      if (newTag.id) {
+        setFormData((prev) => ({
+          ...prev,
+          projectTags: [...(prev.projectTags || []), newTag],
+        }));
+        setTagInput("");
+        setShowSuggestions(false);
+        return;
+      }
+
+      // Otherwise, create a new tag via API
+      dispatch(postExpertise(newTag))
+        .unwrap()
+        .then((response) => {
+          // If the API returns the created tag with an ID, use that
+          const tagWithId = response?.id ? response : newTag;
+
+          setFormData((prev) => ({
+            ...prev,
+            projectTags: [...(prev.projectTags || []), tagWithId],
+          }));
+
+          // Refresh suggestions after adding a new tag
+          dispatch(fetchExpertise())
+            .unwrap()
+            .then((response) => {
+              setTagSuggestions(response);
+            });
+        })
+        .catch((error) => {
+          console.error("Error adding tag:", error);
+        });
+
+      setTagInput("");
+      setShowSuggestions(false);
+    },
+    [tagInput, dispatch, formData.projectTags]
+  );
+
+  // Handle tag input keydown events (for Enter key support and navigation)
+  const handleTagInputKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleTagAdd();
+    } else if (
+      e.key === "ArrowDown" &&
+      showSuggestions &&
+      tagSuggestions.length > 0
+    ) {
+      // Navigate to suggestions
+      const suggestionElements = document.querySelectorAll(".tag-suggestion");
+      if (suggestionElements.length > 0) {
+        (suggestionElements[0] as HTMLElement).focus();
+      }
+    } else if (e.key === "Escape") {
+      setShowSuggestions(false);
+    }
+  };
+
+  // Handle suggestion item keydown for keyboard navigation
+  const handleSuggestionKeyDown = (e, tag, index) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleTagAdd(tag);
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const suggestionElements = document.querySelectorAll(".tag-suggestion");
+      const nextIndex = (index + 1) % suggestionElements.length;
+      (suggestionElements[nextIndex] as HTMLElement).focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const suggestionElements = document.querySelectorAll(".tag-suggestion");
+      const prevIndex =
+        (index - 1 + suggestionElements.length) % suggestionElements.length;
+      if (index === 0) {
+        // Go back to input when at first item
+        tagInputRef.current?.focus();
+      } else {
+        (suggestionElements[prevIndex] as HTMLElement).focus();
+      }
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setShowSuggestions(false);
+      tagInputRef.current?.focus();
+    }
+  };
+
+  // Debounced version of tag input change that will fetch suggestions
+  const debouncedTagInputChange = (e) => {
+    const newValue = e.target.value;
+    setTagInput(newValue);
+
+    // Always show suggestions panel when typing
+    if (newValue.trim() !== "") {
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+      return;
+    }
+
+    // Clear previous timeout
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Set loading state
+    setIsLoadingSuggestions(true);
+
+    // Set new timeout
+    debounceTimerRef.current = setTimeout(() => {
+      // Fetch suggestions based on the input
+      dispatch(fetchExpertise(newValue.trim()))
+        .unwrap()
+        .then((response) => {
+          // Filter suggestions to exclude tags already added to the project
+          const existingTagNames = formData.projectTags.map((tag) =>
+            tag.name?.toLowerCase()
+          );
+
+          const filteredSuggestions = response.filter(
+            (tag) => !existingTagNames.includes(tag.name?.toLowerCase())
+          );
+
+          setTagSuggestions(filteredSuggestions);
+          setIsLoadingSuggestions(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching tag suggestions:", error);
+          setIsLoadingSuggestions(false);
+        });
+    }, 300); // 300ms debounce delay for suggestions
   };
 
   const handleTagRemove = (tagToRemove) => {
@@ -154,8 +328,51 @@ export const ProjectAddForm = ({
       setFormData(initialFormState);
       setProjectFile(null);
       setTagInput("");
+      setShowSuggestions(false);
+
+      // Clear any pending debounce timer when form closes
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
     }
   };
+
+  // Click outside handler for suggestions
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        showSuggestions &&
+        tagInputRef.current &&
+        !tagInputRef.current.contains(event.target) &&
+        !event.target.closest(".tag-suggestions-container")
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSuggestions]);
+
+  // Clean up debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Filter suggestions based on current input
+  const filteredSuggestions =
+    tagInput.trim() === ""
+      ? tagSuggestions
+      : tagSuggestions.filter((tag) =>
+          tag.name.toLowerCase().includes(tagInput.toLowerCase())
+        );
 
   return (
     <Drawer open={isOpen} onOpenChange={handleFormDrawerChange}>
@@ -176,9 +393,9 @@ export const ProjectAddForm = ({
             <path
               d="M8 1V15M1 8H15"
               stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </Button>
@@ -216,6 +433,7 @@ export const ProjectAddForm = ({
                   </div>
                   <input
                     type="text"
+                    required
                     value={formData[field.key] || ""}
                     onChange={(e) => handleChange(field.key, e.target.value)}
                     placeholder={field.placeholder}
@@ -227,7 +445,10 @@ export const ProjectAddForm = ({
               {field.type === "date" && (
                 <div className="flex gap-4">
                   <div className="flex flex-col">
-                    <h1>Start Date</h1>
+                    <h1>
+                      Start Date <span className="text-red-500">*</span>
+                    </h1>
+
                     <div className="relative">
                       <div className="absolute inset-y-0 left-3 flex items-center text-white">
                         {field.icon}
@@ -238,13 +459,16 @@ export const ProjectAddForm = ({
                         onChange={(e) =>
                           handleChange("projectStartDate", e.target.value)
                         }
+                        required
                         placeholder={"Start Date"}
                         className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
                       />
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <h1>End Date</h1>
+                    <h1>
+                      End Date <span className="text-red-500">*</span>
+                    </h1>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-3 flex items-center text-white">
                         {field.icon}
@@ -255,6 +479,7 @@ export const ProjectAddForm = ({
                         onChange={(e) =>
                           handleChange("projectEndDate", e.target.value)
                         }
+                        required
                         placeholder={"End Date"}
                         className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
                       />
@@ -283,16 +508,22 @@ export const ProjectAddForm = ({
                     {field.icon}
                   </div>
                   <input
+                    ref={tagInputRef}
                     type="text"
                     value={tagInput}
-                    onChange={(e) => setTagInput(e.target.value)}
+                    onChange={debouncedTagInputChange}
+                    onKeyDown={handleTagInputKeyDown}
+                    onFocus={() =>
+                      tagInput.trim() !== "" && setShowSuggestions(true)
+                    }
                     placeholder={`Add ${field.label}`}
                     className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
+                    autoComplete="off"
                   />
                   <div className="absolute inset-y-0 right-1 flex items-center text-white">
                     <Button
                       type="button"
-                      onClick={handleTagAdd}
+                      onClick={() => handleTagAdd()}
                       className="bg-[#7C2BD3] text-white hover:bg-[#6620B0] h-8 w-8 rounded-full"
                     >
                       <svg
@@ -305,13 +536,52 @@ export const ProjectAddForm = ({
                         <path
                           d="M8 1V15M1 8H15"
                           stroke="white"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                       </svg>
                     </Button>
                   </div>
+
+                  {/* Tag Suggestions Dropdown */}
+                  {showSuggestions && (
+                    <div className="tag-suggestions-container absolute left-0 right-0 mt-1 bg-[#1E1E3F] z-50 rounded-md shadow-lg max-h-40 overflow-y-auto">
+                      {isLoadingSuggestions ? (
+                        <div className="p-2 text-center text-sm text-gray-300">
+                          Loading suggestions...
+                        </div>
+                      ) : filteredSuggestions.length > 0 ? (
+                        filteredSuggestions.map((tag, index) => (
+                          <div
+                            key={tag.id || `suggestion-${index}`}
+                            onClick={() => handleTagAdd(tag)}
+                            onKeyDown={(e) =>
+                              handleSuggestionKeyDown(e, tag, index)
+                            }
+                            className="tag-suggestion p-2 hover:bg-[#2D2D5D] cursor-pointer flex items-center justify-between text-sm"
+                            tabIndex={0}
+                            role="option"
+                            aria-selected="false"
+                          >
+                            <span>{tag.name}</span>
+                            <Check
+                              size={14}
+                              className="opacity-0 group-hover:opacity-100"
+                            />
+                          </div>
+                        ))
+                      ) : tagInput.trim() !== "" ? (
+                        <div className="p-2 text-center text-sm text-gray-300">
+                          No matching tags. Press Enter to add "{tagInput}".
+                        </div>
+                      ) : (
+                        <div className="p-2 text-center text-sm text-gray-300">
+                          Start typing to see suggestions
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

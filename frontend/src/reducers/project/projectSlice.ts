@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 interface Tags {
   id: number;
   name: string;
@@ -36,7 +36,7 @@ export const fetchProject = createAsyncThunk(
     console.log("fetchProject id", { tid, pid });
     try {
       console.log("Fetching fetchProject...");
-      const response = await axios.get(`/api/project/${tid}/${pid}`);
+      const response = await axiosInstance.get(`/api/project/${tid}/${pid}`);
       console.log("fetchProject fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -51,7 +51,7 @@ export const updateProject = createAsyncThunk(
   "project/updateProject",
   async ({ pid, prid, formData }: { pid: number, prid: number, formData: FormData }, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(
+      const response = await axiosInstance.patch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/${prid}/`,
         formData,
         {
@@ -70,7 +70,7 @@ export const addProject = createAsyncThunk(
   "project/addProject",
   async ({ pid, formData }: { pid: number, formData: FormData }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/`,
         formData,
         {
@@ -89,7 +89,7 @@ export const removeProject = createAsyncThunk(
   "project/removeProject",
   async ({ pid, prid }: { pid: number, prid: number }, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(
+      const response = await axiosInstance.delete(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/${prid}/`
       );
       return response.data;

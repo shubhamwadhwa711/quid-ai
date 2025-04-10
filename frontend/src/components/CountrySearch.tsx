@@ -15,7 +15,7 @@ const CountrySearch = ({
   const inputRef = useRef(null);
   const dispatch = useAppDispatch();
   const { countryList } = useAppSelector((state) => state.CountryList);
-
+  console.log("Inside country search",)
   // Dispatch search action when the user types
   useEffect(() => {
     if (searchTerm.length > 0) {
@@ -59,7 +59,7 @@ const CountrySearch = ({
     setShowDropdown(false);
     inputRef.current.focus();
   };
-
+  console.log("selectedCountry", selectedCountry);
   return (
     <div className="relative w-full">
       <div className="absolute z-50 inset-y-0 left-3 flex items-center text-white">
@@ -70,7 +70,7 @@ const CountrySearch = ({
         <input
           ref={inputRef}
           type="text"
-          value={searchTerm}
+          value={selectedCountry ? selectedCountry : searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
             setShowDropdown(true);

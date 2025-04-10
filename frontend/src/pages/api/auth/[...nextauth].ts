@@ -74,6 +74,7 @@ const authOptions: AuthOptions = {
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
       async profile(profile: LinkedInProfile, tokens: TokenSet) {
+        console.log("LinkedIn profile:", tokens);
         try {
           const response = await axios.post(
             `${process.env.NEXT_BACKEND_URL}/auth/convert-token/`,
@@ -87,6 +88,7 @@ const authOptions: AuthOptions = {
           );
           console.log("Token exchange successful:", response.data);
           const qProfile = response.data;
+          // console.log("qProfile", qProfile);
           return {
             id: qProfile.id ?? 1,
             user: {
@@ -147,16 +149,10 @@ const authOptions: AuthOptions = {
     },
   },
   callbacks: {
-    async jwt({ token, account, profile }) {
+    async jwt({ token, user }) {
       // More secure token generation
-      if (account) {
-        return {
-          ...token,
-          access_token: account.access_token,
-          refresh_token: account.refresh_token,
-          expires_at: account.expires_at,
-          id: profile?.sub || profile?.id,
-        };
+      if (user) {
+        return user;
       }
       if (isTokenValid(token.expires_at)) {
         return token;

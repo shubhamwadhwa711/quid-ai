@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 
 interface User {
   id: number;
@@ -99,7 +99,7 @@ export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (FilterData, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/profile", {
+      const response = await axiosInstance.get("/profile/", {
         params: FilterData,
       });
       return response.data;
@@ -120,15 +120,11 @@ export const updateProfile = createAsyncThunk(
   ) => {
     console.log("Updating profile...", id, data);
     try {
-      const response = await axios.patch(
-        `${process.env.NEXT_BACKEND_URL}/profile/${id}/`,
-        data,
-        {
-          headers: {
-            // "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axiosInstance.patch(`/profile/${id}/`, data, {
+        headers: {
+          // "Content-Type": "application/json",
+        },
+      });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -146,11 +142,7 @@ export const updateAcademics = createAsyncThunk(
   ) => {
     console.log("Updating profile...", eid, data);
     try {
-      const response = await axios.patch(`/api/update-academics/${eid}`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axiosInstance.patch(`/education/${eid}/`, data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -168,11 +160,10 @@ export const postAcademics = createAsyncThunk(
   ) => {
     console.log("Updating profile...", id, data);
     try {
-      const response = await axios.post(`/api/post-academics/${id}/`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axiosInstance.post(
+        `/profile/${id}/education/`,
+        data
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -187,7 +178,9 @@ export const removeAcademics = createAsyncThunk(
   async ({ id, eid }: { id: number; eid: number }, { rejectWithValue }) => {
     console.log("Updating profile...", id);
     try {
-      const response = await axios.delete(`/api/remove-academics/${id}/${eid}`);
+      const response = await axiosInstance.delete(
+        `/profile/${id}/education/${eid}/`
+      );
       return { success: true, data: response.data, removedId: eid };
     } catch (error: any) {
       return rejectWithValue(

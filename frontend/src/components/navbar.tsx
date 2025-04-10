@@ -9,9 +9,9 @@ import Image from "next/image";
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
-
+  console.log("session", session);
   return (
-    <nav className="relative z-50 min-h-8 pt-8 max-w-md w-full justify-self-center">
+    <nav className="relative z-50 min-h-8 pt-2 max-w-md w-full justify-self-center">
       <div className="p-2 bg-gradient-to-br">
         <div className="flex items-center h-full px-4">
           {/* Brand Logo */}

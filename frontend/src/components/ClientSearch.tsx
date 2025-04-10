@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { fetchProfile } from "@/reducers/profile/profileSlice";
 
 const ClientSearch = ({
   profileID,
@@ -46,10 +47,11 @@ const ClientSearch = ({
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [companyID, setCompanyID] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
   const dispatch = useAppDispatch();
-  const { clients } = useAppSelector((state) => state.Client);
+  const { clients, loading, error } = useAppSelector((state) => state.Client);
   const { companies } = useAppSelector((state) => state.company);
   const { companySectors } = useAppSelector((state) => state.CompanySector);
 
@@ -75,9 +77,11 @@ const ClientSearch = ({
     return () => clearTimeout(handler);
   }, [sectorSearch]);
 
-  // Fetch sectors when component mounts
+  // Initial data fetching
   useEffect(() => {
-    dispatch(fetchCompanySectors({})); // Fetch all sectors initially
+    // Fetch initial data when component mounts
+    dispatch(fetchCompanySectors({}));
+    dispatch(fetchClient());
   }, [dispatch]);
 
   useEffect(() => {
@@ -143,28 +147,7 @@ const ClientSearch = ({
     setPreviewUrl(null);
     inputRef.current.focus();
   };
-
-  // Add new client (with formData state)
-  const handleAddClient = () => {
-    // Create a FormData object from the state
-    const submitFormData = new FormData();
-    submitFormData.append("name", formData.name || searchTerm);
-    submitFormData.append("category", formData.category);
-
-    if (formData.logo || imageFile) {
-      submitFormData.append("logo", formData.logo || imageFile);
-    }
-
-    // Log the form data entries for debugging
-    console.log("FormData entries:");
-    for (let pair of submitFormData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
-
-    // Dispatch the action with the formData
-    dispatch(postClient(submitFormData));
-
-    // Reset states
+  const handleResetClient = () => {
     setFormData({
       category: 1,
       name: "",
@@ -174,6 +157,43 @@ const ClientSearch = ({
     setShowDropdown(false);
     setImageFile(null);
     setPreviewUrl(null);
+  };
+
+  const handleAddClient = () => {
+    setIsLoading(true);
+    try {
+      // Create a FormData object from the state
+      const submitFormData = new FormData();
+      submitFormData.append("name", formData.name || searchTerm);
+      submitFormData.append("category", formData.category);
+
+      if (formData.logo || imageFile) {
+        submitFormData.append("logo", formData.logo || imageFile);
+      }
+
+      // Log the form data entries for debugging
+      console.log("FormData entries:");
+      for (let pair of submitFormData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+
+      // Dispatch the action with the formData and wait for it to complete
+      dispatch(postClient(submitFormData))
+        .unwrap()
+        .then((result) => {
+          onChange([...selectedClients, result]);
+          dispatch(fetchProfile());
+        })
+        .catch((error) => {
+          console.error("Error adding client:", error);
+        });
+
+      handleResetClient();
+    } catch (err) {
+      console.error("Failed to add client:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -202,26 +222,85 @@ const ClientSearch = ({
   };
 
   const clientExists = clients?.some(
-    (c) => c.name.toLowerCase() === searchTerm.toLowerCase()
+    (c) => c.company_name?.toLowerCase() === searchTerm.toLowerCase()
   );
-  const handleClientUpdate = async () => {
+
+  const handleClientUpdate =  () => {
+    // if (!companyID || !profileID) {
+    //   toast({
+    //     title: "Error",
+    //     description: "Please select a client first",
+    //     variant: "destructive",
+    //   });
+    //   return;
+    // }
+
+    setIsLoading(true);
     try {
-      await dispatch(
+      // Dispatch update and await completion
+        dispatch(
         updateClient({
           profile: profileID,
           company: companyID,
           isFeatured: false,
         })
-      ).unwrap(); // wait for updateClient to finish
+      )
+        .unwrap()
+        .then(() => {
+          dispatch(fetchProfile());
+        })
+        .catch((error) => {
+          console.error("Error removing project:", error);
+        });
 
-      dispatch(fetchClient()); // now fetch the updated client
+      // Handle success with UI update before refetching
+      // toast({
+      //   title: "Success",
+      //   description: "Client updated successfully",
+      // });
+
+      // Fetch updated data immediately after successful update
+     
+
+      // Clear form after successful update
+      handleClearSelection();
     } catch (error) {
       console.error("Update failed", error);
-      // optionally show toast or error message
+      // toast({
+      //   title: "Update Failed",
+      //   description: error.message || "Failed to update client",
+      //   variant: "destructive",
+      // });
+    } finally {
+      setIsLoading(false);
     }
   };
-  const handleRemoveClient = (clientID) => {
-    dispatch(deleteClient({id:clientID}));
+
+  const handleRemoveClient = async (clientID) => {
+    setIsLoading(true);
+    try {
+      // Delete client and wait for completion
+      await dispatch(deleteClient({ id: clientID }))
+        .unwrap()
+        .then(() => {
+          dispatch(fetchProfile());
+        })
+        .catch((error) => {
+          console.error("Error removing project:", error);
+        });
+
+      // Immediately update UI by calling parent callback
+      // onRemoveClient(clientID);
+
+      // Optimistically remove from local state before refetching
+      onChange(selectedClients.filter((client) => client.id !== clientID));
+
+      // Refresh client list after deletion
+    } catch (error) {
+      console.error("Remove failed", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   console.log("Selected clients:", selectedClients);
   return (
@@ -241,6 +320,7 @@ const ClientSearch = ({
           onFocus={() => setShowDropdown(true)}
           placeholder="Search for a client"
           className="w-full p-2 pl-10 pr-16 bg-[#262640] text-white rounded-3xl border focus:ring-2 focus:ring-[#7C2BD3]"
+          disabled={isLoading}
         />
 
         {searchTerm && !clientExists && (
@@ -250,22 +330,27 @@ const ClientSearch = ({
             onClick={handleAddClient}
             className="absolute inset-y-0 right-2 flex items-center bg-gradient-to-tr from-[#7C2BD3] to-[#075AA8] rounded-full h-8 w-8 p-0 my-auto"
             title={`Add "${searchTerm}"`}
+            disabled={isLoading}
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 1V15M1 8H15"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            {isLoading ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+            ) : (
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 1V15M1 8H15"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
           </Button>
         )}
       </div>
@@ -312,6 +397,7 @@ const ClientSearch = ({
                 size={14}
                 className="cursor-pointer"
                 onClick={() => handleRemoveClient(client.id)}
+                disabled={isLoading}
               />
             </div>
           ))}
@@ -331,6 +417,7 @@ const ClientSearch = ({
               accept="image/*"
               onChange={handleImageChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={isLoading}
             />
             <div className="flex items-center justify-center gap-3 text-white">
               <ImageIcon size={20} />
@@ -358,6 +445,7 @@ const ClientSearch = ({
         <Select
           value={String(formData.category)}
           onValueChange={handleCategoryChange}
+          disabled={isLoading}
         >
           <SelectTrigger className="w-full p-2 pl-4 pr-4 bg-[#262640] text-white rounded-3xl border focus:ring-2 focus:ring-[#7C2BD3]">
             <SelectValue placeholder="Select a company sector" />
@@ -381,23 +469,33 @@ const ClientSearch = ({
         onClick={handleClientUpdate}
         type="submit"
         className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1 from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
+        disabled={isLoading}
       >
-        Update Client
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4 12H20M20 12L14 6M20 12L14 18"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        {isLoading ? (
+          <>
+            <span className="mr-2">Updating...</span>
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+          </>
+        ) : (
+          <>
+            Update Client
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 12H20M20 12L14 6M20 12L14 18"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </>
+        )}
       </Button>
     </div>
   );
