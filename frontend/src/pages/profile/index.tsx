@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Edit,
@@ -169,16 +169,16 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
     const updatedData = { ...formData };
     console.log("currentValue", currentValues);
-    if (formData.featuredClients) {
-      updatedData.featured_clients = selectedClients.map((client) => client.id);
-      dispatch(
-        updateClient({
-          id: currentValues.id,
-          formData: updatedData.featured_clients,
-        })
-      );
-      return;
-    }
+    // if (formData.featuredClients) {
+    //   updatedData.featured_clients = selectedClients.map((client) => client.id);
+    //   dispatch(
+    //     updateClient({
+    //       profile: currentValues.id,
+    //       formData: updatedData.featured_clients,
+    //     })
+    //   );
+    //   return;
+    // }
     if (formData.available) {
       updatedData.available_to = selectedAvailable.map((aval) => aval.id);
     }
@@ -268,6 +268,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
               {field.key === "featuredClients" && (
                 <ClientSearch
+                  profileID={currentValues.id}
                   selectedClients={selectedClients}
                   onChange={(updatedClients) =>
                     setSelectedClients(updatedClients)
@@ -341,31 +342,33 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
               )}
             </div>
           )}
+
+          {field.key != "featuredClients" && (
+            <Button
+              onClick={handleUpdate}
+              type="submit"
+              className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1 from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
+            >
+              Update {title}
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4 12H20M20 12L14 6M20 12L14 18"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Button>
+          )}
         </div>
       ))}
-
-      <Button
-        onClick={handleUpdate}
-        type="submit"
-        className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1 from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
-      >
-        Update {title}
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4 12H20M20 12L14 6M20 12L14 18"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </Button>
     </form>
   );
 };
@@ -374,6 +377,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 const Profile = () => {
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
+  const fileInput = useRef();
   useEffect(() => {
     // console.log("dispatching profile...");
     dispatch(fetchProfile());
@@ -528,6 +532,20 @@ const Profile = () => {
   const handleSaveData = (newData) => {
     setUserData((prev) => ({ ...prev, ...newData }));
   };
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Basic validation: allow only images
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("image", file);
+    dispatch(updateProfile({ id: userData?.id, data: formData }));
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2 pb-20">
       {/* Main profile card */}
@@ -540,11 +558,24 @@ const Profile = () => {
           {/* Profile header with image on left, name/location on right */}
           <div className="flex flex-row -mt-16">
             {/* Profile image (left) */}
-            <div className="h-32 w-32 flex-shrink-0 rounded-full overflow-hidden  border-2 shadow-md">
+            <div className="h-32 w-32 relative flex-shrink-0 rounded-full  border-2 shadow-md">
               <img
                 src={userData?.image}
                 alt="Profile"
-                className="h-full w-full object-cover"
+                className="h-full w-full rounded-full object-cover"
+              />
+              <Button
+                onClick={() => fileInput?.current?.click()}
+                className="bg-gradient-to-tr from-[#7C2BD3] to-[#075AA8] absolute  bottom-0 right-0 rounded-full h-8 w-8 p-0"
+              >
+                <Edit size={16} />
+              </Button>
+              <input
+                ref={fileInput}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
               />
             </div>
             <div className="ml-4">
