@@ -42,7 +42,10 @@ export const postClient = createAsyncThunk(
   "client/postClient",
   async (data: Client, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.NEXT_BACKEND_URL}/client/`, data);
+      const response = await axios.post(
+        `${process.env.NEXT_BACKEND_URL}/all-company/`,
+        data
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -54,16 +57,30 @@ export const postClient = createAsyncThunk(
 
 export const updateClient = createAsyncThunk(
   "client/updateClient",
-  async ({ id, formData }, { rejectWithValue }) => {
+  async (formData, { rejectWithValue, dispatch }) => {
     try {
       console.log("formData", formData);
+      // console.log("id", id);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/client/`,
+        formData
+      );
+      // dispatch(fetchClient());
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to post client"
+      );
+    }
+  }
+);
+export const deleteClient = createAsyncThunk(
+  "client/deleteClient",
+  async ({id}, { rejectWithValue }) => {
+    try {
       console.log("id", id);
-      const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${id}/feature-client/`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/client/${id}/`
       );
       return response.data;
     } catch (error: any) {
@@ -114,6 +131,21 @@ const clientSlice = createSlice({
         state.clients = [...state.clients, action.payload];
       })
       .addCase(updateClient.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteClient.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteClient.fulfilled, (state, action) => {
+        state.loading = false;
+        const deletedId = action.meta.arg; // passed id to the thunk
+        state.clients = state.clients.filter(
+          (client) => client.id !== deletedId
+        );
+      })
+      .addCase(deleteClient.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

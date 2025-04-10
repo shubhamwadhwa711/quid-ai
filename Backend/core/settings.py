@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY') 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", 'False').lower() in ('true', '1', 't')
 ENVIRONMENT = 'DEV'
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.189']
 
@@ -118,6 +118,9 @@ REST_FRAMEWORK = {
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  
         'drf_social_oauth2.authentication.SocialAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
 MIDDLEWARE = [
@@ -240,10 +243,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Example for Gmail
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST') # Example for Gmail
+EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", 'False').lower() in ('true', '1', 't')
 EMAIL_HOST_USER =os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
@@ -258,15 +261,15 @@ AUTHENTICATION_BACKENDS = (
 
 ACTIVATE_JWT = True
 
-SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY = '86r1likhjcc2qo'
-SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET = 'WPL_AP1.JrR1Bj2R52WqAzbG.rJoiiA=='
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY = os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY')
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET =  os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET')
 
 
 # CELERY SETTINGS
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_Task_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'

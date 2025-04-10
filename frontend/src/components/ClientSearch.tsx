@@ -8,24 +8,58 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { fetchClient, postClient } from "@/reducers/filter/client/clientSlice";
+import {
+  deleteClient,
+  fetchClient,
+  postClient,
+  updateClient,
+} from "@/reducers/filter/client/clientSlice";
 import { useAppSelector, useAppDispatch } from "@/store/store";
+import { fetchAllCompanies } from "@/reducers/company/companySlice";
+import { fetchCompanySectors } from "@/reducers/company-sector/company-sector";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 const ClientSearch = ({
+  profileID,
   selectedClients = [],
   onChange,
   onRemoveClient,
   icon = <User size={18} />,
 }) => {
+  const [formData, setFormData] = useState({
+    category: 1,
+    name: "",
+    logo: null,
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [sectorSearch, setSectorSearch] = useState("");
+  const [debouncedSectorSearch, setDebouncedSectorSearch] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [imageFile, setImageFile] = useState(null); // 🆕 file state
-  const [previewUrl, setPreviewUrl] = useState(null); // 🆕 preview state
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [companyID, setCompanyID] = useState(null);
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
   const dispatch = useAppDispatch();
   const { clients } = useAppSelector((state) => state.Client);
+  const { companies } = useAppSelector((state) => state.company);
+  const { companySectors } = useAppSelector((state) => state.CompanySector);
+
+  // Update formData when relevant states change
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      name: searchTerm,
+    }));
+  }, [searchTerm]);
 
   // Debounce search
   useEffect(() => {
@@ -34,8 +68,21 @@ const ClientSearch = ({
   }, [searchTerm]);
 
   useEffect(() => {
+    const handler = setTimeout(
+      () => setDebouncedSectorSearch(sectorSearch),
+      400
+    );
+    return () => clearTimeout(handler);
+  }, [sectorSearch]);
+
+  // Fetch sectors when component mounts
+  useEffect(() => {
+    dispatch(fetchCompanySectors({})); // Fetch all sectors initially
+  }, [dispatch]);
+
+  useEffect(() => {
     if (debouncedSearchTerm.length > 0) {
-      dispatch(fetchClient({ search: debouncedSearchTerm }));
+      dispatch(fetchAllCompanies({ search: debouncedSearchTerm }));
     }
   }, [debouncedSearchTerm, dispatch]);
 
@@ -58,16 +105,38 @@ const ClientSearch = ({
 
   // Select client
   const handleSelectClient = (client) => {
+    console.log("Selected client:", client);
     if (!selectedClients.some((c) => c.id === client.id)) {
       onChange([...selectedClients, client]);
     }
-    setSearchTerm("");
+
+    // Update formData with selected client
+    setFormData({
+      category: client.category || 1,
+      name: client.name || "",
+      logo: client.logo || null,
+    });
+    setCompanyID(client.id);
+    setSearchTerm(client.name || "");
     setShowDropdown(false);
-    setImageFile(null);
-    setPreviewUrl(null);
+
+    if (client.logo) {
+      setImageFile(client.logo);
+      // Create preview URL if logo is a file
+      if (client.logo instanceof File) {
+        const reader = new FileReader();
+        reader.onloadend = () => setPreviewUrl(reader.result);
+        reader.readAsDataURL(client.logo);
+      }
+    }
   };
 
   const handleClearSelection = () => {
+    setFormData({
+      category: 1,
+      name: "",
+      logo: null,
+    });
     setSearchTerm("");
     setShowDropdown(false);
     setImageFile(null);
@@ -75,13 +144,32 @@ const ClientSearch = ({
     inputRef.current.focus();
   };
 
-  // Add new client (with image)
+  // Add new client (with formData state)
   const handleAddClient = () => {
-    const formData = new FormData();
-    formData.append("name", searchTerm);
-    if (imageFile) formData.append("image", imageFile);
-    console.log("formData", formData);
-    dispatch(postClient(formData));
+    // Create a FormData object from the state
+    const submitFormData = new FormData();
+    submitFormData.append("name", formData.name || searchTerm);
+    submitFormData.append("category", formData.category);
+
+    if (formData.logo || imageFile) {
+      submitFormData.append("logo", formData.logo || imageFile);
+    }
+
+    // Log the form data entries for debugging
+    console.log("FormData entries:");
+    for (let pair of submitFormData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+
+    // Dispatch the action with the formData
+    dispatch(postClient(submitFormData));
+
+    // Reset states
+    setFormData({
+      category: 1,
+      name: "",
+      logo: null,
+    });
     setSearchTerm("");
     setShowDropdown(false);
     setImageFile(null);
@@ -92,16 +180,50 @@ const ClientSearch = ({
     const file = e.target.files[0];
     if (!file) return;
 
+    // Update both the image file state and the formData state
     setImageFile(file);
+    setFormData((prev) => ({
+      ...prev,
+      logo: file,
+    }));
+
+    // Create preview
     const reader = new FileReader();
     reader.onloadend = () => setPreviewUrl(reader.result);
     reader.readAsDataURL(file);
   };
 
+  const handleCategoryChange = (value) => {
+    const categoryId = Number(value);
+    setFormData((prev) => ({
+      ...prev,
+      category: categoryId,
+    }));
+  };
+
   const clientExists = clients?.some(
     (c) => c.name.toLowerCase() === searchTerm.toLowerCase()
   );
+  const handleClientUpdate = async () => {
+    try {
+      await dispatch(
+        updateClient({
+          profile: profileID,
+          company: companyID,
+          isFeatured: false,
+        })
+      ).unwrap(); // wait for updateClient to finish
 
+      dispatch(fetchClient()); // now fetch the updated client
+    } catch (error) {
+      console.error("Update failed", error);
+      // optionally show toast or error message
+    }
+  };
+  const handleRemoveClient = (clientID) => {
+    dispatch(deleteClient({id:clientID}));
+  };
+  console.log("Selected clients:", selectedClients);
   return (
     <div className="relative w-full">
       <div className="relative">
@@ -121,18 +243,6 @@ const ClientSearch = ({
           className="w-full p-2 pl-10 pr-16 bg-[#262640] text-white rounded-3xl border focus:ring-2 focus:ring-[#7C2BD3]"
         />
 
-        {/* {searchTerm && (
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={handleClearSelection}
-            className="absolute inset-y-0 right-12 flex items-center text-white h-8 w-8 p-0 my-auto"
-          >
-            <X size={16} />
-          </Button>
-        )} */}
-
-        {/* Add Button */}
         {searchTerm && !clientExists && (
           <Button
             type="button"
@@ -151,27 +261,13 @@ const ClientSearch = ({
               <path
                 d="M8 1V15M1 8H15"
                 stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </Button>
         )}
-
-        {/* <Button
-          type="button"
-          variant="ghost"
-          onClick={() => setShowDropdown(!showDropdown)}
-          className="absolute inset-y-0 right-0 flex items-center text-white h-8 w-8 p-0 my-auto"
-        >
-          <ChevronDown
-            size={18}
-            className={`transition-transform ${
-              showDropdown ? "rotate-180" : ""
-            }`}
-          />
-        </Button> */}
       </div>
 
       {/* Dropdown */}
@@ -180,8 +276,8 @@ const ClientSearch = ({
           ref={dropdownRef}
           className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-[#1E1E38] rounded-xl shadow-lg border border-[#3A3A5A]"
         >
-          {clients?.length > 0 ? (
-            clients.map((cli) => (
+          {companies?.length > 0 ? (
+            companies.map((cli) => (
               <div
                 key={cli.id}
                 onClick={() => handleSelectClient(cli)}
@@ -215,12 +311,13 @@ const ClientSearch = ({
               <X
                 size={14}
                 className="cursor-pointer"
-                onClick={() => onRemoveClient(client)}
+                onClick={() => handleRemoveClient(client.id)}
               />
             </div>
           ))}
         </div>
       )}
+
       {/* Image Upload */}
       {searchTerm && !clientExists && (
         <div className="mt-4">
@@ -255,6 +352,53 @@ const ClientSearch = ({
           )}
         </div>
       )}
+
+      {/* Company Sector Selection */}
+      <div className="relative mt-4">
+        <Select
+          value={String(formData.category)}
+          onValueChange={handleCategoryChange}
+        >
+          <SelectTrigger className="w-full p-2 pl-4 pr-4 bg-[#262640] text-white rounded-3xl border focus:ring-2 focus:ring-[#7C2BD3]">
+            <SelectValue placeholder="Select a company sector" />
+          </SelectTrigger>
+          <SelectContent className="bg-[#262640] text-white rounded-xl border border-[#3A3A5A]">
+            {companySectors && companySectors.length > 0 ? (
+              companySectors.map((sector) => (
+                <SelectItem key={sector.id} value={String(sector.id)}>
+                  {sector.title}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem value="loading" disabled>
+                No sectors available
+              </SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+      </div>
+      <Button
+        onClick={handleClientUpdate}
+        type="submit"
+        className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1 from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
+      >
+        Update Client
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 12H20M20 12L14 6M20 12L14 18"
+            stroke="white"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </Button>
     </div>
   );
 };

@@ -3,7 +3,7 @@
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .filters import ProfileFilter
 
@@ -24,11 +24,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class ProfileViewSet(viewsets.ModelViewSet):
     """
-    API view to list, create, delete and update all profile.
+    API view to list current user.
     """
-    permission_classes = [AllowAny]
-    queryset = Profile.objects.filter(status="APPROVED")
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return Profile.objects.filter(user=self.request.user)
 
     # def get_serializer_class(self):
     #     print(self.request.method)
@@ -172,7 +174,7 @@ class ProfileRelatedViewSet(viewsets.ModelViewSet):
     API view to list, create, delete and update all profile.
     """
     permission_classes = [AllowAny]
-    queryset = Profile.objects.filter(status="APPROVED")
+    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(clients__is_featured =True))
     serializer_class = ProfileRelatedSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]  
     filterset_class = ProfileFilter  # Use the custom filter class 
@@ -183,7 +185,7 @@ class TopProfileViewSet(viewsets.ModelViewSet):
     API view to list, create, delete and update all profile.
     """
     permission_classes = [AllowAny]
-    queryset = Profile.objects.filter(Q(status="APPROVED") & (Q(auto_approve_inquiry=True) | Q(is_featured=True)))
+    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(clients__is_featured =True) & (Q(auto_approve_inquiry=True) | Q(is_featured=True)))
     serializer_class = ProfileRelatedSerializer
     http_method_names=['get']
 
@@ -193,7 +195,7 @@ class UsProfileViewSet(viewsets.ModelViewSet):
     API view to list, create, delete and update all profile.
     """
     permission_classes = [AllowAny]
-    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(country__name="United States"))
+    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(clients__is_featured =True) & Q(country__name="United States"))
     serializer_class = ProfileRelatedSerializer
     http_method_names=['get']
 
