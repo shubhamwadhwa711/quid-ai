@@ -70,7 +70,7 @@ const CountrySearch = ({
         <input
           ref={inputRef}
           type="text"
-          value={selectedCountry ? selectedCountry : searchTerm}
+          value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
             setShowDropdown(true);

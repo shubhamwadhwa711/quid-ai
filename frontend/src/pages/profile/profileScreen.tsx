@@ -37,15 +37,11 @@ const ProfileScreen = () => {
     // console.log("dispatching profile...");
     dispatch(fetchProfile());
   }, [dispatch]);
-  // console.log("profile", profile);
-  const [userData, setUserData] = useState<ProfileType | null>(null);
-  console.log("userData", userData);
-  console.log("userData", userData);
+  console.log("profile", profile);
+ 
   // State for controlling which popup is currently open
-  const [activePopup, setActivePopup] = useState(null);
-  useEffect(() => {
-    setUserData(profile[0]);
-  }, [profile]);
+  const [activePopup, setActivePopup] = useState(false);
+ 
   // Define handlers for different popups
   const popupConfigs = {
     profile: {
@@ -181,12 +177,10 @@ const ProfileScreen = () => {
   };
 
   const handleClosePopup = () => {
-    setActivePopup(null);
+    setActivePopup(false);
   };
 
-  const handleSaveData = (newData) => {
-    setUserData((prev) => ({ ...prev, ...newData }));
-  };
+
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -198,9 +192,9 @@ const ProfileScreen = () => {
     }
     const formData = new FormData();
     formData.append("image", file);
-    dispatch(updateProfile({ id: userData?.id, data: formData }));
+    dispatch(updateProfile({ id: profile?.id, data: formData }));
   };
-
+ 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-2 pb-20">
       {/* Main profile card */}
@@ -215,7 +209,7 @@ const ProfileScreen = () => {
             {/* Profile image (left) */}
             <div className="h-32 w-32 relative flex-shrink-0 rounded-full  border-2 shadow-md">
               <img
-                src={userData?.image}
+                src={profile?.image}
                 alt="Profile"
                 className="h-full w-full rounded-full object-cover"
               />
@@ -236,7 +230,7 @@ const ProfileScreen = () => {
             <div className="ml-4">
               <div className="flex justify-between">
                 <h1 className="text-2xl proxima-medium">
-                  {userData?.user?.first_name} {userData?.user?.last_name}
+                  {profile?.user?.first_name} {profile?.user?.last_name}
                 </h1>
                 <Button
                   size="icon"
@@ -250,11 +244,11 @@ const ProfileScreen = () => {
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
                 <span className="text-gray-400 proxima-small">
-                  {userData?.country?.name}
+                  {profile?.country?.name}
                 </span>
               </div>
               <div className="mt-2">
-                <p className="font-semibold text-sm">{userData?.headline}</p>
+                <p className="font-semibold text-sm">{profile?.headline}</p>
               </div>
               {/* <div className=" absolute top-24 right-0  flex justify-center">
                 <img
@@ -266,7 +260,7 @@ const ProfileScreen = () => {
               <div className="flex items-center space-x-2">
                 <Linkedin className="w-5 h-5 fill-white" />
                 <span className=" text-xs mt-2 font-bold  text-nowrap">
-                  {userData?.linkedin_url?.slice(7)}
+                  {profile?.linkedin_url?.slice(7)}
                 </span>
               </div>
             </div>
@@ -305,7 +299,7 @@ const ProfileScreen = () => {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2">
-              {userData?.skill.map((s, index) => (
+              {profile?.skill?.map((s, index) => (
                 <span
                   key={index}
                   className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -336,7 +330,7 @@ const ProfileScreen = () => {
         </div>
         <div className="space-y-4">
           <div className="pl-4">
-            <ReadMore text={userData?.summary} />
+            <ReadMore text={profile?.summary} />
           </div>
         </div>
       </div>
@@ -357,7 +351,7 @@ const ProfileScreen = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData?.language?.map((lang, index) => (
+          {profile?.language?.map((lang, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -384,7 +378,7 @@ const ProfileScreen = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData?.education.map((edu, index) => (
+          {profile?.education?.map((edu, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -411,7 +405,7 @@ const ProfileScreen = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData?.available_to?.map((aval, index) => (
+          {profile?.available_to?.map((aval, index) => (
             <span
               key={index}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -438,7 +432,7 @@ const ProfileScreen = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2">
-          {userData?.client.map((cli, index) => (
+          {profile?.client?.map((cli, index) => (
             <span
               key={cli.id}
               className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -449,12 +443,12 @@ const ProfileScreen = () => {
         </div>
       </div>
       <ProjectsScreen
-        projects={userData?.projects || []}
-        profileId={userData?.id}
+        projects={profile?.projects || []}
+        profileId={profile?.id}
       />
 
       {activePopup && (
-        <Drawer open={true} onOpenChange={handleClosePopup}>
+        <Drawer open={activePopup} onOpenChange={handleClosePopup}>
           <DrawerContent className="mx-auto max-w-md bg-gradient-to-br h-4/5 rounded-3xl from-black via-[#0F0F30] to-[#0F0F30] text-white">
             <DrawerHeader className="relative flex justify-center">
               <DrawerTitle className="text-xl">
@@ -480,8 +474,8 @@ const ProfileScreen = () => {
             <EditContent
               title={popupConfigs[activePopup]?.title}
               fields={popupConfigs[activePopup].fields}
-              currentValues={userData}
-              onSave={handleSaveData}
+              currentValues={profile}
+              onSave={handleClosePopup}
               onClose={handleClosePopup}
             />
 

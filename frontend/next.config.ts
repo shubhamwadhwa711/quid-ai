@@ -26,7 +26,7 @@ const nextConfig = withPWA({
         protocol: "https",
         hostname: "media.licdn.com",
         pathname: "/dms/image/**",
-      },
+      }, 
       {
         protocol: "https",
         hostname: "s3-alpha-sig.figma.com",

@@ -14,20 +14,21 @@ import ClientSearch from "@/components/ClientSearch";
 // EditContent component to be used in both Dialog and Drawer
 const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(
-    currentValues?.country?.name
+    currentValues?.country
   );
   const [skills, setSkills] = useState<{ id: number; name: string }[]>([]);
-  const [selectedSkills, setSelectedSkills] = useState<[]>(currentValues.skill);
+  const [selectedSkills, setSelectedSkills] = useState<[]>(currentValues?.skill);
   const [selectedlanguages, setSelectedLanguages] = useState<
     { id: number; name: string }[]
-  >(currentValues.language);
+  >(currentValues?.language);
   const [selectedAvailable, setSelectedAvailable] = useState<
     { id: number; name: string }[]
-  >(currentValues.available_to);
+  >(currentValues?.available_to);
   const [selectedClients, setSelectedClients] = useState<[]>(
-    currentValues.client
+    currentValues?.client
   );
   const [fullName, setFullName] = useState<string | null>(null);
+  console.log("CurrentValues", currentValues);
   console.log(title, fields, currentValues);
   const [formData, setFormData] = useState({});
   const [tagInput, setTagInput] = useState("");
@@ -39,8 +40,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     fields.forEach((field) => {
       if (field.key === "fullName") {
         // Combine first and last name for the fullName field
-        initialData[field.key] = `${currentValues.user?.first_name || ""} ${
-          currentValues.user?.last_name || ""
+        initialData[field.key] = `${currentValues?.user?.first_name || ""} ${
+          currentValues?.user?.last_name || ""
         }`.trim();
       } else if (field.type === "tags") {
         // For tag fields, use the array from currentValues or create an empty array
@@ -49,7 +50,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
           : [];
       } else {
         // For text/textarea fields, use the value directly
-        console.log("currentValues.user", currentValues.user);
+        console.log("currentValues.user", currentValues?.user);
         console.log("field.accessor", get(currentValues, field.accessor, ""));
         initialData[field.key] = get(currentValues, field.accessor, "");
       }
@@ -128,7 +129,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       updatedData.skill = selectedSkills.map((skill) => skill.id);
     }
     // Ensure country is passed as an ID
-    if (formData.country) {
+    
+    if (formData.country || formData.country === "") {
       updatedData.country = selectedCountry.id;
     }
     if (formData.languages) {

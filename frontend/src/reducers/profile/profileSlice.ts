@@ -102,7 +102,8 @@ export const fetchProfile = createAsyncThunk(
       const response = await axiosInstance.get("/profile/", {
         params: FilterData,
       });
-      return response.data;
+      console.log("Profile data fetched successfully", response.data[0]);
+      return response.data[0];
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch profile"
@@ -125,6 +126,7 @@ export const updateProfile = createAsyncThunk(
           // "Content-Type": "application/json",
         },
       });
+      console.log("Profile updated successfully", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -135,14 +137,18 @@ export const updateProfile = createAsyncThunk(
 );
 
 export const updateAcademics = createAsyncThunk(
-  "profile/updateProfile",
+  "profile/updateAcademics",
   async (
-    { eid, data }: { eid: number; data: Partial<Education> },
+    { id, eid, data }: { id: number; eid: number; data: Partial<Education> },
     { rejectWithValue }
   ) => {
     console.log("Updating profile...", eid, data);
     try {
-      const response = await axiosInstance.patch(`/education/${eid}/`, data);
+      const response = await axiosInstance.patch(
+        `/education/${eid}/`,
+        data
+      );
+      console.log("Academics updated successfully", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -164,6 +170,7 @@ export const postAcademics = createAsyncThunk(
         `/profile/${id}/education/`,
         data
       );
+      console.log("Academics posted successfully", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -202,6 +209,7 @@ const profileSlice = createSlice({
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.loading = false;
+        console.log("Profile fetched successfully", action.payload);
         state.profile = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
@@ -209,14 +217,12 @@ const profileSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(updateProfile.pending, (state) => {
-        state.loading = true;
+        // state.loading = true;
         state.error = null;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.profile = state.profile.map((profile) =>
-          profile.id === action.payload.id ? action.payload : profile
-        );
+        state.profile = action.payload;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;

@@ -5,11 +5,20 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { use, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchProfile } from "@/reducers/profile/profileSlice";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   console.log("session", session);
+  const dispatch = useAppDispatch();
+  const {profile} = useAppSelector((state) => state.Profile);
+  useEffect(() => {
+    dispatch(fetchProfile());
+  }, []);
+  console.log("profile", profile);
   return (
     <nav className="relative z-50 min-h-8 pt-2 max-w-md w-full justify-self-center">
       <div className="p-2 bg-gradient-to-br">
@@ -28,10 +37,14 @@ const Navbar = () => {
           {/* User Profile / Authentication */}
           <div className="flex-none ml-auto mt-2">
             {session ? (
-              <Button variant="none" className="flex "  onClick={() => router.push("/profile")}>
-                <Image
+              <Button
+                variant="none"
+                className="flex "
+                onClick={() => router.push("/profile")}
+              >
+                <img
                   className="rounded-full"
-                  src={session?.user?.image!}
+                  src={profile?.image}
                   alt="Profile"
                   width={40}
                   height={40}

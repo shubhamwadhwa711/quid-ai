@@ -41,6 +41,7 @@ export const EditAcademic = ({ academic }: { academic: Academic }) => {
   const handleSubmit = useCallback(() => {
     dispatch(
       updateAcademics({
+        id: academic?.profile,
         eid: formData.id,
         data: formData,
       })
