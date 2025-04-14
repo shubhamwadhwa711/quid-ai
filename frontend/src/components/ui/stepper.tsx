@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export interface StepProps {
   title: string;
@@ -38,6 +38,11 @@ export const Stepper: React.FC<StepperProps> = ({
   current = 0,
   defaultOrientation = "left",
 }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
   // Convert children to array even if there's only one child
   const childrenArray = React.Children.toArray(
     children
@@ -73,18 +78,33 @@ export const Stepper: React.FC<StepperProps> = ({
     .filter(Boolean);
 
   return (
-    <div className="relative w-full">
+    <div ref={ref} className="relative w-full">
       {steps.map((step, index) => {
         const isIconLeft = step?.orientation === "left";
-
+        const opacity = useTransform(
+          scrollYProgress,
+          [
+            (index - 0.3) / steps.length,
+            index / steps.length,
+            (index + 0.3) / steps.length,
+          ],
+          [0, 1, 1]
+        );
+        const scale = useTransform(
+          scrollYProgress,
+          [
+            (index+1 - 0.2) / steps.length,
+            (index+1) / steps.length,
+            (index+1 + 0.2) / steps.length,
+          ],
+          [0, 1, 1]
+        );
         return (
           <div key={index} className="flex items-start gap-4 mb-8">
             {/* Left Side */}
             <motion.div
-              initial={{ opacity: 0, x: isIconLeft ? -20 : 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: false, amount: 0.5 }}
-              transition={{ duration: 2, delay: 0.5 * index }}
+              // initial={{ opacity: 0, x: isIconLeft ? -20 : 0 }}
+              style={{ opacity }}
               className="flex-1"
             >
               {isIconLeft ? (
@@ -92,9 +112,7 @@ export const Stepper: React.FC<StepperProps> = ({
               ) : (
                 <div className="text-right pr-4">
                   <h3 className="font-medium text-lg">{step?.title}</h3>
-                  <p className="font-[400] text-xs  mt-1">
-                    {step?.description}
-                  </p>
+                  <p className="font-[400] text-xs mt-1">{step?.description}</p>
                 </div>
               )}
             </motion.div>
@@ -102,10 +120,11 @@ export const Stepper: React.FC<StepperProps> = ({
             {/* Center Step Indicator */}
             <motion.div
               className="relative flex flex-col items-center"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 2, delay: 0.5 * index }}
+              // initial={{ opacity: 0, scale: 0.8 }}
+              // whileInView={{ opacity: 1, scale: 1 }}
+              // viewport={{ once: true, amount: 0.5 }}
+              // transition={{ duration: 2, delay: 0.15 * index }}
+              style={{opacity:opacity}}
             >
               <div
                 className={`
@@ -126,20 +145,22 @@ export const Stepper: React.FC<StepperProps> = ({
               {!step?.isLast && (
                 <motion.div
                   className="w-1 bg-gray-200 absolute top-8 h-24"
-                  initial={{ scaleY: 0, originY: "top" }}
-                  whileInView={{ scaleY: 1 }}
-                  viewport={{ once: false, amount: 0.5 }}
-                  transition={{ duration: 2, delay: 0.5 * index }}
+                  // initial={{ scaleY: 0, originY: "top" }}
+                  // whileInView={{ scaleY: 1 }}
+                  // viewport={{ once: false, amount: 0.5 }}
+                  // transition={{ duration: 0.4, delay: 0.2 * index }}
+                  style={{ scaleY: scale, transformOrigin: "top" }}
                 />
               )}
             </motion.div>
 
             {/* Right Side */}
             <motion.div
-              initial={{ opacity: 0, x: !isIconLeft ? 20 : 0 }}
-              whileInView={{ opacity: 1, x: !isIconLeft ? 20 : 0 }}
-              viewport={{ once: false, amount: 0.5 }}
-              transition={{ duration: 2, delay: 0.5 * index }}
+              // initial={{ opacity: 0, x: !isIconLeft ? 20 : 0 }}
+              // whileInView={{ opacity: 1, x: !isIconLeft ? 20 : 0 }}
+              // viewport={{ once: false, amount: 0.5 }}
+              // transition={{ duration: 0.5, delay: 0.1 * index }}
+              style={{ opacity }}
               className="flex-1"
             >
               {!isIconLeft ? (

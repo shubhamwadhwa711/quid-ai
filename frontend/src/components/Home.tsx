@@ -13,7 +13,7 @@ export default function Home() {
       <div className="space-y-16 ">
         <div className="snap-center"><Hero /></div>
         <div className="snap-center"><Brands /></div>
-        <div className="snap-center"><About /></div>
+        <About />
         <div className="snap-center"><Solutions /></div>
         <div className="snap-center"><Working /></div>
         <div className="snap-center"><Insights /></div>

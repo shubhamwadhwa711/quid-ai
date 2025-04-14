@@ -2,7 +2,13 @@ import { useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Stepper, Step, StepProps } from "./ui/stepper";
+import { useScroll } from "framer-motion";
 const Working = () => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({
+      target: ref,
+      offset: ["start end", "end start"],
+    });
   const router = useRouter();
   const steps = useMemo<StepProps[]>(
     () => [
@@ -35,6 +41,7 @@ const Working = () => {
   return (
     <div
       id="works"
+      ref={ref}
       className="space-y-6 flex flex-col justify-center items-center"
     >
       <div className="">

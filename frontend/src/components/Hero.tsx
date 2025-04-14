@@ -102,11 +102,11 @@ const Hero = () => {
           {/* First row */}
           <div className="grid grid-cols-1 gap-3 ">
             <motion.div
-              initial={{ x: -220 }}
-              whileInView={{ x: 0 }}
-              viewport={{ once: true }}
+              initial={{ x: -100, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{
-                duration:0.3,
+                duration: 0.4,
                 delay: 1.2,
                 ease: "easeOut",
               }}
@@ -133,30 +133,52 @@ const Hero = () => {
                   </svg>
 
                   <div className="flex flex-col text-start space-y-2">
-                    <CardTitle className="proxima-large underline">
-                      Who Is Inside
-                    </CardTitle>
-                    <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm ">
-                      <span className="block">
-                        Discover exclusive profiles of top AI talents
-                      </span>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 1.5,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardTitle className="proxima-large underline">
+                        Who Is Inside
+                      </CardTitle>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 1.6,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm ">
+                        <span className="block">
+                          Discover exclusive profiles of top AI talents
+                        </span>
 
-                      <svg
-                        width="18"
-                        height="14"
-                        viewBox="0 0 18 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
-                          stroke="white"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </CardDescription>
+                        <svg
+                          width="18"
+                          height="14"
+                          viewBox="0 0 18 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
+                            stroke="white"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </CardDescription>
+                    </motion.div>
                   </div>
                 </CardHeader>
               </Card>
@@ -164,12 +186,12 @@ const Hero = () => {
 
             {/* Be Part - Bottom left card */}
             <motion.div
-              initial={{ x: -220 }}
-              whileInView={{ x: 0 }}
-              viewport={{ once: true }}
+              initial={{ x: -100, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{
-                duration: 0.3,
-                delay: 1.5,
+                duration: 0.4,
+                delay: 1.65,
                 ease: "easeOut",
               }}
               // style={{ opacity: opacity }}
@@ -195,30 +217,52 @@ const Hero = () => {
                   </svg>
 
                   <div className="flex flex-col text-start space-y-2">
-                    <CardTitle className="proxima-large underline">
-                      Be Part
-                    </CardTitle>
-                    <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm ">
-                      <span className="block">
-                        Join the largest global AI community.
-                      </span>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 1.7,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardTitle className="proxima-large underline">
+                        Be Part
+                      </CardTitle>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 1.7,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm ">
+                        <span className="block">
+                          Join the largest global AI community.
+                        </span>
 
-                      <svg
-                        width="18"
-                        height="14"
-                        viewBox="0 0 18 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
-                          stroke="white"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </CardDescription>
+                        <svg
+                          width="18"
+                          height="14"
+                          viewBox="0 0 18 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
+                            stroke="white"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </CardDescription>
+                    </motion.div>
                   </div>
                 </CardHeader>
               </Card>
@@ -229,13 +273,13 @@ const Hero = () => {
           <div className="grid grid-cols-1 gap-2">
             {/* Services - Tall card on the right */}
             <motion.div
-              initial={{ x: 220 }}
-              whileInView={{ x: 0 }}
-              viewport={{ once: true }}
+              initial={{ x: 100, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{
-                duration: 0.3,
-                delay: 1.35,
-                ease: "easeOut",
+                duration: 0.4,
+                delay: 1.45,
+                ease: "easeInOut",
               }}
               // style={{ opacity: opacity }}
             >
@@ -259,30 +303,52 @@ const Hero = () => {
                     />
                   </svg>
                   <div className="flex flex-col text-start space-y-2">
-                    <CardTitle className="proxima-large underline">
-                      Services
-                    </CardTitle>
-                    <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm mt-2">
-                      <span className="block">
-                        Consulting, project support,training, & more.
-                      </span>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 1.55,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardTitle className="proxima-large underline">
+                        Services
+                      </CardTitle>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.4,
+                        delay: 1.55,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm mt-2">
+                        <span className="block">
+                          Consulting, project support,training, & more.
+                        </span>
 
-                      <svg
-                        width="18"
-                        height="14"
-                        viewBox="0 0 18 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
-                          stroke="white"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </CardDescription>
+                        <svg
+                          width="18"
+                          height="14"
+                          viewBox="0 0 18 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
+                            stroke="white"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </CardDescription>
+                    </motion.div>
                   </div>
                 </CardHeader>
               </Card>
@@ -290,13 +356,13 @@ const Hero = () => {
 
             {/* AI Insights - Bottom right card */}
             <motion.div
-              initial={{ x: 220 }}
-              whileInView={{ x: 0 }}
-              viewport={{ once: true }}
+              initial={{ x: 100, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{
-                duration: 0.3,
+                duration: 0.4,
                 delay: 1.65,
-                ease: "easeOut",
+                ease: "easeInOut",
               }}
               // style={{ opacity: opacity }}
             >
@@ -321,30 +387,52 @@ const Hero = () => {
                   </svg>
 
                   <div className="flex flex-col text-start space-y-2">
-                    <CardTitle className="proxima-large underline">
-                      AI Insights
-                    </CardTitle>
-                    <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small">
-                      <span className="block">
-                        Knowledge, Interviews,Q&A, Videos.
-                      </span>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: 1.85,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardTitle className="proxima-large underline">
+                        AI Insights
+                      </CardTitle>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: false, amount: 0.2 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: 1.85,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small">
+                        <span className="block">
+                          Knowledge, Interviews,Q&A, Videos.
+                        </span>
 
-                      <svg
-                        width="18"
-                        height="14"
-                        viewBox="0 0 18 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
-                          stroke="white"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </CardDescription>
+                        <svg
+                          width="18"
+                          height="14"
+                          viewBox="0 0 18 14"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
+                            stroke="white"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      </CardDescription>
+                    </motion.div>
                   </div>
                 </CardHeader>
               </Card>
