@@ -1,31 +1,25 @@
-[project]
+[tool.poetry]
 name = "quid-ai"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Mahima0Verma",email = "mahimavermakumari@gmail.com"}
-]
+authors = []
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "django (>=5.1.6,<6.0.0)",
-    "djangorestframework (>=3.15.2,<4.0.0)",
-    "pillow (>=11.1.0,<12.0.0)",
-    "django-filter (>=24.3,<25.0)",
-    "python-dotenv (>=1.0.1,<2.0.0)",
-    "psycopg2 (>=2.9.10,<3.0.0)",
-    "drf-nested-routers (>=0.94.1,<0.95.0)",
-    "drf-yasg (>=1.21.8,<2.0.0)",
-    "django-allauth (>=65.4.1,<66.0.0)",
-    "requests (>=2.32.3,<3.0.0)",
-    "drf-social-oauth2 (==3.1.0)",
-    "django-cors-headers (>=4.7.0,<5.0.0)",
-    "celery (>=5.4.0,<6.0.0)",
-    "redis (>=5.2.1,<6.0.0)",
-    "django-ckeditor-5 (>=0.2.17,<0.3.0)",
-]
 
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "5.1.4"
+djangorestframework = "3.15.2"
+pillow = "*"
+django-filter = "24.3" 
+python-dotenv = "1.0.1"
+psycopg2-binary = "2.9.10"
+drf-nested-routers = "0.94.1"
+drf-yasg = "1.21.8"
+django-allauth = "65.5.0"
+requests = "2.32.3"
+drf-social-oauth2 = "3.1.0"
+django-cors-headers = "4.6.0"
+celery = "5.3.4"
+redis = "^5.2.1"
+django-ckeditor-5 = "0.2.17"
