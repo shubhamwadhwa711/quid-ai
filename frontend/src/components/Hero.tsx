@@ -60,13 +60,13 @@ const Hero = () => {
         Your browser does not support the video tag.
       </video>
       <div className="absolute -translate-y-[20%] inset-0 bg-gradient-to-t from-[rgba(13,18,46,0.8)] to-[rgba(13,18,46,0.6)] z-10"></div>
-      <div className="relative z-20 w-full flex flex-col items-center ">
+      <div className="relative mt-10 z-20 w-full flex flex-col items-center ">
         <div className="space-y-4 text-center mb-10">
           <motion.h1
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="text-sm proxima-regular"
           >
             WORLD'S LARGEST AI THINK TANK
@@ -76,7 +76,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
             className="text-3xl"
           >
             <span className="proxima-bold"> AI Expertise</span>
@@ -87,7 +87,7 @@ const Hero = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.5,delay:0.2 }}
+            transition={{ duration: 0.3, delay: 0.8 }}
           >
             <span className="block">
               From strategy to implementation, we provide
@@ -102,15 +102,15 @@ const Hero = () => {
           {/* First row */}
           <div className="grid grid-cols-1 gap-3 ">
             <motion.div
-              initial={{ x: -100, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
+              initial={{ x: -220 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true }}
               transition={{
-                duration: 0.5,
-                delay: 0.1,
+                duration:0.3,
+                delay: 1.2,
                 ease: "easeOut",
               }}
-              style={{ opacity: opacity }}
+              // style={{ opacity: opacity }}
             >
               <Card className="relative  bg-gradient-to-br border-none from-[#7C2BD3]  to-[#075AA8] text-white h-[170px] w-[160px] overflow-hidden">
                 <img
@@ -164,15 +164,15 @@ const Hero = () => {
 
             {/* Be Part - Bottom left card */}
             <motion.div
-              initial={{ x: -100, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
+              initial={{ x: -220 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true }}
               transition={{
-                duration: 0.5,
-                delay: 0.075,
+                duration: 0.3,
+                delay: 1.5,
                 ease: "easeOut",
               }}
-              style={{ opacity: opacity }}
+              // style={{ opacity: opacity }}
             >
               <Card className="relative bg-gradient-to-tr border-none h-[200px] w-[160px] from-[#7C2BD3]  to-[#075AA8] text-white  overflow-hidden">
                 <img
@@ -229,15 +229,15 @@ const Hero = () => {
           <div className="grid grid-cols-1 gap-2">
             {/* Services - Tall card on the right */}
             <motion.div
-              initial={{ x: -100, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
+              initial={{ x: 220 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true }}
               transition={{
-                duration: 0.5,
-                delay: 0.05,
+                duration: 0.3,
+                delay: 1.35,
                 ease: "easeOut",
               }}
-              style={{ opacity: opacity }}
+              // style={{ opacity: opacity }}
             >
               <Card className="relative  bg-gradient-to-bl border-none from-[#7C2BD3]  to-[#075AA8] text-white h-[200px] w-[160px] overflow-hidden">
                 <img
@@ -290,15 +290,15 @@ const Hero = () => {
 
             {/* AI Insights - Bottom right card */}
             <motion.div
-              initial={{ x: -100, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
+              initial={{ x: 220 }}
+              whileInView={{ x: 0 }}
               viewport={{ once: true }}
               transition={{
-                duration: 0.5,
-                delay: 0.025,
+                duration: 0.3,
+                delay: 1.65,
                 ease: "easeOut",
               }}
-              style={{ opacity: opacity }}
+              // style={{ opacity: opacity }}
             >
               <Card className="relative bg-gradient-to-tl border-none from-[#7C2BD3]  to-[#075AA8] text-white h-[170px] w-[160px] overflow-hidden">
                 <img

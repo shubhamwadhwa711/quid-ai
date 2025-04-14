@@ -7,7 +7,7 @@ const Working = () => {
   const steps = useMemo<StepProps[]>(
     () => [
       {
-        title: "Search Ai Experts",
+        title: "Search AI Experts",
         description:
           "Find experts in teach, adivse, consult, speak, interview.",
         icon: <img src={"/Icons/search-ai-experts.svg"} />,
@@ -23,7 +23,8 @@ const Working = () => {
       },
       {
         title: "Connect them",
-        description: "Discuss the task details and get it complete.",
+        description:
+          "Engage an expert to advise, teach, or speak for your company.",
         icon: <img src={"/Icons/connect-them.svg"} />,
         isActive: true,
         orientation: "left",
@@ -37,15 +38,17 @@ const Working = () => {
       className="space-y-6 flex flex-col justify-center items-center"
     >
       <div className="">
-        <h1 className="text-3xl proxima-bold ">
+        <h1 className="text-3xl proxima-bold text-center">
           How It <span className="text-[#425BFF]">Works</span>
         </h1>
-        <span className="text-sm proxima-small">
+        <span className="text-sm">
           Get matched with AI experts in minutes &
         </span>
-        <span className="text-sm block mt-1">complete your tasks.</span>
+        <span className="text-sm block mt-1 text-center">
+          complete your tasks.
+        </span>
       </div>
-      <div>
+      <div className="">
         <Stepper current={-1}>
           {steps.map((step, index) => (
             <Step

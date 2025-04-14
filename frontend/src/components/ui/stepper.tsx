@@ -1,5 +1,5 @@
 import React from "react";
-import { motion} from "framer-motion";
+import { motion } from "framer-motion";
 
 export interface StepProps {
   title: string;
@@ -84,7 +84,7 @@ export const Stepper: React.FC<StepperProps> = ({
               initial={{ opacity: 0, x: isIconLeft ? -20 : 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: false, amount: 0.5 }}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
+              transition={{ duration: 2, delay: 0.1 * index }}
               className="flex-1"
             >
               {isIconLeft ? (
@@ -92,7 +92,7 @@ export const Stepper: React.FC<StepperProps> = ({
               ) : (
                 <div className="text-right pr-4">
                   <h3 className="font-medium text-lg">{step?.title}</h3>
-                  <p className="font-[400] text-gray-400 text-sm mt-1">
+                  <p className="font-[400] text-xs  mt-1">
                     {step?.description}
                   </p>
                 </div>
@@ -105,7 +105,7 @@ export const Stepper: React.FC<StepperProps> = ({
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: false, amount: 0.5 }}
-              transition={{ duration: 0.3, delay: 0.15 * index }}
+              transition={{ duration: 2, delay: 0.15 * index }}
             >
               <div
                 className={`
@@ -115,7 +115,7 @@ export const Stepper: React.FC<StepperProps> = ({
                       ? "bg-green-500 text-white"
                       : step?.isActive
                       ? "bg-[#425BFF] text-white font-bold"
-                      : "bg-gray-200 text-gray-600"
+                      : "bg-[#425BFF] text-base font-semibold"
                   }
                 `}
               >
@@ -125,7 +125,7 @@ export const Stepper: React.FC<StepperProps> = ({
               {/* Connector Line */}
               {!step?.isLast && (
                 <motion.div
-                  className="w-0.5 bg-gray-200 absolute top-8 h-24"
+                  className="w-1 bg-gray-200 absolute top-8 h-24"
                   initial={{ scaleY: 0, originY: "top" }}
                   whileInView={{ scaleY: 1 }}
                   viewport={{ once: false, amount: 0.5 }}
@@ -147,9 +147,7 @@ export const Stepper: React.FC<StepperProps> = ({
               ) : (
                 <div className="text-left pl-4">
                   <h3 className="font-medium text-lg">{step.title}</h3>
-                  <p className="font-[400] text-gray-400 text-sm mt-1">
-                    {step.description}
-                  </p>
+                  <p className=" text-xs mt-1">{step.description}</p>
                 </div>
               )}
             </motion.div>

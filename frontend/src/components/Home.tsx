@@ -9,24 +9,16 @@ import Working from "@/components/Working";
 
 export default function Home() {
   return (
-    <main className="min-h-screen max-w-md text-white">
-      <div className="space-y-16">
-        {/* Hero Section */}
-        <Hero />
-        {/* Brands */}
-        <Brands />
-        {/* What & Why QuidAI */}
-        <About />
-        {/* The Ultimate AI solutions for your businesses */}
-        <Solutions />
-        {/* How it works */}
-        <Working />
-        {/* Quid AI Insights */}
-        <Insights />
-        {/* FAQ */}
-        <FAQ />
-        {/* Signup section */}
-        <Signup />
+    <main className="min-h-screen text-white">
+      <div className="space-y-16 ">
+        <div className="snap-center"><Hero /></div>
+        <div className="snap-center"><Brands /></div>
+        <div className="snap-center"><About /></div>
+        <div className="snap-center"><Solutions /></div>
+        <div className="snap-center"><Working /></div>
+        <div className="snap-center"><Insights /></div>
+        <div className="snap-center"><FAQ /></div>
+        <div className="snap-center"><Signup /></div>
       </div>
     </main>
   );
