@@ -84,7 +84,7 @@ export const Stepper: React.FC<StepperProps> = ({
               initial={{ opacity: 0, x: isIconLeft ? -20 : 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: false, amount: 0.5 }}
-              transition={{ duration: 2, delay: 0.1 * index }}
+              transition={{ duration: 2, delay: 0.5 * index }}
               className="flex-1"
             >
               {isIconLeft ? (
@@ -104,8 +104,8 @@ export const Stepper: React.FC<StepperProps> = ({
               className="relative flex flex-col items-center"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false, amount: 0.5 }}
-              transition={{ duration: 2, delay: 0.15 * index }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 2, delay: 0.5 * index }}
             >
               <div
                 className={`
@@ -129,7 +129,7 @@ export const Stepper: React.FC<StepperProps> = ({
                   initial={{ scaleY: 0, originY: "top" }}
                   whileInView={{ scaleY: 1 }}
                   viewport={{ once: false, amount: 0.5 }}
-                  transition={{ duration: 0.4, delay: 0.2 * index }}
+                  transition={{ duration: 2, delay: 0.5 * index }}
                 />
               )}
             </motion.div>
@@ -139,7 +139,7 @@ export const Stepper: React.FC<StepperProps> = ({
               initial={{ opacity: 0, x: !isIconLeft ? 20 : 0 }}
               whileInView={{ opacity: 1, x: !isIconLeft ? 20 : 0 }}
               viewport={{ once: false, amount: 0.5 }}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
+              transition={{ duration: 2, delay: 0.5 * index }}
               className="flex-1"
             >
               {!isIconLeft ? (
