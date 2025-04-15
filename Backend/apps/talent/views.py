@@ -183,7 +183,7 @@ class ProfileRelatedViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileRelatedSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]  
     filterset_class = ProfileFilter  # Use the custom filter class 
-    search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree','industry__name']
+    search_fields = ['user__first_name', 'user__last_name', 'skill__name','country__name','education__degree','industry__name','client__name']
 
 class TopProfileViewSet(viewsets.ModelViewSet):
     """
@@ -248,7 +248,9 @@ class AcademicViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Education.objects.all()
     serializer_class = EducationSerializer 
-    http_method_names = ['get']    
+    http_method_names = ['get'] 
+    filter_backends = [SearchFilter]  
+    search_fields = ['degree']    
 
 
 
