@@ -26,11 +26,12 @@ class ProfileViewSet(viewsets.ModelViewSet):
     """
     API view to list current user.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = ProfileSerializer
+    queryset = Industry.objects.all()
 
-    def get_queryset(self):
-        return Profile.objects.filter(user=self.request.user)
+    # def get_queryset(self):
+    #     return Profile.objects.filter(user=self.request.user)
 
     # def get_serializer_class(self):
     #     print(self.request.method)
