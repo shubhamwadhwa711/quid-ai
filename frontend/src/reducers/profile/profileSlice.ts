@@ -83,13 +83,15 @@ export interface Profile {
 }
 
 interface ProfileState {
-  profile: Profile[];
+  profile: Profile | null;
+  profiles: Profile[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProfileState = {
-  profile: [],
+  profile: null,
+  profiles: [],
   loading: false,
   error: null,
 };
@@ -111,7 +113,43 @@ export const fetchProfile = createAsyncThunk(
     }
   }
 );
+export const fetchProfiles = createAsyncThunk(
+  "profile/fetchProfiles",
+  async (FilterData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/profile-related/", {
+        params: FilterData,
+        paramsSerializer: (params) => {
+          const searchParams = new URLSearchParams();
 
+          Object.entries(params).forEach(([key, value]) => {
+            if (key === "search") {
+              console.log("value", value);
+              // Ensure search param is a string, not an array
+              searchParams.append(
+                key,
+                Array.isArray(value) ? value[0] : (value as string)
+              );
+            } else if (Array.isArray(value)) {
+              value.forEach((v) => searchParams.append(key, v)); // 🔹 Append each array item separately
+            } else {
+              searchParams.append(key, value as string);
+            }
+          });
+
+          return searchParams.toString();
+        },
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log("Profile data fetched successfully", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch profile"
+      );
+    }
+  }
+);
 // Async Thunk to update profile data
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
@@ -145,7 +183,7 @@ export const updateAcademics = createAsyncThunk(
     console.log("Updating profile...", eid, data);
     try {
       const response = await axiosInstance.patch(
-        `/education/${eid}/`,
+        `profile/${id}/education/${eid}/`,
         data
       );
       console.log("Academics updated successfully", response.data);
@@ -213,6 +251,19 @@ const profileSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchProfiles.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProfiles.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log("Profiles fetched successfully", action.payload);
+        state.profiles = action.payload;
+      })
+      .addCase(fetchProfiles.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
