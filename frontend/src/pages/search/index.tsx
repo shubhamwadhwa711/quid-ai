@@ -15,7 +15,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useRouter } from "next/navigation";
 import TalentCard from "@/components/TalentCard";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
+import {  fetchProfiles, Profile } from "@/reducers/profile/profileSlice";
 import { fetchAIProfile } from "@/reducers/ai-talent/ai-talent";
 import { fetchUSProfile } from "@/reducers/us-talent/us-talentSlice";
 import FilterDrawer from "@/components/FilterDrawer";
@@ -66,7 +66,7 @@ const Search = () => {
     console.log("Searching for:", query);
     if (query) {
       setIsSearchApplied(true);
-      dispatch(fetchProfile({ search: query }));
+      dispatch(fetchProfiles({ search: query }));
     }
   };
 
@@ -88,7 +88,7 @@ const Search = () => {
 
   // Redux and data states
   const dispatch = useAppDispatch();
-  const { profile } = useAppSelector((state) => state.Profile);
+  const { profiles } = useAppSelector((state) => state.Profile);
   const { aiprofile } = useAppSelector((state) => state.AIProfile);
   const { usprofile } = useAppSelector((state) => state.USProfile);
   // const { filter, filterloading, filtererror } = useAppSelector(
@@ -104,13 +104,13 @@ const Search = () => {
     dispatch(fetchUSProfile());
   }, [dispatch]);
   useEffect(() => {
-    dispatch(fetchProfile(selectedFilters));
+    dispatch(fetchProfiles(selectedFilters));
   }, [dispatch, JSON.stringify(selectedFilters)]);
 
   // Update userData when profile changes
-  useEffect(() => {
-    setUserData(profile);
-  }, [profile]);
+  // useEffect(() => {
+  //   setUserData(profile);
+  // }, [profile]);
 
   // Filter toggle handlers
   const handleFilterToggle = () => {
@@ -134,6 +134,9 @@ const Search = () => {
 
   const updateFilter = useCallback(
     (category: FilterCategory, value: string, isAdding: boolean) => {
+      console.log("category",category);
+      console.log("value",value);
+      console.log("isAdding",isAdding);
       setSelectedFilters((prev) => {
         const updatedFilters = {
           ...prev,
@@ -195,7 +198,7 @@ const Search = () => {
   }, []);
   console.log("isFilterApplied", isFilterApplied);
   console.log("isSearchApllied", isSearchApplied);
-  console.log("profile", profile);
+  console.log("profiles", profiles);
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="my-20 w-full flex flex-col gap-2">
@@ -304,6 +307,7 @@ const Search = () => {
                 updateFilter={updateFilter}
                 selectedFilters={selectedFilters}
                 clearFilters={clearFilters}
+                setIsFilterApplied={setIsFilterApplied}
               />
             </DrawerContent>
           </Drawer>
@@ -311,22 +315,22 @@ const Search = () => {
 
         {/* Talent Cards Section */}
         <div>
-          {isSearchApplied ? (
+          {isSearchApplied || isFilterApplied ? (
             <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
               <div className="mx-1 flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                <h1 className="proxima-bold text-xl text-white">
+                {/* <h1 className="proxima-bold text-xl text-white">
                   Talents from US
-                </h1>
-              </div>
+                </h1> */}
+              </div> 
               <div
                 className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
-                  isSearchApplied
+                  isSearchApplied || isFilterApplied
                     ? "grid-cols-1"
                     : "grid-flow-col auto-cols-max"
                 } gap-2`}
               >
-                {profile?.map((talent) => (
+                {profiles?.map((talent) => (
                   <TalentCard key={talent.id} talent={talent} />
                 ))}
               </div>

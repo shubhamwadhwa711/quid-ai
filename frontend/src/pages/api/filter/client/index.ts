@@ -9,7 +9,7 @@ export default async function handler(
     
     try {
       const response = await axios.get(
-        `${process.env.NEXT_BACKEND_URL}/client`,
+        `${process.env.NEXT_BACKEND_URL}/all-company/`,
         {
           params: req.query,
           paramsSerializer: (params) => {

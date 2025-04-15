@@ -19,14 +19,13 @@ import { fetchCountry } from "@/reducers/filter/country/countrySlice";
 import { fetchClient } from "@/reducers/filter/client/clientSlice";
 import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
 import { fetchAvailableTo } from "@/reducers/filter/availableto/availabletoSlice";
-import { fetchProfile } from "@/reducers/profile/profileSlice";
+import { fetchProfiles } from "@/reducers/profile/profileSlice";
 import { fetchSolutions } from "@/reducers/solutions/solutionSlice";
+
 export default function FilterDrawer({
   showFilters,
   setShowFilters,
-
   handleFilterToggle,
-
   initialFilter,
   applyFilters,
   setSelectedFilters,
@@ -35,13 +34,17 @@ export default function FilterDrawer({
   updateFilter,
   selectedFilters,
   clearFilters,
-}: any) {
+  setIsFilterApplied
+}) {
   const [open, setOpen] = useState(false);
   const [activeFilterCategory, setActiveFilterCategory] = useState(
     initialFilter ?? "Expertise"
   );
+  const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useAppDispatch();
+  
+  // Redux state selectors
   const { academics, academicsloading, academicserror } = useAppSelector(
     (state) => state.Academics
   );
@@ -51,7 +54,7 @@ export default function FilterDrawer({
   const { country, countryloading, countryerror } = useAppSelector(
     (state) => state.Country
   );
-  const { client, clientloading, clienterror } = useAppSelector(
+  const { clients, clientloading, clienterror } = useAppSelector(
     (state) => state.Client
   );
   const { language, languageloading, languageerror } = useAppSelector(
@@ -60,82 +63,136 @@ export default function FilterDrawer({
   const { availableto, availabletoloading, availabletoerror } = useAppSelector(
     (state) => state.AvailableTo
   );
+  const { Solutions, loading, error } = useAppSelector(
+    (state) => state.Solutions
+  );
+
+  // Fetch solutions data on component mount
   useEffect(() => {
-    dispatch(fetchAcademics());
-    dispatch(fetchExpertise());
-    dispatch(fetchCountry());
-    dispatch(fetchClient());
-    dispatch(fetchLanguage());
-    dispatch(fetchAvailableTo());
     dispatch(fetchSolutions());
   }, [dispatch]);
-  console.log("academics", academics);
-  console.log("expertise", expertise);
-  console.log("country", country);
-  console.log("client", client);
-  console.log("language", language);
-  console.log("availableto", availableto);
-  const [searchQuery, setSearchQuery] = useState("");
-  console.log("initialFilter", initialFilter);
-  console.log("showFilters", showFilters);
-  // Filter categories with isSelected property
-  const [filterCategories, setFilterCategories] = useState([
+
+  // Fetch data based on active filter category
+  useEffect(() => {
+    // Only fetch data if it hasn't been loaded yet or if there was an error
+    switch (activeFilterCategory) {
+      case "Expertise":
+        if (!expertise || expertise.length === 0 || expertiseerror) {
+          dispatch(fetchExpertise());
+        }
+        break;
+      case "Academic":
+        if (!academics || academics.length === 0 || academicserror) {
+          dispatch(fetchAcademics());
+        }
+        break;
+      case "Country":
+        if (!country || country.length === 0 || countryerror) {
+          dispatch(fetchCountry());
+        }
+        break;
+      case "Clients":
+        if (!clients || clients.length === 0 || clienterror) {
+          dispatch(fetchClient());
+        }
+        break;
+      case "Languages":
+        if (!language || language.length === 0 || languageerror) {
+          dispatch(fetchLanguage());
+        }
+        break;
+      case "Available to":
+        if (!availableto || availableto.length === 0 || availabletoerror) {
+          dispatch(fetchAvailableTo());
+        }
+        break;
+      default:
+        break;
+    }
+  }, [
+    activeFilterCategory,
+    dispatch,
+    expertise, expertiseerror,
+    academics, academicserror,
+    country, countryerror,
+    clients, clienterror,
+    language, languageerror,
+    availableto, availabletoerror
+  ]);
+
+  // Update profiles when filters change
+  useEffect(() => {
+    dispatch(fetchProfiles(selectedFilters));
+  }, [selectedFilters, dispatch]);
+
+  // Filter categories
+  const filterCategories = [
     { id: "expertise", label: "Expertise" },
     { id: "academic", label: "Academic" },
     { id: "country", label: "Country" },
     { id: "clients", label: "Clients" },
     { id: "languages", label: "Languages" },
     { id: "available_to", label: "Available to" },
-  ]);
- const { Solutions, loading, error } = useAppSelector(
-    (state) => state.Solutions
-  );
- 
-  
+  ];
 
   const handleFilterSelect = (filterlabel) => {
-    console.log("filterlabel", filterlabel);
     setActiveFilterCategory(filterlabel);
     setSearchQuery(""); // Reset search query when changing filter
   };
 
-  const handleSector = (sectorLabel: string) => {
+  const handleSector = (sectorLabel) => {
     setSelectedIndustry(sectorLabel);
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
       industry: sectorLabel,
     }));
+    setIsFilterApplied(true);
   };
-  useEffect(() => {
-    dispatch(fetchProfile(selectedFilters));
-  }, [selectedFilters]);
-  console.log("selectedFilters", selectedFilters);
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
   // Filter the options based on search query
   const getFilteredOptions = (options) => {
-    console.log("options", options);
+    if (!options || !Array.isArray(options)) return [];
     if (!searchQuery) return options;
+    
     return options.filter((option) =>
       typeof option === "string"
-        ? option.toLowerCase().includes(searchQuery.toLowerCase())
-        : option.name.toLowerCase().includes(searchQuery.toLowerCase())
+        ? option?.toLowerCase().includes(searchQuery.toLowerCase())
+        : option?.degree
+        ? option.degree.toLowerCase().includes(searchQuery.toLowerCase())
+        : option?.name
+        ? option.name.toLowerCase().includes(searchQuery.toLowerCase())
+        : false
     );
   };
-console.log("Solutions",Solutions)
+
+  // Display loading state for the current category
+  const isLoading = () => {
+    switch (activeFilterCategory) {
+      case "Expertise": return expertiseloading;
+      case "Academic": return academicsloading;
+      case "Country": return countryloading;
+      case "Clients": return clientloading;
+      case "Languages": return languageloading;
+      case "Available to": return availabletoloading;
+      default: return false;
+    }
+  };
+
   // Render filter options based on active category
   const renderFilterOptions = () => {
-    // console.log("activeFilterCategory", activeFilterCategory);
-    console.log("selectedFilters", selectedFilters);
-    console.log("selectedFilterslang", selectedFilters.languages);
+    if (isLoading()) {
+      return <div className="text-gray-400 text-center py-4">Loading...</div>;
+    }
 
     switch (activeFilterCategory) {
       case "Expertise":
         return getFilteredOptions(expertise).map((option) => (
           <div
-            key={option.id}
+            key={option.id || option.name}
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
@@ -152,23 +209,26 @@ console.log("Solutions",Solutions)
       case "Academic":
         return getFilteredOptions(academics).map((option) => (
           <div
-            key={option.id}
+            key={option?.id || option?.degree}
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
               checked={selectedFilters?.academics?.includes(
-                option.name.toLowerCase()
+                option?.degree?.toLowerCase()
               )}
               onCheckedChange={(checked) =>
-                updateFilter("academic", option.name, checked)
+                updateFilter("academics", option?.degree, checked)
               }
             />
-            <span className="text-gray-400 text-xs">{option.degree}</span>
+            <span className="text-gray-400 text-xs">{option?.degree}</span>
           </div>
         ));
       case "Country":
         return getFilteredOptions(country).map((count) => (
-          <div key={count} className="flex items-center gap-2 p-2 rounded-md">
+          <div 
+            key={count.id || count.name} 
+            className="flex items-center gap-2 p-2 rounded-md"
+          >
             <Checkbox
               checked={selectedFilters?.country?.includes(
                 count.name.toLowerCase()
@@ -181,9 +241,9 @@ console.log("Solutions",Solutions)
           </div>
         ));
       case "Clients":
-        return getFilteredOptions(client)?.map((option) => (
+        return getFilteredOptions(clients)?.map((option) => (
           <div
-            key={option.id}
+            key={option.id || option.name}
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
@@ -199,7 +259,10 @@ console.log("Solutions",Solutions)
         ));
       case "Languages":
         return getFilteredOptions(language).map((lang) => (
-          <div key={lang.id} className="flex items-center gap-2 p-2 rounded-md">
+          <div 
+            key={lang.id || lang.name} 
+            className="flex items-center gap-2 p-2 rounded-md"
+          >
             <Checkbox
               checked={selectedFilters?.languages?.includes(
                 lang.name.toLowerCase()
@@ -214,7 +277,7 @@ console.log("Solutions",Solutions)
       case "Available to":
         return getFilteredOptions(availableto).map((option) => (
           <div
-            key={option.id}
+            key={option.id || option.name}
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
@@ -234,15 +297,8 @@ console.log("Solutions",Solutions)
   };
 
   return (
-    <div className="w-full  bg-gradient-to-br from-black via-[#0F0F30] to-[#0F0F30] backdrop-blur-md rounded-2xl px-2 py-2 transition-all duration-300">
-      {/* <div className="absolute top-0 left-50 w-full z-1 flex justify-center">
-        <img
-          src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
-          alt="Spiral Background"
-          className="w-full h-full object-cover"
-        />
-      </div> */}
-      <div className="flex  justify-between items-center mb-4">
+    <div className="w-full bg-gradient-to-br from-black via-[#0F0F30] to-[#0F0F30] backdrop-blur-md rounded-2xl px-2 py-2 transition-all duration-300">
+      <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg proxima-bold text-center text-white">Filters</h3>
         <div className="flex gap-2">
           <Button
@@ -264,17 +320,17 @@ console.log("Solutions",Solutions)
 
       {showFilters && (
         <div className="space-y-2">
-          <label className="text-base proxima-bold ">
+          <label className="text-base proxima-bold">
             Specialization Sector
           </label>
 
           <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-            {Solutions.map((solution) => (
+            {Solutions && Solutions.map((solution) => (
               <Card
                 key={solution.id}
-                className={`h-28 w-28 p-10 rounded-xl  border-none  flex flex-col text-wrap justify-center items-center ${
-                  solution.name == selectedIndustry
-                    ? "bg-gradient-to-r  from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
+                className={`h-28 w-28 p-10 rounded-xl border-none flex flex-col text-wrap justify-center items-center ${
+                  solution.name === selectedIndustry
+                    ? "bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
                     : "bg-[#545C6C] text-white"
                 }`}
                 onClick={() => handleSector(solution.name)}
@@ -294,7 +350,8 @@ console.log("Solutions",Solutions)
           </div>
         </div>
       )}
-      <div className="grid grid-cols-12 gap-4 my-4  ">
+      
+      <div className="grid grid-cols-12 gap-4 my-4">
         <div className="col-span-4 flex flex-col items-center">
           <h1 className="mx-2 text-sm text-center proxima-bold text-white">
             Filters By
@@ -304,7 +361,7 @@ console.log("Solutions",Solutions)
               <Badge
                 variant="none"
                 className={`w-28 p-2 rounded-3xl m-1 border-none proxima-bold flex justify-center ${
-                  filter.label == activeFilterCategory
+                  filter.label === activeFilterCategory
                     ? "bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
                     : "bg-[#545C6C] text-white"
                 }`}
@@ -318,7 +375,7 @@ console.log("Solutions",Solutions)
 
         <div className="col-span-8 ml-2 my-4">
           <label className="relative flex items-center gap-3 px-4 py-2 rounded-3xl">
-            <SearchIcon className="absolute left- text-gray-400 mx-2" />
+            <SearchIcon className="absolute left-4 text-gray-400 mx-2" />
             <Input
               type="text"
               placeholder={`Search ${activeFilterCategory}`}
@@ -327,18 +384,9 @@ console.log("Solutions",Solutions)
               onChange={handleSearchChange}
             />
           </label>
-          <div className=" overflow-y-auto h-60">{renderFilterOptions()}</div>
+          <div className="overflow-y-auto h-60">{renderFilterOptions()}</div>
         </div>
       </div>
-
-      {/* <div className="mt-6 flex justify-end">
-        <Button
-          onClick={applyFilters}
-          className="rounded-3xl px-6 py-2 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8]"
-        >
-          Apply Filters
-        </Button>
-      </div> */}
     </div>
   );
 }
