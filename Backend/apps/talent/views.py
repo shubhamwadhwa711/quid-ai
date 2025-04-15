@@ -53,7 +53,11 @@ class EducationViewSet(viewsets.ModelViewSet):
     """
     def get_queryset(self):
         profile_id = self.kwargs['profile_pk']
-        return Education.objects.filter(profile_id=profile_id , profile__status="APPROVED")  
+        return Education.objects.filter(profile_id=profile_id )  
+    
+    # def get_object(self):
+    #     response = super().get_object()
+    #     return response
     
 
 class FeatureClientViewSet(viewsets.ModelViewSet):
@@ -123,7 +127,7 @@ class ProjectEditViewSet(viewsets.ModelViewSet):
     """
     API view to for updation
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class =ProjectEditSerializer    
    
     
