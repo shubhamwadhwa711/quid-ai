@@ -29,7 +29,7 @@ class Command(BaseCommand):
         call_command('loaddata', 'insight.json')
         call_command('loaddata', 'company-category.json')
         call_command('loaddata', 'associate-company.json')
-        call_command('loaddata', 'client.json')
+        # call_command('loaddata', 'client.json')
         call_command('loaddata', 'faq.json')
         call_command('loaddata', 'testimonial.json')
         
