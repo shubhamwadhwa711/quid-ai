@@ -27,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY') 
+SECRET_KEY='django-insecure-rjwr-d94ld^j=ld9j((o!vr&xf8zfznokq4%wegiu=vcav4^lk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", 'False').lower() in ('true', '1', 't')
+DEBUG = True
 ENVIRONMENT = 'DEV'
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.189']
 
@@ -245,7 +245,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
 EMAIL_HOST = os.getenv('EMAIL_HOST') # Example for Gmail
-EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+EMAIL_PORT = int(os.getenv('EMAIL_PORT',587))
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", 'False').lower() in ('true', '1', 't')
 EMAIL_HOST_USER =os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
@@ -267,9 +267,22 @@ SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET =  os.getenv('SOCIAL_AUTH_LINKEDIN_OPE
 
 # CELERY SETTINGS
 
-CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_Task_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+print(DEBUG)
+
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY='77y3kxzhtvbp56'
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET='WPL_AP1.12IHBLUOBphUJSj3.POpKIQ=='
+
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp-relay.brevo.com'  # Example for Gmail
+EMAIL_PORT=587
+EMAIL_USE_TLS=False
+EMAIL_HOST_USER='2c218a001@smtp-brevo.com'
+EMAIL_HOST_PASSWORD='FmG7ASPsDW3pUZHh'
+DEFAULT_FROM_EMAIL='2c218a001@smtp-brevo.com'
