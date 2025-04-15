@@ -28,7 +28,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [AllowAny]
     serializer_class = ProfileSerializer
-    queryset = Industry.objects.all()
+    queryset = Profile.objects.all()
 
     # def get_queryset(self):
     #     return Profile.objects.filter(user=self.request.user)
