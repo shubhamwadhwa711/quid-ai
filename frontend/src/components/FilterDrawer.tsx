@@ -139,7 +139,7 @@ console.log("Solutions",Solutions)
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
-              checked={selectedFilters.expertise.includes(
+              checked={selectedFilters?.expertise?.includes(
                 option.name.toLowerCase()
               )}
               onCheckedChange={(checked) =>
@@ -156,7 +156,7 @@ console.log("Solutions",Solutions)
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
-              checked={selectedFilters.academics.includes(
+              checked={selectedFilters?.academics?.includes(
                 option.name.toLowerCase()
               )}
               onCheckedChange={(checked) =>
@@ -170,7 +170,7 @@ console.log("Solutions",Solutions)
         return getFilteredOptions(country).map((count) => (
           <div key={count} className="flex items-center gap-2 p-2 rounded-md">
             <Checkbox
-              checked={selectedFilters.country.includes(
+              checked={selectedFilters?.country?.includes(
                 count.name.toLowerCase()
               )}
               onCheckedChange={(checked) =>
@@ -181,13 +181,13 @@ console.log("Solutions",Solutions)
           </div>
         ));
       case "Clients":
-        return getFilteredOptions(client).map((option) => (
+        return getFilteredOptions(client)?.map((option) => (
           <div
             key={option.id}
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
-              checked={selectedFilters.clients.includes(
+              checked={selectedFilters?.clients?.includes(
                 option.name.toLowerCase()
               )}
               onCheckedChange={(checked) =>
@@ -201,7 +201,7 @@ console.log("Solutions",Solutions)
         return getFilteredOptions(language).map((lang) => (
           <div key={lang.id} className="flex items-center gap-2 p-2 rounded-md">
             <Checkbox
-              checked={selectedFilters.languages.includes(
+              checked={selectedFilters?.languages?.includes(
                 lang.name.toLowerCase()
               )}
               onCheckedChange={(checked) =>
@@ -218,7 +218,7 @@ console.log("Solutions",Solutions)
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
-              checked={selectedFilters.available_to.includes(
+              checked={selectedFilters?.available_to?.includes(
                 option.name.toLowerCase()
               )}
               onCheckedChange={(checked) =>

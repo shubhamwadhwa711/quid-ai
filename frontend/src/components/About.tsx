@@ -59,7 +59,10 @@ const About = () => {
   ];
 
   return (
-    <div ref={ref} className="flex flex-col  justify-center items-center snap-center">
+    <div
+      ref={ref}
+      className="flex flex-col  justify-center items-center snap-center"
+    >
       <div className=" -mt-6  text-white  py-8 rounded-lg ">
         <div className="space-y-6">
           <div className="text-start">
@@ -82,7 +85,7 @@ const About = () => {
               const xOffset = useTransform(
                 scrollYProgress,
                 [0, 0.5, 1],
-                [index % 2 === 0 ? -100 : 100, 0, index % 2 === 0 ? -150 : 150]
+                [index % 2 === 0 ? -100 : 100, 0, index % 2 === 0 ? 0 : 0]
               );
               return (
                 <motion.div
