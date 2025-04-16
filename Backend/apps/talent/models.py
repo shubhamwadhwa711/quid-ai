@@ -59,7 +59,7 @@ class Profile(models.Model):
     available_to = models.ManyToManyField(AvailableTo)
     phone = models.CharField(max_length=20, blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
-    client = models.ManyToManyField(AssociatedCompany,  related_name='model', through='Client')
+    client = models.ManyToManyField(AssociatedCompany,  related_name='model', through='Client', blank=True, null=True)
 
     def __str__(self):
         return self.user.first_name 
