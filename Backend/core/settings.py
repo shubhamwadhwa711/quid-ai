@@ -27,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY='django-insecure-rjwr-d94ld^j=ld9j((o!vr&xf8zfznokq4%wegiu=vcav4^lk'
+SECRET_KEY= os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('EMAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
 ENVIRONMENT = 'DEV'
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.189']
 
@@ -243,12 +243,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
-EMAIL_HOST = os.getenv('EMAIL_HOST') # Example for Gmail
-EMAIL_PORT = int(os.getenv('EMAIL_PORT',587))
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", 'False').lower() in ('true', '1', 't')
-EMAIL_HOST_USER =os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
 
 
 
@@ -261,8 +256,6 @@ AUTHENTICATION_BACKENDS = (
 
 ACTIVATE_JWT = True
 
-SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY = os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY')
-SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET =  os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET')
 
 
 # CELERY SETTINGS
@@ -273,16 +266,25 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_Task_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+
+
+
+
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY=os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY')
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET=os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET')
+
+
+EMAIL_BACKEND=os.getenv('EMAIL_BACKEND')
+EMAIL_HOST=os.getenv('EMAIL_HOST') 
+EMAIL_PORT=int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS=os.getenv('EMAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
+EMAIL_HOST_USER= os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD= os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL= os.getenv('DEFAULT_FROM_EMAIL')
+
+
+print(f"Email Port: {EMAIL_PORT}")
+print(f"Use TLS: {EMAIL_USE_TLS}")
+print(SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET)
 print(DEBUG)
-
-SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY='77y3kxzhtvbp56'
-SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET='WPL_AP1.12IHBLUOBphUJSj3.POpKIQ=='
-
-
-EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST='smtp-relay.brevo.com'  # Example for Gmail
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER='2c218a001@smtp-brevo.com'
-EMAIL_HOST_PASSWORD='FmG7ASPsDW3pUZHh'
-DEFAULT_FROM_EMAIL='2c218a001@smtp-brevo.com'
+print(SECRET_KEY)
