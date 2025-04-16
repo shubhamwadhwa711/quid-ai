@@ -6,6 +6,7 @@ from . serializers import *
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
 
 
 class CompanyCategoryViewSet(viewsets.ModelViewSet):
@@ -38,7 +39,16 @@ class AllCompany(viewsets.ModelViewSet):
     serializer_class = AssociatedCompanySerializer
     http_method_names = ['get','post']
     filter_backends = [SearchFilter]  
-    search_fields = ['name']     
+    search_fields = ['name']    
+
+    def get_permissions(self):
+        if self.action == 'create':
+            # Only authenticated users can create
+            permission_classes = [IsAuthenticated]
+        else:
+            # Allow any user to perform GET requests
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]  
     
 
 class Testimonial(viewsets.ModelViewSet):
