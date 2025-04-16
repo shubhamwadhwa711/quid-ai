@@ -206,12 +206,21 @@ class UsProfileViewSet(viewsets.ModelViewSet):
 
     
 class SkillViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer  
     http_method_names = ['get','post'] 
     filter_backends = [SearchFilter]  
-    search_fields = ['name']    
+    search_fields = ['name']  
+
+    def get_permissions(self):
+        if self.action == 'create':
+            # Only authenticated users can create
+            permission_classes = [IsAuthenticated]
+        else:
+            # Allow any user to perform GET requests
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]  
 
 class LanguageViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
@@ -219,7 +228,16 @@ class LanguageViewSet(viewsets.ModelViewSet):
     serializer_class = LanguageSerializer  
     http_method_names = ['get','post','patch']
     filter_backends = [SearchFilter]  
-    search_fields = ['name']    
+    search_fields = ['name']   
+
+    def get_permissions(self):
+        if self.action in ['partial_update', 'create']:
+            # Only authenticated users can create
+            permission_classes = [IsAuthenticated]
+        else:
+            # Allow any user to perform GET requests
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes] 
      
 
 class AvailableToViewSet(viewsets.ModelViewSet):
@@ -242,7 +260,17 @@ class ClientViewSet(viewsets.ModelViewSet):
     serializer_class = ClientSerializer 
     http_method_names = ['get','post','patch','delete']   
     filter_backends = [SearchFilter]  
-    search_fields = ['company__name']          
+    search_fields = ['company__name']   
+
+
+    def get_permissions(self):
+        if self.action in ['partial_update', 'create', 'destroy']:
+            # Only authenticated users can create
+            permission_classes = [IsAuthenticated]
+        else:
+            # Allow any user to perform GET requests
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]        
 
 class AcademicViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
