@@ -1,3 +1,4 @@
+import axiosInstance from "@/lib/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -42,7 +43,7 @@ export const postClient = createAsyncThunk(
   "client/postClient",
   async (data: Client, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${process.env.NEXT_BACKEND_URL}/all-company/`,
         data
       );
@@ -61,7 +62,7 @@ export const updateClient = createAsyncThunk(
     try {
       console.log("formData", formData);
       // console.log("id", id);
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/client/`,
         formData
       );

@@ -1,3 +1,4 @@
+import axiosInstance from "@/lib/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Language {
@@ -40,7 +41,7 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`/api/updateLanguage/${id}`, data, {
+      const response = await axiosInstance.patch(`/api/updateLanguage/${id}`, data, {
         headers: {
           "Content-Type": "application/json",
         },

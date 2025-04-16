@@ -1,3 +1,4 @@
+import axiosInstance from "@/lib/axiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -44,7 +45,7 @@ export const postExpertise = createAsyncThunk<Expertise, Expertise>(
   async (data, { rejectWithValue }) => {
     try {
       console.log("Posting new expertise:", data);
-      const response = await axios.post("/api/create-skill", data);
+      const response = await axiosInstance.post("/skill/", data);
       console.log("Expertise added successfully:", response.data);
       return response.data;
     } catch (error: any) {
