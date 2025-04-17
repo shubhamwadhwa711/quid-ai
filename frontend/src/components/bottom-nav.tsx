@@ -1,7 +1,7 @@
 "use client";
 import { Home, Search, Menu, LayoutPanelTop } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   Drawer,
@@ -18,6 +18,9 @@ import { HomeIcon } from "./icons/HomeIcon";
 import { SearchIcon } from "./icons/SearchIcon";
 import { LearnIcon } from "./icons/LearnIcon";
 import { MenuIcon } from "./icons/MenuIcon";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchInsightCategory } from "@/reducers/insights/category/insightscategorySlice";
 export const menuItems = [
   {
     icon: <HomeIcon />,
@@ -44,7 +47,23 @@ export const menuItems = [
 export function BottomNav() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
+  const { insightsCategory, loading, error } = useAppSelector(
+    (state) => state.insightsCategory
+  );
+
+  const {
+    insights,
+    loading: insightsLoading,
+    error: insightsError,
+  } = useAppSelector((state) => state.insights);
+
+  useEffect(() => {
+    dispatch(fetchInsightCategory());
+  }, [dispatch]);
   return (
     <nav className="fixed bottom-3 left-0 right-0 z-50  h-16  w-11/12 max-w-md justify-self-center border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
       <div className="grid h-full grid-cols-4">
@@ -59,7 +78,7 @@ export function BottomNav() {
                   <span className="text-sm">{label}</span>
                 </button>
               </DrawerTrigger>
-              <DrawerContent className="bg-gray-900 text-white">
+              <DrawerContent className="bg-gray-900 w-11/12  max-w-md justify-self-center text-white">
                 <DrawerHeader>
                   <DrawerTitle className="text-white">Menu</DrawerTitle>
                 </DrawerHeader>
@@ -84,11 +103,23 @@ export function BottomNav() {
                           </div>
                         )}
                         <span>
-                          Signed in as{" "}
-                          {session.user?.name || session.user?.email}
+                          Signed in as {session.user?.name || session.user?.email}
                         </span>
                       </div>
-
+                      {insightsCategory.map((incat) => (
+                        <li key={incat.id}>
+                          <DrawerClose asChild>
+                            <button
+                              className="w-full text-left block text-white"
+                              onClick={() =>
+                                router.push(`/insights/${incat.id}`)
+                              }
+                            >
+                              {incat.title}
+                            </button>
+                          </DrawerClose>
+                        </li>
+                      ))}
                       <li>
                         <Link href="/profile" className="block text-white">
                           Profile
@@ -99,6 +130,7 @@ export function BottomNav() {
                           Settings
                         </Link>
                       </li>
+
                       <li>
                         <Button
                           variant="outline"

@@ -201,7 +201,7 @@ const Search = () => {
   console.log("profiles", profiles);
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="my-20 w-full flex flex-col gap-2">
+      <div className="pt-10 pb-20 w-full flex flex-col gap-2">
         {/* Search input and filter button */}
         <div className="flex px-2 md:px-4 lg:px-6 max-w-xl gap-2">
           <div className="border flex w-full items-center rounded-3xl">

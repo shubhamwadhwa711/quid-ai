@@ -34,7 +34,7 @@ export default function FilterDrawer({
   updateFilter,
   selectedFilters,
   clearFilters,
-  setIsFilterApplied
+  setIsFilterApplied,
 }) {
   const [open, setOpen] = useState(false);
   const [activeFilterCategory, setActiveFilterCategory] = useState(
@@ -43,7 +43,7 @@ export default function FilterDrawer({
   const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useAppDispatch();
-  
+
   // Redux state selectors
   const { academics, academicsloading, academicserror } = useAppSelector(
     (state) => state.Academics
@@ -112,12 +112,18 @@ export default function FilterDrawer({
   }, [
     activeFilterCategory,
     dispatch,
-    expertise, expertiseerror,
-    academics, academicserror,
-    country, countryerror,
-    clients, clienterror,
-    language, languageerror,
-    availableto, availabletoerror
+    expertise,
+    expertiseerror,
+    academics,
+    academicserror,
+    country,
+    countryerror,
+    clients,
+    clienterror,
+    language,
+    languageerror,
+    availableto,
+    availabletoerror,
   ]);
 
   // Update profiles when filters change
@@ -157,7 +163,7 @@ export default function FilterDrawer({
   const getFilteredOptions = (options) => {
     if (!options || !Array.isArray(options)) return [];
     if (!searchQuery) return options;
-    
+
     return options.filter((option) =>
       typeof option === "string"
         ? option?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -172,13 +178,20 @@ export default function FilterDrawer({
   // Display loading state for the current category
   const isLoading = () => {
     switch (activeFilterCategory) {
-      case "Expertise": return expertiseloading;
-      case "Academic": return academicsloading;
-      case "Country": return countryloading;
-      case "Clients": return clientloading;
-      case "Languages": return languageloading;
-      case "Available to": return availabletoloading;
-      default: return false;
+      case "Expertise":
+        return expertiseloading;
+      case "Academic":
+        return academicsloading;
+      case "Country":
+        return countryloading;
+      case "Clients":
+        return clientloading;
+      case "Languages":
+        return languageloading;
+      case "Available to":
+        return availabletoloading;
+      default:
+        return false;
     }
   };
 
@@ -225,8 +238,8 @@ export default function FilterDrawer({
         ));
       case "Country":
         return getFilteredOptions(country).map((count) => (
-          <div 
-            key={count.id || count.name} 
+          <div
+            key={count.id || count.name}
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
@@ -259,8 +272,8 @@ export default function FilterDrawer({
         ));
       case "Languages":
         return getFilteredOptions(language).map((lang) => (
-          <div 
-            key={lang.id || lang.name} 
+          <div
+            key={lang.id || lang.name}
             className="flex items-center gap-2 p-2 rounded-md"
           >
             <Checkbox
@@ -297,7 +310,9 @@ export default function FilterDrawer({
   };
 
   return (
-    <div className="w-full bg-gradient-to-br from-black via-[#0F0F30] to-[#0F0F30] backdrop-blur-md rounded-2xl px-2 py-2 transition-all duration-300">
+    <div
+      className="  mx-auto bg-gradient-to-br w-11/12 max-w-md from-black via-[#0F0F30] to-[#0F0F30] backdrop-blur-md rounded-2xl px-2 py-2"
+    >
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg proxima-bold text-center text-white">Filters</h3>
         <div className="flex gap-2">
@@ -325,32 +340,33 @@ export default function FilterDrawer({
           </label>
 
           <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-            {Solutions && Solutions.map((solution) => (
-              <Card
-                key={solution.id}
-                className={`h-28 w-28 p-10 rounded-xl border-none flex flex-col text-wrap justify-center items-center ${
-                  solution.name === selectedIndustry
-                    ? "bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
-                    : "bg-[#545C6C] text-white"
-                }`}
-                onClick={() => handleSector(solution.name)}
-              >
-                <img
-                  src={solution.logo}
-                  alt={solution.name}
-                  className="w-10 h-10"
-                />
-                <CardHeader className="p-2">
-                  <CardTitle className="text-white text-xs font-medium break-words text-center leading-tight line-clamp-3">
-                    {solution.name}
-                  </CardTitle>
-                </CardHeader>
-              </Card>
-            ))}
+            {Solutions &&
+              Solutions.map((solution) => (
+                <Card
+                  key={solution.id}
+                  className={`h-28 w-28 p-10 rounded-xl border-none flex flex-col text-wrap justify-center items-center ${
+                    solution.name === selectedIndustry
+                      ? "bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
+                      : "bg-[#545C6C] text-white"
+                  }`}
+                  onClick={() => handleSector(solution.name)}
+                >
+                  <img
+                    src={solution.logo}
+                    alt={solution.name}
+                    className="w-10 h-10"
+                  />
+                  <CardHeader className="p-2">
+                    <CardTitle className="text-white text-xs font-medium break-words text-center leading-tight line-clamp-3">
+                      {solution.name}
+                    </CardTitle>
+                  </CardHeader>
+                </Card>
+              ))}
           </div>
         </div>
       )}
-      
+
       <div className="grid grid-cols-12 gap-4 my-4">
         <div className="col-span-4 flex flex-col items-center">
           <h1 className="mx-2 text-sm text-center proxima-bold text-white">
