@@ -15,7 +15,6 @@ import {
   updateClient,
 } from "@/reducers/filter/client/clientSlice";
 import { useAppSelector, useAppDispatch } from "@/store/store";
-import { fetchAllCompanies } from "@/reducers/company/companySlice";
 import { fetchCompanySectors } from "@/reducers/company-sector/company-sector";
 import {
   Select,
@@ -25,11 +24,10 @@ import {
   SelectValue,
 } from "./ui/select";
 import { fetchProfile } from "@/reducers/profile/profileSlice";
-
 const ClientSearch = ({
   profileID,
-  selectedClients = [],
-  onChange,
+  selectedClients,
+  onSelectClients,
   onRemoveClient,
   icon = <User size={18} />,
 }) => {
@@ -41,8 +39,6 @@ const ClientSearch = ({
 
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [sectorSearch, setSectorSearch] = useState("");
-  const [debouncedSectorSearch, setDebouncedSectorSearch] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -52,7 +48,6 @@ const ClientSearch = ({
   const inputRef = useRef(null);
   const dispatch = useAppDispatch();
   const { clients, loading, error } = useAppSelector((state) => state.Client);
-  const { companies } = useAppSelector((state) => state.company);
   const { companySectors } = useAppSelector((state) => state.CompanySector);
 
   // Update formData when relevant states change
@@ -69,70 +64,61 @@ const ClientSearch = ({
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  useEffect(() => {
-    const handler = setTimeout(
-      () => setDebouncedSectorSearch(sectorSearch),
-      400
-    );
-    return () => clearTimeout(handler);
-  }, [sectorSearch]);
-
   // Initial data fetching
   useEffect(() => {
     // Fetch initial data when component mounts
     dispatch(fetchCompanySectors({}));
-    dispatch(fetchClient());
+    dispatch(fetchClient({}));
   }, [dispatch]);
 
   useEffect(() => {
-    if (debouncedSearchTerm.length > 0) {
-      dispatch(fetchAllCompanies({ search: debouncedSearchTerm }));
+    if (debouncedSearchTerm.trim()) {
+      dispatch(fetchClient({ search: debouncedSearchTerm }));
+      setShowDropdown(true);
+    } else {
+      setShowDropdown(false);
     }
   }, [debouncedSearchTerm, dispatch]);
 
-  // Handle click outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target)
-      ) {
-        setShowDropdown(false);
-      }
-    };
+  const handleAddClient = () => {
+    try {
+      // Create a FormData object from the state
+      const submitFormData = new FormData();
+      submitFormData.append("name", formData.name || searchTerm);
+      submitFormData.append("category", formData.category);
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+      if (formData.logo || imageFile) {
+        submitFormData.append("logo", formData.logo || imageFile);
+      }
+      // Dispatch the action with the formData and wait for it to complete
+      dispatch(postClient(submitFormData));
+      // handleResetClient();
+    } catch (err) {
+      console.error("Failed to add client:", err);
+    }
+  };
 
   // Select client
   const handleSelectClient = (client) => {
-    console.log("Selected client:", client);
+    // console.log("Selected client:", client);
     if (!selectedClients.some((c) => c.id === client.id)) {
-      onChange([...selectedClients, client]);
+      // onSelectClients(client);
+      dispatch(
+        updateClient({
+          profile: profileID,
+          company: client.id,
+          isFeatured: false,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          onSelectClients(client);
+          dispatch(fetchProfile());
+        });
     }
 
-    // Update formData with selected client
-    setFormData({
-      category: client.category || 1,
-      name: client.name || "",
-      logo: client.logo || null,
-    });
-    setCompanyID(client.id);
-    setSearchTerm(client.name || "");
+    setSearchTerm("");
     setShowDropdown(false);
-
-    if (client.logo) {
-      setImageFile(client.logo);
-      // Create preview URL if logo is a file
-      if (client.logo instanceof File) {
-        const reader = new FileReader();
-        reader.onloadend = () => setPreviewUrl(reader.result);
-        reader.readAsDataURL(client.logo);
-      }
-    }
   };
 
   const handleClearSelection = () => {
@@ -145,55 +131,7 @@ const ClientSearch = ({
     setShowDropdown(false);
     setImageFile(null);
     setPreviewUrl(null);
-    inputRef.current.focus();
-  };
-  const handleResetClient = () => {
-    setFormData({
-      category: 1,
-      name: "",
-      logo: null,
-    });
-    setSearchTerm("");
-    setShowDropdown(false);
-    setImageFile(null);
-    setPreviewUrl(null);
-  };
-
-  const handleAddClient = () => {
-    setIsLoading(true);
-    try {
-      // Create a FormData object from the state
-      const submitFormData = new FormData();
-      submitFormData.append("name", formData.name || searchTerm);
-      submitFormData.append("category", formData.category);
-
-      if (formData.logo || imageFile) {
-        submitFormData.append("logo", formData.logo || imageFile);
-      }
-
-      // Log the form data entries for debugging
-      console.log("FormData entries:");
-      for (let pair of submitFormData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
-
-      // Dispatch the action with the formData and wait for it to complete
-      dispatch(postClient(submitFormData))
-        .unwrap()
-        .then((result) => {
-          onChange([...selectedClients, result]);
-          dispatch(fetchProfile());
-        })
-        .catch((error) => {
-          console.error("Error adding client:", error);
-        });
-
-      handleResetClient();
-    } catch (err) {
-      console.error("Failed to add client:", err);
-    } finally {
-      setIsLoading(false);
-    }
+    // inputRef.current.focus();
   };
 
   const handleImageChange = (e) => {
@@ -225,7 +163,7 @@ const ClientSearch = ({
     (c) => c.company_name?.toLowerCase() === searchTerm.toLowerCase()
   );
 
-  const handleClientUpdate =  () => {
+  const handleClientUpdate = () => {
     // if (!companyID || !profileID) {
     //   toast({
     //     title: "Error",
@@ -238,7 +176,7 @@ const ClientSearch = ({
     setIsLoading(true);
     try {
       // Dispatch update and await completion
-        dispatch(
+      dispatch(
         updateClient({
           profile: profileID,
           company: companyID,
@@ -260,7 +198,6 @@ const ClientSearch = ({
       // });
 
       // Fetch updated data immediately after successful update
-     
 
       // Clear form after successful update
       handleClearSelection();
@@ -293,7 +230,7 @@ const ClientSearch = ({
       // onRemoveClient(clientID);
 
       // Optimistically remove from local state before refetching
-      onChange(selectedClients.filter((client) => client.id !== clientID));
+      onRemoveClient(clientID);
 
       // Refresh client list after deletion
     } catch (error) {
@@ -302,7 +239,8 @@ const ClientSearch = ({
       setIsLoading(false);
     }
   };
-  console.log("Selected clients:", selectedClients);
+  console.log("CLients", clients, showDropdown);
+
   return (
     <div className="relative w-full">
       <div className="relative">
@@ -315,9 +253,9 @@ const ClientSearch = ({
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            setShowDropdown(true);
+            // setShowDropdown(true);
           }}
-          onFocus={() => setShowDropdown(true)}
+          // onFocus={() => setShowDropdown(true)}
           placeholder="Search for a client"
           className="w-full p-2 pl-10 pr-16 bg-[#262640] text-white rounded-3xl border focus:ring-2 focus:ring-[#7C2BD3]"
           disabled={isLoading}
@@ -361,8 +299,8 @@ const ClientSearch = ({
           ref={dropdownRef}
           className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-[#1E1E38] rounded-xl shadow-lg border border-[#3A3A5A]"
         >
-          {companies?.length > 0 ? (
-            companies.map((cli) => (
+          {clients?.length > 0 ? (
+            clients.map((cli) => (
               <div
                 key={cli.id}
                 onClick={() => handleSelectClient(cli)}
@@ -465,7 +403,7 @@ const ClientSearch = ({
           </SelectContent>
         </Select>
       </div>
-      <Button
+      {/* <Button
         onClick={handleClientUpdate}
         type="submit"
         className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1 from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
@@ -496,7 +434,7 @@ const ClientSearch = ({
             </svg>
           </>
         )}
-      </Button>
+      </Button> */}
     </div>
   );
 };

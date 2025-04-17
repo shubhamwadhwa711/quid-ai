@@ -17,7 +17,9 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     currentValues?.country
   );
   const [skills, setSkills] = useState<{ id: number; name: string }[]>([]);
-  const [selectedSkills, setSelectedSkills] = useState<[]>(currentValues?.skill);
+  const [selectedSkills, setSelectedSkills] = useState<[]>(
+    currentValues?.skill
+  );
   const [selectedlanguages, setSelectedLanguages] = useState<
     { id: number; name: string }[]
   >(currentValues?.language);
@@ -81,9 +83,17 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     console.log("handleSelectSkill", skill);
     setSelectedSkills((prev) => [...prev, skill]);
   };
-
+  const handleSelectClient = (client) => {
+    console.log("handleSelectClient", client);
+    setSelectedClients((prev) => [...prev, client]);
+  };
   const handleRemoveSkill = (skillId: number) => {
     setSelectedSkills((prev) => prev.filter((skill) => skill.id !== skillId));
+  };
+  const handleRemoveClient = (clientId: number) => {
+    setSelectedClients((prev) =>
+      prev.filter((client) => client.id !== clientId)
+    );
   };
   const handleSelectLanguage = (language) => {
     console.log("handleSelectLanguage", language);
@@ -129,7 +139,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       updatedData.skill = selectedSkills.map((skill) => skill.id);
     }
     // Ensure country is passed as an ID
-    
+
     if (formData.country || formData.country === "") {
       updatedData.country = selectedCountry.id;
     }
@@ -212,16 +222,10 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
               {field.key === "featuredClients" && (
                 <ClientSearch
-                  profileID={currentValues.id}
+                  profileID={currentValues?.id}
                   selectedClients={selectedClients}
-                  onChange={(updatedClients) =>
-                    setSelectedClients(updatedClients)
-                  }
-                  onRemoveClient={(clientToRemove) =>
-                    setSelectedClients((prev) =>
-                      prev.filter((client) => client.id !== clientToRemove.id)
-                    )
-                  }
+                  onSelectClients={handleSelectClient}
+                  onRemoveClient={handleRemoveClient}
                 />
               )}
 
