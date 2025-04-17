@@ -196,7 +196,7 @@ const ProfileScreen = () => {
   };
  
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-2 pb-20">
+    <div className="min-h-screen flex flex-col items-center justify-center -mt-10 px-2 pb-20">
       {/* Main profile card */}
       <div className="w-full max-w-2xl rounded-xl overflow-hidden">
         {/* Cover photo area */}
