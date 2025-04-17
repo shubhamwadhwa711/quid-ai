@@ -26,7 +26,7 @@ export const fetchClient = createAsyncThunk(
   "client/fetchClient",
   async (searchData: Record<string, any>, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/filter/client", {
+      const response = await axiosInstance.get("/all-company", {
         params: searchData,
       });
       return response.data;
@@ -44,7 +44,7 @@ export const postClient = createAsyncThunk(
   async (data: Client, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(
-        `${process.env.NEXT_BACKEND_URL}/all-company/`,
+        `/all-company/`,
         data
       );
       return response.data;
@@ -63,7 +63,7 @@ export const updateClient = createAsyncThunk(
       console.log("formData", formData);
       // console.log("id", id);
       const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/client/`,
+        `/client/`,
         formData
       );
       // dispatch(fetchClient());
@@ -80,8 +80,8 @@ export const deleteClient = createAsyncThunk(
   async ({id}, { rejectWithValue }) => {
     try {
       console.log("id", id);
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/client/${id}/`
+      const response = await axiosInstance.delete(
+        `/client/${id}/`
       );
       return response.data;
     } catch (error: any) {
@@ -117,7 +117,7 @@ const clientSlice = createSlice({
       })
       .addCase(postClient.fulfilled, (state, action) => {
         state.loading = false;
-        state.clients = [...state.clients, action.payload];
+        state.clients.push(action.payload);
       })
       .addCase(postClient.rejected, (state, action) => {
         state.loading = false;

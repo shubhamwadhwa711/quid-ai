@@ -42,14 +42,14 @@ const Navbar = () => {
                 className="flex "
                 onClick={() => router.push("/profile")}
               >
-                <img
+                <Image
                   className="rounded-full"
-                  src={profile?.image}
+                  src={session?.user?.image ?? profile?.image}
                   alt="Profile"
                   width={40}
                   height={40}
                 />
-                <span className="ml-2 text-white">{session?.user?.name}</span>
+                <span className="text-white">{session?.user?.name}</span>
               </Button>
             ) : (
               <div className="flex items-center gap-2">
