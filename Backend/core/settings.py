@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.
 
 CSRF_TRUSTED_ORIGINS = [
     "https://api-quidai.shubpy.com",
-    "http://api.quidai.org"
+    "https://api.quidai.org"
 
  
 ]
