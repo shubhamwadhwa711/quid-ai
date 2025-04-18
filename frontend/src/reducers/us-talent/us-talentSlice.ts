@@ -73,14 +73,16 @@ export interface Profile {
 }
 
 interface ProfileState {
-  usprofile: Profile[];
+  usprofile: Profile | undefined;
+  usprofiles: Profile[];
   loading: boolean;
   error: string | null;
 }
 
 // Initial state
 const initialState: ProfileState = {
-  usprofile: [],
+  usprofile: undefined,
+  usprofiles: [],
   loading: false,
   error: null,
 };
@@ -88,10 +90,30 @@ const initialState: ProfileState = {
 // Async Thunk to fetch company data
 export const fetchUSProfile = createAsyncThunk(
   "profile/fetchUSProfile",
-  async (_, { rejectWithValue }) => {
-     console.log("Fetching US profile...", );
+  async (id, { rejectWithValue }) => {
+    console.log("Fetching US profile...");
     try {
-      const response = await axios.get("/api/us-talent");
+      const response = await axios.get(
+        `${process.env.NEXT_BACKEND_URL}/us-profile/${id}`
+      );
+      console.log("profile fetched:", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to profile"
+      );
+    }
+  }
+);
+
+export const fetchUSProfiles = createAsyncThunk(
+  "profile/fetchUSProfiles",
+  async (_, { rejectWithValue }) => {
+    console.log("Fetching US profile...");
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_BACKEND_URL}/us-profile/`
+      );
       console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -118,6 +140,18 @@ const USProfileSlice = createSlice({
         state.usprofile = action.payload;
       })
       .addCase(fetchUSProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchUSProfiles.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUSProfiles.fulfilled, (state, action) => {
+        state.loading = false;
+        state.usprofiles = action.payload;
+      })
+      .addCase(fetchUSProfiles.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

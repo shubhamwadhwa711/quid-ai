@@ -16,8 +16,8 @@ import { useRouter } from "next/navigation";
 import TalentCard from "@/components/TalentCard";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import {  fetchProfiles, Profile } from "@/reducers/profile/profileSlice";
-import { fetchAIProfile } from "@/reducers/ai-talent/ai-talent";
-import { fetchUSProfile } from "@/reducers/us-talent/us-talentSlice";
+import {  fetchAIProfiles } from "@/reducers/ai-talent/ai-talent";
+import { fetchUSProfile, fetchUSProfiles } from "@/reducers/us-talent/us-talentSlice";
 import FilterDrawer from "@/components/FilterDrawer";
 interface Filter {
   expertise: string[];
@@ -89,19 +89,19 @@ const Search = () => {
   // Redux and data states
   const dispatch = useAppDispatch();
   const { profiles } = useAppSelector((state) => state.Profile);
-  const { aiprofile } = useAppSelector((state) => state.AIProfile);
-  const { usprofile } = useAppSelector((state) => state.USProfile);
+  const { aiprofiles } = useAppSelector((state) => state.AIProfile);
+  const { usprofiles } = useAppSelector((state) => state.USProfile);
   // const { filter, filterloading, filtererror } = useAppSelector(
   //   (state) => state.PostFilter
   // );
-  console.log("aiProfile", aiprofile);
-  console.log("usProfile", usprofile);
+  console.log("aiProfiles", aiprofiles);
+  console.log("usProfiles", usprofiles);
   const [userData, setUserData] = useState<Profile[] | null>(null);
   // const [filterUsers, setFilterUsers] = useState<Profile[] | null>(filter);
   // Fetch profile on component mount
   useEffect(() => {
-    dispatch(fetchAIProfile());
-    dispatch(fetchUSProfile());
+    dispatch(fetchAIProfiles());
+    dispatch(fetchUSProfiles());
   }, [dispatch]);
   useEffect(() => {
     dispatch(fetchProfiles(selectedFilters));
@@ -331,7 +331,7 @@ const Search = () => {
                 } gap-2`}
               >
                 {profiles?.map((talent) => (
-                  <TalentCard key={talent.id} talent={talent} />
+                  <TalentCard type="" key={talent.id} talent={talent} />
                 ))}
               </div>
             </div>
@@ -351,8 +351,8 @@ const Search = () => {
                       : "grid-flow-col auto-cols-max"
                   } gap-2`}
                 >
-                  {aiprofile?.map((talent) => (
-                    <TalentCard key={talent.id} talent={talent} />
+                  {aiprofiles?.map((talent) => (
+                    <TalentCard talent={talent} talenttype={"AI"} />
                   ))}
                 </div>
               </div>
@@ -370,8 +370,8 @@ const Search = () => {
                       : "grid-flow-col auto-cols-max"
                   } gap-2`}
                 >
-                  {usprofile?.map((talent) => (
-                    <TalentCard key={talent.id} talent={talent} />
+                  {usprofiles?.map((talent) => (
+                    <TalentCard  talent={talent} talenttype={"US"}/>
                   ))}
                 </div>
               </div>

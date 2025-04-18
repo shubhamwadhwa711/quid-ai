@@ -34,8 +34,11 @@ interface Education {
 interface Client {
   id: number;
   name: string;
-  client: string;
-  profile: number;
+  // client: string;
+  // profile: number;
+  category: number;
+  logo: string;
+  is_featured: boolean;
 }
 
 interface Project {
@@ -101,8 +104,7 @@ export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/profile/", {
-      });
+      const response = await axiosInstance.get("/profile/", {});
       console.log("Profile data fetched successfully", response.data[0]);
       return response.data[0];
     } catch (error: any) {
