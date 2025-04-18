@@ -44,6 +44,7 @@ class Insights(models.Model):
     title = models.CharField(max_length=100, null=True,blank=True)
     category = models.ForeignKey(InsightsCategory, on_delete=models.CASCADE, related_name='insight')
     text = CKEditor5Field('Text', config_name='extends')
+    embed = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insight_created_by_user')
     updated_at = models.DateTimeField(auto_now=True)
