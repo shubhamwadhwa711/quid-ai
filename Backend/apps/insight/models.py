@@ -28,7 +28,7 @@ class Testimonial(models.Model):
     company = models.CharField(max_length=100,null=True, blank=True)
     message = models.TextField()
     rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(1,6)])
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='testimonial')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='testimonial', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -46,7 +46,7 @@ class Insights(models.Model):
     text = CKEditor5Field('Text', config_name='extends')
     embed = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insight_created_by_user')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='insight_created_by_user',null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='insight_updated_by_user', null=True, blank=True)
     featured_image = models.ImageField(upload_to='featured_image/', blank=True, null=True)
@@ -58,7 +58,7 @@ class Faq(models.Model):
     question = models.TextField()
     answer = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='faq_created_by_user')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='faq_created_by_user', null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='faq_updated_by_user', null=True, blank=True)
 
