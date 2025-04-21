@@ -24,10 +24,10 @@ interface TalentCard {
   image: string;
   headline: string;
   summary?: string;
-  location: string;
+  country: { id: number; name: string };
   linkedin_url: string;
 }
-const TalentCard = ({ talent }: { talent: TalentCard }) => {
+const TalentCard = ({ talent,talenttype }: { talent: TalentCard, talenttype: string}) => {
   const [showConnectForm, setShowConnectForm] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
   const router = useRouter();
@@ -35,10 +35,11 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
     setSelectedTalent(talent);
     setShowConnectForm(true);
   };
-  console.log("talent image", talent.image);
+  console.log("talent", talent);
+  console.log("talenttype", talenttype);
   return (
     <Card
-      key={talent.id}
+      key={talent?.id}
       className="bg-white/10 h-96 w-80 flex flex-col gap-y-4 border-none  relative text-white mt-20"
     >
       <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 z-10">
@@ -53,14 +54,14 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
       <CardHeader className=" flex flex-col items-center gap-y-2 mt-14 px-6 py-0">
         <CardTitle
           className="cursor-pointer "
-          onClick={() => router.push(`/talent/${talent.id}`)}
+          onClick={() => router.push(`/talent/${talenttype}/${talent.id}`)}
         >
           {talent?.user?.first_name} {talent?.user?.last_name}
         </CardTitle>
         <CardDescription className="text-xs">
           {talent?.country?.name}
         </CardDescription>
-        <span className="text-sm proxima-FAQ">{talent.headline}</span>
+        <span className="text-sm proxima-FAQ">{talent?.headline}</span>
       </CardHeader>
       <CardContent className="text-center px-6 py-0">
         <div className="flex flex-wrap overflow-hidden max-h-[5rem] justify-center gap-2 ">
@@ -69,7 +70,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
               key={index}
               className="h-5 text-xs rounded-full font-medium  bg-white/20  transition-all duration-300"
             >
-              {s.name}
+              {s?.name}
             </Badge>
           ))}
         </div>
@@ -100,7 +101,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
             </Button>
             <Link
               className="rounded-full h-12 w-12 border flex items-center justify-center"
-              href={talent.linkedin_url}
+              href={talent?.linkedin_url}
             >
               <Linkedin />
             </Link>
@@ -114,7 +115,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
                   {talent?.client?.map((cli, index) => (
                     <img
                       key={index}
-                      src={cli?.client}
+                      src={cli?.logo}
                       alt={cli?.name}
                       className="h-8 w-20 object-contain inline-block ms-2"
                     />
@@ -126,7 +127,7 @@ const TalentCard = ({ talent }: { talent: TalentCard }) => {
         </div>
 
         <ConnectDialog
-          talentId={talent.id}
+          talentId={talent?.id}
           showConnectForm={showConnectForm}
           setShowConnectForm={setShowConnectForm}
         />
