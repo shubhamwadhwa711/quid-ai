@@ -121,11 +121,11 @@ class EnquirySerializer(serializers.ModelSerializer):
         model = Enquiry
         exclude =['status', 'updated_by','updated_at', 'mobile'] 
 
-    def create(self, validated_data):
-        profile = validated_data.get('profile')
-        if profile and profile.auto_approve_inquiry:
-            validated_data['status'] = "APPROVED"
-        return super().create(validated_data)    
+    # def create(self, validated_data):
+    #     profile = validated_data.get('profile')
+    #     if profile and profile.auto_approve_inquiry:
+    #         validated_data['status'] = "APPROVED"
+    #     return super().create(validated_data)    
 
 
 class ClientSerializer(serializers.ModelSerializer):
