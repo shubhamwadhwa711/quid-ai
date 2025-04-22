@@ -183,7 +183,8 @@ class ProfileRelatedSerializer(serializers.ModelSerializer):
         exclude =['status','is_featured', 'auto_approve_inquiry','phone','website'] 
 
     def get_client(self, obj):
+        request = self.context.get('request')
         client = obj.clients.select_related('company')
-        return ProfileClientSerializer(client, many=True).data    
+        return ProfileClientSerializer(client, many=True, context={'request': request}).data    
 
      
