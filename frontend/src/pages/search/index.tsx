@@ -15,9 +15,12 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { useRouter } from "next/navigation";
 import TalentCard from "@/components/TalentCard";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import {  fetchProfiles, Profile } from "@/reducers/profile/profileSlice";
-import {  fetchAIProfiles } from "@/reducers/ai-talent/ai-talent";
-import { fetchUSProfile, fetchUSProfiles } from "@/reducers/us-talent/us-talentSlice";
+import { fetchProfiles, Profile } from "@/reducers/profile/profileSlice";
+import { fetchAIProfiles } from "@/reducers/ai-talent/ai-talent";
+import {
+  fetchUSProfile,
+  fetchUSProfiles,
+} from "@/reducers/us-talent/us-talentSlice";
 import FilterDrawer from "@/components/FilterDrawer";
 interface Filter {
   expertise: string[];
@@ -134,9 +137,9 @@ const Search = () => {
 
   const updateFilter = useCallback(
     (category: FilterCategory, value: string, isAdding: boolean) => {
-      console.log("category",category);
-      console.log("value",value);
-      console.log("isAdding",isAdding);
+      console.log("category", category);
+      console.log("value", value);
+      console.log("isAdding", isAdding);
       setSelectedFilters((prev) => {
         const updatedFilters = {
           ...prev,
@@ -238,14 +241,14 @@ const Search = () => {
           </Button>
         </div>
         <div>
-          <div className="mx-1 flex items-center gap-2">
+          <div className="mx-4 flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
             <h1 className="proxima-bold text-xl text-white">
               Quick filters by
             </h1>
           </div>
           <div className="w-full px-2 md:px-4 lg:px-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 hide-scrollbar">
+            <div className="grid grid-cols-2 gap-2 hide-scrollbar">
               {QuickFilters.map(({ id, icon, label }) => (
                 <Card
                   key={id}
@@ -253,7 +256,7 @@ const Search = () => {
                     setActiveQuickFilterCategory(label);
                     setShowFilters(true);
                   }}
-                  className="min-h-16 min-w-28 flex flex-col align-middle justify-center items-center border-none bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]"
+                  className="min-h-16 cursor-pointer min-w-28 flex flex-col align-middle justify-center items-center border-none bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]"
                 >
                   <CardTitle>
                     <img src={icon} alt="" />
@@ -265,6 +268,12 @@ const Search = () => {
               ))}
             </div>
           </div>
+          <div className="absolute right-0">
+            <img
+              src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+              alt=""
+            />
+          </div>
         </div>
 
         {/* Selected filters badges */}
@@ -274,8 +283,9 @@ const Search = () => {
               category !== "industry" &&
               values.map((value) => (
                 <Badge
+                  variant="none"
                   key={`${category}-${value}`}
-                  className="flex bg-white/20 items-center text-nowrap rounded-3xl"
+                  className="flex border-none bg-white/20 items-center text-nowrap rounded-3xl"
                 >
                   <span className="text-xs proxima-bold">
                     {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -319,10 +329,10 @@ const Search = () => {
             <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
               <div className="mx-1 flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                {/* <h1 className="proxima-bold text-xl text-white">
-                  Talents from US
-                </h1> */}
-              </div> 
+                <h1 className="proxima-bold text-xl text-white">
+                  Search Results
+                </h1>
+              </div>
               <div
                 className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
                   isSearchApplied || isFilterApplied
@@ -371,12 +381,15 @@ const Search = () => {
                   } gap-2`}
                 >
                   {usprofiles?.map((talent) => (
-                    <TalentCard  talent={talent} talenttype={"US"}/>
+                    <TalentCard talent={talent} talenttype={"US"} />
                   ))}
                 </div>
               </div>
             </>
           )}
+        </div>
+        <div>
+          <img src="" alt="" />
         </div>
       </div>
     </div>

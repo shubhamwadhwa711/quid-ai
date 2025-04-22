@@ -63,7 +63,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     };
   }
 }
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
   // Enable debug only in development
   debug: process.env.NODE_ENV === "development",
   secret: process.env.NEXTAUTH_SECRET!,
@@ -117,7 +117,7 @@ const authOptions: AuthOptions = {
         "https://www.linkedin.com/oauth/.well-known/openid-configuration",
       authorization: {
         params: {
-          scope: "openid profile email",
+          scope: "openid profile email r_basicprofile",
         },
       },
     }),
