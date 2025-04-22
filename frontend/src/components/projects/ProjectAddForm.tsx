@@ -422,7 +422,7 @@ export const ProjectAddForm = ({
         </DrawerHeader>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6 px-4 overflow-auto"
+          className="flex flex-col gap-6 py-2 px-4 overflow-auto"
         >
           {PROJECT_FIELDS.map((field) => (
             <div key={field.key} className="">

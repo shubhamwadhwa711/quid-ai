@@ -38,7 +38,7 @@ const Insights = () => {
   console.log("insights", insights);
   console.log("insights category", insightsCategory);
   return (
-    <div className="flex flex-col w-full  items-center">
+    <div className="flex flex-col w-full items-center">
       <div className="absolute top-0 left-0 w-full h-[50vh] flex justify-center">
         <img
           src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"

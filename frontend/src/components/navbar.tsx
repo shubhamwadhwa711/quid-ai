@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchProfile } from "@/reducers/profile/profileSlice";
 
@@ -14,7 +14,7 @@ const Navbar = () => {
   const router = useRouter();
   console.log("session", session);
   const dispatch = useAppDispatch();
-  const {profile} = useAppSelector((state) => state.Profile);
+  const { profile } = useAppSelector((state) => state.Profile);
   useEffect(() => {
     dispatch(fetchProfile());
   }, []);
@@ -22,9 +22,9 @@ const Navbar = () => {
   return (
     <nav className="relative z-50 min-h-8 pt-2 max-w-md w-full justify-self-center snap-center">
       <div className="p-2 bg-gradient-to-br">
-        <div className="flex items-center h-full px-4">
+        <div className="flex items-center justify-between h-full px-4">
           {/* Brand Logo */}
-          <div className="flex-none mr-4">
+          <div className="flex-none">
             <Link href="/">
               <img
                 src="/quid-icon.png"
@@ -34,12 +34,12 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* User Profile / Authentication */}
-          <div className="flex-none ml-auto mt-2">
+          {/* User Profile / Authentication - Now at rightmost */}
+          <div className="absolute right-0 flex items-center">
             {session ? (
               <Button
                 variant="none"
-                className="flex "
+                className="flex items-center gap-2"
                 onClick={() => router.push("/profile")}
               >
                 <Image
@@ -49,24 +49,28 @@ const Navbar = () => {
                   width={40}
                   height={40}
                 />
-                <span className="text-white">{session?.user?.name}</span>
+                <span className="text-white font-semibold">
+                  {session?.provider?.profile?.given_name}{" "}
+                  {session?.provider?.profile?.family_name}
+                </span>
               </Button>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center mx-2">
                 <Button
                   variant="none"
                   onClick={() => signIn("linkedin")}
-                  className="text-sm text-white hover:text-gray-200"
+                  className="text-sm text-white font-semibold hover:text-gray-200 p-0"
                 >
                   Login
+                  <span className="text-white">|</span>
+                  Sign Up
                 </Button>
-                <span className="text-white">|</span>
-                <Link
+                {/* <Link
                   href="/signup"
                   className="text-sm text-white hover:text-gray-200"
                 >
                   Signup
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>

@@ -20,6 +20,7 @@ const nextConfig = withPWA({
       "media.licdn.com",
       "s3-alpha-sig.figma.com",
       "res.cloudinary.com",
+      "localhost"
     ],
     remotePatterns: [
       {
@@ -36,6 +37,12 @@ const nextConfig = withPWA({
         protocol: "https",
         hostname: "res.cloudinary.com",
         pathname: "/dgz1duuwu/image/upload/**",
+      },
+      {
+        protocol: "http", 
+        hostname: "localhost",
+        port: "8006",
+        pathname: "/media/**",
       },
     ],
   },

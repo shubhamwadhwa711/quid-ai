@@ -212,7 +212,7 @@ const ProfileScreen = () => {
                 height={100}
                 src={profile?.image || "/placeholder-avatar.png"}
                 alt="Profile"
-                className="h-full w-full rounded-full object-cover"
+                className="h-full w-full rounded-full"
               />
               <Button
                 onClick={() => fileInput?.current?.click()}
@@ -263,7 +263,7 @@ const ProfileScreen = () => {
 
               <div className="flex items-center space-x-2 mt-2">
                 <Linkedin className="w-5 h-5 fill-white" />
-                <span className="text-sm font-bold text-nowrap overflow-hidden text-ellipsis">
+                <span className="text-sm font-bold text-wrap overflow-hidden text-ellipsis">
                   {profile?.linkedin_url || "Add LinkedIn URL"}
                 </span>
               </div>
