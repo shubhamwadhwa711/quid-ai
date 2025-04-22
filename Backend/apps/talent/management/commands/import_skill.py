@@ -13,7 +13,7 @@ class Command(BaseCommand):
 
             for row in csv_reader:
                 
-                print(row)
+                
                 skill, created = Skill.objects.get_or_create(name=row[0])
                 if created:
                    print("New user created:", skill)

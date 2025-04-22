@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 
 @shared_task(bind=True, max_retries=3)
 def send_mail_talent(self, subject, message, sender_email, recipient_email ):
-    print(subject)
+    
     result = send_mail(
             subject= subject,
             message=message,
@@ -12,7 +12,7 @@ def send_mail_talent(self, subject, message, sender_email, recipient_email ):
             recipient_list= recipient_email,
             fail_silently=False,
         )
-    print(result)
+    
     return "Done"
 
 

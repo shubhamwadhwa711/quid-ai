@@ -18,15 +18,15 @@ def profile_approve( sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Enquiry)
 def send_approval_email(sender, instance, **kwargs):
-    print("Hello")
+    
     if instance.status == "APPROVED": 
-        print("Hello") 
+        
         subject = f"Hey {instance.profile.user.first_name}, {instance.full_name} wants to connect you!"
         message = f"Hey {instance.profile.user.first_name},{instance.full_name} wants to connect with you.\n{instance.message}\n Details:\n Full name: {instance.full_name}Email: {instance.email}"
         sender_email =  settings.DEFAULT_FROM_EMAIL
-        print(sender_email)
+        
         recipient_email = [instance.profile.user.email]
-        print(recipient_email)
+        
         
         send_mail_talent.delay(subject, message, sender_email, recipient_email)    
 
