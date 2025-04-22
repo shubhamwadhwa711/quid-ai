@@ -29,7 +29,7 @@ def send_approval_email(sender, instance, **kwargs):
         print(recipient_email)
         
         send_mail_talent.delay(subject, message, sender_email, recipient_email)    
-n
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
