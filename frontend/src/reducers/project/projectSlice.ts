@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
-import axios from "axios";
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 interface Tags {
   id: number;
   name: string;
@@ -37,7 +37,7 @@ export const fetchProject = createAsyncThunk(
     console.log("fetchProject id", { tid, pid });
     try {
       console.log("Fetching fetchProject...");
-      const response = await axios.get(`/api/project/${tid}/${pid}`);
+      const response = await axiosInstanceUnauthorized.get(`/profile/${tid}/project/${pid}/`);
       console.log("fetchProject fetched:", response.data);
       return response.data;
     } catch (error: any) {
