@@ -14,14 +14,14 @@ COPY . .
 # RUN rm .env*
 # COPY .env.production .env
 COPY --from=deps /app/node_modules ./node_modules
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 ENV HOSTNAME=0.0.0.0
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
