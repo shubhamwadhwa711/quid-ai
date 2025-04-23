@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -26,7 +27,7 @@ export const fetchExpertise = createAsyncThunk<Expertise[], Record<string, any>>
   async (searchData, { rejectWithValue }) => {
     try {
       console.log("Fetching expertise with params:", searchData);
-      const response = await axios.get("/api/filter/expertise", {
+      const response = await axiosInstanceUnauthorized.get("/skill/", {
         params: searchData,
       });
       console.log("Expertise fetched successfully:", response.data);
