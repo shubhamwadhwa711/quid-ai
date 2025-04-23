@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postbuild": "cp src/config/manifest.json public/manifest.json"
+    "lint": "next lint"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^9.5.0",
