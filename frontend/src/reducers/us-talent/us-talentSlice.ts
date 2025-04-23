@@ -1,3 +1,4 @@
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface User {
@@ -93,8 +94,8 @@ export const fetchUSProfile = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     console.log("Fetching US profile...");
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_BACKEND_URL}/us-profile/${id}`
+      const response = await axiosInstanceUnauthorized.get(
+        `/us-profile/${id}/`
       );
       console.log("profile fetched:", response.data);
       return response.data;
