@@ -1,3 +1,4 @@
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Country {
@@ -24,7 +25,7 @@ export const fetchCountry = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       console.log("Fetching country...");
-      const response = await axios.get("/api/filter/country");
+      const response = await axiosInstanceUnauthorized.get("/country/");
       console.log("country fetched:", response.data);
       return response.data;
     } catch (error: any) {

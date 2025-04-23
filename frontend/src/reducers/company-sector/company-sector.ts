@@ -1,4 +1,5 @@
 // companySectorSlice.ts
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -23,12 +24,35 @@ export const fetchCompanySectors = createAsyncThunk(
   "companySector/fetchCompanySectors",
   async (search: any, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_BACKEND_URL}/category/`, {
+      const response = await axiosInstanceUnauthorized.get(`/category/`, {
         params: search,
+        paramsSerializer: (params) => {
+          const searchParams = new URLSearchParams();
+
+          Object.entries(params).forEach(([key, value]) => {
+            if (key === "search") {
+              console.log("value", value);
+              // Ensure search param is a string, not an array
+              searchParams.append(
+                key,
+                Array.isArray(value) ? value[0] : (value as string)
+              );
+            } else if (Array.isArray(value)) {
+              value.forEach((v) => searchParams.append(key, v));
+            } else {
+              searchParams.append(key, value as string);
+            }
+          });
+
+          return searchParams.toString();
+        },
+        headers: { "Content-Type": "application/json" },
       });
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch company sectors");
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch company sectors"
+      );
     }
   }
 );

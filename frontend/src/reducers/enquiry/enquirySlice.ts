@@ -1,3 +1,4 @@
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Enquiry {
@@ -30,8 +31,8 @@ export const fetchEnquiry = createAsyncThunk(
   "enquiry/fetchEnquiry",
   async (Data: Enquiry, { rejectWithValue }) => {
     try {
-      console.log("Fetching Enquiry...",Data);
-      const response = await axios.post(`/api/enquiry`,Data);
+      console.log("Fetching Enquiry...", Data);
+      const response = await axiosInstanceUnauthorized.post(`/enquiry/`, Data);
       console.log("Enquiry fetched:", response.data);
       return response.data;
     } catch (error: any) {
