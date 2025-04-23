@@ -4,6 +4,7 @@ interface Blog {
   id: number;
   title: string;
   text: string;
+  embed: string;
   created_at: string;
   featured_image: string;
   category: number;
@@ -21,6 +22,7 @@ const initialState: BlogState = {
     id: NaN,
     title: "",
     text: "",
+    embed: "",
     created_at: "",
     featured_image: "",
     category: NaN,
@@ -32,9 +34,9 @@ const initialState: BlogState = {
 // Async Thunk to fetch company data
 export const fetchBlogs = createAsyncThunk(
   "blogs/fetchBlogs",
-  async ({cid, iid}, { rejectWithValue }) => {
+  async ({ cid, iid }, { rejectWithValue }) => {
     try {
-      console.log("Fetching Blogs...",{cid,iid});
+      console.log("Fetching Blogs...", { cid, iid });
       const response = await axios.get(`/api/blogs/${cid}/${iid}`);
       console.log("Blogs fetched:", response.data);
       return response.data;

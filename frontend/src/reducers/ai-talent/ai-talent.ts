@@ -73,14 +73,16 @@ export interface Profile {
 }
 
 interface ProfileState {
-  aiprofile: Profile[];
+  aiprofile: Profile | undefined;
+  aiprofiles: Profile[];
   loading: boolean;
   error: string | null;
 }
 
 // Initial state
 const initialState: ProfileState = {
-  aiprofile: [],
+  aiprofile: undefined,
+  aiprofiles: [],
   loading: false,
   error: null,
 };
@@ -88,10 +90,25 @@ const initialState: ProfileState = {
 // Async Thunk to fetch company data
 export const fetchAIProfile = createAsyncThunk(
   "profile/fetchAIProfile",
-  async (_, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     console.log("Fetching AI profile...");
     try {
-      const response = await axios.get("/api/ai-talent");
+      const response = await axios.get(`${process.env.NEXT_BACKEND_URL}/top-profile/${id}/`);
+      console.log("aiprofile", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to profile"
+      );
+    }
+  }
+);
+export const fetchAIProfiles = createAsyncThunk(
+  "profile/fetchAIProfiles",
+  async (id, { rejectWithValue }) => {
+    console.log("Fetching AI profile...");
+    try {
+      const response = await axios.get(`${process.env.NEXT_BACKEND_URL}/top-profile/`);
       console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -118,6 +135,18 @@ const AIProfileSlice = createSlice({
         state.aiprofile = action.payload;
       })
       .addCase(fetchAIProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+       .addCase(fetchAIProfiles.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAIProfiles.fulfilled, (state, action) => {
+        state.loading = false;
+        state.aiprofiles = action.payload;
+      })
+      .addCase(fetchAIProfiles.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -121,7 +121,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     def get_queryset(self):
         profile_id = self.kwargs['profile_pk']
-        return Project.objects.filter(profile_id=profile_id , profile__status="APPROVED") 
+        return Project.objects.filter(profile_id=profile_id ) 
 
 
 class ProjectEditViewSet(viewsets.ModelViewSet):

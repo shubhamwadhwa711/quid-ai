@@ -9,7 +9,7 @@
             "company": "Shubpy",
             "message": "This is a great platform to search best talent.",
             "rating": 5,
-            "created_by": 1,
+            "created_by": null,
             "created_at": "2025-02-24T06:41:43.572Z"
         }
     },
@@ -23,7 +23,7 @@
             "company": "Vidyakul",
             "message": "This is a great platform to search best talent.",
             "rating": 5,
-            "created_by": 1,
+            "created_by": null,
             "created_at": "2025-02-24T06:41:43.572Z"
         }
     },
@@ -37,7 +37,7 @@
             "company": "Gurukul",
             "message": "This is a great platform to search best talent.",
             "rating": 5,
-            "created_by": 1,
+            "created_by": null,
             "created_at": "2025-02-24T06:41:43.572Z"
         }
     },
@@ -51,7 +51,7 @@
             "company": "IBM",
             "message": "This is a great platform to search best talent.",
             "rating": 5,
-            "created_by": 1,
+            "created_by": null,
             "created_at": "2025-02-24T06:41:43.572Z"
         }
     }

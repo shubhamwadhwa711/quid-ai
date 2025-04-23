@@ -118,7 +118,7 @@ const Hero = () => {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-10"
                 />
-                <CardHeader className="p-4 flex justify-between items-start h-full  relative z-10">
+                <CardHeader className="py-2 px-4 flex justify-between items-start h-full  relative z-10">
                   <svg
                     width="19"
                     height="25"
@@ -372,7 +372,7 @@ const Hero = () => {
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-10"
                 />
-                <CardHeader className="p-4 flex justify-between items-start h-full relative z-10">
+                <CardHeader className="py-2 px-3 flex justify-between items-start h-full relative z-10">
                   <svg
                     width="29"
                     height="30"
@@ -413,7 +413,7 @@ const Hero = () => {
                     >
                       <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small">
                         <span className="block">
-                          Knowledge, Interviews,Q&A, Videos.
+                          Knowledge, Interviews, Q&A, Videos.
                         </span>
 
                         <svg

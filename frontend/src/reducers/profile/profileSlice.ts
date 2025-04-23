@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
+import axios from "axios";
+import { MergeProfile } from "@/lib/profileMerge";
 
 interface User {
   id: number;
@@ -34,8 +36,11 @@ interface Education {
 interface Client {
   id: number;
   name: string;
-  client: string;
-  profile: number;
+  // client: string;
+  // profile: number;
+  category: number;
+  logo: string;
+  is_featured: boolean;
 }
 
 interface Project {
@@ -85,6 +90,7 @@ export interface Profile {
 interface ProfileState {
   profile: Profile | null;
   profiles: Profile[];
+  LinkedInProfile: any | null;
   loading: boolean;
   error: string | null;
 }
@@ -92,19 +98,41 @@ interface ProfileState {
 const initialState: ProfileState = {
   profile: null,
   profiles: [],
+  LinkedInProfile: null,
   loading: false,
   error: null,
 };
+export const fetchLinkedInProfile = createAsyncThunk(
+  "profile/fetchLinkedInProfile",
+  async (access_token, { rejectWithValue }) => {
+    console.log("access_token", access_token);
+    try {
+      const response = await axios.get("/api/linkedin-info", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+      console.log("LinkedInProfile data fetched successfully", response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch profile"
+      );
+    }
+  }
+);
 
 // Async Thunk to fetch profile data
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/profile/", {
-      });
+      const response = await axiosInstance.get("/profile/");
+      const linkedInResponse = await axios.get("/api/linkedin-info");
+
       console.log("Profile data fetched successfully", response.data[0]);
-      return response.data[0];
+
+      return MergeProfile(response.data[0], linkedInResponse.data);
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch profile"
@@ -250,6 +278,22 @@ const profileSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchLinkedInProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchLinkedInProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log(
+          "fetchLinkedInProfile fetched successfully",
+          action.payload
+        );
+        state.LinkedInProfile = action.payload;
+      })
+      .addCase(fetchLinkedInProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

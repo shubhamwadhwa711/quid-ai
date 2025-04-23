@@ -32,7 +32,7 @@ SECRET_KEY= os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('EMAIL_USE_TLS', 'True').lower() in ['true', '1', 'yes']
 ENVIRONMENT = 'DEV'
-ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.189','api.quidai.org']
+ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.189','api.quidai.org','94.237.52.216']
 
 CSRF_TRUSTED_ORIGINS = [
     "https://api-quidai.shubpy.com",
@@ -275,7 +275,7 @@ CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 
 SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY=os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY')
 SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET=os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET')
-
+SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SCOPE =["email", "profile", "openid","r_basicprofile"]
 
 EMAIL_BACKEND=os.getenv('EMAIL_BACKEND')
 EMAIL_HOST=os.getenv('EMAIL_HOST') 
@@ -286,8 +286,3 @@ EMAIL_HOST_PASSWORD= os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL= os.getenv('DEFAULT_FROM_EMAIL')
 
 
-print(f"Email Port: {EMAIL_PORT}")
-print(f"Use TLS: {EMAIL_USE_TLS}")
-print(SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_SECRET)
-print(DEBUG)
-print(SECRET_KEY)
