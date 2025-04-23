@@ -1,3 +1,4 @@
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Insights {
@@ -27,7 +28,7 @@ export const fetchInsights = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       console.log("Fetching Insights...");
-      const response = await axios.get(`/api/insights/${id}`);
+      const response = await axiosInstanceUnauthorized.get(`/insight-category/${id}/insight`);
       console.log("Insights fetched:", response.data);
       return response.data;
     } catch (error: any) {

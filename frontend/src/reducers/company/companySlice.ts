@@ -1,3 +1,4 @@
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Company {
@@ -26,7 +27,7 @@ export const fetchCompanies = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       console.log("Fetching companies...");
-      const response = await axios.get(`/api/company/${id}`);
+      const response = await axiosInstanceUnauthorized.get(`/category/${id}/company`);
       console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -41,8 +42,8 @@ export const fetchAllCompanies = createAsyncThunk(
   async (search, { rejectWithValue }) => {
     try {
       console.log("Fetching all companies...", search);
-      const response = await axios.get(
-        `${process.env.NEXT_BACKEND_URL}/all-company/`,
+      const response = await axiosInstanceUnauthorized.get(
+        `/all-company/`,
         { params: search }
       );
       console.log("Companies fetched:", response.data);
