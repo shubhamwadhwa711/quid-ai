@@ -45,30 +45,34 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://quidai.shubpy.com",
     
+    "https://api-quidai.shubpy.com",
+    "http://api-quidai.shubpy.com",
+   
+    "https://api.quidai.org",
+    "http://api.quidai.org",
+    "https://94.237.52.216:8007",
+    "http://94.237.52.216:8007",
+    
 ]
 
 CORS_ORIGIN_WHITELIST = (
     
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
     "https://quidai.shubpy.com",
+    
+    "https://api-quidai.shubpy.com",
+    "http://api-quidai.shubpy.com",
+   
+    "https://api.quidai.org",
+    "http://api.quidai.org",
+    "https://quidai.org",
+    "http://quidai.org",
+    "https://94.237.52.216:8007",
+    "http://94.237.52.216:8007",
+    
 )
 
-CORS_ALLOW_HEADERS = [
-    "ngrok-skip-browser-warning",
-    "accept",
-    "accept-encoding",
-    "authorization",
-    "content-type",
-    "dnt",
-    "origin",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-    # "access-control-allow-origin",
-    "Authorization",
-    
-]
+
 
 CORS_ORIGIN_ALLOW_ALL = False
  
