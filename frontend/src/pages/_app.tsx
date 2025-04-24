@@ -28,7 +28,7 @@ export default function App({
           <div className="relative min-h-screen">
             <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0F0F30] to-[#0F0F30]"></div>
 
-            <div className="relative max-w-md w-full justify-self-center z-10">
+            <div className="relative max-w-md mx-auto w-full justify-self-center z-10">
               <Navbar />
               <Component {...pageProps} />
               <BottomNav />

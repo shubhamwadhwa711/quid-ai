@@ -319,7 +319,7 @@ const Search = () => {
         {/* Filter Drawer */}
         {showFilters && (
           <Drawer open={showFilters} onOpenChange={closeFilter}>
-            <DrawerContent>
+            <DrawerContent className="max-w-md mx-auto border-none focus-visible:none">
               <FilterDrawer
                 showFilters={!activeQuickFilterCategory}
                 setShowFilters={closeFilter}

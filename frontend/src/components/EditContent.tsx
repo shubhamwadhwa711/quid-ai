@@ -48,7 +48,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       } else if (field.type === "tags") {
         // For tag fields, use the array from currentValues or create an empty array
         initialData[field.key] = currentValues[field.key]
-          ? currentValues[field.key].map((item) => item.name || item.id)
+          ? currentValues[field.key]?.map((item) => item.name || item.id)
           : [];
       } else {
         // For text/textarea fields, use the value directly

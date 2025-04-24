@@ -249,9 +249,9 @@ const ProfileScreen = () => {
                   {profile?.country?.name || "Add your location"}
                 </span>
               </div>
-              <div className="absolute right-0">
+              <div className="absolute  right-0">
                 <img
-                  src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+                  src="/Icons/Spiral.png"
                   alt=""
                 />
               </div>
@@ -287,7 +287,7 @@ const ProfileScreen = () => {
             </Button>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 ">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
                 <div className="h-2.5 w-2.5 rounded-full bg-orange-500"></div>
@@ -296,10 +296,10 @@ const ProfileScreen = () => {
               <Button
                 size="icon"
                 variant="ghost"
-                className="h-8 w-8 rounded-full"
+                className="h-8 w-8 rounded-full z-50"
                 onClick={() => handleOpenPopup("expertise")}
               >
-                <Edit size={16} />
+                <Edit size={16} className=""/>
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 min-h-12 p-2">

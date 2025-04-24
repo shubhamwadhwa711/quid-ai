@@ -310,7 +310,7 @@ export default function FilterDrawer({
   };
 
   return (
-    <div className="  mx-auto bg-gradient-to-br w-11/12 max-w-md from-black via-[#0F0F30] to-[#0F0F30] backdrop-blur-md rounded-2xl px-2 py-2">
+    <div className=" bg-gradient-to-br   from-black via-[#0F0F30] to-[#0F0F30] backdrop-blur-md rounded-2xl px-2 py-2">
       <div className="flex justify-between items-center mb-4 relative">
         <div className="w-24">{/* Left spacer to balance the layout */}</div>
 
