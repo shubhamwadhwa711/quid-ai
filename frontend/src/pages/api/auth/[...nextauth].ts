@@ -128,26 +128,26 @@ export const authOptions: AuthOptions = {
     signIn: "/auth/signin",
     error: "/auth/error",
   },
-  cookies: {
-    csrfToken: {
-      name: "next-auth.csrf-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-        path: "/",
-      },
-    },
-    state: {
-      name: "next-auth.state",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-        path: "/",
-      },
-    },
-  },
+  // cookies: {
+  //   csrfToken: {
+  //     name: "next-auth.csrf-token",
+  //     options: {
+  //       httpOnly: true,
+  //       sameSite: "lax",
+  //       secure: process.env.NODE_ENV === "production",
+  //       path: "/",
+  //     },
+  //   },
+  //   state: {
+  //     name: "next-auth.state",
+  //     options: {
+  //       httpOnly: true,
+  //       sameSite: "lax",
+  //       secure: process.env.NODE_ENV === "production",
+  //       path: "/",
+  //     },
+  //   },
+  // },
   callbacks: {
     async jwt({ token, user }) {
       // More secure token generation
