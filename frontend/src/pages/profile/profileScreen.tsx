@@ -206,7 +206,7 @@ const ProfileScreen = () => {
           {/* Profile header with image on left, name/location on right */}
           <div className="flex flex-row -mt-16">
             {/* Profile image (left) */}
-            <div className="h-32 w-32 relative flex-shrink-0 rounded-full border-2 shadow-md">
+            <div className="h-32 w-32 z-50 relative flex-shrink-0 rounded-full border-2 shadow-md">
               <Image
                 width={100}
                 height={100}
