@@ -18,11 +18,11 @@ const Solutions = () => {
   return (
     <div className="relative w-full flex items-center justify-center">
       {/* Background Image Container */}
-      <div className="absolute -top-60 left-0 w-full h-[50vh] flex justify-center">
+      <div className="absolute -top-52 mx-auto right-0 ">
         <img
-          src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
-          alt="Spiral Background"
-          className="w-full h-full object-fill"
+          src="/Icons/Spiral.png"
+          alt="Spiral decoration"
+          className=""
         />
       </div>
 

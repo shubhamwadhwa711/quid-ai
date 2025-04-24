@@ -45,7 +45,7 @@ const Brands = () => {
         </h1>
 
         {/* Categories */}
-        <div className="my-3 mx-2 pb-2 flex   gap-1 overflow-x-scroll hide-scrollbar">
+        <div className="my-3 mx-2 pb-2 flex gap-1 overflow-x-scroll hide-scrollbar">
           {companyCategory.map((category, index) => (
             <motion.div
               initial={{ opacity: 0 }}

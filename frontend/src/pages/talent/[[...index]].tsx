@@ -44,7 +44,10 @@ const Talent = () => {
   //   setUserData(profile);
   // }, [profile]);
   const [showConnectForm, setShowConnectForm] = useState();
-
+  const handleConnectForm = (talent) => {
+    setSelectedTalent(talent);
+    setShowConnectForm(true);
+  };
   return (
     <div className="text-white flex flex-col items-center justify-center p-2 pb-20">
       {/* Main profile card */}
@@ -88,7 +91,7 @@ const Talent = () => {
               </div>
               <div className=" absolute top-24 right-0  flex justify-center">
                 <img
-                  src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+                  src="/Icons/Spiral.png"
                   alt="Spiral Background"
                   className="w-full h-full object-fill"
                 />
@@ -103,10 +106,10 @@ const Talent = () => {
               </div>
             </div>
           </div>
-          <div className="p-2 mt-4">
+          <div className="p-2 mt-4  ">
             <Button
               onClick={() => setShowConnectForm(true)}
-              className="w-full bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2"
+              className="w-full relative z-50 bg-gradient-to-r text-lg proxima-bold from-[#7C2BD3] to-[#075AA8] text-white rounded-full transition-colors space-x-2"
             >
               Connect
               {/* <Share2 size={40} className="ml-2" /> */}

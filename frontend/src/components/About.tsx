@@ -80,12 +80,12 @@ const About = () => {
             </p>
           </div>
 
-          <div className="space-y-4  md:text-base lg:text-lg xl:text-xl">
+          <div className="space-y-4  md:text-base lg:text-lg xl:text-xl overflow-hidden">
             {about.map((item, index) => {
               const xOffset = useTransform(
                 scrollYProgress,
-                [0, 0.5, 1],
-                [index % 2 === 0 ? -100 : 100, 0, index % 2 === 0 ? 0 : 0]
+                [0, 0.8],
+                [index % 2 === 0 ? -100 : 100, 0]
               );
               return (
                 <motion.div

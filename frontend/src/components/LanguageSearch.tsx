@@ -105,7 +105,7 @@ const LanguageSearch: React.FC<LanguageSearchProps> = ({
 
       {/* Selected Languages */}
       <div className="flex flex-wrap gap-2 pt-4">
-        {selectedLanguages.map((language) => (
+        {selectedLanguages?.map((language) => (
           <Badge
             key={language.id}
             variant="none"

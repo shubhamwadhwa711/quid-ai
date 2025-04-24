@@ -51,9 +51,9 @@ const TalentCard = ({
   return (
     <Card
       key={talent?.id}
-      className="bg-white/15 h-96 w-80 flex flex-col border-none relative text-white mt-20"
+      className="bg-white/15  h-96 w-80 flex flex-col border-none relative text-white mt-20"
     >
-      <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 z-10">
+      <div className="absolute -top-14  left-1/2 transform -translate-x-1/2 z-50">
         <Avatar className="w-24 h-24 shadow-lg ">
           <AvatarImage
             src={talent?.image}
