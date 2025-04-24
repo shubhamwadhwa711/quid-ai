@@ -50,6 +50,8 @@ CORS_ALLOWED_ORIGINS = [
    
     "https://api.quidai.org",
     "http://api.quidai.org",
+    "https://quidai.org",
+    "http://quidai.org",
     "https://94.237.52.216:8007",
     "http://94.237.52.216:8007",
     
