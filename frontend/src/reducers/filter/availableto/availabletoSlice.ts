@@ -1,3 +1,4 @@
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface AvailableTo {
@@ -24,7 +25,7 @@ export const fetchAvailableTo = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       console.log("Fetching availableto...");
-      const response = await axios.get("/api/filter/availableto");
+      const response = await axiosInstanceUnauthorized.get("/available/");
       console.log("languages availableto:", response.data);
       return response.data;
     } catch (error: any) {

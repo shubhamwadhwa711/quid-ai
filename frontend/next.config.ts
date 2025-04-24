@@ -7,6 +7,7 @@ const withPWA = require("next-pwa")({
 });
 
 const nextConfig = withPWA({
+  output:"standalone",
   env: {
     NEXT_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   },

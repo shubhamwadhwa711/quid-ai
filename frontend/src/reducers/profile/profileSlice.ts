@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
 import axios from "axios";
 import { MergeProfile } from "@/lib/profileMerge";
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 
 interface User {
   id: number;
@@ -144,7 +145,7 @@ export const fetchProfiles = createAsyncThunk(
   "profile/fetchProfiles",
   async (FilterData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/profile-related/", {
+      const response = await axiosInstanceUnauthorized.get("/profile-related/", {
         params: FilterData,
         paramsSerializer: (params) => {
           const searchParams = new URLSearchParams();

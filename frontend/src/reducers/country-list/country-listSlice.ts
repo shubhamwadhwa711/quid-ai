@@ -1,3 +1,4 @@
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Country {
@@ -24,10 +25,34 @@ export const fetchCountryList = createAsyncThunk(
   async (SearchData, { rejectWithValue }) => {
     try {
       console.log("Fetching country...", SearchData);
-      const response = await axios.get("/api/countryList", {
-        params: SearchData,
-      });
-      console.log("country fetched:", response.data);
+      const response = await axiosInstanceUnauthorized.get(
+        `/country/`,
+        {
+          params: req.query,
+          paramsSerializer: (params) => {
+            const searchParams = new URLSearchParams();
+
+            Object.entries(params).forEach(([key, value]) => {
+              if (key === "search") {
+                console.log("value", value);
+                // Ensure search param is a string, not an array
+                searchParams.append(
+                  key,
+                  Array.isArray(value) ? value[0] : (value as string)
+                );
+              } else if (Array.isArray(value)) {
+                value.forEach((v) => searchParams.append(key, v)); // 🔹 Append each array item separately
+              } else {
+                searchParams.append(key, value as string);
+              }
+            });
+
+            return searchParams.toString();
+          },
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

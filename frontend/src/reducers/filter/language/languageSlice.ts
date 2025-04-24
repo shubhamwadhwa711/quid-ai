@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 interface Language {
@@ -25,7 +26,7 @@ export const fetchLanguage = createAsyncThunk(
   async (SearchData: { search: string }, { rejectWithValue }) => {
     try {
       console.log("Fetching language...", SearchData);
-      const response = await axios.get("/api/filter/language", {
+      const response = await axiosInstanceUnauthorized.get("/language/", {
         params: SearchData,
       });
       console.log("languages fetched:", response.data);
@@ -41,7 +42,7 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.patch(`/api/updateLanguage/${id}`, data, {
+      const response = await axiosInstance.patch(`/profile/${id}`, data, {
         headers: {
           "Content-Type": "application/json",
         },

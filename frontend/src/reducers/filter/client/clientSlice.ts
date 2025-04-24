@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosInstance";
+import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -26,7 +27,7 @@ export const fetchClient = createAsyncThunk(
   "client/fetchClient",
   async (searchData: Record<string, any>, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/all-company", {
+      const response = await axiosInstanceUnauthorized.get("/all-company/", {
         params: searchData,
       });
       return response.data;
