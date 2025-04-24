@@ -39,11 +39,11 @@ const Insights = () => {
   console.log("insights category", insightsCategory);
   return (
     <div className="flex flex-col w-full items-center">
-      <div className="absolute top-0 left-0 w-full h-[50vh] flex justify-center">
+      <div className="absolute top-0 right-0 flex justify-center">
         <img
-          src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+          src="/Icons/Spiral.png"
           alt="Spiral Background"
-          className="w-full h-full object-fill"
+          className="w-full h-full"
         />
       </div>
       <div className="mt-14 text-center mb-10">

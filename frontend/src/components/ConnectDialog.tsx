@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchEnquiry } from "@/reducers/enquiry/enquirySlice";
+import { useRouter } from "next/navigation";
 
 const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -28,7 +29,7 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
   const dispatch = useAppDispatch();
 
   const { enquiry, loading, error } = useAppSelector((state) => state.Enquiry);
-
+  const router = useRouter();
   // useEffect(() => {
   //   dispatch(fetchEnquiry());
   // }, [dispatch,id]);
@@ -40,7 +41,7 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
       [name]: value,
     });
   };
-  
+
   const handleSubmitConnect = () => {
     // Here you would typically handle the form submission to your backend
     dispatch(fetchEnquiry(connectForm));
@@ -51,11 +52,30 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
     // Optional: Reset form
     setConnectForm({ profile: "", full_name: "", email: "", message: "" });
   };
-  
+
+  const handleContinueSearching = () => {
+    // Close the drawer
+    setShowConnectForm(false);
+    // Navigate to search page
+    router.push("/search");
+  };
+
+  const handleClose = () => {
+    // Close the drawer
+    setShowConnectForm(false);
+    // Navigate to search page
+    // router.push("/search");
+  };
+
   console.log("INSIDE CONNECT DIALOG");
-  
+
   return (
-    <Drawer open={showConnectForm} onOpenChange={setShowConnectForm}>
+    <Drawer
+      open={showConnectForm}
+      onOpenChange={(open) => {
+        setShowConnectForm(open);
+      }}
+    >
       <DrawerContent className="bg-gradient-to-t max-w-md w-full rounded-t-3xl from-black via-blue-950 to-black border-white/20 text-white mx-auto left-0 right-0">
         {!formSubmitted ? (
           <div className="mx-4">
@@ -111,6 +131,15 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
               >
                 Send Request <MoveRight className="ml-2 h-4 w-4" />
               </Button>
+              <DrawerClose asChild>
+                <Button
+                  variant="outline"
+                  onClick={handleClose}
+                  className="mt-2 rounded-3xl bg-transparent border-white/20 text-white"
+                >
+                  Cancel
+                </Button>
+              </DrawerClose>
             </DrawerFooter>
           </div>
         ) : (
@@ -132,7 +161,10 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
               AI expert will get back to you soon.
             </DrawerDescription>
             <DrawerFooter className="mt-4">
-              <Button className="rounded-3xl px-8 py-3 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] w-full">
+              <Button
+                onClick={handleContinueSearching}
+                className="rounded-3xl px-8 py-3 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] w-full"
+              >
                 Continue Searching <MoveRight className="ml-2 h-4 w-4" />
               </Button>
             </DrawerFooter>
