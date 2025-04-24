@@ -18,8 +18,12 @@ const Solutions = () => {
   return (
     <div className="relative w-full flex items-center justify-center">
       {/* Background Image Container */}
-      <div className="absolute -top-52 left-24 w-full ">
-        <img src="/Icons/Spiral.png" alt="" className=""/>
+      <div className="absolute -top-52 w-full max-w-md mx-auto left-0 right-0 flex justify-center">
+        <img
+          src="/Icons/Spiral.png"
+          alt="Spiral decoration"
+          className="w-4/5 md:w-full"
+        />
       </div>
 
       {/* Content Container */}

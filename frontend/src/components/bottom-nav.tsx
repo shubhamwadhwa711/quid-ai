@@ -241,7 +241,7 @@ export function BottomNav() {
   );
 
   return (
-    <nav className="fixed bottom-3 left-0 right-0 z-50 h-16 w-11/12 max-w-md mx-auto border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
+    <nav className="fixed bottom-3 left-0 right-0 z-50 h-16 max-w-md w-11/12 mx-auto border rounded-full bg-gradient-to-r from-[#063373] to-[#041D3F]">
       <div className="grid h-full grid-cols-4">
         {menuItems.map(({ icon, label, href }) => {
           const isActive = pathname === href;
