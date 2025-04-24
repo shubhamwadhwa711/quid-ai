@@ -285,7 +285,7 @@ const Search = () => {
           </div>
           <div className="absolute right-0">
             <img
-              src="https://res.cloudinary.com/dgz1duuwu/image/upload/v1740037507/quidAi/sugtwxhrkajxvvl1bhms.png"
+              src="/Icons/Spiral.png"
               alt=""
             />
           </div>

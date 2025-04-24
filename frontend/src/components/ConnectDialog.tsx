@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchEnquiry } from "@/reducers/enquiry/enquirySlice";
+
 const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [connectForm, setConnectForm] = useState({
@@ -39,6 +40,7 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
       [name]: value,
     });
   };
+  
   const handleSubmitConnect = () => {
     // Here you would typically handle the form submission to your backend
     dispatch(fetchEnquiry(connectForm));
@@ -49,9 +51,12 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
     // Optional: Reset form
     setConnectForm({ profile: "", full_name: "", email: "", message: "" });
   };
+  
+  console.log("INSIDE CONNECT DIALOG");
+  
   return (
     <Drawer open={showConnectForm} onOpenChange={setShowConnectForm}>
-      <DrawerContent className=" bg-gradient-to-t rounded-t-3xl from-black  via-blue-950  to-black  border-white/20 text-white">
+      <DrawerContent className="bg-gradient-to-t max-w-md w-full rounded-t-3xl from-black via-blue-950 to-black border-white/20 text-white mx-auto left-0 right-0">
         {!formSubmitted ? (
           <div className="mx-4">
             <DrawerHeader>
@@ -137,4 +142,5 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
     </Drawer>
   );
 };
+
 export default ConnectDrawer;
