@@ -283,10 +283,11 @@ const Search = () => {
               ))}
             </div>
           </div>
-          <div className="absolute right-0">
+          <div className="absolute right-0 mx-auto">
             <img
               src="/Icons/Spiral.png"
               alt=""
+              className=""
             />
           </div>
         </div>
@@ -342,14 +343,15 @@ const Search = () => {
         <div>
           {isSearchApplied || isFilterApplied ? (
             <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
-              <div className="mx-1 flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                <h1 className="proxima-bold text-xl text-white">
-                  Search Results
-                </h1>
-              </div>
+            <div className="mx-1 flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+              <h1 className="proxima-bold text-xl text-white">
+                Search Results
+              </h1>
+            </div>
+            <div className="flex justify-center w-full">
               <div
-                className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
+                className={`overflow-x-auto hide-scrollbar px-4 grid ${
                   isSearchApplied || isFilterApplied
                     ? "grid-cols-1"
                     : "grid-flow-col auto-cols-max"
@@ -360,6 +362,7 @@ const Search = () => {
                 ))}
               </div>
             </div>
+          </div>
           ) : (
             <>
               <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
