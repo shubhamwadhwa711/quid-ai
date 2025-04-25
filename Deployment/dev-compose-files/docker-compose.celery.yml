@@ -4,7 +4,7 @@ services:
   celery:
     image: backend-qa-image:latest
     container_name: celery-qa
-    command: sh -c "ls && celery -A core beat -l info"
+    command: sh -c "ls && celery -A core worker -l info"
     volumes:
       - ../Backend:/app
     env_file:
