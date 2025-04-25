@@ -262,7 +262,7 @@ const Search = () => {
               Quick filters by
             </h1>
           </div>
-          <div className="w-full px-2 md:px-4 lg:px-6">
+          <div className="w-full px-2 ">
             <div className="grid grid-cols-2 gap-2 hide-scrollbar">
               {QuickFilters.map(({ id, icon, label }) => (
                 <Card
