@@ -43,10 +43,11 @@ export default function BlogPage() {
         </p>
         {/* <img src={blogs.featured_image} className="w-full " alt="" /> */}
         <div
-          className="w-full max-w-md"
+          className="w-full "
           dangerouslySetInnerHTML={{ __html: blogs.embed }}
         />
-
+        <br />
+        <br />
         <div
           className=" proxima-bold"
           dangerouslySetInnerHTML={{ __html: blogs.text }}

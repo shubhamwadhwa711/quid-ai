@@ -84,20 +84,20 @@ export const Stepper: React.FC<StepperProps> = ({
         const opacity = useTransform(
           scrollYProgress,
           [
-            (index - 0.3) / steps.length,
-            index / steps.length,
-            (index + 0.3) / steps.length,
+            (index - 1) / steps.length,
+            index / (steps.length * 1.5),
+            // (index + 0.3) / steps.length,
           ],
-          [0, 1, 1]
+          [0, 1]
         );
         const scale = useTransform(
           scrollYProgress,
           [
-            (index+1 - 0.2) / steps.length,
-            (index+1) / steps.length,
-            (index+1 + 0.2) / steps.length,
+            (index+1 - 1) / steps.length, 
+            (index+1) / (steps.length * 1.5),
+            // (index+1 + 0.2) / steps.length,
           ],
-          [0, 1, 1]
+          [0, 0.9]
         );
         return (
           <div key={index} className="flex items-start gap-4 mb-8">
