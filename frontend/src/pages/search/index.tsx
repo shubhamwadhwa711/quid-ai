@@ -283,7 +283,7 @@ const Search = () => {
               ))}
             </div>
           </div>
-          <div className="fixed mx-auto">
+          <div className="fixed bottom-0 left-0 right-0 z-10 flex justify-center items-center py-2 ">
             <img
               src="/Icons/Spiral.png"
               alt=""
