@@ -283,7 +283,7 @@ const Search = () => {
               ))}
             </div>
           </div>
-          <div className="absolute right-0 mx-auto">
+          <div className="fixed mx-auto">
             <img
               src="/Icons/Spiral.png"
               alt=""
@@ -293,7 +293,7 @@ const Search = () => {
         </div>
 
         {/* Selected filters badges */}
-        <div className="flex gap-2 max-w-sm hide-scrollbar overflow-x-scroll mx-2">
+        <div className="flex relative gap-2 max-w-sm hide-scrollbar overflow-x-scroll mx-2">
           {Object.entries(selectedFilters).map(
             ([category, values]) =>
               category !== "industry" &&
