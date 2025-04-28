@@ -283,7 +283,7 @@ const Search = () => {
               ))}
             </div>
           </div>
-          <div className="fixed bottom-0 left-0 right-0 z-10 flex justify-center items-center py-2 ">
+          <div className="fixed left-0 right-0  flex justify-center items-center py-2 ">
             <img
               src="/Icons/Spiral.png"
               alt=""
@@ -320,7 +320,7 @@ const Search = () => {
         {/* Filter Drawer */}
         {showFilters && (
           <Drawer open={showFilters} onOpenChange={closeFilter}>
-            <DrawerContent className="max-w-md mx-auto border-none focus-visible:none">
+            <DrawerContent className="max-w-md outline-none mx-auto border-none focus-visible:none">
               <FilterDrawer
                 showFilters={!activeQuickFilterCategory}
                 setShowFilters={closeFilter}
