@@ -45,7 +45,7 @@ const ProfileScreen = () => {
   const handleShareProfile = () => {
     if (profile?.linkedin_url) {
       navigator.clipboard
-        .writeText(profile.linkedin_url)
+        .writeText(`https://${profile.linkedin_url}`)
         .then(() => {
           console.log("LinkedIn URL copied to clipboard!");
           setIsCopiedURL(true);

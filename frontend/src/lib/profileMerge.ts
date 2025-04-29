@@ -16,6 +16,6 @@ export const MergeProfile = (quidAIProfile, LinkedInProfile) => {
       name: quidAIProfile?.country?.name || LinkedInProfile?.locale?.country,
     },
     headline: quidAIProfile?.headline || LinkedInProfile?.localizedHeadline,
-    linkedin_url:quidAIProfile?.linkedin_url || `linkedin.com/${LinkedInProfile?.vanityName}`
+    linkedin_url: quidAIProfile?.linkedin_url || `linkedin.com/in/${LinkedInProfile?.vanityName}`
   };
 };
