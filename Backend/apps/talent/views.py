@@ -295,7 +295,7 @@ class AcademicBulkView(APIView):
 # Handling bulk Skill creation
 class SkillBulkView(APIView):
     def post(self, request):
-        serializer = SkillSerializer(data = request.data , many = True)
+        serializer = SkillSerializer(data = request.data , many = True, context={'request':request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

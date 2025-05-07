@@ -33,19 +33,19 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         fields = '__all__'    
 
-    # def create(self, validated_data):
-    #     # Create the skill
-    #     skill = Skill.objects.create(**validated_data)
+    def create(self, validated_data):
+        # Create the skill
+        skill = Skill.objects.create(**validated_data)
         
-    #     # Get the user from the request
-    #     user = self.context['request'].user
+        # Get the user from the request
+        user = self.context['request'].user
         
-    #     # Check if the user has a profile
-    #     if hasattr(user, 'profile'):
-    #         # Add the newly created skill to the user's profile
-    #         user.profile.skill.add(skill)
+        # Check if the user has a profile
+        if hasattr(user, 'profile'):
+            # Add the newly created skill to the user's profile
+            user.profile.skill.add(skill)
         
-    #     return skill
+        return skill
 
 
 class ProfileSerializer(serializers.ModelSerializer):
