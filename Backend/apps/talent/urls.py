@@ -39,4 +39,6 @@ urlpatterns = [
    
     path('', include(router.urls)),
     path('', include(profile_project_router.urls)),
+    path('academics/bulk/', AcademicBulkView.as_view(), name='academic-bulk'),
+    path('skills/bulk/', SkillBulkView.as_view(), name='skill-bulk'),
 ]

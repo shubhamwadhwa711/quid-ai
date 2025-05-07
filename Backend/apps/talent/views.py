@@ -6,11 +6,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .filters import ProfileFilter
+from rest_framework import status
 
 
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
+from rest_framework.views import APIView
+from rest_framework.response import Response
 # from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -276,12 +279,27 @@ class AcademicViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Education.objects.all()
     serializer_class = EducationSerializer 
-    http_method_names = ['get'] 
+    http_method_names = ['get','post','delete'] 
     filter_backends = [SearchFilter]  
     search_fields = ['degree']    
 
+# Handling bulk Academic creation
+class AcademicBulkView(APIView):
+    def post(self, request):
+        serializer = EducationSerializer(data = request.data , many = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+# Handling bulk Skill creation
+class SkillBulkView(APIView):
+    def post(self, request):
+        serializer = SkillSerializer(data = request.data , many = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
     
    
         
