@@ -47,6 +47,7 @@ export default function AddAcademic({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleSubmit = () => {
+    console.log("formData", formData);
     dispatch(postAcademics({ id: profileID, data: formData }))
     .unwrap()
       .then(() => {

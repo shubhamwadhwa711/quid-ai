@@ -21,6 +21,8 @@ const AcademicsSearch: React.FC<AcademicSearchProps> = ({
   profileID,
   defaultAcademics,
 }) => {
+  console.log("defaultAcademics", defaultAcademics);
+  console.log("profileID", profileID);
   return (
     <div className="relative space-y-2">
       <AcademicCards academics={defaultAcademics} />

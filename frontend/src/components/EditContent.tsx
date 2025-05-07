@@ -29,9 +29,10 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
   const [selectedClients, setSelectedClients] = useState<[]>(
     currentValues?.client
   );
+  console.log("currentValues",currentValues)
   const [fullName, setFullName] = useState<string | null>(null);
-  console.log("CurrentValues", currentValues);
-  console.log(title, fields, currentValues);
+  // console.log("CurrentValues", currentValues);
+  // console.log(title, fields, currentValues);
   const [formData, setFormData] = useState({});
   const [tagInput, setTagInput] = useState("");
   const [currentField, setCurrentField] = useState(null);
@@ -47,8 +48,11 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
         }`.trim();
       } else if (field.type === "tags") {
         // For tag fields, use the array from currentValues or create an empty array
+        console.log("currentValues",currentValues);
+        console.log("field.key", field.key);
+        console.log("currentValues[field.key]", currentValues[field.key]);
         initialData[field.key] = currentValues[field.key]
-          ? currentValues[field.key]?.map((item) => item.name || item.id)
+          ? currentValues[field.key]?.map((item) => item.name || item.degree)
           : [];
       } else {
         // For text/textarea fields, use the value directly
@@ -215,8 +219,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
               {field.key === "academics" && (
                 <AcademicsSearch
-                  profileID={currentValues.id}
-                  defaultAcademics={currentValues.education}
+                  profileID={currentValues?.id}
+                  defaultAcademics={currentValues?.education}
                 />
               )}
 
@@ -269,7 +273,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
           {field.key === "projectTags" && (
             <div className="flex flex-wrap gap-2">
-              {currentValues.projects.flatMap((project) =>
+              {currentValues?.projects?.flatMap((project) =>
                 project.tag.map((t) => (
                   <Badge
                     key={t.id}

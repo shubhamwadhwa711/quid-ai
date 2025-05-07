@@ -1,8 +1,10 @@
 export const MergeProfile = (quidAIProfile, LinkedInProfile) => {
   console.log("LinkedInProfile", LinkedInProfile);
+  console.log("quidAIProfile", quidAIProfile);
   return {
     ...quidAIProfile,
-    image: quidAIProfile?.image || LinkedInProfile.picture,
+    image: quidAIProfile?.image || LinkedInProfile?.profile_picture_url_large,
+    skill: quidAIProfile?.skill || LinkedInProfile?.skills,
     user: {
       ...quidAIProfile.user,
       first_name:
@@ -13,9 +15,19 @@ export const MergeProfile = (quidAIProfile, LinkedInProfile) => {
     },
     country: {
       ...quidAIProfile.country,
-      name: quidAIProfile?.country?.name || LinkedInProfile?.locale?.country,
+      name:
+        quidAIProfile?.country?.name ||
+        LinkedInProfile?.primary_locale?.country,
     },
-    headline: quidAIProfile?.headline || LinkedInProfile?.localizedHeadline,
-    linkedin_url: quidAIProfile?.linkedin_url || `linkedin.com/in/${LinkedInProfile?.vanityName}`
+    headline: quidAIProfile?.headline || LinkedInProfile?.headline,
+    linkedin_url:
+      quidAIProfile?.linkedin_url ||
+      `linkedin.com/in/${LinkedInProfile?.vanityName}`,
+    education: [
+      // ...(quidAIProfile?.education || []),
+      ...(LinkedInProfile?.education || []),
+    ],
+    projects: quidAIProfile?.projects || LinkedInProfile?.projects,
+    summary: quidAIProfile?.summary || LinkedInProfile?.headline,
   };
 };
