@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <link rel="manifest" href="/manifest.json" />
-
+        <link rel="icon" type="image/png" sizes="8x8" href="/Icons/quidAI_favicon.png"/>
         <meta name="theme-color" content="#F97316" />
 
         <meta name="mobile-web-app-capable" content="yes" />

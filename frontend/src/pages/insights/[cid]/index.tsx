@@ -63,7 +63,8 @@ export default function InsightsPage() {
               <p className="text-red-400">Failed to load insights</p>
             </div>
           ) : (
-            insights.map((insight) => (
+            <div className="pb-12">
+              {insights.map((insight) => (
               <div className="grid grid-cols-1 mt-4">
                 <Card
                   onClick={() =>
@@ -85,7 +86,7 @@ export default function InsightsPage() {
                       <div className="flex items-center gap-2">
                         <div className="bg-[#425BFF] h-2 w-2 rounded-full"></div>
                         <div className="text-slate-400 proxima-bold">
-                          14 Feb 2025
+                          {insight.created_at.slice(0, 10)}
                         </div>
                       </div>
                     </CardDescription>
@@ -95,7 +96,8 @@ export default function InsightsPage() {
                   </div>
                 </Card>
               </div>
-            ))
+            ))}
+            </div>
           )}
         </div>
       </div>

@@ -84,7 +84,7 @@ const About = () => {
             {about.map((item, index) => {
               const xOffset = useTransform(
                 scrollYProgress,
-                [0, 0.8],
+                [0, 0.5],
                 [index % 2 === 0 ? -100 : 100, 0]
               );
               return (

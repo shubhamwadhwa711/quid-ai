@@ -262,7 +262,7 @@ const Search = () => {
               Quick filters by
             </h1>
           </div>
-          <div className="w-full px-2 md:px-4 lg:px-6">
+          <div className="w-full px-2 ">
             <div className="grid grid-cols-2 gap-2 hide-scrollbar">
               {QuickFilters.map(({ id, icon, label }) => (
                 <Card
@@ -283,16 +283,17 @@ const Search = () => {
               ))}
             </div>
           </div>
-          <div className="absolute right-0">
+          <div className="fixed left-0 right-0  flex justify-center items-center py-2 ">
             <img
               src="/Icons/Spiral.png"
               alt=""
+              className=""
             />
           </div>
         </div>
 
         {/* Selected filters badges */}
-        <div className="flex gap-2 max-w-sm hide-scrollbar overflow-x-scroll mx-2">
+        <div className="flex relative gap-2 max-w-sm hide-scrollbar overflow-x-scroll mx-2">
           {Object.entries(selectedFilters).map(
             ([category, values]) =>
               category !== "industry" &&
@@ -319,7 +320,7 @@ const Search = () => {
         {/* Filter Drawer */}
         {showFilters && (
           <Drawer open={showFilters} onOpenChange={closeFilter}>
-            <DrawerContent className="max-w-md mx-auto border-none focus-visible:none">
+            <DrawerContent className="max-w-md outline-none mx-auto border-none focus-visible:none">
               <FilterDrawer
                 showFilters={!activeQuickFilterCategory}
                 setShowFilters={closeFilter}
@@ -342,14 +343,15 @@ const Search = () => {
         <div>
           {isSearchApplied || isFilterApplied ? (
             <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
-              <div className="mx-1 flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                <h1 className="proxima-bold text-xl text-white">
-                  Search Results
-                </h1>
-              </div>
+            <div className="mx-1 flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+              <h1 className="proxima-bold text-xl text-white">
+                Search Results
+              </h1>
+            </div>
+            <div className="flex justify-center w-full">
               <div
-                className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
+                className={`overflow-x-auto hide-scrollbar px-4 grid ${
                   isSearchApplied || isFilterApplied
                     ? "grid-cols-1"
                     : "grid-flow-col auto-cols-max"
@@ -360,6 +362,7 @@ const Search = () => {
                 ))}
               </div>
             </div>
+          </div>
           ) : (
             <>
               <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
