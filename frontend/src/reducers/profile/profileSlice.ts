@@ -126,14 +126,97 @@ export const fetchLinkedInProfile = createAsyncThunk(
 // Async Thunk to fetch profile data
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch }) => {
     try {
+      // Fetch profile data from your backend
       const response = await axiosInstance.get("/profile/");
+      const profileData = response.data[0];
+      console.log("Profile data fetched successfully", profileData);
+
+      // Fetch LinkedIn user info
       const linkedInResponse = await axios.get("/api/linkedin-info");
+      console.log("linkedInResponse", linkedInResponse.data);
 
-      console.log("Profile data fetched successfully", response.data[0]);
+      // Fetch data from Unipile API
+      const UnipileResponse = await axios.request({
+        method: "GET",
+        url: `https://api14.unipile.com:14406/api/v1/users/${linkedInResponse.data.vanityName}`,
+        headers: {
+          accept: "application/json",
+          "X-API-KEY": "rKbzU6n3.ZyhJqXTKOM2On9Py7cnJkvkRIJYRtotIa4XQkfRvM6o=",
+        },
+        params: {
+          linkedin_sections: [
+            "skills",
+            "education",
+            "experience",
+            "projects",
+            "certifications",
+          ],
+          notify: "false",
+          account_id: "No2LNXRKSICQV6M5pzuUVQ",
+        },
+      });
+      console.log("UnipileResponse", UnipileResponse.data);
 
-      return MergeProfile(response.data[0], linkedInResponse.data);
+      // Update profile with headline and summary
+      await dispatch(
+        updateProfile({
+          id: profileData.id,
+          data: {
+            headline: UnipileResponse.data.headline,
+            summary: UnipileResponse.data.headline,
+          },
+        })
+      );
+
+      // Check if education data needs to be posted
+      if (
+        profileData.education.length === 0 &&
+        UnipileResponse.data.education?.length > 0
+      ) {
+        console.log("backend education posting");
+        try {
+          await axiosInstance.post(
+            "/academics/bulk/",
+            UnipileResponse?.data?.education?.map((edu: any) => ({
+              school: edu.school || "",
+              degree: edu.degree || "",
+              field_of_study: edu.field_of_study || "",
+              start_year: edu.start ? parseInt(edu.start.split("-")[0]) : null,
+              end_year: edu.end ? parseInt(edu.end.split("-")[0]) : null,
+              description: "Imported from LinkedIn",
+              profile: profileData.id,
+            }))
+          );
+          console.log("Education data posted successfully");
+        } catch (eduError) {
+          console.error("Failed to post education data:", eduError);
+          // Continue execution even if education posting fails
+        }
+      }
+      console.log("profileData.skill.length",profileData.skill.length);
+      if (
+        profileData.skill.length === 0 &&
+        UnipileResponse.data.skills?.length > 0
+      ) {
+        console.log("backend skills posting");
+        try {
+          await axiosInstance.post(
+            "/skills/bulk/",
+            UnipileResponse?.data?.skills?.map((ski: any) => ({
+              name: ski.name || "",
+            }))
+          );
+          console.log("Education data posted successfully");
+        } catch (eduError) {
+          console.error("Failed to post education data:", eduError);
+          // Continue execution even if education posting fails
+        }
+      }
+
+      // Merge and return the data - this will be accessible in the fulfilled action
+      return MergeProfile(profileData, UnipileResponse.data);
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch profile"
@@ -145,30 +228,33 @@ export const fetchProfiles = createAsyncThunk(
   "profile/fetchProfiles",
   async (FilterData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstanceUnauthorized.get("/profile-related/", {
-        params: FilterData,
-        paramsSerializer: (params) => {
-          const searchParams = new URLSearchParams();
+      const response = await axiosInstanceUnauthorized.get(
+        "/profile-related/",
+        {
+          params: FilterData,
+          paramsSerializer: (params) => {
+            const searchParams = new URLSearchParams();
 
-          Object.entries(params).forEach(([key, value]) => {
-            if (key === "search") {
-              console.log("value", value);
-              // Ensure search param is a string, not an array
-              searchParams.append(
-                key,
-                Array.isArray(value) ? value[0] : (value as string)
-              );
-            } else if (Array.isArray(value)) {
-              value.forEach((v) => searchParams.append(key, v)); // 🔹 Append each array item separately
-            } else {
-              searchParams.append(key, value as string);
-            }
-          });
+            Object.entries(params).forEach(([key, value]) => {
+              if (key === "search") {
+                console.log("value", value);
+                // Ensure search param is a string, not an array
+                searchParams.append(
+                  key,
+                  Array.isArray(value) ? value[0] : (value as string)
+                );
+              } else if (Array.isArray(value)) {
+                value.forEach((v) => searchParams.append(key, v)); // 🔹 Append each array item separately
+              } else {
+                searchParams.append(key, value as string);
+              }
+            });
 
-          return searchParams.toString();
-        },
-        headers: { "Content-Type": "application/json" },
-      });
+            return searchParams.toString();
+          },
+          headers: { "Content-Type": "application/json" },
+        }
+      );
       console.log("Profile data fetched successfully", response.data);
       return response.data;
     } catch (error: any) {
@@ -208,6 +294,7 @@ export const updateAcademics = createAsyncThunk(
     { id, eid, data }: { id: number; eid: number; data: Partial<Education> },
     { rejectWithValue }
   ) => {
+    console.log("Profile id", id);
     console.log("Updating profile...", eid, data);
     try {
       const response = await axiosInstance.patch(

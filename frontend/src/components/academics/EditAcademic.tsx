@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Pencil } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -21,6 +21,7 @@ import { DialogTrigger } from "../ui/dialog";
 // Edit Academic Component - Handles editing existing academic entries
 export const EditAcademic = ({ academic }: { academic: Academic }) => {
   const [open, setOpen] = useState(false);
+  console.log("academic", academic);
   const [formData, setFormData] = useState({
     id: academic.id,
     school: academic.school || "",
@@ -33,7 +34,7 @@ export const EditAcademic = ({ academic }: { academic: Academic }) => {
   });
 
   const dispatch = useAppDispatch();
-
+  const {profile } = useAppSelector((state) => state.Profile);
   const handleChange = useCallback((e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }, []);
@@ -41,7 +42,7 @@ export const EditAcademic = ({ academic }: { academic: Academic }) => {
   const handleSubmit = useCallback(() => {
     dispatch(
       updateAcademics({
-        id: academic?.profile,
+        id: academic?.profile || profile.id,
         eid: formData.id,
         data: formData,
       })

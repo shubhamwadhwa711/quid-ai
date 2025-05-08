@@ -26,6 +26,7 @@ export const AcademicCard = ({ academic }: { academic: Academic }) => {
         console.error("Error removing academic:", error);
       });
   }, []);
+  console.log("academic", academic);
   return (
     <Card
       key={academic.id}
@@ -87,11 +88,12 @@ export const AcademicCard = ({ academic }: { academic: Academic }) => {
 };
 
 export const AcademicCards = ({ academics }: { academics: Academic[] }) => {
+  console.log("academics", academics);
   return (
     <div className="flex flex-wrap gap-2 pt-4">
       {academics &&
-        academics.map((academic) => <AcademicCard academic={academic} />)}
-      {academics.length <= 0 && "Add academics"}
+        academics?.map((academic) => <AcademicCard academic={academic} />)}
+      {academics?.length <= 0 && "Add academics"}
     </div>
   );
 };
