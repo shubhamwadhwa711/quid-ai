@@ -129,10 +129,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class ProjectEditViewSet(viewsets.ModelViewSet):
     """
-    API view to for updation
+    API view  for updation
     """
-    permission_classes = [IsAuthenticated]
-    serializer_class =ProjectEditSerializer    
+    # permission_classes = [IsAuthenticated]
+    
+    serializer_class =ProjectEditSerializer 
+      
    
     
     """
@@ -303,3 +305,12 @@ class SkillBulkView(APIView):
     
    
         
+# Handling bulk Project creation
+class ProjectBulkView(APIView):
+    # permission_classes=[IsAuthenticated]
+    def post(self, request):
+        serializer = ProjectEditSerializer(data = request.data , many = True, context={'request':request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
