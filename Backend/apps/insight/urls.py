@@ -26,4 +26,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', include(category_company_router.urls)),
     path('', include(category_insight_router.urls)),
+    path('clients/bulk/',CompanyBulkView.as_view(),name='clients-bulk')
   ]
