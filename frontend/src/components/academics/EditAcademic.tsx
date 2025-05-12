@@ -90,7 +90,7 @@ export const EditAcademic = ({ academic }: { academic: Academic }) => {
       key={"edit-academics"}
     >
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)} variant="ghost">
+        <Button variant="default" className="shadow-none" onClick={() => setOpen(true)}>
           <Pencil />
         </Button>
       </DialogTrigger>

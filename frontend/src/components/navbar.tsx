@@ -15,9 +15,9 @@ const Navbar = () => {
   console.log("session", session);
   const dispatch = useAppDispatch();
   const { profile } = useAppSelector((state) => state.Profile);
-  useEffect(() => {
-    dispatch(fetchProfile());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchProfile());
+  // }, []);
   console.log("profile", profile);
   return (
     <nav className="relative z-50 min-h-8 pt-2 max-w-md w-full justify-self-center snap-center">

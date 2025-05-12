@@ -62,7 +62,7 @@ export default function AddAcademic({
   return (
     <Drawer key={"add-academics"} open={isOpen} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className="my-1.5">
           <Plus size={16} className="mr-2" />
           Add Academic
         </Button>

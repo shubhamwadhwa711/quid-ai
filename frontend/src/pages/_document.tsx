@@ -1,11 +1,17 @@
 import { Html, Head, Main, NextScript } from "next/document";
-
+import { ThemeModeScript } from "flowbite-react";
 export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <ThemeModeScript />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" type="image/png" sizes="8x8" href="/Icons/quidAI_favicon.png"/>
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="8x8"
+          href="/Icons/quidAI_favicon.png"
+        />
         <meta name="theme-color" content="#F97316" />
 
         <meta name="mobile-web-app-capable" content="yes" />

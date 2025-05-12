@@ -4,7 +4,7 @@ import { Linkedin, MapPin, Pencil, Share2, X } from "lucide-react";
 import { useRouter } from "next/router";
 
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProfile, Profile } from "@/reducers/profile/profileSlice";
+import {  Profile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import ConnectDrawer from "@/components/ConnectDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
