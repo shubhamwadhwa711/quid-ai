@@ -126,6 +126,16 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         profile_id = self.kwargs['profile_pk']
         return Project.objects.filter(profile_id=profile_id ) 
+    
+    def get_permissions(self):
+        if self.action in ['partial_update', 'create', 'destroy']:
+            # Only authenticated users can create
+            permission_classes = [IsAuthenticated]
+        else:
+            # Allow any user to perform GET requests
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]        
+
 
 
 class ProjectEditViewSet(viewsets.ModelViewSet):
@@ -185,7 +195,7 @@ class ProfileRelatedViewSet(viewsets.ModelViewSet):
     API view to list, create, delete and update all profile.
     """
     permission_classes = [AllowAny]
-    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(clients__is_featured =True))
+    queryset = Profile.objects.filter(Q(status="APPROVED"))
     serializer_class = ProfileRelatedSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]  
     filterset_class = ProfileFilter  # Use the custom filter class 
@@ -196,7 +206,7 @@ class TopProfileViewSet(viewsets.ModelViewSet):
     API view to list, create, delete and update all profile.
     """
     permission_classes = [AllowAny]
-    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(clients__is_featured =True) & (Q(auto_approve_inquiry=True) | Q(is_featured=True)))
+    queryset = Profile.objects.filter(Q(status="APPROVED") & (Q(auto_approve_inquiry=True) | Q(is_featured=True)))
     serializer_class = ProfileRelatedSerializer
     http_method_names=['get']
 
