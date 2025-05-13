@@ -410,7 +410,7 @@ export const ProjectEditForm = ({
       <DrawerTrigger className="absolute top-1 right-1">
         <Button
           size="icon"
-          variant="ghost"
+          variant="default"
           className="bg-white p-1h-8 w-8 rounded-full"
           onClick={() => onOpenChange(true)}
         >

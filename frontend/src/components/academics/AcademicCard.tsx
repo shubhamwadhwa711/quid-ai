@@ -20,14 +20,14 @@ export const AcademicCard = ({ academic }: { academic: Academic }) => {
 
   const onRemoveAcademics = useCallback(() => {
     dispatch(removeAcademics({ id: academic.profile, eid: academic.id }))
-      .unwrap()
-      .then(() => {
-        dispatch(fetchProfile());
-      })
-      .catch((error) => {
-        console.error("Error removing academic:", error);
-      });
-  }, [dispatch, academic.profile, academic.id]);
+   .unwrap()
+   .then(() => {
+     dispatch(fetchProfile());
+   })
+   .catch((error) => {
+     console.error("Error removing academic:", error);
+   });
+  }, [dispatch,academic.profile, academic.id]);
 
   return (
     <Card key={academic.id} className="bg-white h-40">
