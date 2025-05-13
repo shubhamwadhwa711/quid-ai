@@ -254,7 +254,30 @@ export const postBulkSkills = createAsyncThunk(
     }
   }
 );
-
+export const postBulkClient = createAsyncThunk(
+  "profile/postBulkClient",
+  async (
+    ClientData 
+  ) => {
+    console.log("Posting bulk client data...", ClientData);
+    try {
+      const response = await axiosInstance.post(
+        "/clients/bulk/",
+        ClientData.map((client: any) => ({
+          name: client.name || "",
+          category: client.category || 1,
+        }))
+      );
+      console.log("Bulk client data posted successfully", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Failed to post bulk client data:", error);
+      return (
+        error.response?.data?.message || "Failed to post bulk client data"
+      );
+    }
+  }
+)
 // Async Thunk to fetch profile data
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
@@ -271,28 +294,28 @@ export const fetchProfile = createAsyncThunk(
       console.log("linkedInResponse", linkedInResponse.data);
 
       // Fetch data from Unipile API
-      const UnipileResponse = await axios.request({
-        method: "GET",
-        url: `https://api14.unipile.com:14406/api/v1/users/${linkedInResponse.data.vanityName}`,
-        headers: {
-          accept: "application/json",
-          "X-API-KEY": "rKbzU6n3.ZyhJqXTKOM2On9Py7cnJkvkRIJYRtotIa4XQkfRvM6o=",
-        },
-        params: {
-          linkedin_sections: [
-            "skills",
-            "education",
-            "experience",
-            "projects",
-            "certifications",
-          ],
-          notify: "false",
-          account_id: "No2LNXRKSICQV6M5pzuUVQ",
-        },
-      });
-      console.log("UnipileResponse", UnipileResponse.data);
+      // const UnipileResponse = await axios.request({
+      //   method: "GET",
+      //   url: `https://api14.unipile.com:14403/api/v1/users/${linkedInResponse.data.vanityName}`,
+      //   headers: {
+      //     accept: "application/json",
+      //     "X-API-KEY": "fDUgwYtA.tkO5PxzOJL/QgRO3fTWka1XSnLV8aj/Wjx8f/wZ5xZ8=",
+      //   },
+      //   params: {
+      //     linkedin_sections: [
+      //       "skills",
+      //       "education",
+      //       "experience",
+      //       "projects",
+      //       "certifications",
+      //     ],
+      //     notify: "false",
+      //     account_id: "niqclrjxSSOSdgpqatxiJw",
+      //   },
+      // });
+      // console.log("UnipileResponse", UnipileResponse.data);
       // console.log("profileUserData",profileUserData)
-      // const UnipileResponse = {data: profileUserData};
+      const UnipileResponse = {data: profileUserData};
       // Update profile with headline and summary
       const countryList = (await dispatch(fetchCountry())).payload;
       // console.log("countryList", countryList);
@@ -309,7 +332,7 @@ export const fetchProfile = createAsyncThunk(
           acc[item.name.toLowerCase()] = item.id;
           return acc;
         }, {}) || {};
-
+      
       // Step 2: Map over each project and replace matching skill names with their IDs
       const tagList = UnipileResponse?.data?.projects?.map((project) => {
         const tags = project.skills
@@ -325,8 +348,6 @@ export const fetchProfile = createAsyncThunk(
         updateProfile({
           id: profileData.id,
           data: {
-            headline: UnipileResponse.data.headline,
-            summary: UnipileResponse.data.headline,
             linkedin_profile_url:
               UnipileResponse.data.profile_picture_url_large,
             linkedin_url: `https://linkedin.com/in/${linkedInResponse.data.vanityName}`,
@@ -334,6 +355,28 @@ export const fetchProfile = createAsyncThunk(
           },
         })
       );
+      if(!profileData.headline) {
+        await dispatch(
+          updateProfile({
+            id: profileData.id,
+            data: {
+              headline: UnipileResponse.data.headline,
+              
+            },
+          })
+        );
+      } 
+      if(!profileData.summary) {
+        await dispatch(
+          updateProfile({
+            id: profileData.id,
+            data: {
+              summary: UnipileResponse.data.headline,
+              
+            },
+          })
+        );
+      }
 
       //  Check if education data needs to be posted
       console.log("profileData.education.length", profileData.education.length);
@@ -356,6 +399,19 @@ export const fetchProfile = createAsyncThunk(
             projectData: UnipileResponse.data.projects,
           })
         );
+      }
+      console.log("UnipileResponse?.data?.work_experience",UnipileResponse?.data?.work_experience)
+      const ClientData = UnipileResponse?.data?.work_experience.map((client: any) => {
+        return {
+          name: client.company || "",
+          category: client.category || 1,
+        }
+      } );
+      console.log("ClientData", ClientData);
+      if(profileData.client.length === 0){
+        await dispatch(
+          postBulkClient(ClientData)
+        )
       }
       if (profileData.skill.length === 0) {
         console.log("Dispatching skills bulk post");
@@ -547,7 +603,7 @@ const profileSlice = createSlice({
 
       // NEW - Bulk academics states
       .addCase(postBulkAcademics.pending, (state) => {
-        state.academicsLoading = true;
+        state.academicsLoading = false;
         state.academicsError = null;
       })
       .addCase(postBulkAcademics.fulfilled, (state) => {
@@ -561,7 +617,7 @@ const profileSlice = createSlice({
 
       // NEW - Bulk skills states
       .addCase(postBulkSkills.pending, (state) => {
-        state.skillsLoading = true;
+        state.skillsLoading = false;
         state.skillsError = null;
       })
       .addCase(postBulkSkills.fulfilled, (state) => {
@@ -575,7 +631,7 @@ const profileSlice = createSlice({
 
       // Profiles fetching states
       .addCase(fetchProfiles.pending, (state) => {
-        state.loading = true;
+        state.loading = false;
         state.error = null;
       })
       .addCase(fetchProfiles.fulfilled, (state, action) => {

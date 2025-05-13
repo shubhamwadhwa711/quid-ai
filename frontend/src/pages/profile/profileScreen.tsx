@@ -48,7 +48,7 @@ const ProfileScreen = () => {
   const handleShareProfile = () => {
     if (profile?.linkedin_url) {
       navigator.clipboard
-        .writeText(`https://${profile.linkedin_url}`)
+        .writeText(`${profile.linkedin_url}`)
         .then(() => {
           console.log("LinkedIn URL copied to clipboard!");
           setIsCopiedURL(true);
@@ -289,7 +289,7 @@ const ProfileScreen = () => {
               <div className="flex items-center space-x-2 mt-2">
                 <Linkedin className="w-5 h-5 fill-white" />
                 <span className="text-sm font-bold text-wrap overflow-hidden text-ellipsis">
-                  {profile?.linkedin_url || "Add LinkedIn URL"}
+                  {profile?.linkedin_url?.slice(8) || "Add LinkedIn URL"}
                 </span>
               </div>
             </div>
@@ -498,7 +498,8 @@ const ProfileScreen = () => {
                 key={cli.id}
                 className="px-3 py-1  rounded-3xl bg-white/20 text-sm"
               >
-                <img src={cli.logo} alt="" className="uniform-logo-inverted " />
+                {/* <img src={cli.logo} alt="" className="uniform-logo-inverted " /> */}
+                {cli.name}
               </span>
             ))
           ) : (
