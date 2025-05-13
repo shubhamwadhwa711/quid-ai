@@ -14,6 +14,7 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 # from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -135,16 +136,16 @@ class ProjectEditViewSet(viewsets.ModelViewSet):
     
     serializer_class =ProjectEditSerializer 
       
-   
-    
     """
     Restricts the returned project to a given profile,
     by filtering against a `pk` URL parameter.
     """
     def get_queryset(self):
         profile_id = self.kwargs['profile_pk']
-        return Project.objects.filter(profile_id=profile_id , profile__status="APPROVED")             
+        print(profile_id)
+        return Project.objects.filter(profile_id=profile_id )   
 
+    
 class IndustryViewSet(viewsets.ModelViewSet):
     """
     API view to list all industries.
@@ -211,7 +212,6 @@ class UsProfileViewSet(viewsets.ModelViewSet):
 
     
 class SkillViewSet(viewsets.ModelViewSet):
-    # permission_classes = [AllowAny]
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer  
     http_method_names = ['get','post'] 
@@ -294,8 +294,9 @@ class AcademicBulkView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Handling bulk Skill creation
+''' Handling bulk Skill creation '''
 class SkillBulkView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = SkillSerializer(data = request.data , many = True, context={'request':request})
         if serializer.is_valid():
