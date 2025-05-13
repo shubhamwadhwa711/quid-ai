@@ -20,6 +20,7 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <Provider store={store}>
+
         {showSplash ? (
           <div className="flex items-center justify-center h-screen bg-black">
             <img src="/quid-icon.png" alt="Splash Screen" className="w-64" />

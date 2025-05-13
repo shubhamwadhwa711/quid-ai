@@ -26,20 +26,23 @@ import ProjectsScreen from "@/components/projects/ProjectsScreen";
 import EditContent from "@/components/EditContent";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { Spinner } from "flowbite-react";
 import { Badge } from "@/components/ui/badge";
 // Main Profile Component
 const ProfileScreen = () => {
   const { data: session } = useSession();
-  console.log("session?.provider.tokens", session?.provider.tokens);
+  // console.log("session?.provider.tokens", session?.provider.tokens);
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
+ 
   const [isCopiedURL, setIsCopiedURL] = useState(false);
   const fileInput = useRef();
   useEffect(() => {
+    console.log("fetching profile in profile screen");
     dispatch(fetchProfile());
-  }, [dispatch]);
-  console.log("profile", profile);
-
+  }, []);
+  // console.log("profile", profile);
+  
   // State for controlling which popup is currently open
   const [activePopup, setActivePopup] = useState(false);
   const handleShareProfile = () => {
@@ -211,7 +214,14 @@ const ProfileScreen = () => {
     formData.append("image", file);
     dispatch(updateProfile({ id: profile?.id, data: formData }));
   };
-
+  if(loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <Spinner aria-label="Extra large spinner example" size="xl" />
+      </div>
+    );
+    
+  }
   return (
     <div className="min-h-screen flex flex-col items-center justify-center mt-20 px-2 pb-20">
       {/* Main profile card */}
@@ -228,7 +238,7 @@ const ProfileScreen = () => {
               <Image
                 width={100}
                 height={100}
-                src={profile?.image || "/images/placeholder.png"}
+                src={profile?.image || profile?.linkedin_profile_url}
                 alt="Profile"
                 className="h-full w-full rounded-full"
               />

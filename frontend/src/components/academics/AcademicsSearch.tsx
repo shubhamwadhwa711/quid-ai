@@ -24,9 +24,10 @@ const AcademicsSearch: React.FC<AcademicSearchProps> = ({
   console.log("defaultAcademics", defaultAcademics);
   console.log("profileID", profileID);
   return (
-    <div className="relative space-y-2">
-      <AcademicCards academics={defaultAcademics} />
+    <div className="h-screen overflow-y-auto  ">
       <AddAcademic profileID={profileID} />
+      <AcademicCards academics={defaultAcademics} />
+      {/* <AcademicCards academics={defaultAcademics} /> */}
     </div>
   );
 };

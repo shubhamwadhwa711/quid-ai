@@ -5,7 +5,7 @@ const withPWA = require("next-pwa")({
   register: true,
   skipWaiting: true, // Ensures updated service workers take control
 });
-
+const withFlowbiteReact = require("flowbite-react/plugin/nextjs");
 const nextConfig = withPWA({
   output:"standalone",
   env: {
@@ -49,4 +49,4 @@ const nextConfig = withPWA({
   },
 });
 
-export default nextConfig;
+export default withFlowbiteReact(nextConfig);

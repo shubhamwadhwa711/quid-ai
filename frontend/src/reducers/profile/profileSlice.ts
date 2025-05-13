@@ -3,7 +3,10 @@ import axiosInstance from "@/lib/axiosInstance";
 import axios from "axios";
 import { MergeProfile } from "@/lib/profileMerge";
 import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
-
+import { profileUserData } from "./profile";
+import { profile } from "console";
+import { fetchCountry } from "../filter/country/countrySlice";
+import { fetchExpertise } from "../filter/expertise/expertiseSlice";
 interface User {
   id: number;
   username: string;
@@ -86,6 +89,7 @@ export interface Profile {
   projects: Project[];
   available_to?: Availability[];
   languages?: Language[];
+  linkedin_profile_url: string;
 }
 
 interface ProfileState {
@@ -93,7 +97,11 @@ interface ProfileState {
   profiles: Profile[];
   LinkedInProfile: any | null;
   loading: boolean;
+  academicsLoading: boolean;
+  skillsLoading: boolean;
   error: string | null;
+  academicsError: string | null;
+  skillsError: string | null;
 }
 
 const initialState: ProfileState = {
@@ -101,8 +109,13 @@ const initialState: ProfileState = {
   profiles: [],
   LinkedInProfile: null,
   loading: false,
+  academicsLoading: false,
+  skillsLoading: false,
   error: null,
+  academicsError: null,
+  skillsError: null,
 };
+
 export const fetchLinkedInProfile = createAsyncThunk(
   "profile/fetchLinkedInProfile",
   async (access_token, { rejectWithValue }) => {
@@ -123,12 +136,132 @@ export const fetchLinkedInProfile = createAsyncThunk(
   }
 );
 
+// NEW - Separate thunk for bulk academics posting
+export const postBulkAcademics = createAsyncThunk(
+  "profile/postBulkAcademics",
+  async (
+    {
+      profileId,
+      educationData,
+    }: {
+      profileId: number;
+      educationData: any[];
+    },
+    { rejectWithValue }
+  ) => {
+    console.log("Posting bulk academics data...", educationData);
+    try {
+      const response = await axiosInstance.post(
+        "/academics/bulk/",
+        educationData.map((edu: any) => ({
+          school: edu.school || "",
+          degree: edu.degree || "",
+          field_of_study: edu.field_of_study || "",
+          start_year: edu.start ? parseInt(edu.start.split("/")[2]) : null,
+          end_year: edu.end ? parseInt(edu.end.split("/")[2]) : null,
+          description: "Imported from LinkedIn",
+          profile: profileId,
+        }))
+      );
+      console.log("Bulk academics data posted successfully", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Failed to post bulk academics data:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to post bulk academics data"
+      );
+    }
+  }
+);
+
+export const postBulkProjects = createAsyncThunk(
+  "profile/postBulkProjects",
+  async (
+    {
+      profileId,
+      projectData,
+      tag,
+    }: {
+      profileId: number;
+      projectData: any[];
+      tag: number[];
+    },
+    { rejectWithValue }
+  ) => {
+    console.log("projectData", projectData);
+    console.log("tag", tag);
+    try {
+      const response = await axiosInstance.post(
+        "projects/bulk/",
+        projectData.map((proj: any, index: number) => ({
+          title: proj.name || "",
+          tag: tag[index] || [],
+          start_date: proj.start
+            ? `${proj.start.split("/")[2]}-${proj.start
+                .split("/")[0]
+                .padStart(2, "0")}-${proj.start.split("/")[1].padStart(2, "0")}`
+            : null,
+          end_date: proj.end
+            ? `${proj.end.split("/")[2]}-${proj.end
+                .split("/")[0]
+                .padStart(2, "0")}-${proj.end.split("/")[1].padStart(2, "0")}`
+            : null,
+          description: proj.description || "",
+          url:
+            proj.url ||
+            "https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+          profile: profileId,
+        }))
+      );
+
+      console.log("Bulk projects data posted successfully", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Failed to post bulk projects data:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to post bulk projects data"
+      );
+    }
+  }
+);
+
+// NEW - Separate thunk for bulk skills posting
+export const postBulkSkills = createAsyncThunk(
+  "profile/postBulkSkills",
+  async (
+    {
+      skillsData,
+    }: {
+      skillsData: any[];
+    },
+    { rejectWithValue }
+  ) => {
+    console.log("Posting bulk skills data...");
+    try {
+      const response = await axiosInstance.post(
+        "/skills/bulk/",
+        skillsData.map((skill: any) => ({
+          name: skill.name || "",
+        }))
+      );
+      console.log("Bulk skills data posted successfully", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error("Failed to post bulk skills data:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to post bulk skills data"
+      );
+    }
+  }
+);
+
 // Async Thunk to fetch profile data
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue, dispatch }) => {
     try {
       // Fetch profile data from your backend
+      console.log("fetchProfile reducer");
       const response = await axiosInstance.get("/profile/");
       const profileData = response.data[0];
       console.log("Profile data fetched successfully", profileData);
@@ -158,65 +291,86 @@ export const fetchProfile = createAsyncThunk(
         },
       });
       console.log("UnipileResponse", UnipileResponse.data);
-
+      // console.log("profileUserData",profileUserData)
+      // const UnipileResponse = {data: profileUserData};
       // Update profile with headline and summary
-      await dispatch(
+      const countryList = (await dispatch(fetchCountry())).payload;
+      // console.log("countryList", countryList);
+      // console.log("UnipileResponse.data.location", UnipileResponse.data.location);
+      const country = countryList.find(
+        (country: any) =>
+          country.name === UnipileResponse?.data?.location?.split(", ")[2]
+      );
+      const projectSkillList = (await dispatch(fetchExpertise({}))).payload;
+      // console.log("projectSkillList", projectSkillList);
+      // Step 1: Create a lookup map for faster access by lowercased name
+      const skillNameToIdMap =
+        projectSkillList?.reduce((acc: Record<string, number>, item) => {
+          acc[item.name.toLowerCase()] = item.id;
+          return acc;
+        }, {}) || {};
+
+      // Step 2: Map over each project and replace matching skill names with their IDs
+      const tagList = UnipileResponse?.data?.projects?.map((project) => {
+        const tags = project.skills
+          ?.map((skill: string) => skillNameToIdMap[skill.toLowerCase()])
+          ?.filter((id): id is number => id !== undefined); // filter out unmatched skills
+
+        return tags;
+      });
+
+      console.log("tagList", tagList);
+      //  console.log("location", country);
+      dispatch(
         updateProfile({
           id: profileData.id,
           data: {
             headline: UnipileResponse.data.headline,
             summary: UnipileResponse.data.headline,
+            linkedin_profile_url:
+              UnipileResponse.data.profile_picture_url_large,
+            linkedin_url: `https://linkedin.com/in/${linkedInResponse.data.vanityName}`,
+            country: country ? country.id : null,
           },
         })
       );
 
-      // Check if education data needs to be posted
-      if (
-        profileData.education.length === 0 &&
-        UnipileResponse.data.education?.length > 0
-      ) {
-        console.log("backend education posting");
-        try {
-          await axiosInstance.post(
-            "/academics/bulk/",
-            UnipileResponse?.data?.education?.map((edu: any) => ({
-              school: edu.school || "",
-              degree: edu.degree || "",
-              field_of_study: edu.field_of_study || "",
-              start_year: edu.start ? parseInt(edu.start.split("-")[0]) : null,
-              end_year: edu.end ? parseInt(edu.end.split("-")[0]) : null,
-              description: "Imported from LinkedIn",
-              profile: profileData.id,
-            }))
-          );
-          console.log("Education data posted successfully");
-        } catch (eduError) {
-          console.error("Failed to post education data:", eduError);
-          // Continue execution even if education posting fails
-        }
+      //  Check if education data needs to be posted
+      console.log("profileData.education.length", profileData.education.length);
+      // console.log("profileData.skills.length", profileData.education.length);
+      if (profileData.education.length === 0) {
+        console.log("Dispatching academics bulk post");
+        await dispatch(
+          postBulkAcademics({
+            profileId: profileData.id,
+            educationData: UnipileResponse.data.education,
+          })
+        );
       }
-      console.log("profileData.skill.length",profileData.skill.length);
-      if (
-        profileData.skill.length === 0 &&
-        UnipileResponse.data.skills?.length > 0
-      ) {
-        console.log("backend skills posting");
-        try {
-          await axiosInstance.post(
-            "/skills/bulk/",
-            UnipileResponse?.data?.skills?.map((ski: any) => ({
-              name: ski.name || "",
-            }))
-          );
-          console.log("Education data posted successfully");
-        } catch (eduError) {
-          console.error("Failed to post education data:", eduError);
-          // Continue execution even if education posting fails
-        }
+      if (profileData.projects.length === 0) {
+        console.log("Dispatching projects bulk post");
+        await dispatch(
+          postBulkProjects({
+            profileId: profileData.id,
+            tag: tagList,
+            projectData: UnipileResponse.data.projects,
+          })
+        );
+      }
+      if (profileData.skill.length === 0) {
+        console.log("Dispatching skills bulk post");
+        await dispatch(
+          postBulkSkills({
+            skillsData: UnipileResponse.data.skills,
+          })
+        );
       }
 
-      // Merge and return the data - this will be accessible in the fulfilled action
-      return MergeProfile(profileData, UnipileResponse.data);
+      // Now refetch profile after possible updates
+      const refreshedResponse = await axiosInstance.get("/profile/");
+      const refreshedProfileData = refreshedResponse.data[0];
+
+      return refreshedProfileData;
     } catch (error: any) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch profile"
@@ -224,6 +378,7 @@ export const fetchProfile = createAsyncThunk(
     }
   }
 );
+
 export const fetchProfiles = createAsyncThunk(
   "profile/fetchProfiles",
   async (FilterData, { rejectWithValue }) => {
@@ -264,6 +419,7 @@ export const fetchProfiles = createAsyncThunk(
     }
   }
 );
+
 // Async Thunk to update profile data
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
@@ -356,6 +512,7 @@ const profileSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Profile fetching states
       .addCase(fetchProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -369,6 +526,8 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      // LinkedIn profile states
       .addCase(fetchLinkedInProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -385,6 +544,36 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      // NEW - Bulk academics states
+      .addCase(postBulkAcademics.pending, (state) => {
+        state.academicsLoading = true;
+        state.academicsError = null;
+      })
+      .addCase(postBulkAcademics.fulfilled, (state) => {
+        state.academicsLoading = false;
+        console.log("Bulk academics posted successfully");
+      })
+      .addCase(postBulkAcademics.rejected, (state, action) => {
+        state.academicsLoading = false;
+        state.academicsError = action.payload as string;
+      })
+
+      // NEW - Bulk skills states
+      .addCase(postBulkSkills.pending, (state) => {
+        state.skillsLoading = true;
+        state.skillsError = null;
+      })
+      .addCase(postBulkSkills.fulfilled, (state) => {
+        state.skillsLoading = false;
+        console.log("Bulk skills posted successfully");
+      })
+      .addCase(postBulkSkills.rejected, (state, action) => {
+        state.skillsLoading = false;
+        state.skillsError = action.payload as string;
+      })
+
+      // Profiles fetching states
       .addCase(fetchProfiles.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -398,6 +587,8 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+
+      // Profile update states
       .addCase(updateProfile.pending, (state) => {
         // state.loading = true;
         state.error = null;
