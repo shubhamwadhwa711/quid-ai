@@ -496,7 +496,7 @@ const ProfileScreen = () => {
             profile.client.map((cli, index) => (
               <span
                 key={cli.id}
-                className="px-3 py-1  rounded-3xl bg-white/20 text-sm"
+                className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
               >
                 {/* <img src={cli.logo} alt="" className="uniform-logo-inverted " /> */}
                 {cli.name}

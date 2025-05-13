@@ -13,7 +13,7 @@ export const ProjectCard = ({ project, key }:ProjectCard) => {
     >
       <div className="relative h-4/5">
         <img
-          src={project?.image}
+          src={project?.image || "/AI.jpg"}
           alt={project?.title}
           className="w-full h-full object-fill rounded-t-lg"
         />

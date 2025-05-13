@@ -294,28 +294,28 @@ export const fetchProfile = createAsyncThunk(
       console.log("linkedInResponse", linkedInResponse.data);
 
       // Fetch data from Unipile API
-      // const UnipileResponse = await axios.request({
-      //   method: "GET",
-      //   url: `https://api14.unipile.com:14403/api/v1/users/${linkedInResponse.data.vanityName}`,
-      //   headers: {
-      //     accept: "application/json",
-      //     "X-API-KEY": "fDUgwYtA.tkO5PxzOJL/QgRO3fTWka1XSnLV8aj/Wjx8f/wZ5xZ8=",
-      //   },
-      //   params: {
-      //     linkedin_sections: [
-      //       "skills",
-      //       "education",
-      //       "experience",
-      //       "projects",
-      //       "certifications",
-      //     ],
-      //     notify: "false",
-      //     account_id: "niqclrjxSSOSdgpqatxiJw",
-      //   },
-      // });
-      // console.log("UnipileResponse", UnipileResponse.data);
-      // console.log("profileUserData",profileUserData)
-      const UnipileResponse = {data: profileUserData};
+       const UnipileResponse = await axios.request({
+         method: "GET",
+         url: `${process.env.UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
+         headers: {
+           accept: "application/json",
+           "X-API-KEY": `${process.env.X_API_KEY}`,
+         },
+         params: {
+           linkedin_sections: [
+             "skills",
+             "education",
+             "experience",
+             "projects",
+             "certifications",
+           ],
+           notify: "false",
+           account_id: `${process.env.UNIPILE_ACCOUNT_ID}`,
+         },
+       });
+      console.log("UnipileResponse", UnipileResponse.data);
+      console.log("profileUserData",profileUserData)
+      // const UnipileResponse = {data: profileUserData};
       // Update profile with headline and summary
       const countryList = (await dispatch(fetchCountry())).payload;
       // console.log("countryList", countryList);
