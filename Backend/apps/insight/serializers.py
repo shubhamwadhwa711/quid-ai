@@ -15,6 +15,17 @@ class AssociatedCompanySerializer(serializers.ModelSerializer):
         model = AssociatedCompany
         fields = '__all__'
 
+    def create(self, validated_data):
+        
+        associatedcompany = AssociatedCompany.objects.create(**validated_data)
+        user = self.context['request'].user
+        print(user)
+        # Check if the user has a profile
+        if hasattr(user, 'profile'):
+           user.profile.client.add(associatedcompany)
+        
+        return associatedcompany    
+
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testimonial

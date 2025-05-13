@@ -107,7 +107,7 @@ class FaqViewSet(viewsets.ModelViewSet):
 
 # Handling bulk company creation
 class CompanyBulkView(APIView):
-    # permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated]
     def post(self, request):
         serializer = AssociatedCompanySerializer(data = request.data , many = True, context={'request':request})
         if serializer.is_valid():
