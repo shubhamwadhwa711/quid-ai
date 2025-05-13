@@ -132,7 +132,7 @@ class ProjectEditViewSet(viewsets.ModelViewSet):
     """
     API view  for updation
     """
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     serializer_class =ProjectEditSerializer 
       
