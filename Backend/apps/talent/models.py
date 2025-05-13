@@ -122,7 +122,7 @@ class Project(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='projects')
     title = models.CharField(max_length=255)
     tag = models.ManyToManyField(Skill)
-    image = models.ImageField(upload_to='project/', blank=True, null=True)
+    image = models.ImageField(upload_to='project/',default='project/AI.jpg', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     start_date = models.DateField()
