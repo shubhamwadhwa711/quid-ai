@@ -216,7 +216,7 @@ class UsProfileViewSet(viewsets.ModelViewSet):
     API view to list, create, delete and update all profile.
     """
     permission_classes = [AllowAny]
-    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(clients__is_featured =True) & Q(country__name="United States"))
+    queryset = Profile.objects.filter(Q(status="APPROVED") & Q(country__name="United States"))
     serializer_class = ProfileRelatedSerializer
     http_method_names=['get']
 
