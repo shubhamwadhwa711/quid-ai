@@ -292,14 +292,15 @@ export const fetchProfile = createAsyncThunk(
       // Fetch LinkedIn user info
       const linkedInResponse = await axios.get("/api/linkedin-info");
       console.log("linkedInResponse", linkedInResponse.data);
+      console.log("Unipile", process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL);
 
       // Fetch data from Unipile API
        const UnipileResponse = await axios.request({
          method: "GET",
-         url: `${process.env.UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
+         url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
          headers: {
            accept: "application/json",
-           "X-API-KEY": `${process.env.X_API_KEY}`,
+           "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
          },
          params: {
            linkedin_sections: [
@@ -310,7 +311,7 @@ export const fetchProfile = createAsyncThunk(
              "certifications",
            ],
            notify: "false",
-           account_id: `${process.env.UNIPILE_ACCOUNT_ID}`,
+           account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
          },
        });
       console.log("UnipileResponse", UnipileResponse.data);
