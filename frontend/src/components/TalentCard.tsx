@@ -124,7 +124,7 @@ const TalentCard = ({
               </Button>
               <Link
                 className="rounded-full h-12 w-12 border flex items-center justify-center"
-                href={talent?.linkedin_url}
+                href={talent?.linkedin_url || "#"}
               >
                 <Linkedin />
               </Link>
