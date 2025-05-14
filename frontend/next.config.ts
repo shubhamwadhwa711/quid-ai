@@ -21,7 +21,8 @@ const nextConfig = withPWA({
       "media.licdn.com",
       "s3-alpha-sig.figma.com",
       "res.cloudinary.com",
-      "localhost"
+      "localhost",
+      "api.quidai.org"
     ],
     remotePatterns: [
       {
@@ -43,6 +44,11 @@ const nextConfig = withPWA({
         protocol: "http", 
         hostname: "localhost",
         port: "8006",
+        pathname: "/media/**",
+      },
+      {
+        protocol: "http",
+        hostname: "api.quidai.org",
         pathname: "/media/**",
       },
     ],

@@ -65,6 +65,8 @@ const Search = () => {
   // State for filter drawer
   const [showFilters, setShowFilters] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const dispatch = useAppDispatch();
+
   const onSearch = (query: string) => {
     console.log("Searching for:", query);
     if (query) {
@@ -90,7 +92,6 @@ const Search = () => {
   >(null);
 
   // Redux and data states
-  const dispatch = useAppDispatch();
   const { profiles } = useAppSelector((state) => state.Profile);
   const { aiprofiles } = useAppSelector((state) => state.AIProfile);
   const { usprofiles } = useAppSelector((state) => state.USProfile);
