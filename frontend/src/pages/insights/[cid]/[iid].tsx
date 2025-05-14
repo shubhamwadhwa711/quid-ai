@@ -50,8 +50,6 @@ export default function BlogPage() {
           className=" proxima-bold"
           dangerouslySetInnerHTML={{ __html: blogs.text }}
         ></div>
-
-        {/* <LazyClientEditor initialData={blogs.text} /> */}
       </main>
     </div>
   );

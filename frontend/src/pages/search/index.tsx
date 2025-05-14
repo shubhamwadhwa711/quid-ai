@@ -74,7 +74,12 @@ const Search = () => {
       dispatch(fetchProfiles({ search: query }));
     }
   };
-
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e != null) {
+      setSearchTerm(e.target.value);
+      setIsSearchApplied(true);
+    }
+  };
   useEffect(() => {
     const delay = setTimeout(() => {
       if (typeof onSearch === "function") {
@@ -228,8 +233,9 @@ const Search = () => {
             <Input
               type="text"
               placeholder="Search talent..."
+              name="search"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleSearch}
               className="flex h-10 w-full border-none focus-visible:ring-0 rounded-md bg-transparent py-3 text-sm outline-none"
             />
           </div>
@@ -285,11 +291,7 @@ const Search = () => {
             </div>
           </div>
           <div className="fixed left-0 right-0  flex justify-center items-center py-2 ">
-            <img
-              src="/Icons/Spiral.png"
-              alt=""
-              className=""
-            />
+            <img src="/Icons/Spiral.png" alt="" className="" />
           </div>
         </div>
 
@@ -344,26 +346,26 @@ const Search = () => {
         <div>
           {isSearchApplied || isFilterApplied ? (
             <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
-            <div className="mx-1 flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-              <h1 className="proxima-bold text-xl text-white">
-                Search Results
-              </h1>
-            </div>
-            <div className="flex justify-center w-full">
-              <div
-                className={`overflow-x-auto hide-scrollbar px-4 grid ${
-                  isSearchApplied || isFilterApplied
-                    ? "grid-cols-1"
-                    : "grid-flow-col auto-cols-max"
-                } gap-2`}
-              >
-                {profiles?.map((talent) => (
-                  <TalentCard type="" key={talent.id} talent={talent} />
-                ))}
+              <div className="mx-1 flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                <h1 className="proxima-bold text-xl text-white">
+                  Search Results
+                </h1>
+              </div>
+              <div className="flex justify-center w-full">
+                <div
+                  className={`overflow-x-auto hide-scrollbar px-4 grid ${
+                    isSearchApplied || isFilterApplied
+                      ? "grid-cols-1"
+                      : "grid-flow-col auto-cols-max"
+                  } gap-2`}
+                >
+                  {profiles?.map((talent) => (
+                    <TalentCard type="" key={talent.id} talent={talent} />
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
           ) : (
             <>
               <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
