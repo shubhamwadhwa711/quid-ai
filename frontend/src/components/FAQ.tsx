@@ -69,7 +69,7 @@ const FAQ = () => {
       <div className="flex flex-col justify-center items-center">
         <Button onClick={()=>router.push("/insights")} className="bg-gradient-to-r px-6 py-6 mt-4 proxima-large rounded-full from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
           <div className="flex justify-center gap-2  items-center">
-            <span className="proxima-bold text-lg">
+            <span className="proxima-bold text-white text-lg">
               All Questions & Answers
             </span>
             <svg

@@ -71,7 +71,7 @@ const Brands = () => {
 
         {/* Logos Grid */}
 
-        <div className="grid grid-cols-3 mb-4 md:grid-cols-4 overflow-y-hidden max-h-32">
+        <div className="grid grid-cols-3 md:grid-cols-4 overflow-y-hidden">
           <AnimatePresence mode="wait">
             {companies.map((company) => (
               <motion.div
@@ -82,11 +82,14 @@ const Brands = () => {
                 transition={{ duration: 0.4 }}
                 className="flex items-center  justify-center p-2"
               >
-                <img
+                {company.logo ? (<img
                   src={company.logo}
                   alt={company.name}
                   className="max-h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
-                />
+                />) : (
+                  <span className="text-gray-300 font-bold">{company.name.slice(0,15)}</span>
+                )}
+                
               </motion.div>
             ))}
           </AnimatePresence>

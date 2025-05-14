@@ -184,7 +184,7 @@ const Talent = () => {
           <div className="pl-4">
             <p>
               {aiprofile?.summary?.length || usprofile?.summary?.length > 200
-                ? `${aiprofile?.summary?.substring(0, 200)}... Read More`
+                ? `${aiprofile?.summary}`
                 : aiprofile?.summary}
             </p>
           </div>

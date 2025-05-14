@@ -10,7 +10,7 @@ import Working from "@/components/Working";
 export default function Home() {
   return (
     <main className="min-h-screen text-white">
-      <div className="space-y-16 ">
+      <div className="space-y-16  ">
         <div className="snap-center"><Hero /></div>
         <div className="snap-center"><Brands /></div>
         <About />
@@ -18,7 +18,7 @@ export default function Home() {
         <div className="snap-center"><Working /></div>
         <div className="snap-center"><Insights /></div>
         <div className="snap-center"><FAQ /></div>
-        <div className="snap-center"><Signup /></div>
+        <div className="snap-center "><Signup /></div>
       </div>
     </main>
   );
