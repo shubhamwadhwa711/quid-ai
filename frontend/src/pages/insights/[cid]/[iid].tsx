@@ -4,8 +4,6 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import Head from "next/head";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import CustomEditor from "@/components/custom-editor";
-import LazyClientEditor from "@/components/lazy-client-editor";
 export default function BlogPage() {
   const { cid, iid } = useParams();
   const dispatch = useAppDispatch();
@@ -52,8 +50,6 @@ export default function BlogPage() {
           className=" proxima-bold"
           dangerouslySetInnerHTML={{ __html: blogs.text }}
         ></div>
-
-        {/* <LazyClientEditor initialData={blogs.text} /> */}
       </main>
     </div>
   );

@@ -109,7 +109,7 @@ export const fetchAIProfiles = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     console.log("Fetching AI profile...");
     try {
-      const response = await axios.get(`${process.env.NEXT_BACKEND_URL}/top-profile/`);
+      const response = await axiosInstanceUnauthorized.get(`/top-profile/`);
       console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {

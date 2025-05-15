@@ -38,7 +38,7 @@ const Insights = () => {
       dispatch(fetchInsights(selectedCategory));
     }
   }, [selectedCategory, dispatch]);
-
+  console.log("insights", insights);
   return (
     <div className="">
       <div>
@@ -90,11 +90,11 @@ const Insights = () => {
                     <Card
                     onClick={() => router.push(`insights/${insight.category}/${insight.id}`)}
                       key={insight.id}
-                      className="hover:shadow-md bg-gray-800  transition flex-shrink-0 w-60 h-56"
+                      className="hover:shadow-md bg-gray-800 cursor-pointer transition flex-shrink-0 w-60 h-56"
                     >
                       <div className="relative h-3/5">
                         <img
-                          src={insight.featured_image}
+                          src={insight.featured_image || "/insight.jpg"}
                           alt={insight.title}
                           className="w-full h-full object-fill rounded-t-lg"
                         />

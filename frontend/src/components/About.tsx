@@ -73,7 +73,11 @@ const About = () => {
               We offer a platform with top AI
               <br />
               Experts. Work with the best talent
-              <br />
+              <br /><img
+                  // src={company.logo}
+                  // alt={company.name}
+                  className="max-h-12 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+                />
               worldwide on our secure, flexible,
               <br />
               and seamless platform.

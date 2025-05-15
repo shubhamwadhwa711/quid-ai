@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ConnectDialog from "./ConnectDialog";
 import Link from "next/link";
+import Image from "next/image";
 
 interface TalentCard {
   id: number;
@@ -27,6 +28,7 @@ interface TalentCard {
   summary?: string;
   country: { id: number; name: string };
   linkedin_url: string;
+  linkedin_profile_url: string;
 }
 
 const TalentCard = ({
@@ -55,10 +57,12 @@ const TalentCard = ({
     >
       <div className="absolute -top-14  left-1/2 transform -translate-x-1/2 z-50">
         <Avatar className="w-24 h-24 shadow-lg ">
-          <AvatarImage
-            src={talent?.image}
+          <Image
+            src={talent?.image || talent?.linkedin_profile_url}
             alt={talent?.user?.username}
             className="object-cover border"
+            width={100}
+            height={100}
           />
         </Avatar>
       </div>
@@ -81,7 +85,7 @@ const TalentCard = ({
         {/* Middle section (will grow/shrink as needed) */}
         <CardContent className="text-center px-6 py-2 flex-grow">
           <div className="flex flex-wrap justify-center gap-2 overflow-y-auto max-h-full">
-            {talent?.skill?.map((s, index) => (
+            {talent?.skill?.slice(0, 5).map((s, index) => (
               <Badge
                 variant="none"
                 key={index}
@@ -99,7 +103,7 @@ const TalentCard = ({
             <div className="flex justify-center items-center gap-4">
               <Button
                 onClick={() => handleConnectForm()}
-                className="rounded-3xl proxima-bold px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
+                className="rounded-3xl proxima-bold text-white px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
               >
                 Connect
                 <svg
@@ -120,25 +124,31 @@ const TalentCard = ({
               </Button>
               <Link
                 className="rounded-full h-12 w-12 border flex items-center justify-center"
-                href={talent?.linkedin_url}
+                href={talent?.linkedin_url || "#"}
               >
                 <Linkedin />
               </Link>
             </div>
             <div className="flex flex-nowrap items-center">
               <h3 className="text-xs text-nowrap">Featured Clients</h3>
-              <Separator orientation="vertical" className="h-4 ml-2" />
+              <Separator orientation="vertical" className="h-4 mx-2 " />
               <div className="w-full overflow-x-auto hide-scrollbar">
                 <div className="w-full relative">
                   <div className="flex items-center">
-                    {talent?.client?.map((cli, index) => (
-                      <img
-                        key={index}
-                        src={cli?.logo}
-                        alt={cli?.name}
-                        className="h-8 w-20 object-contain inline-block ms-2"
-                      />
-                    ))}
+                    {talent?.client?.slice(0, 2)?.map((cli, index) =>
+                      cli.logo ? (
+                        <img
+                          key={index}
+                          src={cli.logo}
+                          alt={cli.name}
+                          className="h-8 w-20 object-contain inline-block ms-2"
+                        />
+                      ) : (
+                        <span key={index} className=" text-xs font-bold">
+                          {cli.name}
+                        </span>
+                      )
+                    )}
                   </div>
                 </div>
               </div>

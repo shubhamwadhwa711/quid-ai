@@ -112,8 +112,8 @@ export const fetchUSProfiles = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     console.log("Fetching US profile...");
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_BACKEND_URL}/us-profile/`
+      const response = await axiosInstanceUnauthorized.get(
+        `/us-profile/`
       );
       console.log("profile fetched:", response.data);
       return response.data;

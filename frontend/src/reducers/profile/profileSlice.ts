@@ -292,30 +292,31 @@ export const fetchProfile = createAsyncThunk(
       // Fetch LinkedIn user info
       const linkedInResponse = await axios.get("/api/linkedin-info");
       console.log("linkedInResponse", linkedInResponse.data);
+      console.log("Unipile", process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL);
 
       // Fetch data from Unipile API
-      // const UnipileResponse = await axios.request({
-      //   method: "GET",
-      //   url: `https://api14.unipile.com:14403/api/v1/users/${linkedInResponse.data.vanityName}`,
-      //   headers: {
-      //     accept: "application/json",
-      //     "X-API-KEY": "fDUgwYtA.tkO5PxzOJL/QgRO3fTWka1XSnLV8aj/Wjx8f/wZ5xZ8=",
-      //   },
-      //   params: {
-      //     linkedin_sections: [
-      //       "skills",
-      //       "education",
-      //       "experience",
-      //       "projects",
-      //       "certifications",
-      //     ],
-      //     notify: "false",
-      //     account_id: "niqclrjxSSOSdgpqatxiJw",
-      //   },
-      // });
-      // console.log("UnipileResponse", UnipileResponse.data);
+        const UnipileResponse = await axios.request({
+          method: "GET",
+          url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
+          headers: {
+            accept: "application/json",
+            "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
+          },
+          params: {
+            linkedin_sections: [
+              "skills",
+              "education",
+              "experience",
+              "projects",
+              "certifications",
+            ],
+            notify: "false",
+            account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
+          },
+        });
+       console.log("UnipileResponse", UnipileResponse.data);
       // console.log("profileUserData",profileUserData)
-      const UnipileResponse = {data: profileUserData};
+      //  const UnipileResponse = {data: profileUserData};
       // Update profile with headline and summary
       const countryList = (await dispatch(fetchCountry())).payload;
       // console.log("countryList", countryList);
@@ -344,7 +345,7 @@ export const fetchProfile = createAsyncThunk(
 
       console.log("tagList", tagList);
       //  console.log("location", country);
-      dispatch(
+      await dispatch(
         updateProfile({
           id: profileData.id,
           data: {

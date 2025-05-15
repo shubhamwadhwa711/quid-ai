@@ -4,12 +4,13 @@ import { Linkedin, MapPin, Pencil, Share2, X } from "lucide-react";
 import { useRouter } from "next/router";
 
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import {  Profile } from "@/reducers/profile/profileSlice";
+import { Profile } from "@/reducers/profile/profileSlice";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import ConnectDrawer from "@/components/ConnectDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchAIProfile } from "@/reducers/ai-talent/ai-talent";
 import { fetchUSProfile } from "@/reducers/us-talent/us-talentSlice";
+import Image from "next/image";
 
 // Main Profile Component
 const Talent = () => {
@@ -61,10 +62,25 @@ const Talent = () => {
           <div className="flex flex-row -mt-16">
             {/* Profile image (left) */}
             <div className="h-32 w-32 flex-shrink-0 rounded-full">
-              <Avatar className="h-full w-full">
-                <AvatarImage src={aiprofile?.image || usprofile?.image} />
-                <AvatarFallback>{aiprofile?.user?.username}</AvatarFallback>
-              </Avatar>
+              
+                {aiprofile ? (
+                  <Image
+                    src={aiprofile.image || aiprofile.linkedin_profile_url}
+                    alt="AI Profile"
+                    width={100}
+                    height={100}
+                    className="h-full w-full rounded-full"
+                  />
+                ) : usprofile ? (
+                  <Image
+                    src={usprofile.image || usprofile.linkedin_profile_url}
+                    alt="US Profile"
+                    width={100}
+                    height={100}
+                    className="h-full w-full rounded-full"
+                  />
+                ) : null}
+              
             </div>
             <div className="ml-4">
               <div className="flex justify-between">
@@ -98,7 +114,7 @@ const Talent = () => {
               </div>
               <div className="">
                 <div className="flex  items-center gap-2 ">
-                  <img src="/Icons/linkdein.png" alt="" />
+                  {/* <img src="/Icons/linkdein.png" alt="" /> */}
                   <span className=" text-xs mt-2 font-bold  text-nowrap">
                     {/* {aiprofile?.linkedin_url?.slice(7)} */}
                   </span>
@@ -168,7 +184,7 @@ const Talent = () => {
           <div className="pl-4">
             <p>
               {aiprofile?.summary?.length || usprofile?.summary?.length > 200
-                ? `${aiprofile?.summary?.substring(0, 200)}... Read More`
+                ? `${aiprofile?.summary}`
                 : aiprofile?.summary}
             </p>
           </div>
@@ -291,7 +307,7 @@ const Talent = () => {
             ? aiprofile?.client.map((cli) => (
                 <span
                   key={cli.id}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+                  className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
                 >
                   {cli.name}
                 </span>
@@ -299,7 +315,7 @@ const Talent = () => {
             : usprofile?.client.map((cli) => (
                 <span
                   key={cli.id}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+                  className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
                 >
                   {cli.name}
                 </span>
@@ -333,7 +349,7 @@ const Talent = () => {
                 >
                   <div className="relative h-4/5">
                     <img
-                      src={project?.image}
+                      src={project?.image || "/AI.jpg"}
                       alt={project.title}
                       className="w-full h-full object-fill rounded-t-lg"
                     />

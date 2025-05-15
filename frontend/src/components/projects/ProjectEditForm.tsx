@@ -411,7 +411,7 @@ export const ProjectEditForm = ({
         <Button
           size="icon"
           variant="default"
-          className="bg-white p-1h-8 w-8 rounded-full"
+          className="p-1 h-8 w-8 rounded-full"
           onClick={() => onOpenChange(true)}
         >
           <Edit size={16} />

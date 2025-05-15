@@ -238,7 +238,7 @@ const ProfileScreen = () => {
               <Image
                 width={100}
                 height={100}
-                src={profile?.image || profile?.linkedin_profile_url}
+                src={profile?.image || profile?.linkedin_profile_url || session?.user?.image}
                 alt="Profile"
                 className="h-full w-full rounded-full"
               />
@@ -496,7 +496,7 @@ const ProfileScreen = () => {
             profile.client.map((cli, index) => (
               <span
                 key={cli.id}
-                className="px-3 py-1  rounded-3xl bg-white/20 text-sm"
+                className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
               >
                 {/* <img src={cli.logo} alt="" className="uniform-logo-inverted " /> */}
                 {cli.name}
