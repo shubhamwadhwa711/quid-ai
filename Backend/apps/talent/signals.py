@@ -9,8 +9,8 @@ from .tasks import  send_mail_talent
 @receiver(post_save, sender= Profile)
 def profile_approve( sender, instance, created, **kwargs):
     if instance.status == "APPROVED":
-        subject = "Congratulations " + instance.user.first_name + " your profile has been Approved"
-        message = "Congratulations " + instance.user.first_name + " your profile has been Approved. You are now ready to fly!"
+        subject = f"Congratulations {instance.user.first_name}, your profile has been Approved "
+        message = f"Hey {instance.user.first_name}, your profile has been Approved by Quid AI. You are now ready to fly!."
         sender_email = settings.DEFAULT_FROM_EMAIL
         recipient_email = [instance.user.email]
         
