@@ -345,7 +345,7 @@ export const fetchProfile = createAsyncThunk(
 
       console.log("tagList", tagList);
       //  console.log("location", country);
-      dispatch(
+      await dispatch(
         updateProfile({
           id: profileData.id,
           data: {
