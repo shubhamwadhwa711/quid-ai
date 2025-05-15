@@ -71,7 +71,7 @@ const Brands = () => {
 
         {/* Logos Grid */}
 
-        <div className="grid grid-cols-3 md:grid-cols-4 overflow-y-hidden">
+        <div className="grid grid-cols-3 overflow-y-hidden">
           <AnimatePresence mode="wait">
             {companies.map((company) => (
               <motion.div
