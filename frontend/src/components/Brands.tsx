@@ -73,7 +73,7 @@ const Brands = () => {
 
         <div className="grid grid-cols-3 overflow-y-hidden">
           <AnimatePresence mode="wait">
-            {companies.map((company) => (
+            {companies.slice(0,9).map((company) => (
               <motion.div
                 key={company.id}
                 initial={{ opacity: 0 }}
