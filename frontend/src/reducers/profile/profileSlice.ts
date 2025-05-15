@@ -295,28 +295,28 @@ export const fetchProfile = createAsyncThunk(
       console.log("Unipile", process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL);
 
       // Fetch data from Unipile API
-      //  const UnipileResponse = await axios.request({
-      //    method: "GET",
-      //    url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
-      //    headers: {
-      //      accept: "application/json",
-      //      "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
-      //    },
-      //    params: {
-      //      linkedin_sections: [
-      //        "skills",
-      //        "education",
-      //        "experience",
-      //        "projects",
-      //        "certifications",
-      //      ],
-      //      notify: "false",
-      //      account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
-      //    },
-      //  });
+        const UnipileResponse = await axios.request({
+          method: "GET",
+          url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
+          headers: {
+            accept: "application/json",
+            "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
+          },
+          params: {
+            linkedin_sections: [
+              "skills",
+              "education",
+              "experience",
+              "projects",
+              "certifications",
+            ],
+            notify: "false",
+            account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
+          },
+        });
       // console.log("UnipileResponse", UnipileResponse.data);
       // console.log("profileUserData",profileUserData)
-       const UnipileResponse = {data: profileUserData};
+      //  const UnipileResponse = {data: profileUserData};
       // Update profile with headline and summary
       const countryList = (await dispatch(fetchCountry())).payload;
       // console.log("countryList", countryList);
