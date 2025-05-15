@@ -314,7 +314,7 @@ export const fetchProfile = createAsyncThunk(
             account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
           },
         });
-      // console.log("UnipileResponse", UnipileResponse.data);
+       console.log("UnipileResponse", UnipileResponse.data);
       // console.log("profileUserData",profileUserData)
       //  const UnipileResponse = {data: profileUserData};
       // Update profile with headline and summary

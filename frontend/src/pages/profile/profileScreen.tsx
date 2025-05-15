@@ -238,7 +238,7 @@ const ProfileScreen = () => {
               <Image
                 width={100}
                 height={100}
-                src={profile?.image || profile?.linkedin_profile_url}
+                src={profile?.image || profile?.linkedin_profile_url || session?.user?.image}
                 alt="Profile"
                 className="h-full w-full rounded-full"
               />
