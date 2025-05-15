@@ -75,7 +75,7 @@ export default function InsightsPage() {
                 >
                   <div className="relative h-3/5">
                     <img
-                      src={insight.featured_image}
+                      src={insight.featured_image || "/insight.jpg"}
                       alt={insight.title}
                       className="w-full h-full object-fill rounded-t-lg"
                     />

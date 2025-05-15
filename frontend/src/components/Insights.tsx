@@ -90,7 +90,7 @@ const Insights = () => {
                     <Card
                     onClick={() => router.push(`insights/${insight.category}/${insight.id}`)}
                       key={insight.id}
-                      className="hover:shadow-md bg-gray-800  transition flex-shrink-0 w-60 h-56"
+                      className="hover:shadow-md bg-gray-800 cursor-pointer transition flex-shrink-0 w-60 h-56"
                     >
                       <div className="relative h-3/5">
                         <img
