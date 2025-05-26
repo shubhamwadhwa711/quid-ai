@@ -60,6 +60,7 @@ class Profile(models.Model):
     phone = models.CharField(max_length=20, blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
     linkedin_profile_url = models.URLField(blank=True, null=True, max_length=1000)
+    linkedin_data = models.BooleanField(default=False)
     client = models.ManyToManyField(AssociatedCompany,  related_name='model', through='Client', blank=True, null=True)
     # sync_complete = models.BooleanField(default=False)
 
