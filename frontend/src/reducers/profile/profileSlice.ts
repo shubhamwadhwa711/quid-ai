@@ -90,6 +90,7 @@ export interface Profile {
   available_to?: Availability[];
   languages?: Language[];
   linkedin_profile_url: string;
+  linkedin_data:boolean;
 }
 
 interface ProfileState {
@@ -256,9 +257,7 @@ export const postBulkSkills = createAsyncThunk(
 );
 export const postBulkClient = createAsyncThunk(
   "profile/postBulkClient",
-  async (
-    ClientData 
-  ) => {
+  async (ClientData) => {
     console.log("Posting bulk client data...", ClientData);
     try {
       const response = await axiosInstance.post(
@@ -272,12 +271,10 @@ export const postBulkClient = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       console.error("Failed to post bulk client data:", error);
-      return (
-        error.response?.data?.message || "Failed to post bulk client data"
-      );
+      return error.response?.data?.message || "Failed to post bulk client data";
     }
   }
-)
+);
 // Async Thunk to fetch profile data
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
@@ -295,28 +292,28 @@ export const fetchProfile = createAsyncThunk(
       console.log("Unipile", process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL);
 
       // Fetch data from Unipile API
-        const UnipileResponse = await axios.request({
-          method: "GET",
-          url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
-          headers: {
-            accept: "application/json",
-            "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
-          },
-          params: {
-            linkedin_sections: [
-              "skills",
-              "education",
-              "experience",
-              "projects",
-              "certifications",
-            ],
-            notify: "false",
-            account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
-          },
-        });
-       console.log("UnipileResponse", UnipileResponse.data);
+      //   const UnipileResponse = await axios.request({
+      //     method: "GET",
+      //     url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
+      //     headers: {
+      //       accept: "application/json",
+      //       "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
+      //     },
+      //     params: {
+      //       linkedin_sections: [
+      //         "skills",
+      //         "education",
+      //         "experience",
+      //         "projects",
+      //         "certifications",
+      //       ],
+      //       notify: "false",
+      //       account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
+      //     },
+      //   });
+      //  console.log("UnipileResponse", UnipileResponse.data);
       // console.log("profileUserData",profileUserData)
-      //  const UnipileResponse = {data: profileUserData};
+      const UnipileResponse = { data: profileUserData };
       // Update profile with headline and summary
       const countryList = (await dispatch(fetchCountry())).payload;
       // console.log("countryList", countryList);
@@ -333,7 +330,7 @@ export const fetchProfile = createAsyncThunk(
           acc[item.name.toLowerCase()] = item.id;
           return acc;
         }, {}) || {};
-      
+
       // Step 2: Map over each project and replace matching skill names with their IDs
       const tagList = UnipileResponse?.data?.projects?.map((project) => {
         const tags = project.skills
@@ -356,24 +353,22 @@ export const fetchProfile = createAsyncThunk(
           },
         })
       );
-      if(!profileData.headline) {
-        await dispatch(
-          updateProfile({
-            id: profileData.id,
-            data: {
-              headline: UnipileResponse.data.headline,
-              
-            },
-          })
-        );
-      } 
-      if(!profileData.summary) {
+       if(!profileData.headline && !profileData.linkedin_data) {
+         await dispatch(
+           updateProfile({
+             id: profileData.id,
+             data: {
+               headline: UnipileResponse.data.headline
+             },
+           })
+         );
+       }
+      if (!profileData.summary && !profileData.linkedin_data) {
         await dispatch(
           updateProfile({
             id: profileData.id,
             data: {
               summary: UnipileResponse.data.headline,
-              
             },
           })
         );
@@ -382,7 +377,7 @@ export const fetchProfile = createAsyncThunk(
       //  Check if education data needs to be posted
       console.log("profileData.education.length", profileData.education.length);
       // console.log("profileData.skills.length", profileData.education.length);
-      if (profileData.education.length === 0) {
+      if (profileData.education.length === 0 && !profileData.linkedin_data) {
         console.log("Dispatching academics bulk post");
         await dispatch(
           postBulkAcademics({
@@ -391,7 +386,7 @@ export const fetchProfile = createAsyncThunk(
           })
         );
       }
-      if (profileData.projects.length === 0) {
+      if (profileData.projects.length === 0 && !profileData.linkedin_data) {
         console.log("Dispatching projects bulk post");
         await dispatch(
           postBulkProjects({
@@ -401,20 +396,23 @@ export const fetchProfile = createAsyncThunk(
           })
         );
       }
-      console.log("UnipileResponse?.data?.work_experience",UnipileResponse?.data?.work_experience)
-      const ClientData = UnipileResponse?.data?.work_experience.map((client: any) => {
-        return {
-          name: client.company || "",
-          category: client.category || 1,
+      console.log(
+        "UnipileResponse?.data?.work_experience",
+        UnipileResponse?.data?.work_experience
+      );
+      const ClientData = UnipileResponse?.data?.work_experience.map(
+        (client: any) => {
+          return {
+            name: client.company || "",
+            category: client.category || 1,
+          };
         }
-      } );
+      );
       console.log("ClientData", ClientData);
-      if(profileData.client.length === 0){
-        await dispatch(
-          postBulkClient(ClientData)
-        )
+      if (profileData.client.length === 0 && !profileData.linkedin_data) {
+        await dispatch(postBulkClient(ClientData));
       }
-      if (profileData.skill.length === 0) {
+      if (profileData.skill.length === 0 && !profileData.linkedin_data) {
         console.log("Dispatching skills bulk post");
         await dispatch(
           postBulkSkills({
@@ -422,7 +420,14 @@ export const fetchProfile = createAsyncThunk(
           })
         );
       }
-
+      await dispatch(
+        updateProfile({
+          id: profileData.id,
+          data: {
+            linkedin_data: true,
+          },
+        })
+      );
       // Now refetch profile after possible updates
       const refreshedResponse = await axiosInstance.get("/profile/");
       const refreshedProfileData = refreshedResponse.data[0];
