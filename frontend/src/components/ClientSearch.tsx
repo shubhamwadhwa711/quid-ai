@@ -324,7 +324,7 @@ const ClientSearch = ({
 
       {/* Selected Clients */}
       {selectedClients.length > 0 && (
-        <div className="mt-2 flex flex-wrap gap-2">
+        <div className="mt-2 flex flex-wrap gap-2 overflow-y-scroll hide-scrollbar max-h-96  ">
           {selectedClients.map((client) => (
             <div
               key={client.id}

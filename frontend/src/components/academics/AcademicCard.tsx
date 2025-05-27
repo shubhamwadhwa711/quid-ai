@@ -82,7 +82,7 @@ export const AcademicCard = ({ academic }: { academic: Academic }) => {
 export const AcademicCards = ({ academics }: { academics: Academic[] }) => {
   return (
     <div
-      className="grid grid-cols-1 overflow-y-auto gap-1 mb-24"
+      className="grid grid-cols-1 overflow-y-scroll hide-scrollbar max-h-96  gap-1 mb-24 pb-20"
      
     >
       {academics?.length > 0 ? (

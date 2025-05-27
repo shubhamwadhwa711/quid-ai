@@ -146,7 +146,7 @@ const SkillSearch: React.FC<SkillSearchProps> = ({
       )}
 
       {/* Selected Skills */}
-      <div className="flex flex-wrap gap-2 pt-4">
+      <div className="flex flex-wrap gap-2 pt-4 pb-20 overflow-y-scroll overflow-x-hidden max-h-96 hide-scrollbar">
         {selectedSkills?.map((skill) => (
           <Badge
             key={skill.id}
