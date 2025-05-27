@@ -19,7 +19,7 @@ const CountrySearch = ({
   // Dispatch search action when the user types
   useEffect(() => {
     if (searchTerm.length > 0) {
-      dispatch(fetchCountryList({ search: searchTerm }));
+      dispatch(fetchCountryList({ SearchData: searchTerm }));
     }
   }, [searchTerm, dispatch]);
 

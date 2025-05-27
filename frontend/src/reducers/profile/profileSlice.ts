@@ -90,7 +90,7 @@ export interface Profile {
   available_to?: Availability[];
   languages?: Language[];
   linkedin_profile_url: string;
-  linkedin_data:boolean;
+  linkedin_data: boolean;
 }
 
 interface ProfileState {
@@ -292,25 +292,25 @@ export const fetchProfile = createAsyncThunk(
       console.log("Unipile", process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL);
 
       // Fetch data from Unipile API
-        const UnipileResponse = await axios.request({
-          method: "GET",
-          url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
-          headers: {
-            accept: "application/json",
-            "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
-          },
-          params: {
-            linkedin_sections: [
-              "skills",
-              "education",
-              "experience",
-              "projects",
-              "certifications",
-            ],
-            notify: "false",
-            account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
-          },
-        });
+      const UnipileResponse = await axios.request({
+        method: "GET",
+        url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
+        headers: {
+          accept: "application/json",
+          "X-API-KEY": `${process.env.NEXT_PUBLIC_X_API_KEY}`,
+        },
+        params: {
+          linkedin_sections: [
+            "skills",
+            "education",
+            "experience",
+            "projects",
+            "certifications",
+          ],
+          notify: "false",
+          account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
+        },
+      });
       //  console.log("UnipileResponse", UnipileResponse.data);
       // console.log("profileUserData",profileUserData)
       // const UnipileResponse = { data: profileUserData };
@@ -342,27 +342,29 @@ export const fetchProfile = createAsyncThunk(
 
       console.log("tagList", tagList);
       //  console.log("location", country);
-      await dispatch(
-        updateProfile({
-          id: profileData.id,
-          data: {
-            linkedin_profile_url:
-              UnipileResponse.data.profile_picture_url_large,
-            linkedin_url: `https://linkedin.com/in/${linkedInResponse.data.vanityName}`,
-            country: country ? country.id : null,
-          },
-        })
-      );
-       if(!profileData.headline && !profileData.linkedin_data) {
-         await dispatch(
-           updateProfile({
-             id: profileData.id,
-             data: {
-               headline: UnipileResponse.data.headline
-             },
-           })
-         );
-       }
+      if (!profileData.linkedin_data) {
+        await dispatch(
+          updateProfile({
+            id: profileData.id,
+            data: {
+              linkedin_profile_url:
+                UnipileResponse.data.profile_picture_url_large,
+              linkedin_url: `https://linkedin.com/in/${linkedInResponse.data.vanityName}`,
+              country: country ? country.id : null,
+            },
+          })
+        );
+      }
+      if (!profileData.headline && !profileData.linkedin_data) {
+        await dispatch(
+          updateProfile({
+            id: profileData.id,
+            data: {
+              headline: UnipileResponse.data.headline,
+            },
+          })
+        );
+      }
       if (!profileData.summary && !profileData.linkedin_data) {
         await dispatch(
           updateProfile({

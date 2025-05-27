@@ -28,7 +28,7 @@ export const fetchCountryList = createAsyncThunk(
       const response = await axiosInstanceUnauthorized.get(
         `/country/`,
         {
-          params: req.query,
+          params: SearchData,
           paramsSerializer: (params) => {
             const searchParams = new URLSearchParams();
 
