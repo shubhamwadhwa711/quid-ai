@@ -402,17 +402,16 @@ export const ProjectEditForm = ({
     tagInput.trim() === ""
       ? tagSuggestions
       : tagSuggestions.filter((tag) =>
-          tag.name.toLowerCase().includes(tagInput.toLowerCase())
-        );
+        tag.name.toLowerCase().includes(tagInput.toLowerCase())
+      );
 
   return (
     <Drawer open={isOpen} onOpenChange={onOpenChange}>
-      <DrawerTrigger className="absolute top-1 right-1">
+      <DrawerTrigger asChild className="absolute top-1 right-1">
         <Button
           size="icon"
           variant="default"
           className="p-1 h-8 w-8 rounded-full"
-          onClick={() => onOpenChange(true)}
         >
           <Edit size={16} />
         </Button>

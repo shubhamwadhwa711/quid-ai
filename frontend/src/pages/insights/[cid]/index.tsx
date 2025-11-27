@@ -65,14 +65,13 @@ export default function InsightsPage() {
           ) : (
             <div className="pb-12">
               {insights.map((insight) => (
-              <div className="grid grid-cols-1 mt-4">
-                <Card
-                  onClick={() =>
-                    router.push(`${insight.category}/${insight.id}`)
-                  }
-                  key={insight.id}
-                  className="hover:shadow-md bg-gray-800  transition flex-shrink-0 w-full h-56"
-                >
+                <div key={insight.id} className="grid grid-cols-1 mt-4">
+                  <Card
+                    onClick={() =>
+                      router.push(`${insight.category}/${insight.id}`)
+                    }
+                    className="hover:shadow-md bg-gray-800  transition flex-shrink-0 w-full h-56"
+                  >
                   <div className="relative h-3/5">
                     <img
                       src={insight.featured_image || "/insight.jpg"}

@@ -62,25 +62,25 @@ const Talent = () => {
           <div className="flex flex-row -mt-16">
             {/* Profile image (left) */}
             <div className="h-32 w-32 flex-shrink-0 rounded-full">
-              
-                {aiprofile ? (
-                  <Image
-                    src={aiprofile.image || aiprofile.linkedin_profile_url}
-                    alt="AI Profile"
-                    width={100}
-                    height={100}
-                    className="h-full w-full rounded-full"
-                  />
-                ) : usprofile ? (
-                  <Image
-                    src={usprofile.image || usprofile.linkedin_profile_url}
-                    alt="US Profile"
-                    width={100}
-                    height={100}
-                    className="h-full w-full rounded-full"
-                  />
-                ) : null}
-              
+
+              {aiprofile ? (
+                <Image
+                  src={aiprofile.image || aiprofile.linkedin_profile_url}
+                  alt="AI Profile"
+                  width={100}
+                  height={100}
+                  className="h-full w-full rounded-full"
+                />
+              ) : usprofile ? (
+                <Image
+                  src={usprofile.image || usprofile.linkedin_profile_url}
+                  alt="US Profile"
+                  width={100}
+                  height={100}
+                  className="h-full w-full rounded-full"
+                />
+              ) : null}
+
             </div>
             <div className="ml-4">
               <div className="flex justify-between">
@@ -147,21 +147,21 @@ const Talent = () => {
             <div className="flex flex-wrap gap-2">
               {talenttype === "AI"
                 ? aiprofile?.skill.map((s, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                    >
-                      {s.name}
-                    </span>
-                  ))
+                  <span
+                    key={index}
+                    className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+                  >
+                    {s.name}
+                  </span>
+                ))
                 : usprofile?.skill.map((s, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                    >
-                      {s.name}
-                    </span>
-                  ))}
+                  <span
+                    key={index}
+                    className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+                  >
+                    {s.name}
+                  </span>
+                ))}
             </div>
           </div>
         </div>
@@ -206,21 +206,21 @@ const Talent = () => {
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
             ? aiprofile?.language?.map((lang, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                >
-                  {lang.name}
-                </span>
-              ))
+              <span
+                key={index}
+                className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+              >
+                {lang.name}
+              </span>
+            ))
             : usprofile?.language?.map((lang, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                >
-                  {lang.name}
-                </span>
-              ))}
+              <span
+                key={index}
+                className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+              >
+                {lang.name}
+              </span>
+            ))}
         </div>
       </div>
 
@@ -239,21 +239,21 @@ const Talent = () => {
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
             ? aiprofile?.education.map((edu, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                >
-                  {edu.degree}
-                </span>
-              ))
+              <span
+                key={index}
+                className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+              >
+                {edu.degree}
+              </span>
+            ))
             : usprofile?.education.map((edu, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                >
-                  {edu.degree}
-                </span>
-              ))}
+              <span
+                key={index}
+                className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+              >
+                {edu.degree}
+              </span>
+            ))}
         </div>
       </div>
 
@@ -272,21 +272,21 @@ const Talent = () => {
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
             ? aiprofile?.available_to?.map((aval) => (
-                <span
-                  key={aval.id}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                >
-                  {aval.name}
-                </span>
-              ))
+              <span
+                key={aval.id}
+                className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+              >
+                {aval.name}
+              </span>
+            ))
             : usprofile?.available_to?.map((aval) => (
-                <span
-                  key={aval.id}
-                  className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
-                >
-                  {aval.name}
-                </span>
-              ))}
+              <span
+                key={aval.id}
+                className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
+              >
+                {aval.name}
+              </span>
+            ))}
         </div>
       </div>
 
@@ -305,21 +305,21 @@ const Talent = () => {
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
             ? aiprofile?.client.map((cli) => (
-                <span
-                  key={cli.id}
-                  className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
-                >
-                  {cli.name}
-                </span>
-              ))
+              <span
+                key={cli.id}
+                className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
+              >
+                {cli.name}
+              </span>
+            ))
             : usprofile?.client.map((cli) => (
-                <span
-                  key={cli.id}
-                  className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
-                >
-                  {cli.name}
-                </span>
-              ))}
+              <span
+                key={cli.id}
+                className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
+              >
+                {cli.name}
+              </span>
+            ))}
         </div>
       </div>
 
@@ -338,55 +338,59 @@ const Talent = () => {
         <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4">
           {talenttype === "AI"
             ? aiprofile?.projects.map((project, index) => (
-                <Card
-                  onClick={() =>
-                    router.push(
-                      `/talent/${aiprofile?.id}/project/${project.id}`
-                    )
-                  }
-                  key={index}
-                  className=" hover:shadow-md border-none relative bg-gray-800  transition flex-shrink-0 w-44 h-48"
-                >
-                  <div className="relative h-4/5">
-                    <img
-                      src={project?.image || "/AI.jpg"}
-                      alt={project.title}
-                      className="w-full h-full object-fill rounded-t-lg"
-                    />
-                  </div>
+              <Card
+                onClick={() =>
+                  // Only allow navigation if linkedin_data is true
+                  aiprofile?.linkedin_data && router.push(
+                    `/talent/${aiprofile?.id}/project/${project.id}`
+                  )
+                }
+                key={index}
+                className={`hover:shadow-md border-none relative bg-gray-800 transition flex-shrink-0 w-44 h-48 ${!aiprofile?.linkedin_data ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+                  }`}
+              >
+                <div className="relative h-4/5">
+                  <img
+                    src={project?.image || "/AI.jpg"}
+                    alt={project.title}
+                    className="w-full h-full object-fill rounded-t-lg"
+                  />
+                </div>
 
-                  <div className="h-1/5 flex  flex-col justify-between p-1">
-                    <CardTitle className="text-xs text-center text-wrap text-white">
-                      {project.title}
-                    </CardTitle>
-                  </div>
-                </Card>
-              ))
+                <div className="h-1/5 flex  flex-col justify-between p-1">
+                  <CardTitle className="text-xs text-center text-wrap text-white">
+                    {project.title}
+                  </CardTitle>
+                </div>
+              </Card>
+            ))
             : usprofile?.projects.map((project, index) => (
-                <Card
-                  onClick={() =>
-                    router.push(
-                      `/talent/${usprofile?.id}/project/${project.id}`
-                    )
-                  }
-                  key={index}
-                  className=" hover:shadow-md border-none relative bg-gray-800  transition flex-shrink-0 w-44 h-48"
-                >
-                  <div className="relative h-4/5">
-                    <img
-                      src={project?.image}
-                      alt={project.title}
-                      className="w-full h-full object-fill rounded-t-lg"
-                    />
-                  </div>
+              <Card
+                onClick={() =>
+                  // Only allow navigation if linkedin_data is true
+                  usprofile?.linkedin_data && router.push(
+                    `/talent/${usprofile?.id}/project/${project.id}`
+                  )
+                }
+                key={index}
+                className={`hover:shadow-md border-none relative bg-gray-800 transition flex-shrink-0 w-44 h-48 ${!usprofile?.linkedin_data ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+                  }`}
+              >
+                <div className="relative h-4/5">
+                  <img
+                    src={project?.image}
+                    alt={project.title}
+                    className="w-full h-full object-fill rounded-t-lg"
+                  />
+                </div>
 
-                  <div className="h-1/5 flex  flex-col justify-between p-1">
-                    <CardTitle className="text-xs text-center text-wrap text-white">
-                      {project.title}
-                    </CardTitle>
-                  </div>
-                </Card>
-              ))}
+                <div className="h-1/5 flex  flex-col justify-between p-1">
+                  <CardTitle className="text-xs text-center text-wrap text-white">
+                    {project.title}
+                  </CardTitle>
+                </div>
+              </Card>
+            ))}
         </div>
       </div>
 

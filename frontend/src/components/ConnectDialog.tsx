@@ -67,7 +67,6 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
     // router.push("/search");
   };
 
-  console.log("INSIDE CONNECT DIALOG");
 
   return (
     <Drawer
@@ -96,6 +95,7 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
                       value={connectForm.full_name}
                       onChange={handleFormChange}
                       className="bg-white/5 border-white/10 rounded-3xl focus:border-purple-500"
+                      required
                     />
                   </div>
                 </div>
@@ -108,6 +108,7 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
                     value={connectForm.email}
                     onChange={handleFormChange}
                     className="bg-white/5 border-white/10 rounded-3xl focus:border-purple-500"
+                    required
                   />
                 </div>
 
@@ -119,6 +120,7 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
                     onChange={handleFormChange}
                     placeholder="Your Message"
                     className="bg-white/5 border-white/10 focus:border-purple-500 min-h-24"
+                    required
                   />
                 </div>
               </div>

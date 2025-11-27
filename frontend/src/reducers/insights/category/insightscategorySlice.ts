@@ -24,9 +24,8 @@ export const fetchInsightCategory = createAsyncThunk(
   "insight/fetchInsightCategory",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Fetching companies...");
       const response = await axiosInstanceUnauthorized.get("/insight-category/");
-      console.log("Companies fetched:", response.data);
+      // console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

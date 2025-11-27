@@ -201,16 +201,14 @@ export const postBulkProjects = createAsyncThunk(
             ? `${proj.start.split("/")[2]}-${proj.start
                 .split("/")[0]
                 .padStart(2, "0")}-${proj.start.split("/")[1].padStart(2, "0")}`
-            : null,
+            : "",
           end_date: proj.end
             ? `${proj.end.split("/")[2]}-${proj.end
                 .split("/")[0]
                 .padStart(2, "0")}-${proj.end.split("/")[1].padStart(2, "0")}`
-            : null,
+            : "",
           description: proj.description || "",
-          url:
-            proj.url ||
-            "https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html",
+          url: proj.url || "https://example.com" /* Default URL if none provided */,
           profile: profileId,
         }))
       );

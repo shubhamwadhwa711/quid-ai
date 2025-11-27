@@ -1,15 +1,15 @@
 import { Project } from "@/reducers/project/projectSlice";
 import { Card, CardTitle } from "../ui/card";
 import { ProjectEditForm } from "./ProjectEditForm";
-type ProjectCard={
-    project:Project;
-    key:any;
-}
-export const ProjectCard = ({ project, key }:ProjectCard) => {
+
+type ProjectCardProps = {
+  project: Project;
+};
+
+export const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Card
-      key={key}
-      className="hover:shadow-md border-none relative bg-gray-800  transition flex-shrink-0 w-44 h-48"
+      className="hover:shadow-md border-none relative bg-gray-800 transition flex-shrink-0 w-44 h-48"
     >
       <div className="relative h-4/5">
         <img

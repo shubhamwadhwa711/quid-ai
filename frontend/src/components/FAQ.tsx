@@ -67,7 +67,7 @@ const FAQ = () => {
       </Accordion>
 
       <div className="flex flex-col justify-center items-center">
-        <Button onClick={()=>router.push("/insights")} className="bg-gradient-to-r px-6 py-6 mt-4 proxima-large rounded-full from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
+        <Button onClick={() => router.push("/insights")} className="bg-gradient-to-r px-6 py-6 mt-4 proxima-large rounded-full from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
           <div className="flex justify-center gap-2  items-center">
             <span className="proxima-bold text-white text-lg">
               All Questions & Answers
@@ -82,9 +82,9 @@ const FAQ = () => {
               <path
                 d="M1 7H17M17 7L11 1M17 7L11 13"
                 stroke="white"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </div>

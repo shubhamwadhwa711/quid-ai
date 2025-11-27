@@ -223,8 +223,8 @@ const Search = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M11.3851 12.446C10.0371 13.5231 8.32776 14.0432 6.60827 13.8994C4.88877 13.7555 3.28961 12.9588 2.13922 11.6727C0.988832 10.3867 0.374549 8.70893 0.422536 6.98409C0.470522 5.25926 1.17713 3.61827 2.39725 2.39816C3.61736 1.17805 5.25835 0.471438 6.98318 0.423451C8.70801 0.375465 10.3857 0.989748 11.6718 2.14014C12.9579 3.29052 13.7546 4.88969 13.8984 6.60918C14.0422 8.32868 13.5222 10.038 12.4451 11.386L17.6011 16.541C17.6748 16.6097 17.7339 16.6925 17.7749 16.7845C17.8159 16.8765 17.8379 16.9758 17.8397 17.0765C17.8415 17.1772 17.8229 17.2772 17.7852 17.3706C17.7475 17.464 17.6913 17.5488 17.6201 17.62C17.5489 17.6913 17.4641 17.7474 17.3707 17.7851C17.2773 17.8228 17.1773 17.8414 17.0766 17.8396C16.9759 17.8378 16.8766 17.8158 16.7846 17.7748C16.6926 17.7338 16.6098 17.6747 16.5411 17.601L11.3851 12.446ZM3.46009 10.884C2.72613 10.15 2.22624 9.21483 2.0236 8.19678C1.82096 7.17872 1.92466 6.12344 2.3216 5.1643C2.71854 4.20517 3.3909 3.38523 4.2537 2.80811C5.11651 2.23098 6.13103 1.92259 7.16906 1.92189C8.20709 1.92119 9.22203 2.22822 10.0856 2.80418C10.9492 3.38014 11.6226 4.19918 12.0209 5.15778C12.4191 6.11638 12.5242 7.17152 12.323 8.18985C12.1217 9.20817 11.6231 10.144 10.8901 10.879L10.8851 10.884L10.8801 10.888C9.89518 11.8706 8.56052 12.4221 7.16926 12.4214C5.77801 12.4206 4.44394 11.8677 3.46009 10.884Z"
                   fill="white"
                 />
@@ -354,11 +354,10 @@ const Search = () => {
               </div>
               <div className="flex justify-center w-full">
                 <div
-                  className={`overflow-x-auto hide-scrollbar px-4 grid ${
-                    isSearchApplied || isFilterApplied
-                      ? "grid-cols-1"
-                      : "grid-flow-col auto-cols-max"
-                  } gap-2`}
+                  className={`overflow-x-auto hide-scrollbar px-4 grid ${isSearchApplied || isFilterApplied
+                    ? "grid-cols-1"
+                    : "grid-flow-col auto-cols-max"
+                    } gap-2`}
                 >
                   {profiles?.map((talent) => (
                     <TalentCard type="" key={talent.id} talent={talent} />
@@ -376,11 +375,10 @@ const Search = () => {
                   </h1>
                 </div>
                 <div
-                  className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
-                    isFilterApplied
-                      ? "grid-cols-1"
-                      : "grid-flow-col auto-cols-max"
-                  } gap-2`}
+                  className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${isFilterApplied
+                    ? "grid-cols-1"
+                    : "grid-flow-col auto-cols-max"
+                    } gap-2`}
                 >
                   {aiprofiles?.map((talent) => (
                     <TalentCard talent={talent} talenttype={"AI"} />
@@ -395,11 +393,10 @@ const Search = () => {
                   </h1>
                 </div>
                 <div
-                  className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${
-                    isFilterApplied
-                      ? "grid-cols-1"
-                      : "grid-flow-col auto-cols-max"
-                  } gap-2`}
+                  className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${isFilterApplied
+                    ? "grid-cols-1"
+                    : "grid-flow-col auto-cols-max"
+                    } gap-2`}
                 >
                   {usprofiles?.map((talent) => (
                     <TalentCard talent={talent} talenttype={"US"} />

@@ -26,9 +26,8 @@ export const fetchCompanies = createAsyncThunk(
   "company/fetchCompanies",
   async (id: number, { rejectWithValue }) => {
     try {
-      console.log("Fetching companies...");
       const response = await axiosInstanceUnauthorized.get(`/category/${id}/company/`);
-      console.log("Companies fetched:", response.data);
+      // console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -41,12 +40,11 @@ export const fetchAllCompanies = createAsyncThunk(
   "company/fetchAllCompanies",
   async (search, { rejectWithValue }) => {
     try {
-      console.log("Fetching all companies...", search);
       const response = await axiosInstanceUnauthorized.get(
         `/all-company/`,
         { params: search }
       );
-      console.log("Companies fetched:", response.data);
+      // console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

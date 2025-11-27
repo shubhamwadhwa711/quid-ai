@@ -371,17 +371,16 @@ export const ProjectAddForm = ({
     tagInput.trim() === ""
       ? tagSuggestions
       : tagSuggestions.filter((tag) =>
-          tag.name.toLowerCase().includes(tagInput.toLowerCase())
-        );
+        tag.name.toLowerCase().includes(tagInput.toLowerCase())
+      );
 
   return (
     <Drawer open={isOpen} onOpenChange={handleFormDrawerChange}>
-      <DrawerTrigger>
+      <DrawerTrigger asChild>
         <Button
           size="icon"
           variant="ghost"
           className="h-8 w-8 rounded-full"
-          onClick={() => handleFormDrawerChange(true)}
         >
           <svg
             width="16"

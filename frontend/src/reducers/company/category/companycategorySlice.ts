@@ -24,9 +24,8 @@ export const fetchCompanyCategory = createAsyncThunk(
   "company/fetchCompanyCategory",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Fetching companies...");
       const response = await axiosInstanceUnauthorized.get("/category/");
-      console.log("Companies fetched:", response.data);
+      // console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

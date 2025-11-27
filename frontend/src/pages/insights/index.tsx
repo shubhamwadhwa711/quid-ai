@@ -107,9 +107,9 @@ const Insights = () => {
                     <path
                       d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
                       stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </CardDescription>
@@ -160,9 +160,9 @@ const Insights = () => {
                     <path
                       d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
                       stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </CardDescription>
@@ -215,9 +215,9 @@ const Insights = () => {
                     <path
                       d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
                       stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </CardDescription>
@@ -268,9 +268,9 @@ const Insights = () => {
                     <path
                       d="M0.75 7H16.5M11.25 1L17.25 7L11.25 13"
                       stroke="white"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </CardDescription>

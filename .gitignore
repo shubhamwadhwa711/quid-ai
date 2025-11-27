@@ -211,3 +211,4 @@ cython_debug/
 *.tsbuildinfo
 *next-env.d.ts
 Backend/.vscode/launch.json
+.vscode

@@ -35,7 +35,7 @@ const Brands = () => {
       dispatch(fetchCompanies(selectedCategory));
     }
   }, [selectedCategory, dispatch]);
-  console.log("companies", companies);
+  // console.log("companies", companies);
   return (
     <div className="">
       <div className="relative  border border-white mx-4  min-h-52 h-auto -mt-4 rounded-xl">
@@ -48,6 +48,7 @@ const Brands = () => {
         <div className="my-3 mx-2 flex gap-1 overflow-x-scroll hide-scrollbar">
           {companyCategory.map((category, index) => (
             <motion.div
+              key={category.id}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: false, amount: 0.2 }}
@@ -57,11 +58,10 @@ const Brands = () => {
                 key={category.id}
                 variant="none"
                 onClick={() => setSelectedCategory(category.id)}
-                className={` w-auto h-4 proxima-bold rounded-full text-xs transition-all backdrop-blur-md ${
-                  selectedCategory === category.id
+                className={` w-auto h-4 proxima-bold rounded-full text-xs transition-all backdrop-blur-md ${selectedCategory === category.id
                     ? "bg-[#425BFF] text-white"
                     : "bg-gradient-to-tr bg-white/30"
-                }`}
+                  }`}
               >
                 {category.title}
               </Button>
@@ -73,7 +73,7 @@ const Brands = () => {
 
         <div className="grid grid-cols-3 overflow-y-hidden">
           <AnimatePresence mode="wait">
-            {companies.slice(0,9).map((company) => (
+            {companies.slice(0, 9).map((company) => (
               <motion.div
                 key={company.id}
                 initial={{ opacity: 0 }}
@@ -89,7 +89,7 @@ const Brands = () => {
                 />) : (
                   <span className="text-gray-300 text-sm font-bold">{company.name}</span>
                 )}
-                
+
               </motion.div>
             ))}
           </AnimatePresence>

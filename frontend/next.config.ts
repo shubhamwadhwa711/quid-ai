@@ -4,10 +4,11 @@ const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
   skipWaiting: true, // Ensures updated service workers take control
+  disable: process.env.NODE_ENV === "development", // Disable PWA in dev
 });
-const withFlowbiteReact = require("flowbite-react/plugin/nextjs");
+import withFlowbiteReact from "flowbite-react/plugin/nextjs";
 const nextConfig = withPWA({
-  output:"standalone",
+  output: "standalone",
   env: {
     NEXT_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
   },
@@ -15,21 +16,14 @@ const nextConfig = withPWA({
   typescript: {
     ignoreBuildErrors: true,
   },
-  swcMinify: true,
+  // swcMinify: true,
   images: {
-    domains: [
-      "media.licdn.com",
-      "s3-alpha-sig.figma.com",
-      "res.cloudinary.com",
-      "localhost",
-      "api.quidai.org"
-    ],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "media.licdn.com",
         pathname: "/dms/image/**",
-      }, 
+      },
       {
         protocol: "https",
         hostname: "s3-alpha-sig.figma.com",
@@ -41,7 +35,7 @@ const nextConfig = withPWA({
         pathname: "/dgz1duuwu/image/upload/**",
       },
       {
-        protocol: "http", 
+        protocol: "http",
         hostname: "localhost",
         port: "8006",
         pathname: "/media/**",

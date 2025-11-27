@@ -4,11 +4,11 @@ import { Button } from "./ui/button";
 import { Stepper, Step, StepProps } from "./ui/stepper";
 import { useScroll } from "framer-motion";
 const Working = () => {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-      target: ref,
-      offset: ["start end", "end start"],
-    });
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
   const router = useRouter();
   const steps = useMemo<StepProps[]>(
     () => [
@@ -85,9 +85,9 @@ const Working = () => {
               <path
                 d="M1 7H17M17 7L11 1M17 7L11 13"
                 stroke="white"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </div>

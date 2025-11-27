@@ -34,7 +34,7 @@ const ProfileScreen = () => {
   // console.log("session?.provider.tokens", session?.provider.tokens);
   const dispatch = useAppDispatch();
   const { profile, loading, error } = useAppSelector((state) => state.Profile);
- 
+
   const [isCopiedURL, setIsCopiedURL] = useState(false);
   const fileInput = useRef();
   useEffect(() => {
@@ -42,7 +42,7 @@ const ProfileScreen = () => {
     dispatch(fetchProfile());
   }, []);
   // console.log("profile", profile);
-  
+
   // State for controlling which popup is currently open
   const [activePopup, setActivePopup] = useState(false);
   const handleShareProfile = () => {
@@ -201,7 +201,7 @@ const ProfileScreen = () => {
     setActivePopup(false);
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -214,13 +214,13 @@ const ProfileScreen = () => {
     formData.append("image", file);
     dispatch(updateProfile({ id: profile?.id, data: formData }));
   };
-  if(loading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <Spinner aria-label="Extra large spinner example" size="xl" />
       </div>
     );
-    
+
   }
   return (
     <div className="min-h-screen flex flex-col items-center justify-center mt-20 px-2 pb-20">
