@@ -24,9 +24,9 @@ export const fetchAvailableTo = createAsyncThunk(
   "availableto/fetchAvailableTo",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Fetching availableto...");
+      // console.log("Fetching availableto...");
       const response = await axiosInstanceUnauthorized.get("/available/");
-      console.log("languages availableto:", response.data);
+      // console.log("languages availableto:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

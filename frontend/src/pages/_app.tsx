@@ -2,24 +2,45 @@ import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { BottomNav } from "@/components/bottom-nav";
 import Navbar from "@/components/navbar";
+import { PageLoader } from "@/components/PageLoader";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { getSession, SessionProvider } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
   const [showSplash, setShowSplash] = useState(true);
-  console.log("session", session);
+  const [isPageLoading, setIsPageLoading] = useState(false);
+  const router = useRouter();
+
   useEffect(() => {
     setTimeout(() => setShowSplash(false), 2000);
   }, []);
 
+  useEffect(() => {
+    const handleRouteChangeStart = () => setIsPageLoading(true);
+    const handleRouteChangeComplete = () => setIsPageLoading(false);
+    const handleRouteChangeError = () => setIsPageLoading(false);
+
+    router.events.on("routeChangeStart", handleRouteChangeStart);
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    router.events.on("routeChangeError", handleRouteChangeError);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChangeStart);
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
+      router.events.off("routeChangeError", handleRouteChangeError);
+    };
+  }, [router.events]);
+
   return (
     <SessionProvider session={session}>
       <Provider store={store}>
+        <PageLoader isLoading={isPageLoading} />
 
         {showSplash ? (
           <div className="flex items-center justify-center h-screen bg-black">

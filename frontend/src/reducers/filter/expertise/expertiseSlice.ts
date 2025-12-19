@@ -30,7 +30,7 @@ export const fetchExpertise = createAsyncThunk<Expertise[], Record<string, any>>
       const response = await axiosInstanceUnauthorized.get("/skill/", {
         params: searchData,
       });
-      console.log("Expertise fetched successfully:", response.data);
+      // console.log("Expertise fetched successfully:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -47,7 +47,7 @@ export const postExpertise = createAsyncThunk<Expertise, Expertise>(
     try {
       console.log("Posting new expertise:", data);
       const response = await axiosInstance.post("/skill/", data);
-      console.log("Expertise added successfully:", response.data);
+      // console.log("Expertise added successfully:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

@@ -24,9 +24,9 @@ export const fetchCountry = createAsyncThunk(
   "country/fetchCountry",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Fetching country...");
+      // console.log("Fetching country...");
       const response = await axiosInstanceUnauthorized.get("/country/");
-      console.log("country fetched:", response.data);
+      // console.log("country fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

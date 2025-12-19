@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardDescription, CardTitle } from "./ui/card";
 import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
 import { fetchInsightCategory } from "@/reducers/insights/category/insightscategorySlice";
 import { fetchInsights } from "@/reducers/insights/insightsSlice";
 import { SkeletonCards } from "./SkeletonCard";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 const getTypeColor = (type: string) => {
   switch (type.toLowerCase()) {
     case "interview":
@@ -17,6 +19,7 @@ const getTypeColor = (type: string) => {
 };
 
 const Insights = () => {
+  const insightsScrollRef = useHorizontalScroll<HTMLDivElement>();
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -38,14 +41,23 @@ const Insights = () => {
       dispatch(fetchInsights(selectedCategory));
     }
   }, [selectedCategory, dispatch]);
-  console.log("insights", insights);
+  // console.log("insights", insights);
   return (
-    <div className="">
-      <div>
-        <h1 className="text-3xl text-center proxima-bold -mt-3">
-          Quid AI <span className="text-[#425BFF] ">Insights</span>
+    <div className="px-4 relative">
+      {/* Decorative shape */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-[#425BFF]/10 rounded-full blur-3xl"></div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1 className="text-3xl md:text-4xl text-center proxima-bold">
+          Quid AI <span className="text-[#425BFF]">Insights</span>
         </h1>
-      </div>
+        <p className="text-sm md:text-base text-center text-white/70 mt-2">Discover latest AI trends and expert interviews</p>
+      </motion.div>
 
       <div className="p-1">
         {/* Categories Section */}
@@ -53,11 +65,10 @@ const Insights = () => {
           {insightsCategory.map((insight) => (
             <button
               key={insight.id}
-              className={`px-2 rounded-full text-center proxima-bold text-xs transition-all backdrop-blur-md flex-shrink-0 ${
-                selectedCategory === insight.id
-                  ? "bg-[#425BFF] text-white"
-                  : "bg-white/30"
-              }`}
+              className={`px-2 rounded-full text-center proxima-bold text-xs transition-all backdrop-blur-md flex-shrink-0 ${selectedCategory === insight.id
+                ? "bg-[#425BFF] text-white"
+                : "bg-white/30"
+                }`}
               onClick={() => setSelectedCategory(insight.id)}
             >
               {insight.title}
@@ -68,7 +79,7 @@ const Insights = () => {
         {/* Cards Section */}
         <div className="w-full">
           <div className="relative">
-            <div className="flex overflow-x-auto hide-scrollbar">
+            <div ref={insightsScrollRef} className="flex overflow-x-auto hide-scrollbar">
               <div className="flex ml-4 gap-4 min-w-max px-1 pb-4">
                 {insightsLoading ? (
                   <SkeletonCards />
@@ -88,7 +99,7 @@ const Insights = () => {
                 ) : (
                   insights.map((insight) => (
                     <Card
-                    onClick={() => router.push(`insights/${insight.category}/${insight.id}`)}
+                      onClick={() => router.push(`insights/${insight.category}/${insight.id}`)}
                       key={insight.id}
                       className="hover:shadow-md bg-gray-800 cursor-pointer transition flex-shrink-0 w-60 h-56"
                     >

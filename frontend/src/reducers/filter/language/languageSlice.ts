@@ -25,11 +25,11 @@ export const fetchLanguage = createAsyncThunk(
   "language/fetchLanguage",
   async (SearchData: { search: string }, { rejectWithValue }) => {
     try {
-      console.log("Fetching language...", SearchData);
+      // console.log("Fetching language...", SearchData);
       const response = await axiosInstanceUnauthorized.get("/language/", {
         params: SearchData,
       });
-      console.log("languages fetched:", response.data);
+      // console.log("languages fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -38,28 +38,16 @@ export const fetchLanguage = createAsyncThunk(
     }
   }
 );
-export const updateProfile = createAsyncThunk(
-  "profile/updateProfile",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.patch(`/profile/${id}`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to update profile"
-      );
-    }
-  }
-);
+
 // Create the slice
 const languageSlice = createSlice({
   name: "language",
   initialState,
-  reducers: {},
+  reducers: {
+    clearLanguageError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLanguage.pending, (state) => {

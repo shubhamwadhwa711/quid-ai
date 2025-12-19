@@ -44,10 +44,7 @@ export const postClient = createAsyncThunk(
   "client/postClient",
   async (data: Client, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(
-        `/all-company/`,
-        data
-      );
+      const response = await axiosInstance.post(`/all-company/`, data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -61,33 +58,34 @@ export const updateClient = createAsyncThunk(
   "client/updateClient",
   async (formData, { rejectWithValue, dispatch }) => {
     try {
-      console.log("formData", formData);
-      // console.log("id", id);
-      const response = await axiosInstance.post(
-        `/client/`,
-        formData
-      );
-      // dispatch(fetchClient());
+      console.log("Adding client...", formData);
+      const response = await axiosInstance.post(`/client/`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Client updated successfully", response.data);
       return response.data;
     } catch (error: any) {
+      console.error("Error updating client:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to post client"
+        error.response?.data?.message || "Failed to add client"
       );
     }
   }
 );
+
 export const deleteClient = createAsyncThunk(
   "client/deleteClient",
-  async ({id}, { rejectWithValue }) => {
+  async ({ id }: { id: number }, { rejectWithValue }) => {
     try {
-      console.log("id", id);
-      const response = await axiosInstance.delete(
-        `/client/${id}/`
-      );
-      return response.data;
+      console.log("Deleting client...", id);
+      const response = await axiosInstance.delete(`/client/${id}/`);
+      return { success: true, data: response.data, deletedId: id };
     } catch (error: any) {
+      console.error("Error deleting client:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to post client"
+        error.response?.data?.message || "Failed to delete client"
       );
     }
   }
@@ -142,10 +140,11 @@ const clientSlice = createSlice({
       })
       .addCase(deleteClient.fulfilled, (state, action) => {
         state.loading = false;
-        const deletedId = action.meta.arg; // passed id to the thunk
+        const deletedId = action.payload.deletedId;
         state.clients = state.clients.filter(
           (client) => client.id !== deletedId
         );
+        state.error = null;
       })
       .addCase(deleteClient.rejected, (state, action) => {
         state.loading = false;

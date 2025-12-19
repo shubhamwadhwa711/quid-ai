@@ -2,6 +2,7 @@ import { Linkedin } from "lucide-react";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
 import {
   Card,
   CardContent,
@@ -18,31 +19,19 @@ import ConnectDialog from "./ConnectDialog";
 import Link from "next/link";
 import Image from "next/image";
 
-interface TalentCard {
-  id: number;
-  user: Profile["user"];
-  skill: Profile["skill"];
-  client: Profile["client"];
-  image: string;
-  headline: string;
-  summary?: string;
-  country: { id: number; name: string };
-  linkedin_url: string;
-  linkedin_profile_url: string;
-}
-
 const TalentCard = ({
   talent,
   talenttype,
 }: {
-  talent: TalentCard;
+  talent: Profile;
   talenttype: string;
 }) => {
+  const clientsScrollRef = useHorizontalScroll<HTMLDivElement>();
   const [showConnectForm, setShowConnectForm] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
   const router = useRouter();
 
-  const handleConnectForm = (talent) => {
+  const handleConnectForm = (talent?: any) => {
     setSelectedTalent(talent);
     setShowConnectForm(true);
   };
@@ -58,8 +47,8 @@ const TalentCard = ({
       <div className="absolute -top-14  left-1/2 transform -translate-x-1/2 z-50">
         <Avatar className="w-24 h-24 shadow-lg ">
           <Image
-            src={talent?.image || talent?.linkedin_profile_url}
-            alt={talent?.user?.username}
+            src={talent?.image || talent?.linkedin_profile_url || '/default-avatar.png'}
+            alt={talent?.user?.username || 'User'}
             className="object-cover border"
             width={100}
             height={100}
@@ -132,7 +121,7 @@ const TalentCard = ({
             <div className="flex flex-nowrap items-center">
               <h3 className="text-xs text-nowrap">Featured Clients</h3>
               <Separator orientation="vertical" className="h-4 mx-2 " />
-              <div className="w-full overflow-x-auto hide-scrollbar">
+              <div ref={clientsScrollRef} className="w-full overflow-x-auto hide-scrollbar">
                 <div className="w-full relative">
                   <div className="flex items-center">
                     {talent?.client?.slice(0, 2)?.map((cli, index) =>

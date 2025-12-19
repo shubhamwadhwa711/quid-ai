@@ -3,6 +3,7 @@ import Brands from "@/components/Brands";
 import FAQ from "@/components/FAQ";
 import Hero from "@/components/Hero";
 import Insights from "@/components/Insights";
+import JoinExpertCTA from "@/components/JoinExpertCTA";
 import Signup from "@/components/Signup";
 import Solutions from "@/components/Solutions";
 import Working from "@/components/Working";
@@ -18,6 +19,7 @@ export default function Home() {
         <div className="snap-center"><Working /></div>
         <div className="snap-center"><Insights /></div>
         <div className="snap-center"><FAQ /></div>
+        <div className="snap-center"><JoinExpertCTA /></div>
         <div className="snap-center "><Signup /></div>
       </div>
     </main>

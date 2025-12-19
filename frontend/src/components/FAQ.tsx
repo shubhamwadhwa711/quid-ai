@@ -10,6 +10,7 @@ import { fetchFAQ } from "@/reducers/faq/faqSlice";
 import { useEffect } from "react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 const faq = [
   {
     id: 1,
@@ -36,18 +37,27 @@ const FAQ = () => {
     dispatch(fetchFAQ());
   }, [dispatch]);
 
-  console.log("FAQ", FAQ);
+  // console.log("FAQ", FAQ);
   return (
-    <div className="px-2 ">
-      <div className="-mt-10 ">
-        <h1 className="text-3xl text-center proxima-bold mb-2">
-          Have any <span className="text-[#425BFF]">Questions</span>
+    <div className="px-4 relative">
+      {/* Decorative shape */}
+      <div className="absolute top-10 left-0 w-40 h-40 bg-[#7C2BD3]/10 rounded-full blur-3xl"></div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
+        className="relative z-10"
+      >
+        <h1 className="text-3xl md:text-4xl text-center proxima-bold mb-3">
+          Have any <span className="text-[#425BFF]">Questions</span>?
         </h1>
-        <p className=" text-base text-center proxima-FAQ  mb-4">
+        <p className="text-sm md:text-base text-center text-white/70 mb-6">
           Read our FAQs if you have queries
         </p>
-        <Separator orientation="horizontal" />
-      </div>
+        <Separator orientation="horizontal" className="bg-white/20" />
+      </motion.div>
 
       <Accordion type="single" collapsible className="w-full ">
         {FAQ.map((item) => (
@@ -67,27 +77,25 @@ const FAQ = () => {
       </Accordion>
 
       <div className="flex flex-col justify-center items-center">
-        <Button onClick={() => router.push("/insights")} className="bg-gradient-to-r px-6 py-6 mt-4 proxima-large rounded-full from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8]">
-          <div className="flex justify-center gap-2  items-center">
-            <span className="proxima-bold text-white text-lg">
-              All Questions & Answers
-            </span>
-            <svg
-              width="18"
-              height="14"
-              viewBox="0 0 18 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 7H17M17 7L11 1M17 7L11 13"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
+        <Button onClick={() => router.push("/insights")} className="bg-gradient-to-r px-6 py-6 mt-4 proxima-large rounded-full from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] flex justify-center gap-2 items-center">
+          <span className="proxima-bold text-white text-lg">
+            All Questions & Answers
+          </span>
+          <svg
+            width="18"
+            height="14"
+            viewBox="0 0 18 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1 7H17M17 7L11 1M17 7L11 13"
+              stroke="white"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </Button>
       </div>
     </div>

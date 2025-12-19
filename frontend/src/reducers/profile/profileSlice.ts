@@ -120,14 +120,12 @@ const initialState: ProfileState = {
 export const fetchLinkedInProfile = createAsyncThunk(
   "profile/fetchLinkedInProfile",
   async (access_token, { rejectWithValue }) => {
-    console.log("access_token", access_token);
     try {
       const response = await axios.get("/api/linkedin-info", {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
       });
-      console.log("LinkedInProfile data fetched successfully", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -150,7 +148,6 @@ export const postBulkAcademics = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    console.log("Posting bulk academics data...", educationData);
     try {
       const response = await axiosInstance.post(
         "/academics/bulk/",
@@ -164,10 +161,8 @@ export const postBulkAcademics = createAsyncThunk(
           profile: profileId,
         }))
       );
-      console.log("Bulk academics data posted successfully", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Failed to post bulk academics data:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to post bulk academics data"
       );
@@ -208,15 +203,15 @@ export const postBulkProjects = createAsyncThunk(
                 .padStart(2, "0")}-${proj.end.split("/")[1].padStart(2, "0")}`
             : "",
           description: proj.description || "",
-          url: proj.url || "https://example.com" /* Default URL if none provided */,
+          url:
+            proj.url ||
+            "https://example.com" /* Default URL if none provided */,
           profile: profileId,
         }))
       );
 
-      console.log("Bulk projects data posted successfully", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Failed to post bulk projects data:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to post bulk projects data"
       );
@@ -243,10 +238,8 @@ export const postBulkSkills = createAsyncThunk(
           name: skill.name || "",
         }))
       );
-      console.log("Bulk skills data posted successfully", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Failed to post bulk skills data:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to post bulk skills data"
       );
@@ -255,20 +248,17 @@ export const postBulkSkills = createAsyncThunk(
 );
 export const postBulkClient = createAsyncThunk(
   "profile/postBulkClient",
-  async (ClientData) => {
-    console.log("Posting bulk client data...", ClientData);
+  async (ClientData: any[]) => {
     try {
       const response = await axiosInstance.post(
         "/clients/bulk/",
-        ClientData.map((client: any) => ({
+        ClientData?.map((client: any) => ({
           name: client.name || "",
           category: client.category || 1,
-        }))
+        })) || []
       );
-      console.log("Bulk client data posted successfully", response.data);
       return response.data;
     } catch (error: any) {
-      console.error("Failed to post bulk client data:", error);
       return error.response?.data?.message || "Failed to post bulk client data";
     }
   }
@@ -278,16 +268,12 @@ export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue, dispatch }) => {
     try {
-      // Fetch profile data from your backend
-      console.log("fetchProfile reducer");
       const response = await axiosInstance.get("/profile/");
       const profileData = response.data[0];
-      console.log("Profile data fetched successfully", profileData);
+      // console.log("Profile data fetched successfully", profileData);
 
       // Fetch LinkedIn user info
       const linkedInResponse = await axios.get("/api/linkedin-info");
-      console.log("linkedInResponse", linkedInResponse.data);
-      console.log("Unipile", process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL);
 
       // Fetch data from Unipile API
       const UnipileResponse = await axios.request({
@@ -320,26 +306,26 @@ export const fetchProfile = createAsyncThunk(
         (country: any) =>
           country.name === UnipileResponse?.data?.location?.split(", ")[2]
       );
-      const projectSkillList = (await dispatch(fetchExpertise({}))).payload;
+      const projectSkillList =
+        (await dispatch(fetchExpertise({}))).payload || [];
       // console.log("projectSkillList", projectSkillList);
       // Step 1: Create a lookup map for faster access by lowercased name
-      const skillNameToIdMap =
-        projectSkillList?.reduce((acc: Record<string, number>, item) => {
-          acc[item.name.toLowerCase()] = item.id;
-          return acc;
-        }, {}) || {};
+      const skillNameToIdMap = Array.isArray(projectSkillList)
+        ? projectSkillList.reduce((acc: Record<string, number>, item: any) => {
+            acc[item.name.toLowerCase()] = item.id;
+            return acc;
+          }, {})
+        : {};
 
       // Step 2: Map over each project and replace matching skill names with their IDs
-      const tagList = UnipileResponse?.data?.projects?.map((project) => {
+      const tagList = UnipileResponse?.data?.projects?.map((project: any) => {
         const tags = project.skills
           ?.map((skill: string) => skillNameToIdMap[skill.toLowerCase()])
-          ?.filter((id): id is number => id !== undefined); // filter out unmatched skills
+          ?.filter((id: any): id is number => id !== undefined); // filter out unmatched skills
 
         return tags;
       });
 
-      console.log("tagList", tagList);
-      //  console.log("location", country);
       if (!profileData.linkedin_data) {
         await dispatch(
           updateProfile({
@@ -374,11 +360,8 @@ export const fetchProfile = createAsyncThunk(
         );
       }
 
-      //  Check if education data needs to be posted
-      console.log("profileData.education.length", profileData.education.length);
-      // console.log("profileData.skills.length", profileData.education.length);
+      // Check if education data needs to be posted
       if (profileData.education.length === 0 && !profileData.linkedin_data) {
-        console.log("Dispatching academics bulk post");
         await dispatch(
           postBulkAcademics({
             profileId: profileData.id,
@@ -387,7 +370,6 @@ export const fetchProfile = createAsyncThunk(
         );
       }
       if (profileData.projects.length === 0 && !profileData.linkedin_data) {
-        console.log("Dispatching projects bulk post");
         await dispatch(
           postBulkProjects({
             profileId: profileData.id,
@@ -396,10 +378,6 @@ export const fetchProfile = createAsyncThunk(
           })
         );
       }
-      console.log(
-        "UnipileResponse?.data?.work_experience",
-        UnipileResponse?.data?.work_experience
-      );
       const ClientData = UnipileResponse?.data?.work_experience.map(
         (client: any) => {
           return {
@@ -413,7 +391,6 @@ export const fetchProfile = createAsyncThunk(
         await dispatch(postBulkClient(ClientData));
       }
       if (profileData.skill.length === 0 && !profileData.linkedin_data) {
-        console.log("Dispatching skills bulk post");
         await dispatch(
           postBulkSkills({
             skillsData: UnipileResponse.data.skills,
@@ -443,18 +420,17 @@ export const fetchProfile = createAsyncThunk(
 
 export const fetchProfiles = createAsyncThunk(
   "profile/fetchProfiles",
-  async (FilterData, { rejectWithValue }) => {
+  async (FilterData: any = {}, { rejectWithValue }) => {
     try {
       const response = await axiosInstanceUnauthorized.get(
         "/profile-related/",
         {
-          params: FilterData,
+          params: FilterData || {},
           paramsSerializer: (params) => {
             const searchParams = new URLSearchParams();
 
             Object.entries(params).forEach(([key, value]) => {
               if (key === "search") {
-                console.log("value", value);
                 // Ensure search param is a string, not an array
                 searchParams.append(
                   key,
@@ -472,7 +448,6 @@ export const fetchProfiles = createAsyncThunk(
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log("Profile data fetched successfully", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -486,19 +461,25 @@ export const fetchProfiles = createAsyncThunk(
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (
-    { id, data }: { id: number; data: Partial<Profile> },
+    { id, data }: { id: number; data: Partial<Profile> | FormData },
     { rejectWithValue }
   ) => {
     console.log("Updating profile...", id, data);
     try {
+      const headers: any = {};
+      // Only set Content-Type if data is not FormData
+      // (axios will automatically set multipart/form-data for FormData)
+      if (!(data instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+      }
+
       const response = await axiosInstance.patch(`/profile/${id}/`, data, {
-        headers: {
-          // "Content-Type": "application/json",
-        },
+        headers: headers.length > 0 ? headers : undefined,
       });
       console.log("Profile updated successfully", response.data);
       return response.data;
     } catch (error: any) {
+      console.error("Error updating profile:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to update profile"
       );
@@ -512,18 +493,23 @@ export const updateAcademics = createAsyncThunk(
     { id, eid, data }: { id: number; eid: number; data: Partial<Education> },
     { rejectWithValue }
   ) => {
-    console.log("Profile id", id);
-    console.log("Updating profile...", eid, data);
+    console.log("Updating academics...", id, eid, data);
     try {
       const response = await axiosInstance.patch(
         `profile/${id}/education/${eid}/`,
-        data
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("Academics updated successfully", response.data);
       return response.data;
     } catch (error: any) {
+      console.error("Error updating academics:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to update profile"
+        error.response?.data?.message || "Failed to update academics"
       );
     }
   }
@@ -535,17 +521,23 @@ export const postAcademics = createAsyncThunk(
     { id, data }: { id: number; data: Partial<Education> },
     { rejectWithValue }
   ) => {
-    console.log("Updating profile...", id, data);
+    console.log("Adding academics...", id, data);
     try {
       const response = await axiosInstance.post(
         `/profile/${id}/education/`,
-        data
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("Academics posted successfully", response.data);
       return response.data;
     } catch (error: any) {
+      console.error("Error posting academics:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to update profile"
+        error.response?.data?.message || "Failed to add academics"
       );
     }
   }
@@ -554,13 +546,14 @@ export const postAcademics = createAsyncThunk(
 export const removeAcademics = createAsyncThunk(
   "profile/removeAcademics",
   async ({ id, eid }: { id: number; eid: number }, { rejectWithValue }) => {
-    console.log("Updating profile...", id);
+    console.log("Removing academics...", id, eid);
     try {
       const response = await axiosInstance.delete(
         `/profile/${id}/education/${eid}/`
       );
       return { success: true, data: response.data, removedId: eid };
     } catch (error: any) {
+      console.error("Error removing academics:", error);
       return rejectWithValue(
         error.response?.data?.message || "Failed to remove academics"
       );
@@ -652,14 +645,76 @@ const profileSlice = createSlice({
 
       // Profile update states
       .addCase(updateProfile.pending, (state) => {
-        // state.loading = true;
+        state.loading = true;
         state.error = null;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.profile = action.payload;
+        state.error = null;
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Update academics states
+      .addCase(updateAcademics.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateAcademics.fulfilled, (state, action) => {
+        state.loading = false;
+        // Update the education item in the profile
+        if (state.profile && state.profile.education) {
+          const index = state.profile.education.findIndex(
+            (edu) => edu.id === action.payload.id
+          );
+          if (index !== -1) {
+            state.profile.education[index] = action.payload;
+          }
+        }
+        state.error = null;
+      })
+      .addCase(updateAcademics.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Post academics states
+      .addCase(postAcademics.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(postAcademics.fulfilled, (state, action) => {
+        state.loading = false;
+        // Add the new education item to the profile
+        if (state.profile && state.profile.education) {
+          state.profile.education.push(action.payload);
+        }
+        state.error = null;
+      })
+      .addCase(postAcademics.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Remove academics states
+      .addCase(removeAcademics.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeAcademics.fulfilled, (state, action) => {
+        state.loading = false;
+        // Remove the education item from the profile
+        if (state.profile && state.profile.education) {
+          state.profile.education = state.profile.education.filter(
+            (edu) => edu.id !== action.payload.removedId
+          );
+        }
+        state.error = null;
+      })
+      .addCase(removeAcademics.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

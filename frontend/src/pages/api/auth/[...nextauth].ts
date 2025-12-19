@@ -74,7 +74,7 @@ export const authOptions: AuthOptions = {
       client: { token_endpoint_auth_method: "client_secret_post" },
       issuer: "https://www.linkedin.com",
       async profile(profile: LinkedInProfile, tokens: TokenSet) {
-        console.log("LinkedIn profile:", tokens);
+        // console.log("LinkedIn profile:", tokens);
         try {
           const response = await axios.post(
             `${process.env.NEXT_BACKEND_URL}/auth/convert-token/`,
@@ -86,7 +86,7 @@ export const authOptions: AuthOptions = {
               token: tokens?.access_token,
             }
           );
-          console.log("Token exchange successful:", response.data);
+          // console.log("Token exchange successful:", response.data);
           const qProfile = response.data;
           // console.log("qProfile", qProfile);
           return {
@@ -152,7 +152,7 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       // More secure token generation
       if (user) {
-        return user;
+        return user as unknown as JWT;
       }
       if (isTokenValid(token.expires_at)) {
         return token;
@@ -178,16 +178,16 @@ export const authOptions: AuthOptions = {
 
   events: {
     async signIn(message) {
-      console.log("Successful Sign In", {
-        user: message.user,
-        account: message.account,
-      });
+      // console.log("Successful Sign In", {
+      //   user: message.user,
+      //   account: message.account,
+      // });
     },
     async signOut(message) {
-      console.log("Sign Out", message);
+      // console.log("Sign Out", message);
     },
     async createUser(message) {
-      console.log("New User Created", message.user);
+      // console.log("New User Created", message.user);
     },
   },
 

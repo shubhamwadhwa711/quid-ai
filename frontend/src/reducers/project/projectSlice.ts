@@ -37,7 +37,9 @@ export const fetchProject = createAsyncThunk(
     console.log("fetchProject id", { tid, pid });
     try {
       console.log("Fetching fetchProject...");
-      const response = await axiosInstanceUnauthorized.get(`/profile/${tid}/project/${pid}/`);
+      const response = await axiosInstanceUnauthorized.get(
+        `/profile/${tid}/project/${pid}/`
+      );
       console.log("fetchProject fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -50,7 +52,10 @@ export const fetchProject = createAsyncThunk(
 
 export const updateProject = createAsyncThunk(
   "project/updateProject",
-  async ({ pid, prid, formData }: { pid: number, prid: number, formData: FormData }, { rejectWithValue }) => {
+  async (
+    { pid, prid, formData }: { pid: number; prid: number; formData: FormData },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.patch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/${prid}/`,
@@ -69,7 +74,10 @@ export const updateProject = createAsyncThunk(
 );
 export const addProject = createAsyncThunk(
   "project/addProject",
-  async ({ pid, formData }: { pid: number, formData: FormData }, { rejectWithValue }) => {
+  async (
+    { pid, formData }: { pid: number; formData: FormData },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await axiosInstance.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/`,
@@ -88,7 +96,7 @@ export const addProject = createAsyncThunk(
 );
 export const removeProject = createAsyncThunk(
   "project/removeProject",
-  async ({ pid, prid }: { pid: number, prid: number }, { rejectWithValue }) => {
+  async ({ pid, prid }: { pid: number; prid: number }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.delete(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/profile/${pid}/project-edit/${prid}/`
@@ -128,8 +136,45 @@ const projectSlice = createSlice({
       .addCase(updateProject.fulfilled, (state, action) => {
         state.loading = false;
         state.project = action.payload;
+        state.error = null;
       })
       .addCase(updateProject.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(addProject.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addProject.fulfilled, (state, action) => {
+        state.loading = false;
+        // Add new project to the projects list
+        if (Array.isArray(state.project)) {
+          state.project.push(action.payload);
+        } else {
+          state.project = [action.payload];
+        }
+        state.error = null;
+      })
+      .addCase(addProject.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(removeProject.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(removeProject.fulfilled, (state, action) => {
+        state.loading = false;
+        // Remove project from the projects list
+        if (Array.isArray(state.project)) {
+          state.project = state.project.filter(
+            (proj) => proj.id !== action.meta.arg.prid
+          );
+        }
+        state.error = null;
+      })
+      .addCase(removeProject.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -30,9 +30,9 @@ export const fetchAcademics = createAsyncThunk(
   "academics/fetchAcademics",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Fetching academics...");
+      // console.log("Fetching academics...");
       const response = await axiosInstanceUnauthorized.get("/academic/");
-      console.log("academics fetched:", response.data);
+      // console.log("academics fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

@@ -2,7 +2,7 @@ import { useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Stepper, Step, StepProps } from "./ui/stepper";
-import { useScroll } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 const Working = () => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -42,19 +42,25 @@ const Working = () => {
     <div
       id="works"
       ref={ref}
-      className="space-y-6 flex flex-col justify-center items-center"
+      className="space-y-8 flex flex-col justify-center items-center px-4 relative"
     >
-      <div className="">
-        <h1 className="text-3xl proxima-bold text-center">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-40 h-40 bg-[#7C2BD3]/10 rounded-full blur-3xl"></div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.3 }}
+        transition={{ duration: 0.6 }}
+        className="text-center relative z-10"
+      >
+        <h1 className="text-3xl md:text-4xl proxima-bold text-center">
           How It <span className="text-[#425BFF]">Works</span>
         </h1>
-        <span className="text-sm">
-          Get matched with AI experts in minutes &
-        </span>
-        <span className="text-sm block mt-1 text-center">
-          complete your tasks.
-        </span>
-      </div>
+        <p className="text-sm md:text-base text-white/70 mt-2">
+          Get matched with AI experts in minutes & complete your tasks.
+        </p>
+      </motion.div>
       <div className="">
         <Stepper current={-1}>
           {steps.map((step, index) => (

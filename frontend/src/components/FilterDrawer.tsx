@@ -21,6 +21,7 @@ import { fetchLanguage } from "@/reducers/filter/language/languageSlice";
 import { fetchAvailableTo } from "@/reducers/filter/availableto/availabletoSlice";
 import { fetchProfiles } from "@/reducers/profile/profileSlice";
 import { fetchSolutions } from "@/reducers/solutions/solutionSlice";
+import { useHorizontalScroll } from "@/hooks/useHorizontalScroll";
 
 export default function FilterDrawer({
   showFilters,
@@ -36,6 +37,7 @@ export default function FilterDrawer({
   clearFilters,
   setIsFilterApplied,
 }) {
+  const solutionsScrollRef = useHorizontalScroll<HTMLDivElement>();
   const [open, setOpen] = useState(false);
   const [activeFilterCategory, setActiveFilterCategory] = useState(
     initialFilter ?? "Expertise"
@@ -353,7 +355,7 @@ export default function FilterDrawer({
             Specialization Sector
           </label>
 
-          <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+          <div ref={solutionsScrollRef} className="flex gap-2 overflow-x-auto hide-scrollbar">
             {Solutions &&
               Solutions.map((solution) => (
                 <Card

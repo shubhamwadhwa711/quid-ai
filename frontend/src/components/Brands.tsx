@@ -59,8 +59,8 @@ const Brands = () => {
                 variant="none"
                 onClick={() => setSelectedCategory(category.id)}
                 className={` w-auto h-4 proxima-bold rounded-full text-xs transition-all backdrop-blur-md ${selectedCategory === category.id
-                    ? "bg-[#425BFF] text-white"
-                    : "bg-gradient-to-tr bg-white/30"
+                  ? "bg-[#425BFF] text-white"
+                  : "bg-gradient-to-tr bg-white/30"
                   }`}
               >
                 {category.title}
@@ -72,7 +72,7 @@ const Brands = () => {
         {/* Logos Grid */}
 
         <div className="grid grid-cols-3 overflow-y-hidden">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout">
             {companies.slice(0, 9).map((company) => (
               <motion.div
                 key={company.id}

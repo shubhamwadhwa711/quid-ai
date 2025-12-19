@@ -146,7 +146,7 @@ const Hero = () => {
                       }}
                     >
                       <CardTitle className="proxima-large underline">
-                        Who Is Inside
+                        Explore AI Talent
                       </CardTitle>
                     </motion.div>
                     <motion.div
@@ -161,7 +161,7 @@ const Hero = () => {
                     >
                       <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm ">
                         <span className="block">
-                          Discover exclusive profiles of top AI talents
+                          Leads to AI Experts Directory
                         </span>
 
                         <svg
@@ -198,7 +198,7 @@ const Hero = () => {
               }}
             // style={{ opacity: opacity }}
             >
-              <Card onClick={() => router.push("/profile")} className="relative cursor-pointer bg-gradient-to-tr border-none h-[200px] w-[160px] from-[#7C2BD3]  to-[#075AA8] text-white  overflow-hidden">
+              <Card onClick={() => router.push("/join-as-ai-expert")} className="relative cursor-pointer bg-gradient-to-tr border-none h-[200px] w-[160px] from-[#7C2BD3]  to-[#075AA8] text-white  overflow-hidden">
                 <img
                   src="https://s3-alpha-sig.figma.com/img/8c77/bfd4/1fa2e49054a0cdc072595be2eba624b6?Expires=1742774400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=TENEczB~iihSWP020yEhIlqJ8hP4elnOsox~inlPJWC7SNANBJdu2SMtKrEXCa5lTNkyx~ItBfdOo3ggZn71bAIeiMwSECzMoMKa2WBD4mAONfT2SLdIeHDeJ~KeBykWFtvaBsrDxIqBMALPVgjc-IqGl-H8a2Z6jtTu5vGKRT49pkSPUxMdR4wpq6F8HWbQpcvjIXZ2QxBUIINzvudZFRrknsSjHg9eWFfl9cVlsHjTj~iF6ySjEJevudESem37B4n1zTke8oVJFL6ZaT~8TG-kN3jm1DzJkd8tiSFTN9JX0gu~PcgZWRMoxWv1QVLmne8Z9A8-5WePNmWa9hr-tg__"
                   alt=""
@@ -230,7 +230,7 @@ const Hero = () => {
                       }}
                     >
                       <CardTitle className="proxima-large underline">
-                        Be Part
+                        Join as an AI Expert
                       </CardTitle>
                     </motion.div>
                     <motion.div
@@ -245,7 +245,7 @@ const Hero = () => {
                     >
                       <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm ">
                         <span className="block">
-                          Join the largest global AI community.
+                          Leads to Sign-up Page
                         </span>
 
                         <svg
@@ -285,7 +285,7 @@ const Hero = () => {
               }}
             // style={{ opacity: opacity }}
             >
-              <Card onClick={() => router.push("/insights")} className="relative  cursor-pointer bg-gradient-to-bl border-none from-[#7C2BD3]  to-[#075AA8] text-white h-[200px] w-[160px] overflow-hidden">
+              <Card onClick={() => router.push("/services")} className="relative  cursor-pointer bg-gradient-to-bl border-none from-[#7C2BD3]  to-[#075AA8] text-white h-[200px] w-[160px] overflow-hidden">
                 <img
                   src="https://s3-alpha-sig.figma.com/img/9a7f/fa42/3a369877c33cbbee232854f73042f342?Expires=1742774400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=dCpTD~E1qQgicG521cGkdc8ihfWxyDH1~fYEMFQfBmJNt-brTJkLmNwZGVxOXaOFozVwR4Dww~3F8dEpJN8pVjOBRgK~AqRdR9pUAdkUKO8lrB1Y8NL4NgOCWfjkN5jc84C1a0zZbAToCn5RTDbDD-jBwJbHJ2IwLcJQ4OgRoSLBuREYtbu-rqbkQ0TGrE8EL6j459xNgxaqw9HyBoIwAYv~9qZCyUrNuYcca8wOo1HJLfcaMa8pKNovlRy9mPjwWFCklXa4VWZVgsS2ay02cJVsQQT5fdUcjgUgcINgMHusBpgaCY11rfjm4o~ke-pXZpi79i4a2-2tsuzYqb0cPQ__"
                   alt=""
@@ -316,7 +316,7 @@ const Hero = () => {
                       }}
                     >
                       <CardTitle className="proxima-large underline">
-                        Services
+                        Contact an AI Expert
                       </CardTitle>
                     </motion.div>
                     <motion.div
@@ -331,7 +331,7 @@ const Hero = () => {
                     >
                       <CardDescription className="flex flex-col space-y-2 text-white/90 proxima-small text-sm mt-2">
                         <span className="block">
-                          Consulting, project support,training, & more.
+                          Consulting, project, support, training & more
                         </span>
 
                         <svg

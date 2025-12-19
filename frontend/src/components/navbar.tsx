@@ -5,20 +5,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProfile } from "@/reducers/profile/profileSlice";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const router = useRouter();
   console.log("session", session);
-  const dispatch = useAppDispatch();
   const { profile } = useAppSelector((state) => state.Profile);
-  // useEffect(() => {
-  //   dispatch(fetchProfile());
-  // }, []);
-  console.log("profile", profile);
+  // console.log("profile", profile);
   return (
     <nav className="relative z-50 min-h-8 pt-2 max-w-md w-full justify-self-center snap-center">
       <div className="p-2 bg-gradient-to-br">
@@ -44,7 +38,7 @@ const Navbar = () => {
               >
                 <Image
                   className="rounded-full"
-                  src={session?.user?.image ?? profile?.image}
+                  src={session?.user?.image ?? profile?.image ?? "/default-avatar.jpg"}
                   alt="Profile"
                   width={40}
                   height={40}
@@ -58,19 +52,13 @@ const Navbar = () => {
               <div className="flex items-center mx-2">
                 <Button
                   variant="none"
-                  onClick={() => signIn("linkedin")}
-                  className="text-sm text-white font-semibold hover:text-gray-200 p-0"
+                  onClick={() => signIn("linkedin", { callbackUrl: "/profile" })}
+                  className="text-sm text-white font-semibold py-2 px-4 border border-white rounded-lg hover:bg-white hover:text-black transition"
                 >
                   Login
-                  <span className="text-white">|</span>
-                  Sign Up
+                  {/* <span className="text-white">|</span>
+                  Sign Up */}
                 </Button>
-                {/* <Link
-                  href="/signup"
-                  className="text-sm text-white hover:text-gray-200"
-                >
-                  Signup
-                </Link> */}
               </div>
             )}
           </div>

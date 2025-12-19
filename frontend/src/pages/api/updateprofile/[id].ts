@@ -7,9 +7,9 @@ export default async function handler(
 ) {
   const { id } = req.query;
   const { data } = req.body;
-  console.log("req.body", req.body);
-  console.log("Profile ID:", id);
-  console.log("Data:", data);
+  // console.log("req.body", req.body);
+  // console.log("Profile ID:", id);
+  // console.log("Data:", data);
 
   try {
     const response = await axios.patch(
