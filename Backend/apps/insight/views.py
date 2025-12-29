@@ -80,7 +80,9 @@ class InsightsViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
     def get_queryset(self):
-        category_id = self.kwargs['category_pk']
+        category_id = self.kwargs.get('category_pk')
+        if category_id is None:
+            return Insights.objects.all()
         return Insights.objects.filter(category_id=category_id)
     
 
