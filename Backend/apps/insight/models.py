@@ -16,6 +16,8 @@ class AssociatedCompany(models.Model):
 
     def __str__(self):
         return self.name   
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["category", "name"], name="unique_company_per_category"),]
     
     # @property
     # def is_featured(self):
