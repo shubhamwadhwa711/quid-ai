@@ -10,18 +10,34 @@ class CompanyCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AssociatedCompanySerializer(serializers.ModelSerializer):
-    category = serializers.PrimaryKeyRelatedField(queryset =CompanyCategory.objects.all())
+    category = serializers.PrimaryKeyRelatedField(queryset =CompanyCategory.objects.all(), many = True, required = False)
     class Meta:
         model = AssociatedCompany
         fields = '__all__'
 
     def create(self, validated_data):
-        
-        associatedcompany = AssociatedCompany.objects.create(**validated_data)
-        user = self.context['request'].user
-        print(user)
+        categories = validated_data.pop('category', [])
+        name = (validated_data.get('name') or "").strip()
+        associatedcompany = None
+        if name:
+            associatedcompany = AssociatedCompany.objects.filter(name__iexact=name).first()
+        if associatedcompany is None:
+            if name:
+                validated_data['name'] = name        
+            associatedcompany = AssociatedCompany.objects.create(**validated_data)
+        else:
+            new_logo = validated_data.get('logo')
+            if new_logo and not associatedcompany.logo:
+                associatedcompany.logo = new_logo
+                associatedcompany.save(update_fields=['logo'])
+        if categories:
+            associatedcompany.category.add(*categories)
+        request = self.context.get('request')
+        user = getattr(request, 'user', None)
+        # user = self.context['request'].user
+        # print(user)
         # Check if the user has a profile
-        if hasattr(user, 'profile'):
+        if user and user.is_authenticated and hasattr(user, 'profile'):
            user.profile.client.add(associatedcompany)
         
         return associatedcompany    

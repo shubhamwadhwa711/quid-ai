@@ -30,9 +30,13 @@ class AssociatedCompanyViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         category_id = self.kwargs.get('category_pk')
-        if category_id is None:
-            return AssociatedCompany.objects.all()        
-        return AssociatedCompany.objects.filter(category_id=category_id) 
+        qs = AssociatedCompany.objects.all().prefetch_related("category")
+
+        if category_id is not None:
+            qs = qs.filter(category__id=category_id).distinct()
+        return qs
+            # return AssociatedCompany.objects.all()        
+        # return AssociatedCompany.objects.filter(category_id=category_id) 
 class AllCompany(viewsets.ModelViewSet):
     """
     API view to list all company.

@@ -1,23 +1,39 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_ckeditor_5.fields import CKEditor5Field
-
+from django.db.models import Q
+from django.db.models.functions import Lower
+from django.core.exceptions import ValidationError
 
 class CompanyCategory(models.Model):
     title = models.CharField(max_length=80, null=True, blank=True )
     
     def __str__(self):
         return self.title   
+    
 
 class AssociatedCompany(models.Model):
-    category = models.ForeignKey(CompanyCategory, on_delete=models.CASCADE, related_name='company_category')
+    category = models.ManyToManyField(CompanyCategory,blank=True, related_name='company_category')
     name = models.CharField(max_length=100, null=True, blank=True)
     logo = models.ImageField(upload_to='logo/', blank=True, null=True)
 
     def __str__(self):
         return self.name   
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=["category", "name"], name="unique_company_per_category"),]
+    
+    def clean(self):
+        nm = (self.name or "").strip()
+        if not nm:
+            raise ValidationError({"name": "Company name is required."})
+        qs = AssociatedCompany.objects.filter(name__iexact=nm)
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+        if qs.exists():
+            raise ValidationError({"name": "This company already exists. Edit the existing company and add categories there."})
+        
+        self.name = nm
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
     
     # @property
     # def is_featured(self):
