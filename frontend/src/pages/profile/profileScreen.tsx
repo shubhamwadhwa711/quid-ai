@@ -316,17 +316,17 @@ const ProfileScreen = () => {
             <Button
               onClick={handleSyncWithLinkedIn}
               disabled={syncLoading}
-              className="w-full bg-[#0A66C2] hover:bg-[#085BA8] text-lg proxima-bold text-white rounded-full transition-colors space-x-2 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="w-full bg-[#0A66C2] hover:bg-[#085BA8] text-lg proxima-bold text-white rounded-full transition-colors gap-2 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {syncLoading ? (
                 <>
-                  <Spinner size="sm" className="mr-2" />
+                  <Spinner size="sm" />
                   <span>Syncing...</span>
                 </>
               ) : (
                 <>
                   <Linkedin className="w-5 h-5" />
-                  <span className="proxima-bold cursor-pointer">Sync with LinkedIn</span>
+                  <span className="proxima-bold">Sync with LinkedIn</span>
                 </>
               )}
             </Button>
