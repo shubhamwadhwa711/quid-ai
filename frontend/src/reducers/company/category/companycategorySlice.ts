@@ -48,7 +48,7 @@ const companyCategorySlice = createSlice({
       })
       .addCase(fetchCompanyCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.companyCategory = action.payload;
+        state.companyCategory = action.payload.results || action.payload;
       })
       .addCase(fetchCompanyCategory.rejected, (state, action) => {
         state.loading = false;

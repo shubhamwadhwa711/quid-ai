@@ -1,4 +1,4 @@
-import { Linkedin } from "lucide-react";
+import { ArrowRight, Linkedin } from "lucide-react";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -21,10 +21,10 @@ import Image from "next/image";
 
 const TalentCard = ({
   talent,
-  talenttype,
+  talentType,
 }: {
   talent: Profile;
-  talenttype: string;
+  talentType: string;
 }) => {
   const clientsScrollRef = useHorizontalScroll<HTMLDivElement>();
   const [showConnectForm, setShowConnectForm] = useState(false);
@@ -36,8 +36,8 @@ const TalentCard = ({
     setShowConnectForm(true);
   };
 
-  console.log("talent", talent);
-  console.log("talenttype", talenttype);
+  // console.log("talent", talent);
+  // console.log("talentType", talentType);
 
   return (
     <Card
@@ -47,7 +47,7 @@ const TalentCard = ({
       <div className="absolute -top-14  left-1/2 transform -translate-x-1/2 z-50">
         <Avatar className="w-24 h-24 shadow-lg ">
           <Image
-            src={talent?.image || talent?.linkedin_profile_url || '/default-avatar.png'}
+            src={talent?.image || talent?.linkedin_profile_url || '/default-avatar.jpg'}
             alt={talent?.user?.username || 'User'}
             className="object-cover border"
             width={100}
@@ -61,7 +61,7 @@ const TalentCard = ({
         <CardHeader className="flex flex-col items-center gap-y-2 mt-14 px-6 py-0">
           <CardTitle
             className="cursor-pointer"
-            onClick={() => router.push(`/talent/${talenttype}/${talent.id}`)}
+            onClick={() => router.push(`/talent/${talentType}/${talent.id}`)}
           >
             {talent?.user?.first_name} {talent?.user?.last_name}
           </CardTitle>
@@ -95,24 +95,10 @@ const TalentCard = ({
                 className="rounded-3xl proxima-bold text-white px-14 py-6 bg-gradient-to-r from-[#7C2BD3] to-[#075AA8] flex items-center gap-2"
               >
                 Connect
-                <svg
-                  width="18"
-                  height="14"
-                  viewBox="0 0 18 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1 7H17M17 7L11 1M17 7L11 13"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <ArrowRight />
               </Button>
               <Link
-                className="rounded-full h-12 w-12 border flex items-center justify-center"
+                className="rounded-full h-12 w-12 border flex items-center justify-center bg-[#0a66c2] text-white hover:bg-[#084d91] transition"
                 href={talent?.linkedin_url || "#"}
               >
                 <Linkedin />

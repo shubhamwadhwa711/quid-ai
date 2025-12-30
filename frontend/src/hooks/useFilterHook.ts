@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { fetchProfile } from "@/reducers/profile/profileSlice";
+import { fetchProfile, fetchProfiles } from "@/reducers/profile/profileSlice";
 import { fetchAcademics } from "@/reducers/filter/academics/academicsSlice";
 import { fetchExpertise } from "@/reducers/filter/expertise/expertiseSlice";
 import { fetchCountry } from "@/reducers/filter/country/countrySlice";
@@ -45,12 +45,12 @@ export const useFilterManagement = () => {
   // Fetch all filter options when the hook is used
   useEffect(() => {
     // Dispatch all filter fetching actions
-    dispatch(fetchAcademics());
-    dispatch(fetchExpertise());
-    dispatch(fetchCountry());
-    dispatch(fetchClient());
-    dispatch(fetchLanguage());
-    dispatch(fetchAvailableTo());
+    dispatch(fetchAcademics({} as any));
+    dispatch(fetchExpertise({}));
+    dispatch(fetchCountry({}));
+    dispatch(fetchClient({}));
+    dispatch(fetchLanguage({}));
+    dispatch(fetchAvailableTo({} as any));
   }, [dispatch]);
 
   // Centralized method to update filters
@@ -68,7 +68,7 @@ export const useFilterManagement = () => {
 
   // Trigger profile fetch whenever filters change
   useEffect(() => {
-    dispatch(fetchProfile(selectedFilters));
+    dispatch(fetchProfiles(selectedFilters));
   }, [dispatch, selectedFilters]);
 
   // Clear all filters

@@ -23,6 +23,7 @@ import {
   fetchUSProfile,
   fetchUSProfiles,
 } from "@/reducers/us-talent/us-talentSlice";
+import { useRouter } from "next/router";
 interface Filter {
   expertise: string[];
   academics: string[];
@@ -42,8 +43,11 @@ type FilterCategory =
   | "industry";
 
 const SearchPage = () => {
+  const router = useRouter();
+
   // Horizontal scroll refs
   const searchResultsScrollRef = useHorizontalScroll<HTMLDivElement>();
+  const allTalentsScrollRef = useHorizontalScroll<HTMLDivElement>();
   const aiTalentsScrollRef = useHorizontalScroll<HTMLDivElement>();
   const usTalentsScrollRef = useHorizontalScroll<HTMLDivElement>();
 
@@ -61,7 +65,7 @@ const SearchPage = () => {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedClients, setSelectedClients] = useState<string[]>([]);
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
-  const [selectedIndustry, setSelectedIndustry] = useState<string>();
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("");
 
   const [selectedFilters, setSelectedFilters] = useState<Filter>({
     expertise: [],
@@ -96,12 +100,25 @@ const SearchPage = () => {
 
   // Redux data states
   const { profiles } = useAppSelector((state) => state.Profile);
-  const { aiprofiles } = useAppSelector((state) => state.AIProfile);
-  const { usprofiles } = useAppSelector((state) => state.USProfile);
+  const { aiProfiles } = useAppSelector((state) => state.AIProfile);
+  const { usProfiles } = useAppSelector((state) => state.USProfile);
+  const [allTalents, setAllTalents] = useState<Profile[]>([]);
+
+  // Debug log
+  useEffect(() => {
+    console.log("Profiles data:", profiles);
+    console.log("AI profiles data:", aiProfiles);
+    console.log("US profiles data:", usProfiles);
+    console.log("Is search applied:", isSearchApplied, "Is filter applied:", isFilterApplied);
+  }, [profiles, aiProfiles, usProfiles, isSearchApplied, isFilterApplied]);
   // Fetch AI and US profiles on component mount
   useEffect(() => {
     dispatch(fetchAIProfiles());
     dispatch(fetchUSProfiles());
+    // Fetch all talents for the default view
+    dispatch(fetchProfiles({})).unwrap().then((response) => {
+      setAllTalents(response.results || response);
+    });
   }, [dispatch]);
 
   // Fetch profiles based on selected filters
@@ -126,13 +143,14 @@ const SearchPage = () => {
     { id: 3, icon: "/Icons/Country.png", label: "Country" },
     { id: 4, icon: "/Icons/Client.png", label: "Clients" },
     { id: 5, icon: "/Icons/Languages.png", label: "Languages" },
-    { id: 6, icon: "/Icons/AvailableTo.png", label: "Available to" },
+    { id: 6, icon: "/Icons/AvailableTo.png", label: "Available To" },
   ];
 
   const updateFilter = useCallback(
-    (category: FilterCategory, value: string, isAdding: boolean) => {
+    (category: string, value: string, isAdding: boolean) => {
       setSelectedFilters((prev) => {
-        const categoryValue = prev[category];
+        const categoryKey = category as FilterCategory;
+        const categoryValue = prev[categoryKey];
         const updatedFilters = {
           ...prev,
           [category]: isAdding && Array.isArray(categoryValue)
@@ -196,16 +214,16 @@ const SearchPage = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full">
       {/* Header Section with Explanation */}
-      <div className="w-full bg-gradient-to-b from-[#0a0e27]/80 to-transparent pt-12 pb-8 px-4">
+      <div className="w-full bg-gradient-to-b from-[#0a0e27]/80 to-transparent pt-12 pb-3 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold proxima-bold text-white mb-3">
             Find Top AI Talent
           </h1>
           <p className="text-md text-white/80 proxima-large mb-2">
             Search through our verified directory of AI professionals
-            <span className="text-sm text-white/60 proxima-small block mt-2">
+            {/* <span className="text-sm text-white/60 proxima-small block mt-2">
               Use filters to narrow down by expertise, skills, location, and availability
-            </span>
+            </span> */}
           </p>
         </div>
       </div>
@@ -299,7 +317,7 @@ const SearchPage = () => {
                 showFilters={!activeQuickFilterCategory}
                 setShowFilters={closeFilter}
                 handleFilterToggle={handleFilterToggle}
-                initialFilter={activeQuickFilterCategory}
+                initialFilter={activeQuickFilterCategory ?? undefined}
                 applyFilters={applyFilters}
                 setSelectedFilters={setSelectedFilters}
                 selectedIndustry={selectedIndustry}
@@ -331,20 +349,69 @@ const SearchPage = () => {
                     : "grid-flow-col auto-cols-max"
                     } gap-2`}
                 >
-                  {profiles?.map((talent: Profile) => (
-                    <TalentCard key={talent.id} talent={talent} talenttype="search" />
-                  ))}
+                  {profiles && profiles.length > 0 ? (
+                    profiles.map((talent: Profile) => (
+                      <TalentCard key={talent.id} talent={talent} talentType="search" />
+                    ))
+                  ) : (
+                    <p className="text-white/60 text-center py-8">No profiles found</p>
+                  )}
                 </div>
               </div>
             </div>
           ) : (
             <>
               <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
-                <div className="mx-1 flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                  <h1 className="proxima-bold text-xl text-white">
-                    Top AI Talents
-                  </h1>
+                <div className="mx-1 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                    <h1 className="proxima-bold text-xl text-white">
+                      All Talents
+                    </h1>
+                  </div>
+                  {allTalents && allTalents.length > 10 && (
+                    <Button
+                      variant="ghost"
+                      onClick={() => router.push("/talents/all")}
+                      className="text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-full"
+                    >
+                      See More
+                    </Button>
+                  )}
+                </div>
+                <div
+                  ref={allTalentsScrollRef}
+                  className={`w-full overflow-x-auto hide-scrollbar px-4 grid ${isFilterApplied
+                    ? "grid-cols-1"
+                    : "grid-flow-col auto-cols-max"
+                    } gap-2`}
+                >
+                  {allTalents && allTalents.length > 0 ? (
+                    allTalents.map((talent: Profile) => (
+                      <TalentCard key={talent.id} talent={talent} talentType={"all"} />
+                    ))
+                  ) : (
+                    <p className="text-white/60 text-center py-8">No talents found</p>
+                  )}
+                </div>
+              </div>
+              <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
+                <div className="mx-1 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                    <h1 className="proxima-bold text-xl text-white">
+                      Top AI Talents
+                    </h1>
+                  </div>
+                  {aiProfiles && aiProfiles.length > 10 && (
+                    <Button
+                      variant="ghost"
+                      onClick={() => router.push("/talents/ai")}
+                      className="text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-full"
+                    >
+                      See More
+                    </Button>
+                  )}
                 </div>
                 <div
                   ref={aiTalentsScrollRef}
@@ -353,17 +420,32 @@ const SearchPage = () => {
                     : "grid-flow-col auto-cols-max"
                     } gap-2`}
                 >
-                  {aiprofiles?.map((talent: any) => (
-                    <TalentCard key={talent.id} talent={talent as Profile} talenttype={"AI"} />
-                  ))}
+                  {aiProfiles && aiProfiles.length > 0 ? (
+                    aiProfiles.slice(0, 10).map((talent: any) => (
+                      <TalentCard key={talent.id} talent={talent as Profile} talentType={"AI"} />
+                    ))
+                  ) : (
+                    <p className="text-white/60 text-center py-8">No AI profiles found</p>
+                  )}
                 </div>
               </div>
               <div className="w-full relative overflow-x-auto hide-scrollbar px-4">
-                <div className="mx-1 flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-                  <h1 className="proxima-bold text-xl text-white">
-                    Talents from US
-                  </h1>
+                <div className="mx-1 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                    <h1 className="proxima-bold text-xl text-white">
+                      Talents from US
+                    </h1>
+                  </div>
+                  {usProfiles && usProfiles.length > 10 && (
+                    <Button
+                      variant="ghost"
+                      onClick={() => router.push("/talents/us")}
+                      className="text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-full"
+                    >
+                      See More
+                    </Button>
+                  )}
                 </div>
                 <div
                   ref={usTalentsScrollRef}
@@ -372,9 +454,13 @@ const SearchPage = () => {
                     : "grid-flow-col auto-cols-max"
                     } gap-2`}
                 >
-                  {usprofiles?.map((talent: any) => (
-                    <TalentCard key={talent.id} talent={talent as Profile} talenttype={"US"} />
-                  ))}
+                  {usProfiles && usProfiles.length > 0 ? (
+                    usProfiles.slice(0, 10).map((talent: any) => (
+                      <TalentCard key={talent.id} talent={talent as Profile} talentType={"US"} />
+                    ))
+                  ) : (
+                    <p className="text-white/60 text-center py-8">No US profiles found</p>
+                  )}
                 </div>
               </div>
             </>

@@ -69,7 +69,7 @@ const companySectorSlice = createSlice({
       })
       .addCase(fetchCompanySectors.fulfilled, (state, action) => {
         state.loading = false;
-        state.companySectors = action.payload;
+        state.companySectors = action.payload.results || action.payload;
       })
       .addCase(fetchCompanySectors.rejected, (state, action) => {
         state.loading = false;

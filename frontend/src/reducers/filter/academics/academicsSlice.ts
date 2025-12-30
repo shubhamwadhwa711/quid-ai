@@ -55,7 +55,7 @@ const academicSlice = createSlice({
       })
       .addCase(fetchAcademics.fulfilled, (state, action) => {
         state.loading = false;
-        state.academics = action.payload;
+        state.academics = action.payload.results || action.payload;
       })
       .addCase(fetchAcademics.rejected, (state, action) => {
         state.loading = false;

@@ -66,7 +66,7 @@ const SkillSearch: React.FC<SkillSearchProps> = ({
 
   const handleAddSkill = (skill: Skill) => {
     if (!selectedSkills.some((s) => s.id === skill.id)) {
-      onSelectSkill(skill);
+      onSelectSkill(skill.name);
     }
     setInputValue("");
     setShowSuggestions(false);
@@ -76,7 +76,7 @@ const SkillSearch: React.FC<SkillSearchProps> = ({
     if (inputValue.trim()) {
       const newSkill = inputValue;
 
-      dispatch(postExpertise({ name: newSkill }));
+      dispatch(postExpertise({ id: 0, name: newSkill }));
       // onSelectSkill(newSkill);
       // setInputValue("");
       // setShowSuggestions(false);
@@ -108,21 +108,7 @@ const SkillSearch: React.FC<SkillSearchProps> = ({
             onClick={handleAddUnknownSkill}
             className="absolute inset-y-0 right-3 flex items-center justify-center bg-gradient-to-tr from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-2.5"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 1V15M1 8H15"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <Plus className="w-4 h-4" />
           </Button>
         )}
       </div>

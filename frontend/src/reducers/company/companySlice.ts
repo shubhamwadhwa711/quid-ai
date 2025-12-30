@@ -26,7 +26,9 @@ export const fetchCompanies = createAsyncThunk(
   "company/fetchCompanies",
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await axiosInstanceUnauthorized.get(`/category/${id}/company/`);
+      const response = await axiosInstanceUnauthorized.get(
+        `/category/${id}/company/`
+      );
       // console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -40,10 +42,9 @@ export const fetchAllCompanies = createAsyncThunk(
   "company/fetchAllCompanies",
   async (search, { rejectWithValue }) => {
     try {
-      const response = await axiosInstanceUnauthorized.get(
-        `/all-company/`,
-        { params: search }
-      );
+      const response = await axiosInstanceUnauthorized.get(`/all-company/`, {
+        params: search,
+      });
       // console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -53,7 +54,6 @@ export const fetchAllCompanies = createAsyncThunk(
     }
   }
 );
-
 
 // Create the slice
 const companySlice = createSlice({
@@ -68,7 +68,7 @@ const companySlice = createSlice({
       })
       .addCase(fetchCompanies.fulfilled, (state, action) => {
         state.loading = false;
-        state.companies = action.payload;
+        state.companies = action.payload.results || action.payload;
       })
       .addCase(fetchCompanies.rejected, (state, action) => {
         state.loading = false;
@@ -80,7 +80,7 @@ const companySlice = createSlice({
       })
       .addCase(fetchAllCompanies.fulfilled, (state, action) => {
         state.loading = false;
-        state.companies = action.payload;
+        state.companies = action.payload.results || action.payload;
       })
       .addCase(fetchAllCompanies.rejected, (state, action) => {
         state.loading = false;

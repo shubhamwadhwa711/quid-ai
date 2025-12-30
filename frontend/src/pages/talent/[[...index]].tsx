@@ -21,20 +21,21 @@ const Talent = () => {
   const { usprofile } = useAppSelector((state) => state.USProfile);
   const router = useRouter();
   // const { talenttype, id } = router.query;
-  const talenttype = router.query.index[0];
-  const id = router.query.index[1];
+  const talenttype = router.query.index?.[0] as string | undefined;
+  const id = router.query.index?.[1] as string | undefined;
 
   console.log("talenttype", talenttype);
   console.log("id", id);
   // console.log("Router query",router.query)
   useEffect(() => {
     // console.log("dispatching profile...");
+    if (!id) return;
     if (talenttype === "AI") {
       dispatch(fetchAIProfile(id));
     } else {
       dispatch(fetchUSProfile(id));
     }
-  }, [dispatch]);
+  }, [dispatch, id, talenttype]);
   // console.log("profile", profile);
   const [userData, setUserData] = useState<Profile | null>(null);
   console.log("userData", userData);
@@ -44,8 +45,9 @@ const Talent = () => {
   // useEffect(() => {
   //   setUserData(profile);
   // }, [profile]);
-  const [showConnectForm, setShowConnectForm] = useState();
-  const handleConnectForm = (talent) => {
+  const [showConnectForm, setShowConnectForm] = useState<boolean>(false);
+  const [selectedTalent, setSelectedTalent] = useState<any>(null);
+  const handleConnectForm = (talent: any) => {
     setSelectedTalent(talent);
     setShowConnectForm(true);
   };
@@ -146,7 +148,7 @@ const Talent = () => {
             </div>
             <div className="flex flex-wrap gap-2">
               {talenttype === "AI"
-                ? aiprofile?.skill.map((s, index) => (
+                ? aiprofile?.skill.map((s: any, index: number) => (
                   <span
                     key={index}
                     className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -154,7 +156,7 @@ const Talent = () => {
                     {s.name}
                   </span>
                 ))
-                : usprofile?.skill.map((s, index) => (
+                : usprofile?.skill.map((s: any, index: number) => (
                   <span
                     key={index}
                     className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -205,7 +207,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.language?.map((lang, index) => (
+            ? aiprofile?.language?.map((lang: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -213,7 +215,7 @@ const Talent = () => {
                 {lang.name}
               </span>
             ))
-            : usprofile?.language?.map((lang, index) => (
+            : usprofile?.language?.map((lang: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -238,7 +240,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.education.map((edu, index) => (
+            ? aiprofile?.education.map((edu: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -246,7 +248,7 @@ const Talent = () => {
                 {edu.degree}
               </span>
             ))
-            : usprofile?.education.map((edu, index) => (
+            : usprofile?.education.map((edu: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -271,7 +273,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.available_to?.map((aval) => (
+            ? aiprofile?.available_to?.map((aval: any) => (
               <span
                 key={aval.id}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -279,7 +281,7 @@ const Talent = () => {
                 {aval.name}
               </span>
             ))
-            : usprofile?.available_to?.map((aval) => (
+            : usprofile?.available_to?.map((aval: any) => (
               <span
                 key={aval.id}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -304,7 +306,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.client.map((cli) => (
+            ? aiprofile?.client.map((cli: any) => (
               <span
                 key={cli.id}
                 className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
@@ -312,7 +314,7 @@ const Talent = () => {
                 {cli.name}
               </span>
             ))
-            : usprofile?.client.map((cli) => (
+            : usprofile?.client.map((cli: any) => (
               <span
                 key={cli.id}
                 className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
@@ -337,7 +339,7 @@ const Talent = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4">
           {talenttype === "AI"
-            ? aiprofile?.projects.map((project, index) => (
+            ? aiprofile?.projects.map((project: any, index: number) => (
               <Card
                 onClick={() =>
                   // Only allow navigation if linkedin_data is true
@@ -364,7 +366,7 @@ const Talent = () => {
                 </div>
               </Card>
             ))
-            : usprofile?.projects.map((project, index) => (
+            : usprofile?.projects.map((project: any, index: number) => (
               <Card
                 onClick={() =>
                   // Only allow navigation if linkedin_data is true

@@ -34,17 +34,17 @@ export const EditAcademic = ({ academic }: { academic: Academic }) => {
   });
 
   const dispatch = useAppDispatch();
-  const {profile } = useAppSelector((state) => state.Profile);
-  const handleChange = useCallback((e) => {
+  const { profile } = useAppSelector((state) => state.Profile);
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }, []);
 
   const handleSubmit = useCallback(() => {
     dispatch(
       updateAcademics({
-        id: academic?.profile || profile.id,
+        id: academic?.profile || profile?.id,
         eid: formData.id,
-        data: formData,
+        data: formData as any,
       })
     )
       .unwrap()

@@ -1,44 +1,41 @@
 import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 interface AvailableTo {
   id: number;
   name: string;
 }
 
 interface AvailableToState {
-  availableto: AvailableTo[];
+  availableTo: AvailableTo[];
   loading: boolean;
   error: string | null;
 }
 
 // Initial state
 const initialState: AvailableToState = {
-  availableto: [],
+  availableTo: [],
   loading: false,
   error: null,
 };
 
 // Async Thunk to fetch company data
 export const fetchAvailableTo = createAsyncThunk(
-  "availableto/fetchAvailableTo",
+  "availableTo/fetchAvailableTo",
   async (_, { rejectWithValue }) => {
     try {
-      // console.log("Fetching availableto...");
       const response = await axiosInstanceUnauthorized.get("/available/");
-      // console.log("languages availableto:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch availableto"
+        error.response?.data?.message || "Failed to fetch availableTo"
       );
     }
   }
 );
 
 // Create the slice
-const availabletoSlice = createSlice({
-  name: "availableto",
+const availableToSlice = createSlice({
+  name: "availableTo",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -49,7 +46,7 @@ const availabletoSlice = createSlice({
       })
       .addCase(fetchAvailableTo.fulfilled, (state, action) => {
         state.loading = false;
-        state.availableto = action.payload;
+        state.availableTo = action.payload.results || action.payload;
       })
       .addCase(fetchAvailableTo.rejected, (state, action) => {
         state.loading = false;
@@ -58,4 +55,4 @@ const availabletoSlice = createSlice({
   },
 });
 
-export default availabletoSlice.reducer;
+export default availableToSlice.reducer;

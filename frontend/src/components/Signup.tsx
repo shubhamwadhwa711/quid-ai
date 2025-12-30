@@ -2,6 +2,7 @@ import { Button } from "./ui/button";
 import { Card, CardHeader, CardTitle } from "./ui/card";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 const Signup = () => {
   const router = useRouter();
@@ -39,21 +40,7 @@ const Signup = () => {
               className="px-10 py-6 rounded-3xl proxima-large bg-gradient-to-r mb-8 from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] flex justify-center items-center gap-2"
             >
               <span className="proxima-bold text-white text-xl">Search AI Experts</span>
-              <svg
-                width="18"
-                height="14"
-                viewBox="0 0 18 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1 7H17M17 7L11 1M17 7L11 13"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <ArrowRight className="w-5 h-5" />
             </Button>
           </div>
         </Card>

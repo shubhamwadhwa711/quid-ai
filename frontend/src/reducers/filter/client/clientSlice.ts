@@ -103,7 +103,7 @@ const clientSlice = createSlice({
       })
       .addCase(fetchClient.fulfilled, (state, action) => {
         state.loading = false;
-        state.clients = action.payload; // Assuming payload is an array
+        state.clients = action.payload.results || action.payload; // Assuming payload is an array
       })
       .addCase(fetchClient.rejected, (state, action) => {
         state.loading = false;

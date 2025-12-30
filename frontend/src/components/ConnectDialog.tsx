@@ -18,13 +18,20 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchEnquiry } from "@/reducers/enquiry/enquirySlice";
 import { useRouter } from "next/navigation";
 
-const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
+type ConnectDrawerProps = {
+  talentId: number | null;
+  showConnectForm: boolean;
+  setShowConnectForm: (show: boolean) => void;
+};
+
+
+const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }: ConnectDrawerProps) => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [connectForm, setConnectForm] = useState({
     full_name: "",
     email: "",
     message: "",
-    profile: talentId,
+    profile: talentId || 0,
   });
   const dispatch = useAppDispatch();
 
@@ -34,7 +41,7 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
   //   dispatch(fetchEnquiry());
   // }, [dispatch,id]);
 
-  const handleFormChange = (e) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setConnectForm({
       ...connectForm,
@@ -43,17 +50,35 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
   };
 
   const handleSubmitConnect = () => {
+    // Validate that talentId is provided
+    if (!talentId) {
+      console.error("Talent ID is required to send a connection request");
+      return;
+    }
     // Here you would typically handle the form submission to your backend
-    dispatch(fetchEnquiry(connectForm));
+    dispatch(fetchEnquiry({
+      full_name: connectForm.full_name,
+      email: connectForm.email,
+      message: connectForm.message,
+      profile: talentId,
+    }));
     console.log("Form submitted:", connectForm);
     // Show thank you message
     setFormSubmitted(true);
 
     // Optional: Reset form
-    setConnectForm({ profile: "", full_name: "", email: "", message: "" });
+    setConnectForm({ profile: talentId || 0, full_name: "", email: "", message: "" });
   };
 
   const handleContinueSearching = () => {
+    // Reset form state
+    setFormSubmitted(false);
+    setConnectForm({
+      full_name: "",
+      email: "",
+      message: "",
+      profile: talentId || 0
+    });
     // Close the drawer
     setShowConnectForm(false);
     // Navigate to search page
@@ -61,10 +86,16 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
   };
 
   const handleClose = () => {
+    // Reset form state
+    setFormSubmitted(false);
+    setConnectForm({
+      full_name: "",
+      email: "",
+      message: "",
+      profile: talentId || 0
+    });
     // Close the drawer
     setShowConnectForm(false);
-    // Navigate to search page
-    // router.push("/search");
   };
 
 
@@ -73,6 +104,16 @@ const ConnectDrawer = ({ talentId, showConnectForm, setShowConnectForm }) => {
       open={showConnectForm}
       onOpenChange={(open) => {
         setShowConnectForm(open);
+        // Reset form when drawer closes
+        if (!open) {
+          setFormSubmitted(false);
+          setConnectForm({
+            full_name: "",
+            email: "",
+            message: "",
+            profile: talentId || 0
+          });
+        }
       }}
     >
       <DrawerContent className="bg-gradient-to-t max-w-md w-full rounded-t-3xl from-black via-blue-950 to-black border-white/20 text-white mx-auto left-0 right-0">

@@ -7,6 +7,7 @@ import { profileUserData } from "./profile";
 import { profile } from "console";
 import { fetchCountry } from "../filter/country/countrySlice";
 import { fetchExpertise } from "../filter/expertise/expertiseSlice";
+
 interface User {
   id: number;
   username: string;
@@ -40,8 +41,6 @@ interface Education {
 interface Client {
   id: number;
   name: string;
-  // client: string;
-  // profile: number;
   category: number;
   logo: string;
   is_featured: boolean;
@@ -56,6 +55,12 @@ interface Project {
   start_date: string;
   end_date: string;
   profile: number;
+  tag?: Tags[];
+}
+
+interface Tags {
+  id: number;
+  name: string;
 }
 
 interface Skill {
@@ -98,11 +103,17 @@ interface ProfileState {
   profiles: Profile[];
   LinkedInProfile: any | null;
   loading: boolean;
+  syncLoading: boolean;
   academicsLoading: boolean;
   skillsLoading: boolean;
   error: string | null;
   academicsError: string | null;
   skillsError: string | null;
+  pagination: {
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
 const initialState: ProfileState = {
@@ -110,11 +121,17 @@ const initialState: ProfileState = {
   profiles: [],
   LinkedInProfile: null,
   loading: false,
+  syncLoading: false,
   academicsLoading: false,
   skillsLoading: false,
   error: null,
   academicsError: null,
   skillsError: null,
+  pagination: {
+    count: 0,
+    next: null,
+    previous: null,
+  },
 };
 
 export const fetchLinkedInProfile = createAsyncThunk(
@@ -135,7 +152,6 @@ export const fetchLinkedInProfile = createAsyncThunk(
   }
 );
 
-// NEW - Separate thunk for bulk academics posting
 export const postBulkAcademics = createAsyncThunk(
   "profile/postBulkAcademics",
   async (
@@ -203,13 +219,10 @@ export const postBulkProjects = createAsyncThunk(
                 .padStart(2, "0")}-${proj.end.split("/")[1].padStart(2, "0")}`
             : "",
           description: proj.description || "",
-          url:
-            proj.url ||
-            "https://example.com" /* Default URL if none provided */,
+          url: proj.url || "https://example.com",
           profile: profileId,
         }))
       );
-
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -219,7 +232,6 @@ export const postBulkProjects = createAsyncThunk(
   }
 );
 
-// NEW - Separate thunk for bulk skills posting
 export const postBulkSkills = createAsyncThunk(
   "profile/postBulkSkills",
   async (
@@ -246,6 +258,7 @@ export const postBulkSkills = createAsyncThunk(
     }
   }
 );
+
 export const postBulkClient = createAsyncThunk(
   "profile/postBulkClient",
   async (ClientData: any[]) => {
@@ -263,19 +276,124 @@ export const postBulkClient = createAsyncThunk(
     }
   }
 );
-// Async Thunk to fetch profile data
+
+// Async Thunk to fetch profile data - ONLY fetches from backend, no LinkedIn sync
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (_, { rejectWithValue, dispatch }) => {
     try {
       const response = await axiosInstance.get("/profile/");
-      const profileData = response.data[0];
-      // console.log("Profile data fetched successfully", profileData);
+      const profileData = response.data.results[0]; // Extract from paginated results
+
+      if (!profileData) {
+        console.error("❌ [FETCH PROFILE] No profile found in response");
+        return rejectWithValue("No profile found");
+      }
+
+      console.log("📊 [FETCH PROFILE] Profile data extracted:", {
+        id: profileData.id,
+        user: profileData.user,
+        linkedin_data: profileData.linkedin_data,
+        skills: profileData.skill?.length || 0,
+        education: profileData.education?.length || 0,
+        projects: profileData.projects?.length || 0,
+      });
+
+      // Only fetch LinkedIn data if this is the first time (linkedin_data is false)
+      if (profileData && !profileData.linkedin_data) {
+        console.log(
+          "🆕 [FETCH PROFILE] First login detected! linkedin_data is false"
+        );
+        console.log("🔗 [FETCH PROFILE] Initiating automatic LinkedIn sync...");
+
+        const syncResult = await dispatch(syncWithLinkedIn());
+
+        if (syncResult.type.includes("fulfilled")) {
+          const refreshedResponse = await axiosInstance.get("/profile/");
+          const refreshedProfile = refreshedResponse.data.results[0];
+          console.log("✅ [FETCH PROFILE] Refreshed profile data:", {
+            id: refreshedProfile.id,
+            linkedin_data: refreshedProfile.linkedin_data,
+            skills: refreshedProfile.skill?.length || 0,
+            education: refreshedProfile.education?.length || 0,
+            projects: refreshedProfile.projects?.length || 0,
+          });
+          return refreshedProfile;
+        } else {
+          console.error(
+            "❌ [FETCH PROFILE] LinkedIn sync failed:",
+            syncResult.payload
+          );
+          // Return original profile even if sync fails
+          return profileData;
+        }
+      }
+
+      console.log(
+        "✅ [FETCH PROFILE] Returning existing profile (already synced)"
+      );
+      return profileData;
+    } catch (error: any) {
+      console.error("❌ [FETCH PROFILE] Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch profile"
+      );
+    }
+  }
+);
+
+// NEW: Separate thunk for syncing with LinkedIn (called on first login or when user clicks sync button)
+export const syncWithLinkedIn = createAsyncThunk(
+  "profile/syncWithLinkedIn",
+  async (_, { rejectWithValue, dispatch, getState }: any) => {
+    try {
+      console.log(
+        "🔗 [LINKEDIN SYNC] ==================== STARTING LINKEDIN SYNC ===================="
+      );
+      const state = getState();
+      let profileData = state.Profile.profile;
+
+      // If no profile in state, fetch it first
+      if (!profileData) {
+        console.log(
+          "⚠️ [LINKEDIN SYNC] No profile in state, fetching from backend..."
+        );
+        const response = await axiosInstance.get("/profile/");
+        profileData = response.data.results[0];
+        console.log("✅ [LINKEDIN SYNC] Profile fetched:", profileData?.id);
+      }
+
+      if (!profileData) {
+        console.error("❌ [LINKEDIN SYNC] No profile found!");
+        return rejectWithValue("No profile found");
+      }
+
+      console.log("📋 [LINKEDIN SYNC] Current profile state:", {
+        id: profileData.id,
+        email: profileData.user?.email,
+        current_skills: profileData.skill?.length || 0,
+        current_education: profileData.education?.length || 0,
+        current_projects: profileData.projects?.length || 0,
+      });
 
       // Fetch LinkedIn user info
+      console.log(
+        "🔍 [LINKEDIN SYNC] Step 1: Fetching LinkedIn user info from OAuth..."
+      );
       const linkedInResponse = await axios.get("/api/linkedin-info");
+      console.log("✅ [LINKEDIN SYNC] LinkedIn OAuth data:", {
+        vanityName: linkedInResponse.data.vanityName,
+        name: linkedInResponse.data.name,
+        email: linkedInResponse.data.email,
+      });
 
       // Fetch data from Unipile API
+      console.log("🌐 [LINKEDIN SYNC] Step 2: Calling Unipile API...");
+      console.log(
+        "🌐 [LINKEDIN SYNC] Unipile URL:",
+        `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`
+      );
+
       const UnipileResponse = await axios.request({
         method: "GET",
         url: `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`,
@@ -295,21 +413,50 @@ export const fetchProfile = createAsyncThunk(
           account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
         },
       });
-      //  console.log("UnipileResponse", UnipileResponse.data);
-      // console.log("profileUserData",profileUserData)
-      // const UnipileResponse = { data: profileUserData };
-      // Update profile with headline and summary
-      const countryList = (await dispatch(fetchCountry())).payload;
-      // console.log("countryList", countryList);
-      // console.log("UnipileResponse.data.location", UnipileResponse.data.location);
+
+      console.log("✅ [LINKEDIN SYNC] Unipile API response received:", {
+        headline: UnipileResponse.data.headline,
+        location: UnipileResponse.data.location,
+        skills_count: UnipileResponse.data.skills?.length || 0,
+        education_count: UnipileResponse.data.education?.length || 0,
+        experience_count: UnipileResponse.data.experience?.length || 0,
+        projects_count: UnipileResponse.data.projects?.length || 0,
+      });
+      console.log(
+        "📊 [LINKEDIN SYNC] Full Unipile data:",
+        UnipileResponse.data
+      );
+
+      // Get country list and find matching country
+      console.log("🌍 [LINKEDIN SYNC] Step 3: Matching location to country...");
+      const countryResponse: any =
+        (await dispatch(fetchCountry())).payload || {};
+      const countryList = Array.isArray(countryResponse)
+        ? countryResponse
+        : countryResponse.results || [];
+      const locationParts = UnipileResponse?.data?.location?.split(", ");
       const country = countryList.find(
         (country: any) =>
-          country.name === UnipileResponse?.data?.location?.split(", ")[2]
+          country.name === locationParts?.[locationParts.length - 1]
+      );
+      console.log("✅ [LINKEDIN SYNC] Country match result:", {
+        linkedin_location: UnipileResponse?.data?.location,
+        matched_country: country?.name || "None",
+        country_id: country?.id || "None",
+      });
+
+      // Get expertise/skills list
+      console.log(
+        "🎯 [LINKEDIN SYNC] Step 4: Fetching expertise/skills list..."
       );
       const projectSkillList =
         (await dispatch(fetchExpertise({}))).payload || [];
-      // console.log("projectSkillList", projectSkillList);
-      // Step 1: Create a lookup map for faster access by lowercased name
+      console.log(
+        "✅ [LINKEDIN SYNC] Available skills in system:",
+        projectSkillList?.length || 0
+      );
+
+      // Create skill name to ID mapping
       const skillNameToIdMap = Array.isArray(projectSkillList)
         ? projectSkillList.reduce((acc: Record<string, number>, item: any) => {
             acc[item.name.toLowerCase()] = item.id;
@@ -317,59 +464,90 @@ export const fetchProfile = createAsyncThunk(
           }, {})
         : {};
 
-      // Step 2: Map over each project and replace matching skill names with their IDs
-      const tagList = UnipileResponse?.data?.projects?.map((project: any) => {
-        const tags = project.skills
-          ?.map((skill: string) => skillNameToIdMap[skill.toLowerCase()])
-          ?.filter((id: any): id is number => id !== undefined); // filter out unmatched skills
+      // Map project skills to expertise IDs
+      const tagList =
+        UnipileResponse?.data?.projects?.map((project: any) => {
+          const tags = project.skills
+            ?.map((skill: string) => skillNameToIdMap[skill.toLowerCase()])
+            ?.filter((id: any): id is number => id !== undefined);
+          return tags || [];
+        }) || [];
 
-        return tags;
-      });
+      console.log("🏷️ [LINKEDIN SYNC] Project tags mapped:", tagList);
 
-      if (!profileData.linkedin_data) {
-        await dispatch(
-          updateProfile({
-            id: profileData.id,
-            data: {
-              linkedin_profile_url:
-                UnipileResponse.data.profile_picture_url_large,
-              linkedin_url: `https://linkedin.com/in/${linkedInResponse.data.vanityName}`,
-              country: country ? country.id : null,
-            },
-          })
-        );
-      }
-      if (!profileData.headline && !profileData.linkedin_data) {
-        await dispatch(
-          updateProfile({
-            id: profileData.id,
-            data: {
-              headline: UnipileResponse.data.headline,
-            },
-          })
-        );
-      }
-      if (!profileData.summary && !profileData.linkedin_data) {
-        await dispatch(
-          updateProfile({
-            id: profileData.id,
-            data: {
-              summary: UnipileResponse.data.headline,
-            },
-          })
-        );
-      }
+      // Step 1: Update basic profile info
+      console.log("📝 [LINKEDIN SYNC] Step 5: Updating basic profile info...");
+      const profileUpdateData = {
+        linkedin_profile_url: UnipileResponse.data.profile_picture_url_large,
+        linkedin_url: `https://linkedin.com/in/${linkedInResponse.data.vanityName}`,
+        country: country ? country.id : profileData.country?.id,
+        headline: UnipileResponse.data.headline,
+        summary: UnipileResponse.data.headline,
+      };
+      console.log(
+        "📊 [LINKEDIN SYNC] Profile update payload:",
+        profileUpdateData
+      );
 
-      // Check if education data needs to be posted
-      if (profileData.education.length === 0 && !profileData.linkedin_data) {
+      await dispatch(
+        updateProfile({
+          id: profileData.id,
+          data: profileUpdateData,
+        })
+      );
+      console.log("✅ [LINKEDIN SYNC] Basic profile info updated");
+
+      // Step 2: Post education data if empty
+      console.log("🎓 [LINKEDIN SYNC] Step 6: Checking education data...");
+      console.log(
+        "📊 [LINKEDIN SYNC] Current education count:",
+        profileData.education.length
+      );
+      console.log(
+        "📊 [LINKEDIN SYNC] LinkedIn education count:",
+        UnipileResponse.data.education?.length || 0
+      );
+
+      if (
+        profileData.education.length === 0 &&
+        UnipileResponse.data.education?.length > 0
+      ) {
+        console.log(
+          "📤 [LINKEDIN SYNC] Posting education data...",
+          UnipileResponse.data.education
+        );
         await dispatch(
           postBulkAcademics({
             profileId: profileData.id,
             educationData: UnipileResponse.data.education,
           })
         );
+        console.log("✅ [LINKEDIN SYNC] Education data posted");
+      } else {
+        console.log(
+          "⏭️ [LINKEDIN SYNC] Skipping education (already has data or no LinkedIn education)"
+        );
       }
-      if (profileData.projects.length === 0 && !profileData.linkedin_data) {
+
+      // Step 3: Post projects data if empty
+      console.log("💼 [LINKEDIN SYNC] Step 7: Checking projects data...");
+      console.log(
+        "📊 [LINKEDIN SYNC] Current projects count:",
+        profileData.projects.length
+      );
+      console.log(
+        "📊 [LINKEDIN SYNC] LinkedIn projects count:",
+        UnipileResponse.data.projects?.length || 0
+      );
+
+      if (
+        profileData.projects.length === 0 &&
+        UnipileResponse.data.projects?.length > 0
+      ) {
+        console.log(
+          "📤 [LINKEDIN SYNC] Posting projects data...",
+          UnipileResponse.data.projects
+        );
         await dispatch(
           postBulkProjects({
             profileId: profileData.id,
@@ -377,26 +555,78 @@ export const fetchProfile = createAsyncThunk(
             projectData: UnipileResponse.data.projects,
           })
         );
+        console.log("✅ [LINKEDIN SYNC] Projects data posted");
+      } else {
+        console.log(
+          "⏭️ [LINKEDIN SYNC] Skipping projects (already has data or no LinkedIn projects)"
+        );
       }
-      const ClientData = UnipileResponse?.data?.work_experience.map(
-        (client: any) => {
+
+      // Step 4: Post work experience/companies if empty
+      console.log("🏢 [LINKEDIN SYNC] Step 8: Checking client/company data...");
+      console.log(
+        "📊 [LINKEDIN SYNC] Current client count:",
+        profileData.client.length
+      );
+
+      const ClientData =
+        UnipileResponse?.data?.work_experience?.map((client: any) => {
           return {
             name: client.company || "",
             category: client.category || 1,
           };
-        }
+        }) || [];
+
+      console.log(
+        "📊 [LINKEDIN SYNC] LinkedIn work experience count:",
+        ClientData.length
       );
-      console.log("ClientData", ClientData);
-      if (profileData.client.length === 0 && !profileData.linkedin_data) {
+
+      if (profileData.client.length === 0 && ClientData.length > 0) {
+        console.log("📤 [LINKEDIN SYNC] Posting client data...", ClientData);
         await dispatch(postBulkClient(ClientData));
+        console.log("✅ [LINKEDIN SYNC] Client data posted");
+      } else {
+        console.log(
+          "⏭️ [LINKEDIN SYNC] Skipping clients (already has data or no LinkedIn work experience)"
+        );
       }
-      if (profileData.skill.length === 0 && !profileData.linkedin_data) {
+
+      // Step 5: Post skills if empty
+      console.log("🛠️ [LINKEDIN SYNC] Step 9: Checking skills data...");
+      console.log(
+        "📊 [LINKEDIN SYNC] Current skills count:",
+        profileData.skill.length
+      );
+      console.log(
+        "📊 [LINKEDIN SYNC] LinkedIn skills count:",
+        UnipileResponse.data.skills?.length || 0
+      );
+
+      if (
+        profileData.skill.length === 0 &&
+        UnipileResponse.data.skills?.length > 0
+      ) {
+        console.log(
+          "📤 [LINKEDIN SYNC] Posting skills data...",
+          UnipileResponse.data.skills
+        );
         await dispatch(
           postBulkSkills({
             skillsData: UnipileResponse.data.skills,
           })
         );
+        console.log("✅ [LINKEDIN SYNC] Skills data posted");
+      } else {
+        console.log(
+          "⏭️ [LINKEDIN SYNC] Skipping skills (already has data or no LinkedIn skills)"
+        );
       }
+
+      // Step 6: Mark LinkedIn data as synced
+      console.log(
+        "✅ [LINKEDIN SYNC] Step 10: Marking LinkedIn data as synced..."
+      );
       await dispatch(
         updateProfile({
           id: profileData.id,
@@ -405,14 +635,18 @@ export const fetchProfile = createAsyncThunk(
           },
         })
       );
-      // Now refetch profile after possible updates
-      const refreshedResponse = await axiosInstance.get("/profile/");
-      const refreshedProfileData = refreshedResponse.data[0];
+      console.log("✅ [LINKEDIN SYNC] linkedin_data flag set to true");
 
-      return refreshedProfileData;
+      console.log(
+        "✅ [LINKEDIN SYNC] ==================== LINKEDIN SYNC COMPLETED SUCCESSFULLY ===================="
+      );
+      return { success: true, message: "LinkedIn profile synced successfully" };
     } catch (error: any) {
+      console.error("LinkedIn sync error:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch profile"
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to sync with LinkedIn"
       );
     }
   }
@@ -431,13 +665,12 @@ export const fetchProfiles = createAsyncThunk(
 
             Object.entries(params).forEach(([key, value]) => {
               if (key === "search") {
-                // Ensure search param is a string, not an array
                 searchParams.append(
                   key,
                   Array.isArray(value) ? value[0] : (value as string)
                 );
               } else if (Array.isArray(value)) {
-                value.forEach((v) => searchParams.append(key, v)); // 🔹 Append each array item separately
+                value.forEach((v) => searchParams.append(key, v));
               } else {
                 searchParams.append(key, value as string);
               }
@@ -457,7 +690,6 @@ export const fetchProfiles = createAsyncThunk(
   }
 );
 
-// Async Thunk to update profile data
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async (
@@ -467,8 +699,6 @@ export const updateProfile = createAsyncThunk(
     console.log("Updating profile...", id, data);
     try {
       const headers: any = {};
-      // Only set Content-Type if data is not FormData
-      // (axios will automatically set multipart/form-data for FormData)
       if (!(data instanceof FormData)) {
         headers["Content-Type"] = "application/json";
       }
@@ -569,17 +799,34 @@ const profileSlice = createSlice({
     builder
       // Profile fetching states
       .addCase(fetchProfile.pending, (state) => {
+        console.log(
+          "⏳ [REDUX] fetchProfile.pending - Starting profile fetch..."
+        );
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("Profile fetched successfully", action.payload);
+        console.log(
+          "✅ [REDUX] fetchProfile.fulfilled - Profile loaded into state:",
+          {
+            id: action.payload?.id,
+            user: action.payload?.user?.email,
+            linkedin_data: action.payload?.linkedin_data,
+            skills: action.payload?.skill?.length || 0,
+            education: action.payload?.education?.length || 0,
+            projects: action.payload?.projects?.length || 0,
+          }
+        );
         state.profile = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+        console.error(
+          "❌ [REDUX] fetchProfile.rejected - Error:",
+          action.payload
+        );
       })
 
       // LinkedIn profile states
@@ -600,43 +847,90 @@ const profileSlice = createSlice({
         state.error = action.payload as string;
       })
 
-      // NEW - Bulk academics states
+      // Sync with LinkedIn states
+      .addCase(syncWithLinkedIn.pending, (state) => {
+        console.log(
+          "⏳ [REDUX] syncWithLinkedIn.pending - Starting LinkedIn sync..."
+        );
+        state.syncLoading = true;
+        state.error = null;
+      })
+      .addCase(syncWithLinkedIn.fulfilled, (state) => {
+        state.syncLoading = false;
+        console.log(
+          "✅ [REDUX] syncWithLinkedIn.fulfilled - LinkedIn sync completed in Redux!"
+        );
+      })
+      .addCase(syncWithLinkedIn.rejected, (state, action) => {
+        state.syncLoading = false;
+        state.error = action.payload as string;
+        console.error(
+          "❌ [REDUX] syncWithLinkedIn.rejected - Error:",
+          action.payload
+        );
+      })
+
+      // Bulk academics states
       .addCase(postBulkAcademics.pending, (state) => {
-        state.academicsLoading = false;
+        console.log(
+          "⏳ [REDUX] postBulkAcademics.pending - Posting education data..."
+        );
+        state.academicsLoading = true;
         state.academicsError = null;
       })
       .addCase(postBulkAcademics.fulfilled, (state) => {
         state.academicsLoading = false;
-        console.log("Bulk academics posted successfully");
+        console.log(
+          "✅ [REDUX] postBulkAcademics.fulfilled - Education data posted!"
+        );
       })
       .addCase(postBulkAcademics.rejected, (state, action) => {
         state.academicsLoading = false;
         state.academicsError = action.payload as string;
+        console.error(
+          "❌ [REDUX] postBulkAcademics.rejected - Error:",
+          action.payload
+        );
       })
 
-      // NEW - Bulk skills states
+      // Bulk skills states
       .addCase(postBulkSkills.pending, (state) => {
-        state.skillsLoading = false;
+        console.log(
+          "⏳ [REDUX] postBulkSkills.pending - Posting skills data..."
+        );
+        state.skillsLoading = true;
         state.skillsError = null;
       })
       .addCase(postBulkSkills.fulfilled, (state) => {
         state.skillsLoading = false;
-        console.log("Bulk skills posted successfully");
+        console.log(
+          "✅ [REDUX] postBulkSkills.fulfilled - Skills data posted!"
+        );
       })
       .addCase(postBulkSkills.rejected, (state, action) => {
         state.skillsLoading = false;
         state.skillsError = action.payload as string;
+        console.error(
+          "❌ [REDUX] postBulkSkills.rejected - Error:",
+          action.payload
+        );
       })
 
       // Profiles fetching states
       .addCase(fetchProfiles.pending, (state) => {
-        state.loading = false;
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchProfiles.fulfilled, (state, action) => {
         state.loading = false;
-        console.log("Profiles fetched successfully", action.payload);
-        state.profiles = action.payload;
+        state.profiles = action.payload.results || action.payload;
+        if (action.payload.count !== undefined) {
+          state.pagination = {
+            count: action.payload.count,
+            next: action.payload.next,
+            previous: action.payload.previous,
+          };
+        }
       })
       .addCase(fetchProfiles.rejected, (state, action) => {
         state.loading = false;
@@ -665,7 +959,6 @@ const profileSlice = createSlice({
       })
       .addCase(updateAcademics.fulfilled, (state, action) => {
         state.loading = false;
-        // Update the education item in the profile
         if (state.profile && state.profile.education) {
           const index = state.profile.education.findIndex(
             (edu) => edu.id === action.payload.id
@@ -688,7 +981,6 @@ const profileSlice = createSlice({
       })
       .addCase(postAcademics.fulfilled, (state, action) => {
         state.loading = false;
-        // Add the new education item to the profile
         if (state.profile && state.profile.education) {
           state.profile.education.push(action.payload);
         }
@@ -706,7 +998,6 @@ const profileSlice = createSlice({
       })
       .addCase(removeAcademics.fulfilled, (state, action) => {
         state.loading = false;
-        // Remove the education item from the profile
         if (state.profile && state.profile.education) {
           state.profile.education = state.profile.education.filter(
             (edu) => edu.id !== action.payload.removedId

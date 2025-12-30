@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
 import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
-interface Tags {
+export interface Tags {
   id: number;
   name: string;
 }
@@ -18,14 +18,14 @@ export interface Project {
 }
 
 interface ProjectState {
-  project: Project;
+  project: Project | null;
   loading: boolean;
   error: string | null;
 }
 
 // Initial state
 const initialState: ProjectState = {
-  project: [],
+  project: null,
   loading: false,
   error: null,
 };
@@ -33,7 +33,7 @@ const initialState: ProjectState = {
 // Async Thunk to fetch company data
 export const fetchProject = createAsyncThunk(
   "project/fetchProject",
-  async ({ tid, pid }, { rejectWithValue }) => {
+  async ({ tid, pid }: { tid: string; pid: string }, { rejectWithValue }) => {
     console.log("fetchProject id", { tid, pid });
     try {
       console.log("Fetching fetchProject...");
@@ -148,12 +148,8 @@ const projectSlice = createSlice({
       })
       .addCase(addProject.fulfilled, (state, action) => {
         state.loading = false;
-        // Add new project to the projects list
-        if (Array.isArray(state.project)) {
-          state.project.push(action.payload);
-        } else {
-          state.project = [action.payload];
-        }
+        // For single project state, just set it
+        state.project = action.payload;
         state.error = null;
       })
       .addCase(addProject.rejected, (state, action) => {
@@ -166,12 +162,8 @@ const projectSlice = createSlice({
       })
       .addCase(removeProject.fulfilled, (state, action) => {
         state.loading = false;
-        // Remove project from the projects list
-        if (Array.isArray(state.project)) {
-          state.project = state.project.filter(
-            (proj) => proj.id !== action.meta.arg.prid
-          );
-        }
+        // Clear project state when removed
+        state.project = null;
         state.error = null;
       })
       .addCase(removeProject.rejected, (state, action) => {

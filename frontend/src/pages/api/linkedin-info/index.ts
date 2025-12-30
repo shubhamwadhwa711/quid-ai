@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]"; // adjust the path to your auth config
+import { authOptions } from "../auth/[...nextauth]";
 import axios from "axios";
 
 export default async function handler(
@@ -11,7 +11,7 @@ export default async function handler(
 
   console.log("Session:", session);
 
-  const accessToken = session?.provider?.tokens?.access_token; // or however you're storing LinkedIn token
+  const accessToken = session?.provider?.tokens?.access_token;
 
   if (!accessToken) {
     return res.status(401).json({ error: "Unauthorized: No access token" });

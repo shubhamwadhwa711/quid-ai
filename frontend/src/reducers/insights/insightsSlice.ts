@@ -4,9 +4,9 @@ import axios from "axios";
 interface Insights {
   id: number;
   title: string;
-  created_at:string;
-  featured_image:string;
-  category:number;
+  created_at: string;
+  featured_image: string;
+  category: number;
 }
 
 interface InsightsState {
@@ -27,7 +27,9 @@ export const fetchInsights = createAsyncThunk(
   "insight/fetchInsights",
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await axiosInstanceUnauthorized.get(`/insight-category/${id}/insight/`);
+      const response = await axiosInstanceUnauthorized.get(
+        `/insight-category/${id}/insight/`
+      );
       // console.log("Insights fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -50,7 +52,7 @@ const insightsSlice = createSlice({
       })
       .addCase(fetchInsights.fulfilled, (state, action) => {
         state.loading = false;
-        state.insights = action.payload;
+        state.insights = action.payload.results || action.payload;
       })
       .addCase(fetchInsights.rejected, (state, action) => {
         state.loading = false;

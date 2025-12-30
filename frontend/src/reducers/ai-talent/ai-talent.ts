@@ -74,28 +74,40 @@ export interface Profile {
 }
 
 interface ProfileState {
-  aiprofile: Profile | undefined;
-  aiprofiles: Profile[];
+  aiProfile: Profile | undefined;
+  aiProfiles: Profile[];
   loading: boolean;
   error: string | null;
+  pagination: {
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
 // Initial state
 const initialState: ProfileState = {
-  aiprofile: undefined,
-  aiprofiles: [],
+  aiProfile: undefined,
+  aiProfiles: [],
   loading: false,
   error: null,
+  pagination: {
+    count: 0,
+    next: null,
+    previous: null,
+  },
 };
 
 // Async Thunk to fetch company data
 export const fetchAIProfile = createAsyncThunk(
   "profile/fetchAIProfile",
-  async (id, { rejectWithValue }) => {
-    console.log("Fetching AI profile...");
+  async (id: string, { rejectWithValue }) => {
+    // console.log("Fetching AI profile...");
     try {
-      const response = await axiosInstanceUnauthorized.get(`/top-profile/${id}/`);
-      console.log("aiprofile", response.data);
+      const response = await axiosInstanceUnauthorized.get(
+        `/top-profile/${id}/`
+      );
+      // console.log("aiProfile", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -107,10 +119,10 @@ export const fetchAIProfile = createAsyncThunk(
 export const fetchAIProfiles = createAsyncThunk(
   "profile/fetchAIProfiles",
   async (id, { rejectWithValue }) => {
-    console.log("Fetching AI profile...");
+    // console.log("Fetching AI profile...");
     try {
       const response = await axiosInstanceUnauthorized.get(`/top-profile/`);
-      console.log("profile fetched:", response.data);
+      // console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -133,19 +145,26 @@ const AIProfileSlice = createSlice({
       })
       .addCase(fetchAIProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.aiprofile = action.payload;
+        state.aiProfile = action.payload;
       })
       .addCase(fetchAIProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-       .addCase(fetchAIProfiles.pending, (state) => {
+      .addCase(fetchAIProfiles.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchAIProfiles.fulfilled, (state, action) => {
         state.loading = false;
-        state.aiprofiles = action.payload;
+        state.aiProfiles = action.payload.results || action.payload;
+        if (action.payload.count !== undefined) {
+          state.pagination = {
+            count: action.payload.count,
+            next: action.payload.next,
+            previous: action.payload.previous,
+          };
+        }
       })
       .addCase(fetchAIProfiles.rejected, (state, action) => {
         state.loading = false;

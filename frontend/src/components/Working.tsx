@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Stepper, Step, StepProps } from "./ui/stepper";
 import { motion, useScroll } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 const Working = () => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -81,21 +82,7 @@ const Working = () => {
         >
           <div className="flex justify-center items-center gap-2">
             Search AI Experts
-            <svg
-              width="18"
-              height="14"
-              viewBox="0 0 18 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 7H17M17 7L11 1M17 7L11 13"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ArrowRight className="w-5 h-5" />
           </div>
         </Button>
       </div>

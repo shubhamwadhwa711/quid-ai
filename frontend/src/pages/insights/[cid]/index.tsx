@@ -29,7 +29,8 @@ export default function InsightsPage() {
 
   useEffect(() => {
     if (cid) {
-      dispatch(fetchInsights(cid));
+      const categoryId = Array.isArray(cid) ? cid[0] : cid;
+      dispatch(fetchInsights(Number(categoryId)));
     }
   }, [dispatch, cid]);
 
@@ -46,10 +47,10 @@ export default function InsightsPage() {
           {/* Header outside of Card */}
           <div className="mb-4 text-center">
             <h2 className="text-3xl proxima-regular text-white font-semibold">
-               <span className="text-[#425BFF] ">QuidAI Insights</span>
+              <span className="text-[#425BFF] ">QuidAI Insights</span>
             </h2>
             <p className="text-base text-white/70">
-             Glance at our AI Insights
+              Glance at our AI Insights
             </p>
           </div>
 
@@ -72,30 +73,30 @@ export default function InsightsPage() {
                     }
                     className="hover:shadow-md bg-gray-800  transition flex-shrink-0 w-full h-56"
                   >
-                  <div className="relative h-3/5">
-                    <img
-                      src={insight.featured_image || "/insight.jpg"}
-                      alt={insight.title}
-                      className="w-full h-full object-fill rounded-t-lg"
-                    />
-                  </div>
+                    <div className="relative h-3/5">
+                      <img
+                        src={insight.featured_image || "/insight.jpg"}
+                        alt={insight.title}
+                        className="w-full h-full object-fill rounded-t-lg"
+                      />
+                    </div>
 
-                  <div className="h-2/5 flex  flex-col justify-between p-4">
-                    <CardDescription className="text-sm text-gray-500">
-                      <div className="flex items-center gap-2">
-                        <div className="bg-[#425BFF] h-2 w-2 rounded-full"></div>
-                        <div className="text-slate-400 proxima-bold">
-                          {insight.created_at.slice(0, 10)}
+                    <div className="h-2/5 flex  flex-col justify-between p-4">
+                      <CardDescription className="text-sm text-gray-500">
+                        <div className="flex items-center gap-2">
+                          <div className="bg-[#425BFF] h-2 w-2 rounded-full"></div>
+                          <div className="text-slate-400 proxima-bold">
+                            {insight.created_at.slice(0, 10)}
+                          </div>
                         </div>
-                      </div>
-                    </CardDescription>
-                    <CardTitle className="text-sm text-start text-white proxima-FAQ">
-                      {insight.title}
-                    </CardTitle>
-                  </div>
-                </Card>
-              </div>
-            ))}
+                      </CardDescription>
+                      <CardTitle className="text-sm text-start text-white proxima-FAQ">
+                        {insight.title}
+                      </CardTitle>
+                    </div>
+                  </Card>
+                </div>
+              ))}
             </div>
           )}
         </div>

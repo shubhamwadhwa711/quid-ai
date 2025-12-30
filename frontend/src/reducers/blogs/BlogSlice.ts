@@ -35,10 +35,12 @@ const initialState: BlogState = {
 // Async Thunk to fetch company data
 export const fetchBlogs = createAsyncThunk(
   "blogs/fetchBlogs",
-  async ({ cid, iid }, { rejectWithValue }) => {
+  async ({ cid, iid }: { cid: string; iid: string }, { rejectWithValue }) => {
     try {
       console.log("Fetching Blogs...", { cid, iid });
-      const response = await axiosInstanceUnauthorized.get(`/insight-category/${cid}/insight/${iid}/`);
+      const response = await axiosInstanceUnauthorized.get(
+        `/insight-category/${cid}/insight/${iid}/`
+      );
       console.log("Blogs fetched:", response.data);
       return response.data;
     } catch (error: any) {

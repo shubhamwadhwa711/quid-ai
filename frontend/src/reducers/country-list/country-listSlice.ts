@@ -25,33 +25,30 @@ export const fetchCountryList = createAsyncThunk(
   async (SearchData, { rejectWithValue }) => {
     try {
       console.log("Fetching country...", SearchData);
-      const response = await axiosInstanceUnauthorized.get(
-        `/country/`,
-        {
-          params: SearchData,
-          paramsSerializer: (params) => {
-            const searchParams = new URLSearchParams();
+      const response = await axiosInstanceUnauthorized.get(`/country/`, {
+        params: SearchData,
+        paramsSerializer: (params) => {
+          const searchParams = new URLSearchParams();
 
-            Object.entries(params).forEach(([key, value]) => {
-              if (key === "search") {
-                console.log("value", value);
-                // Ensure search param is a string, not an array
-                searchParams.append(
-                  key,
-                  Array.isArray(value) ? value[0] : (value as string)
-                );
-              } else if (Array.isArray(value)) {
-                value.forEach((v) => searchParams.append(key, v)); // 🔹 Append each array item separately
-              } else {
-                searchParams.append(key, value as string);
-              }
-            });
+          Object.entries(params).forEach(([key, value]) => {
+            if (key === "search") {
+              console.log("value", value);
+              // Ensure search param is a string, not an array
+              searchParams.append(
+                key,
+                Array.isArray(value) ? value[0] : (value as string)
+              );
+            } else if (Array.isArray(value)) {
+              value.forEach((v) => searchParams.append(key, v)); // 🔹 Append each array item separately
+            } else {
+              searchParams.append(key, value as string);
+            }
+          });
 
-            return searchParams.toString();
-          },
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+          return searchParams.toString();
+        },
+        headers: { "Content-Type": "application/json" },
+      });
 
       return response.data;
     } catch (error: any) {
@@ -75,7 +72,7 @@ const countrySlice = createSlice({
       })
       .addCase(fetchCountryList.fulfilled, (state, action) => {
         state.loading = false;
-        state.countryList = action.payload;
+        state.countryList = action.payload.results || action.payload;
       })
       .addCase(fetchCountryList.rejected, (state, action) => {
         state.loading = false;

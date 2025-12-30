@@ -48,7 +48,7 @@ const FAQSlice = createSlice({
       })
       .addCase(fetchFAQ.fulfilled, (state, action) => {
         state.loading = false;
-        state.FAQ = action.payload;
+        state.FAQ = action.payload.results || action.payload;
       })
       .addCase(fetchFAQ.rejected, (state, action) => {
         state.loading = false;

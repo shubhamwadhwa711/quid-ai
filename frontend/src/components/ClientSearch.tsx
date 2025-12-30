@@ -6,6 +6,7 @@ import {
   X,
   Plus,
   Image as ImageIcon,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,14 +25,36 @@ import {
   SelectValue,
 } from "./ui/select";
 import { fetchProfile } from "@/reducers/profile/profileSlice";
+import React from "react";
+
+interface Client {
+  id: number;
+  name: string;
+  logo?: string;
+  category?: number;
+  company_name?: string;
+}
+
+interface ClientSearchProps {
+  profileID: number;
+  selectedClients: Client[];
+  onSelectClients: (client: Client) => void;
+  onRemoveClient: (clientId: number) => void;
+  icon?: React.ReactNode;
+}
+
 const ClientSearch = ({
   profileID,
   selectedClients,
   onSelectClients,
   onRemoveClient,
   icon = <User size={18} />,
-}) => {
-  const [formData, setFormData] = useState({
+}: ClientSearchProps) => {
+  const [formData, setFormData] = useState<{
+    category: number;
+    name: string;
+    logo: File | null;
+  }>({
     category: 1,
     name: "",
     logo: null,
@@ -40,12 +63,12 @@ const ClientSearch = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const [imageFile, setImageFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [companyID, setCompanyID] = useState(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [companyID, setCompanyID] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const dropdownRef = useRef(null);
-  const inputRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const { clients, loading, error } = useAppSelector((state) => state.Client);
   const { companySectors } = useAppSelector((state) => state.CompanySector);
@@ -85,13 +108,13 @@ const ClientSearch = ({
       // Create a FormData object from the state
       const submitFormData = new FormData();
       submitFormData.append("name", formData.name || searchTerm);
-      submitFormData.append("category", formData.category);
+      submitFormData.append("category", formData.category.toString());
 
       if (formData.logo || imageFile) {
-        submitFormData.append("logo", formData.logo || imageFile);
+        submitFormData.append("logo", formData.logo || imageFile as File);
       }
       // Dispatch the action with the formData and wait for it to complete
-      dispatch(postClient(submitFormData));
+      dispatch(postClient(submitFormData as any));
       // handleResetClient();
     } catch (err) {
       console.error("Failed to add client:", err);
@@ -99,9 +122,9 @@ const ClientSearch = ({
   };
 
   // Select client
-  const handleSelectClient = (client) => {
+  const handleSelectClient = (client: Client) => {
     // console.log("Selected client:", client);
-    if (!selectedClients.some((c) => c.id === client.id)) {
+    if (!selectedClients.some((c: Client) => c.id === client.id)) {
       // onSelectClients(client);
       dispatch(
         updateClient({
@@ -113,7 +136,7 @@ const ClientSearch = ({
         .unwrap()
         .then(() => {
           onSelectClients(client);
-          dispatch(fetchProfile());
+          dispatch(fetchProfile({}));
         });
     }
 
@@ -134,8 +157,8 @@ const ClientSearch = ({
     // inputRef.current.focus();
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     // Update both the image file state and the formData state
@@ -147,11 +170,11 @@ const ClientSearch = ({
 
     // Create preview
     const reader = new FileReader();
-    reader.onloadend = () => setPreviewUrl(reader.result);
+    reader.onloadend = () => setPreviewUrl(reader.result as string);
     reader.readAsDataURL(file);
   };
 
-  const handleCategoryChange = (value) => {
+  const handleCategoryChange = (value: string) => {
     const categoryId = Number(value);
     setFormData((prev) => ({
       ...prev,
@@ -160,7 +183,7 @@ const ClientSearch = ({
   };
 
   const clientExists = clients?.some(
-    (c) => c.company_name?.toLowerCase() === searchTerm.toLowerCase()
+    (c: Client) => (c as any).company_name?.toLowerCase() === searchTerm.toLowerCase()
   );
 
   const handleClientUpdate = () => {
@@ -185,7 +208,7 @@ const ClientSearch = ({
       )
         .unwrap()
         .then(() => {
-          dispatch(fetchProfile());
+          dispatch(fetchProfile({}));
         })
         .catch((error) => {
           console.error("Error removing project:", error);
@@ -213,14 +236,14 @@ const ClientSearch = ({
     }
   };
 
-  const handleRemoveClient = async (clientID) => {
+  const handleRemoveClient = async (clientID: number) => {
     setIsLoading(true);
     try {
       // Delete client and wait for completion
       await dispatch(deleteClient({ id: clientID }))
         .unwrap()
         .then(() => {
-          dispatch(fetchProfile());
+          dispatch(fetchProfile({}));
         })
         .catch((error) => {
           console.error("Error removing project:", error);
@@ -273,21 +296,7 @@ const ClientSearch = ({
             {isLoading ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
             ) : (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8 1V15M1 8H15"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Plus className="w-4 h-4" />
             )}
           </Button>
         )}
@@ -300,14 +309,14 @@ const ClientSearch = ({
           className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-[#1E1E38] rounded-xl shadow-lg border border-[#3A3A5A]"
         >
           {clients?.length > 0 ? (
-            clients.map((cli) => (
+            clients.map((cli: Client) => (
               <div
                 key={cli.id}
                 onClick={() => handleSelectClient(cli)}
                 className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-[#2A2A4A] transition"
               >
                 <span className="text-white">{cli.name}</span>
-                {selectedClients.some((c) => c.id === cli.id) && (
+                {selectedClients.some((c: Client) => c.id === cli.id) && (
                   <Check size={16} className="text-[#7C2BD3]" />
                 )}
               </div>
@@ -325,7 +334,7 @@ const ClientSearch = ({
       {/* Selected Clients */}
       {selectedClients.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2 overflow-y-scroll hide-scrollbar max-h-96  ">
-          {selectedClients.map((client) => (
+          {selectedClients.map((client: Client) => (
             <div
               key={client.id}
               className="flex items-center bg-[#2A2A4A] text-white px-3 py-1 rounded-full"
@@ -335,7 +344,6 @@ const ClientSearch = ({
                 size={14}
                 className="cursor-pointer"
                 onClick={() => handleRemoveClient(client.id)}
-                disabled={isLoading}
               />
             </div>
           ))}
@@ -417,21 +425,7 @@ const ClientSearch = ({
         ) : (
           <>
             Update Client
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4 12H20M20 12L14 6M20 12L14 18"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ArrowRight className="w-6 h-6" />
           </>
         )}
       </Button> */}

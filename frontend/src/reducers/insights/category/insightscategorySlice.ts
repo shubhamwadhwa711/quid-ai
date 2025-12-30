@@ -24,7 +24,9 @@ export const fetchInsightCategory = createAsyncThunk(
   "insight/fetchInsightCategory",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstanceUnauthorized.get("/insight-category/");
+      const response = await axiosInstanceUnauthorized.get(
+        "/insight-category/"
+      );
       // console.log("Companies fetched:", response.data);
       return response.data;
     } catch (error: any) {
@@ -48,7 +50,7 @@ const insightCategorySlice = createSlice({
       })
       .addCase(fetchInsightCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.insightsCategory = action.payload;
+        state.insightsCategory = action.payload.results || action.payload;
       })
       .addCase(fetchInsightCategory.rejected, (state, action) => {
         state.loading = false;

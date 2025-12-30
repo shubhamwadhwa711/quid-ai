@@ -74,30 +74,40 @@ export interface Profile {
 }
 
 interface ProfileState {
-  usprofile: Profile | undefined;
-  usprofiles: Profile[];
+  usProfile: Profile | undefined;
+  usProfiles: Profile[];
   loading: boolean;
   error: string | null;
+  pagination: {
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
 // Initial state
 const initialState: ProfileState = {
-  usprofile: undefined,
-  usprofiles: [],
+  usProfile: undefined,
+  usProfiles: [],
   loading: false,
   error: null,
+  pagination: {
+    count: 0,
+    next: null,
+    previous: null,
+  },
 };
 
 // Async Thunk to fetch company data
 export const fetchUSProfile = createAsyncThunk(
   "profile/fetchUSProfile",
-  async (id, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     console.log("Fetching US profile...");
     try {
       const response = await axiosInstanceUnauthorized.get(
         `/us-profile/${id}/`
       );
-      console.log("profile fetched:", response.data);
+      // console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -110,12 +120,10 @@ export const fetchUSProfile = createAsyncThunk(
 export const fetchUSProfiles = createAsyncThunk(
   "profile/fetchUSProfiles",
   async (_, { rejectWithValue }) => {
-    console.log("Fetching US profile...");
+    // console.log("Fetching US profile...");
     try {
-      const response = await axiosInstanceUnauthorized.get(
-        `/us-profile/`
-      );
-      console.log("profile fetched:", response.data);
+      const response = await axiosInstanceUnauthorized.get(`/us-profile/`);
+      // console.log("profile fetched:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -138,7 +146,7 @@ const USProfileSlice = createSlice({
       })
       .addCase(fetchUSProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.usprofile = action.payload;
+        state.usProfile = action.payload;
       })
       .addCase(fetchUSProfile.rejected, (state, action) => {
         state.loading = false;
@@ -150,7 +158,14 @@ const USProfileSlice = createSlice({
       })
       .addCase(fetchUSProfiles.fulfilled, (state, action) => {
         state.loading = false;
-        state.usprofiles = action.payload;
+        state.usProfiles = action.payload.results || action.payload;
+        if (action.payload.count !== undefined) {
+          state.pagination = {
+            count: action.payload.count,
+            next: action.payload.next,
+            previous: action.payload.previous,
+          };
+        }
       })
       .addCase(fetchUSProfiles.rejected, (state, action) => {
         state.loading = false;

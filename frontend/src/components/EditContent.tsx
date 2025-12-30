@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, ArrowRight } from "lucide-react";
 import CountrySearch from "@/components/CountrySearch";
 import { useAppDispatch } from "@/store/store";
 import { updateProfile } from "@/reducers/profile/profileSlice";
@@ -11,48 +11,76 @@ import LanguageSearch from "@/components/LanguageSearch";
 import AcademicsSearch from "@/components/academics/AcademicsSearch";
 import { AvailableTo } from "@/components/AvailableToSelect";
 import ClientSearch from "@/components/ClientSearch";
+import React from "react";
+
+interface EditField {
+  key: string;
+  type: "text" | "textarea" | "tags";
+  label?: string;
+  placeholder?: string;
+  accessor?: string;
+  icon?: React.ReactNode;
+}
+
+interface Skill {
+  id: number;
+  name: string;
+}
+
+interface Country {
+  id: number;
+  name: string;
+}
+
+interface EditContentProps {
+  title: string;
+  fields: EditField[];
+  currentValues: any;
+  onSave: (formData: Record<string, any>) => void;
+  onClose: () => void;
+}
+
 // EditContent component to be used in both Dialog and Drawer
-const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
+const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditContentProps) => {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(
     currentValues?.country
   );
   const [skills, setSkills] = useState<{ id: number; name: string }[]>([]);
-  const [selectedSkills, setSelectedSkills] = useState<[]>(
-    currentValues?.skill
+  const [selectedSkills, setSelectedSkills] = useState<Skill[]>(
+    currentValues?.skill || []
   );
-  const [selectedlanguages, setSelectedLanguages] = useState<
-    { id: number; name: string }[]
-  >(currentValues?.language);
-  const [selectedAvailable, setSelectedAvailable] = useState<
-    { id: number; name: string }[]
-  >(currentValues?.available_to);
-  const [selectedClients, setSelectedClients] = useState<[]>(
-    currentValues?.client
+  const [selectedlanguages, setSelectedLanguages] = useState<Skill[]>(
+    currentValues?.language || []
   );
-  console.log("currentValues",currentValues)
+  const [selectedAvailable, setSelectedAvailable] = useState<Skill[]>(
+    currentValues?.available_to || []
+  );
+  const [selectedClients, setSelectedClients] = useState<Skill[]>(
+    currentValues?.client || []
+  );
+  console.log("currentValues", currentValues)
   const [fullName, setFullName] = useState<string | null>(null);
   // console.log("CurrentValues", currentValues);
   // console.log(title, fields, currentValues);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<Record<string, any>>({});
   const [tagInput, setTagInput] = useState("");
-  const [currentField, setCurrentField] = useState(null);
+  const [currentField, setCurrentField] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   // Initialize form data when currentValues changes
   useEffect(() => {
-    const initialData = {};
+    const initialData: Record<string, any> = {};
     fields.forEach((field) => {
       if (field.key === "fullName") {
         // Combine first and last name for the fullName field
-        initialData[field.key] = `${currentValues?.user?.first_name || ""} ${
-          currentValues?.user?.last_name || ""
-        }`.trim();
+        initialData[field.key] = `${currentValues?.user?.first_name || ""} ${currentValues?.user?.last_name || ""
+          }`.trim();
       } else if (field.type === "tags") {
         // For tag fields, use the array from currentValues or create an empty array
-        console.log("currentValues",currentValues);
-        console.log("field.key", field.key);
-        console.log("currentValues[field.key]", currentValues[field.key]);
+        // console.log("currentValues", currentValues);
+        // console.log("field.key", field.key);
+        // console.log("currentValues[field.key]", currentValues[field.key]);
         initialData[field.key] = currentValues[field.key]
-          ? currentValues[field.key]?.map((item) => item.name || item.degree)
+          ? currentValues[field.key]?.map((item: any) => item.name || item.degree)
           : [];
       } else {
         // For text/textarea fields, use the value directly
@@ -65,29 +93,29 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     setFormData(initialData);
   }, [currentValues, fields]);
 
-  const handleChange = (key, value) => {
+  const handleChange = (key: string, value: any) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleTagAdd = (field) => {
+  const handleTagAdd = (field: string) => {
     if (!tagInput.trim()) return;
 
-    const newTags = [...(formData[field] || []), tagInput.trim()];
+    const newTags = [...((formData as any)[field] || []), tagInput.trim()];
     setFormData((prev) => ({ ...prev, [field]: newTags }));
     setTagInput("");
     setCurrentField(null);
   };
 
-  const handleTagRemove = (field, index) => {
-    const newTags = [...formData[field]];
+  const handleTagRemove = (field: string, index: number) => {
+    const newTags = [...(formData as any)[field]];
     newTags.splice(index, 1);
     setFormData((prev) => ({ ...prev, [field]: newTags }));
   };
-  const handleSelectSkill = (skill) => {
+  const handleSelectSkill = (skill: Skill) => {
     console.log("handleSelectSkill", skill);
     setSelectedSkills((prev) => [...prev, skill]);
   };
-  const handleSelectClient = (client) => {
+  const handleSelectClient = (client: Skill) => {
     console.log("handleSelectClient", client);
     setSelectedClients((prev) => [...prev, client]);
   };
@@ -99,7 +127,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
       prev.filter((client) => client.id !== clientId)
     );
   };
-  const handleSelectLanguage = (language) => {
+  const handleSelectLanguage = (language: Skill) => {
     console.log("handleSelectLanguage", language);
     setSelectedLanguages((prev) => [...prev, language]);
   };
@@ -111,11 +139,11 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     );
   };
 
-  const handleAvailableOnChange = (availability) => {
+  const handleAvailableOnChange = (availability: Skill[]) => {
     console.log("availability", availability);
     setSelectedAvailable(availability);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
     onClose();
@@ -136,24 +164,24 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
     //   );
     //   return;
     // }
-    if (formData.available) {
+    if ((formData as any).available) {
       updatedData.available_to = selectedAvailable.map((aval) => aval.id);
     }
-    if (formData.skill) {
+    if ((formData as any).skill) {
       updatedData.skill = selectedSkills.map((skill) => skill.id);
     }
     // Ensure country is passed as an ID
 
-    if (formData.country || formData.country === "") {
-      updatedData.country = selectedCountry.id;
+    if ((formData as any).country || (formData as any).country === "") {
+      updatedData.country = (selectedCountry as any)?.id;
     }
-    if (formData.languages) {
+    if ((formData as any).languages) {
       // selectedlanguages.map((lang) => lang.id)
       updatedData.language = selectedlanguages.map((lang) => lang.id);
     }
     // Split fullName into firstName and lastName
-    if (formData.fullName) {
-      const nameParts = formData.fullName.trim().split(" ");
+    if ((formData as any).fullName) {
+      const nameParts = (formData as any).fullName.trim().split(" ");
       updatedData.first_name = nameParts[0];
       updatedData.last_name = nameParts.slice(1).join(" ") || ""; // Handle cases where there's no last name
       delete updatedData.fullName; // Remove fullName after splitting
@@ -171,10 +199,10 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
           {field.key === "country" ? (
             <CountrySearch
               selectedCountry={selectedCountry}
-              onChange={(country) => {
+              onChange={(country: any) => {
                 setSelectedCountry(country);
               }}
-              icon={field.icon}
+              icon={field.icon as any}
             />
           ) : (
             field.type === "text" && (
@@ -184,7 +212,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
                 </div>
                 <input
                   type="text"
-                  value={formData[field.key] || ""}
+                  value={(formData as any)[field.key] || ""}
                   onChange={(e) => handleChange(field.key, e.target.value)}
                   placeholder={field.placeholder || `Enter ${field.label}`}
                   className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg border-none focus:ring-2 focus:ring-[#7C2BD3]"
@@ -199,7 +227,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
                 {field.icon}
               </div>
               <textarea
-                value={formData[field.key] || ""}
+                value={(formData as any)[field.key] || ""}
                 onChange={(e) => handleChange(field.key, e.target.value)}
                 placeholder={field.placeholder || `Enter ${field.label}`}
                 className="w-full p-2 pl-10 bg-[#262640] text-white rounded-lg min-h-[200px] border-none focus:ring-2 focus:ring-[#7C2BD3]"
@@ -211,8 +239,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
             <div className="space-y-2">
               {field.key === "skill" && (
                 <SkillSearch
-                  selectedSkills={selectedSkills}
-                  onSelectSkill={handleSelectSkill}
+                  selectedSkills={selectedSkills as any}
+                  onSelectSkill={handleSelectSkill as any}
                   onRemoveSkill={handleRemoveSkill}
                 />
               )}
@@ -235,8 +263,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
               {field.key === "languages" && (
                 <LanguageSearch
-                  selectedLanguages={selectedlanguages}
-                  onSelectLanguage={handleSelectLanguage}
+                  selectedLanguages={selectedlanguages as any}
+                  onSelectLanguage={handleSelectLanguage as any}
                   onRemoveLanguage={handleRemoveLanguage}
                 />
               )}
@@ -273,8 +301,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
 
           {field.key === "projectTags" && (
             <div className="flex flex-wrap gap-2">
-              {currentValues?.projects?.flatMap((project) =>
-                project.tag.map((t) => (
+              {currentValues?.projects?.flatMap((project: any) =>
+                project.tag.map((t: any) => (
                   <Badge
                     key={t.id}
                     variant="none"
@@ -302,21 +330,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }) => {
               className="w-11/12 bg-gradient-to-r proxima-bold fixed bottom-1 from-[#7C2BD3] to-[#075AA8] text-white rounded-full p-6"
             >
               Update {title}
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4 12H20M20 12L14 6M20 12L14 18"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <ArrowRight className="w-6 h-6" />
             </Button>
           )}
         </div>

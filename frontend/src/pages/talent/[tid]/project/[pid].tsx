@@ -9,12 +9,14 @@ const ProjectView = () => {
   const { project, loading, error } = useAppSelector((state) => state.Project);
   useEffect(() => {
     // console.log("dispatching profile...");
-    dispatch(fetchProject({ tid, pid }));
-  }, [dispatch]);
+    if (tid && pid) {
+      dispatch(fetchProject({ tid: tid as string, pid: pid as string }));
+    }
+  }, [dispatch, tid, pid]);
   console.log("project", project);
   return (
     <div className="py-20 px-10 max-w-md">
-      <div key={pid} className="flex flex-col  gap-y-4">
+      <div key={pid as React.Key} className="flex flex-col  gap-y-4">{" "}
         <h1 className="proxima-bold text-xl">{project?.title}</h1>
         <div className="flex flex-wrap gap-2">
           {project?.tag?.map((t) => (

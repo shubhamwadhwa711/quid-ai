@@ -21,8 +21,10 @@ export default function BlogPage() {
   console.log("id", cid);
   console.log("iid", iid);
   useEffect(() => {
-    dispatch(fetchBlogs({ cid, iid }));
-  }, []);
+    if (cid && iid) {
+      dispatch(fetchBlogs({ cid: cid as string, iid: iid as string }));
+    }
+  }, [cid, iid, dispatch]);
 
   console.log("inisghts", insights);
   console.log("INSIDE BlogPage");

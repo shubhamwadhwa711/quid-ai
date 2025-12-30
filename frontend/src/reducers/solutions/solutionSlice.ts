@@ -48,7 +48,7 @@ const solutionsSlice = createSlice({
       })
       .addCase(fetchSolutions.fulfilled, (state, action) => {
         state.loading = false;
-        state.Solutions = action.payload;
+        state.Solutions = action.payload.results || action.payload;
       })
       .addCase(fetchSolutions.rejected, (state, action) => {
         state.loading = false;

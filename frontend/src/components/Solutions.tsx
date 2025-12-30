@@ -82,21 +82,7 @@ const Solutions = () => {
           className="px-6 py-6 proxima-bold text-xl rounded-full bg-gradient-to-r from-[#7C2BD3] via-[#5C3CD3] to-[#075AA8] text-white"
         >
           Get Connected For Free
-          <svg
-            width="18"
-            height="14"
-            viewBox="0 0 18 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1 7H17M17 7L11 1M17 7L11 13"
-              stroke="white"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowRight className="w-5 h-5 ml-2" />
         </Button>
       </div>
     </div>

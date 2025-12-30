@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
+import { ArrowRight } from "lucide-react";
 
 import { motion } from "framer-motion";
 
@@ -60,21 +61,7 @@ export default function JoinExpertCTA() {
                                 <span className="proxima-bold text-white text-xl">
                                     Join as Expert
                                 </span>
-                                <svg
-                                    width="18"
-                                    height="14"
-                                    viewBox="0 0 18 14"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M1 7H17M17 7L11 1M17 7L11 13"
-                                        stroke="white"
-                                        strokeWidth="1.5"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
+                                <ArrowRight className="w-5 h-5" />
                             </Button>
                         </Link>
                     </div>

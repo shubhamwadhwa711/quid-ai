@@ -49,7 +49,7 @@ const countrySlice = createSlice({
       })
       .addCase(fetchCountry.fulfilled, (state, action) => {
         state.loading = false;
-        state.country = action.payload;
+        state.country = action.payload.results || action.payload;
       })
       .addCase(fetchCountry.rejected, (state, action) => {
         state.loading = false;

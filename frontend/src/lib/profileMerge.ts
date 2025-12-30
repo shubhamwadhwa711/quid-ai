@@ -1,4 +1,4 @@
-export const MergeProfile = (quidAIProfile, LinkedInProfile) => {
+export const mergeProfiles = (quidAIProfile: any, LinkedInProfile: any) => {
   console.log("LinkedInProfile", LinkedInProfile);
   console.log("quidAIProfile", quidAIProfile);
   return {

@@ -3,7 +3,7 @@ import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface Expertise {
+export interface Expertise {
   id: number;
   name: string;
 }
@@ -22,23 +22,23 @@ const initialState: ExpertiseState = {
 };
 
 // Async Thunk to fetch expertise data
-export const fetchExpertise = createAsyncThunk<Expertise[], Record<string, any>>(
-  "expertise/fetchExpertise",
-  async (searchData, { rejectWithValue }) => {
-    try {
-      console.log("Fetching expertise with params:", searchData);
-      const response = await axiosInstanceUnauthorized.get("/skill/", {
-        params: searchData,
-      });
-      // console.log("Expertise fetched successfully:", response.data);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch expertise"
-      );
-    }
+export const fetchExpertise = createAsyncThunk<
+  Expertise[],
+  Record<string, any>
+>("expertise/fetchExpertise", async (searchData, { rejectWithValue }) => {
+  try {
+    console.log("Fetching expertise with params:", searchData);
+    const response = await axiosInstanceUnauthorized.get("/skill/", {
+      params: searchData,
+    });
+    // console.log("Expertise fetched successfully:", response.data);
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to fetch expertise"
+    );
   }
-);
+});
 
 // Async Thunk to post new expertise data
 export const postExpertise = createAsyncThunk<Expertise, Expertise>(
@@ -71,7 +71,7 @@ const expertiseSlice = createSlice({
       })
       .addCase(fetchExpertise.fulfilled, (state, action) => {
         state.loading = false;
-        state.expertise = action.payload;
+        state.expertise = (action.payload as any).results || action.payload;
       })
       .addCase(fetchExpertise.rejected, (state, action) => {
         state.loading = false;

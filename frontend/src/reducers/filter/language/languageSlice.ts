@@ -56,7 +56,7 @@ const languageSlice = createSlice({
       })
       .addCase(fetchLanguage.fulfilled, (state, action) => {
         state.loading = false;
-        state.language = action.payload;
+        state.language = action.payload.results || action.payload;
       })
       .addCase(fetchLanguage.rejected, (state, action) => {
         state.loading = false;

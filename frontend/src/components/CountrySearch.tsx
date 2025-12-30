@@ -3,23 +3,35 @@ import { Check, ChevronDown, MapPin, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fetchCountryList } from "@/reducers/country-list/country-listSlice";
 import { useAppSelector, useAppDispatch } from "@/store/store";
+import React from "react";
+
+interface Country {
+  id: number;
+  name: string;
+}
+
+interface CountrySearchProps {
+  selectedCountry: Country | null;
+  onChange: (country: Country | null) => void;
+  icon?: React.ReactNode;
+}
 
 const CountrySearch = ({
   selectedCountry,
   onChange,
   icon = <MapPin size={18} />,
-}) => {
+}: CountrySearchProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef(null);
-  const inputRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const { countryList } = useAppSelector((state) => state.CountryList);
   console.log("Inside country search",)
   // Dispatch search action when the user types
   useEffect(() => {
     if (searchTerm.length > 0) {
-      dispatch(fetchCountryList({ SearchData: searchTerm }));
+      dispatch(fetchCountryList({ SearchData: searchTerm } as any));
     }
   }, [searchTerm, dispatch]);
 
@@ -32,12 +44,12 @@ const CountrySearch = ({
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
+        !(dropdownRef.current as any).contains(event.target) &&
         inputRef.current &&
-        !inputRef.current.contains(event.target)
+        !(inputRef.current as any).contains(event.target)
       ) {
         setShowDropdown(false);
       }
@@ -47,7 +59,7 @@ const CountrySearch = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelectCountry = (country) => {
+  const handleSelectCountry = (country: Country) => {
     setSearchTerm(country.name);
     onChange(country);
     setShowDropdown(false);
@@ -57,7 +69,7 @@ const CountrySearch = ({
     setSearchTerm("");
     onChange(null);
     setShowDropdown(false);
-    inputRef.current.focus();
+    inputRef.current?.focus();
   };
   console.log("selectedCountry", selectedCountry);
   return (
@@ -99,9 +111,8 @@ const CountrySearch = ({
         >
           <ChevronDown
             size={18}
-            className={`transition-transform ${
-              showDropdown ? "rotate-180" : ""
-            }`}
+            className={`transition-transform ${showDropdown ? "rotate-180" : ""
+              }`}
           />
         </Button>
       </div>

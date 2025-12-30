@@ -8,7 +8,7 @@ import {
   DrawerTrigger,
 } from "../ui/drawer";
 import { Button } from "../ui/button";
-import { Calendar, PlusSquare } from "lucide-react";
+import { Calendar, PlusSquare, Plus } from "lucide-react";
 
 import { X, Image as ImageIcon, Check } from "lucide-react";
 
@@ -23,6 +23,8 @@ import {
   fetchExpertise,
   postExpertise,
 } from "@/reducers/filter/expertise/expertiseSlice";
+
+import { Expertise } from "@/reducers/filter/expertise/expertiseSlice";
 
 type ProjectAddFormProps = {
   defaultOpen?: boolean;
@@ -65,9 +67,9 @@ const PROJECT_FIELDS = [
 const initialFormState = {
   projectTitle: "",
   projectDescription: "",
-  projectTags: [],
-  projectStartDate: null,
-  projectEndDate: null,
+  projectTags: [] as Expertise[],
+  projectStartDate: null as string | null,
+  projectEndDate: null as string | null,
 };
 export const ProjectAddForm = ({
   profileId,
@@ -77,7 +79,7 @@ export const ProjectAddForm = ({
   const [formData, setFormData] = useState(initialFormState);
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [tagInput, setTagInput] = useState("");
-  const [tagSuggestions, setTagSuggestions] = useState([]);
+  const [tagSuggestions, setTagSuggestions] = useState<Expertise[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const dispatch = useAppDispatch();
@@ -85,12 +87,12 @@ export const ProjectAddForm = ({
   // Reference for debounce timer
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   // Reference for tag input element for keyboard navigation
-  const tagInputRef = useRef(null);
+  const tagInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch initial tag suggestions when the form opens
   useEffect(() => {
     if (isOpen) {
-      dispatch(fetchExpertise())
+      dispatch(fetchExpertise({}))
         .unwrap()
         .then((response) => {
           setTagSuggestions(response);
@@ -101,7 +103,7 @@ export const ProjectAddForm = ({
     }
   }, [isOpen, dispatch]);
 
-  const handleChange = (key, value) => {
+  const handleChange = (key: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [key]: value,
@@ -109,7 +111,7 @@ export const ProjectAddForm = ({
   };
 
   const handleTagAdd = useCallback(
-    (tagToAdd = null) => {
+    (tagToAdd: Expertise | string | null = null) => {
       // If a specific tag is passed, use it; otherwise use the input value
       const tagValue = tagToAdd || tagInput.trim();
 
@@ -135,14 +137,14 @@ export const ProjectAddForm = ({
         debounceTimerRef.current = null;
       }
 
-      const newTag =
+      const newTag: Partial<Expertise> =
         typeof tagValue === "object" ? tagValue : { name: tagValue.trim() };
 
       // If the tag already has an ID (from suggestions), add it directly
-      if (newTag.id) {
+      if ((newTag as Expertise).id) {
         setFormData((prev) => ({
           ...prev,
-          projectTags: [...(prev.projectTags || []), newTag],
+          projectTags: [...(prev.projectTags || []), newTag as Expertise],
         }));
         setTagInput("");
         setShowSuggestions(false);
@@ -150,11 +152,11 @@ export const ProjectAddForm = ({
       }
 
       // Otherwise, create a new tag via API
-      dispatch(postExpertise(newTag))
+      dispatch(postExpertise(newTag as Expertise))
         .unwrap()
         .then((response) => {
           // If the API returns the created tag with an ID, use that
-          const tagWithId = response?.id ? response : newTag;
+          const tagWithId = response?.id ? response : newTag as Expertise;
 
           setFormData((prev) => ({
             ...prev,
@@ -162,7 +164,7 @@ export const ProjectAddForm = ({
           }));
 
           // Refresh suggestions after adding a new tag
-          dispatch(fetchExpertise())
+          dispatch(fetchExpertise({}))
             .unwrap()
             .then((response) => {
               setTagSuggestions(response);
@@ -179,7 +181,7 @@ export const ProjectAddForm = ({
   );
 
   // Handle tag input keydown events (for Enter key support and navigation)
-  const handleTagInputKeyDown = (e) => {
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleTagAdd();
@@ -199,7 +201,7 @@ export const ProjectAddForm = ({
   };
 
   // Handle suggestion item keydown for keyboard navigation
-  const handleSuggestionKeyDown = (e, tag, index) => {
+  const handleSuggestionKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, tag: Expertise, index: number) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleTagAdd(tag);
@@ -227,7 +229,7 @@ export const ProjectAddForm = ({
   };
 
   // Debounced version of tag input change that will fetch suggestions
-  const debouncedTagInputChange = (e) => {
+  const debouncedTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setTagInput(newValue);
 
@@ -250,7 +252,7 @@ export const ProjectAddForm = ({
     // Set new timeout
     debounceTimerRef.current = setTimeout(() => {
       // Fetch suggestions based on the input
-      dispatch(fetchExpertise(newValue.trim()))
+      dispatch(fetchExpertise({ search: newValue.trim() }))
         .unwrap()
         .then((response) => {
           // Filter suggestions to exclude tags already added to the project
@@ -272,7 +274,7 @@ export const ProjectAddForm = ({
     }, 300); // 300ms debounce delay for suggestions
   };
 
-  const handleTagRemove = (tagToRemove) => {
+  const handleTagRemove = (tagToRemove: Expertise) => {
     const updatedTags = formData.projectTags.filter(
       (tag) => tag.id !== tagToRemove.id
     );
@@ -283,25 +285,25 @@ export const ProjectAddForm = ({
     }));
   };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       setProjectFile(file);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const submissionData = new FormData();
     submissionData.append("title", formData.projectTitle);
-    submissionData.append("profile", profileId);
+    submissionData.append("profile", profileId.toString());
     submissionData.append("description", formData.projectDescription);
-    submissionData.append("start_date", formData.projectStartDate);
-    submissionData.append("end_date", formData.projectEndDate);
+    submissionData.append("start_date", formData.projectStartDate || "");
+    submissionData.append("end_date", formData.projectEndDate || "");
 
     formData.projectTags.forEach((tag) => {
-      submissionData.append("tag", tag.id);
+      submissionData.append("tag", tag.id.toString());
     });
 
     if (projectFile) {
@@ -340,12 +342,12 @@ export const ProjectAddForm = ({
 
   // Click outside handler for suggestions
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         showSuggestions &&
         tagInputRef.current &&
-        !tagInputRef.current.contains(event.target) &&
-        !event.target.closest(".tag-suggestions-container")
+        !tagInputRef.current.contains(event.target as Node) &&
+        !(event.target as Element).closest(".tag-suggestions-container")
       ) {
         setShowSuggestions(false);
       }
@@ -382,21 +384,7 @@ export const ProjectAddForm = ({
           variant="ghost"
           className="h-8 w-8 rounded-full"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8 1V15M1 8H15"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Plus className="w-4 h-4" />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="mx-auto max-w-md bg-gradient-to-br rounded-t-3xl h-4/5 from-black via-[#0F0F30] to-[#0F0F30] text-white">
@@ -404,18 +392,7 @@ export const ProjectAddForm = ({
           <DrawerTitle>Add Project</DrawerTitle>
           <DrawerClose asChild>
             <Button variant="none" className="absolute right-4 top-2">
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6.9998 8.40005L2.0998 13.3C1.91647 13.4834 1.68314 13.575 1.3998 13.575C1.11647 13.575 0.883138 13.4834 0.699804 13.3C0.516471 13.1167 0.424805 12.8834 0.424805 12.6C0.424805 12.3167 0.516471 12.0834 0.699804 11.9L5.5998 7.00005L0.699804 2.10005C0.516471 1.91672 0.424805 1.68338 0.424805 1.40005C0.424805 1.11672 0.516471 0.883382 0.699804 0.700048C0.883138 0.516715 1.11647 0.425049 1.3998 0.425049C1.68314 0.425049 1.91647 0.516715 2.0998 0.700048L6.9998 5.60005L11.8998 0.700048C12.0831 0.516715 12.3165 0.425049 12.5998 0.425049C12.8831 0.425049 13.1165 0.516715 13.2998 0.700048C13.4831 0.883382 13.5748 1.11672 13.5748 1.40005C13.5748 1.68338 13.4831 1.91672 13.2998 2.10005L8.3998 7.00005L13.2998 11.9C13.4831 12.0834 13.5748 12.3167 13.5748 12.6C13.5748 12.8834 13.4831 13.1167 13.2998 13.3C13.1165 13.4834 12.8831 13.575 12.5998 13.575C12.3165 13.575 12.0831 13.4834 11.8998 13.3L6.9998 8.40005Z"
-                  fill="white"
-                />
-              </svg>
+              <X className="w-3.5 h-3.5" />
             </Button>
           </DrawerClose>
         </DrawerHeader>
@@ -433,7 +410,7 @@ export const ProjectAddForm = ({
                   <input
                     type="text"
                     required
-                    value={formData[field.key] || ""}
+                    value={(formData as any)[field.key] || ""}
                     onChange={(e) => handleChange(field.key, e.target.value)}
                     placeholder={field.placeholder}
                     className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl border-none focus:ring-2 focus:ring-[#7C2BD3]"
@@ -493,7 +470,7 @@ export const ProjectAddForm = ({
                     {field.icon}
                   </div>
                   <textarea
-                    value={formData[field.key] || ""}
+                    value={(formData as any)[field.key] || ""}
                     onChange={(e) => handleChange(field.key, e.target.value)}
                     placeholder={field.placeholder}
                     className="w-full p-2 pl-10 bg-[#262640] text-white rounded-3xl h-28 border-none focus:ring-2 focus:ring-[#7C2BD3]"
@@ -525,21 +502,7 @@ export const ProjectAddForm = ({
                       onClick={() => handleTagAdd()}
                       className="bg-[#7C2BD3] text-white hover:bg-[#6620B0] h-8 w-8 rounded-full"
                     >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M8 1V15M1 8H15"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                      <Plus className="w-4 h-4" />
                     </Button>
                   </div>
 
