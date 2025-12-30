@@ -29,9 +29,10 @@ class AssociatedCompanyViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
     def get_queryset(self):
-        category_id = self.kwargs['category_pk']
+        category_id = self.kwargs.get('category_pk')
+        if category_id is None:
+            return AssociatedCompany.objects.all()        
         return AssociatedCompany.objects.filter(category_id=category_id) 
-
 class AllCompany(viewsets.ModelViewSet):
     """
     API view to list all company.
@@ -80,7 +81,9 @@ class InsightsViewSet(viewsets.ModelViewSet):
     http_method_names = ['get']
 
     def get_queryset(self):
-        category_id = self.kwargs['category_pk']
+        category_id = self.kwargs.get('category_pk')
+        if category_id is None:
+            return Insights.objects.all()
         return Insights.objects.filter(category_id=category_id)
     
 
