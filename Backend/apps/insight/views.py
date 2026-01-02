@@ -9,6 +9,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db.models import Min
 
 
 class CompanyCategoryViewSet(viewsets.ModelViewSet):
@@ -61,8 +62,13 @@ class AllCompany(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        return super().get_queryset().distinct('name')
-
+        ids = (
+            AssociatedCompany.objects
+            .values('name')
+            .annotate(id=Min('id'))
+            .values_list('id', flat=True)
+        )
+        return AssociatedCompany.objects.filter(id__in=ids)
 
 class Testimonial(viewsets.ModelViewSet):
     """
