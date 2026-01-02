@@ -67,11 +67,11 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    if instance.profile:
-        # Ensure the profile is saved after the user is created
-        instance.profile.save()
+# @receiver(post_save, sender=User)
+# def save_user_profile(sender, instance, **kwargs):
+#     if instance.profile:
+#         # Ensure the profile is saved after the user is created
+#         instance.profile.save()
 
  
        
