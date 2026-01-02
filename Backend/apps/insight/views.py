@@ -30,7 +30,7 @@ class AssociatedCompanyViewSet(viewsets.ModelViewSet):
 
     permission_classes = [AllowAny]
     serializer_class = AssociatedCompanySerializer
-    http_method_names = ["get", "patch"]
+    http_method_names = ["get"]
 
     def get_queryset(self):
         category_id = self.kwargs.get("category_pk")
@@ -47,7 +47,7 @@ class AllCompany(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = AssociatedCompany.objects.all()
     serializer_class = AssociatedCompanySerializer
-    http_method_names = ["get", "post"]
+    http_method_names = ["get", "post","patch"]
     filter_backends = [SearchFilter]
     search_fields = ["name"]
 
