@@ -60,6 +60,10 @@ class AllCompany(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
+    def get_queryset(self):
+        return super().get_queryset().distinct('name')
+
+
 class Testimonial(viewsets.ModelViewSet):
     """
     API view to list all testimonial.
