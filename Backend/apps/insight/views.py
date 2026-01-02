@@ -62,14 +62,20 @@ class AllCompany(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        ids = (
-            AssociatedCompany.objects
-            .values('name')
-            .annotate(id=Min('id'))
-            .values_list('id', flat=True)
-        )
-        return AssociatedCompany.objects.filter(id__in=ids)
+        queryset = AssociatedCompany.objects.all()
 
+        category_id = self.request.query_params.get("category")
+        if category_id:
+            queryset = queryset.filter(category_id=category_id)
+
+        ids = (
+            queryset
+            .values("name")
+            .annotate(id=Min("id"))
+            .values_list("id", flat=True)
+        )
+
+        return AssociatedCompany.objects.filter(id__in=ids)
 class Testimonial(viewsets.ModelViewSet):
     """
     API view to list all testimonial.
