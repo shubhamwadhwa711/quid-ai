@@ -42,8 +42,8 @@ interface EditContentProps {
 
 // EditContent component to be used in both Dialog and Drawer
 const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditContentProps) => {
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(
-    currentValues?.country
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(
+    currentValues?.country || null
   );
   const [skills, setSkills] = useState<{ id: number; name: string }[]>([]);
   const [selectedSkills, setSelectedSkills] = useState<Skill[]>(
@@ -84,9 +84,8 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditCont
           : [];
       } else {
         // For text/textarea fields, use the value directly
-        console.log("currentValues.user", currentValues?.user);
-        console.log("field.accessor", get(currentValues, field.accessor, ""));
-        initialData[field.key] = get(currentValues, field.accessor, "");
+        const accessor = field.accessor || field.key;
+        initialData[field.key] = get(currentValues, accessor, "");
       }
     });
     console.log("initialData", initialData);
@@ -113,14 +112,29 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditCont
   };
   const handleSelectSkill = (skill: Skill) => {
     console.log("handleSelectSkill", skill);
+    // Add to local state
     setSelectedSkills((prev) => [...prev, skill]);
+    
+    // Immediately update backend
+    const updatedSkills = [...selectedSkills, skill].map(s => s.id);
+    dispatch(updateProfile({ 
+      id: currentValues.id, 
+      data: { skill: updatedSkills } 
+    }));
   };
   const handleSelectClient = (client: Skill) => {
     console.log("handleSelectClient", client);
     setSelectedClients((prev) => [...prev, client]);
   };
   const handleRemoveSkill = (skillId: number) => {
-    setSelectedSkills((prev) => prev.filter((skill) => skill.id !== skillId));
+    const updatedSkills = selectedSkills.filter((skill) => skill.id !== skillId);
+    setSelectedSkills(updatedSkills);
+    
+    // Immediately update backend
+    dispatch(updateProfile({ 
+      id: currentValues.id, 
+      data: { skill: updatedSkills.map(s => s.id) } 
+    }));
   };
   const handleRemoveClient = (clientId: number) => {
     setSelectedClients((prev) =>
@@ -129,19 +143,37 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditCont
   };
   const handleSelectLanguage = (language: Skill) => {
     console.log("handleSelectLanguage", language);
-    setSelectedLanguages((prev) => [...prev, language]);
+    const updatedLanguages = [...selectedlanguages, language];
+    setSelectedLanguages(updatedLanguages);
+    
+    // Immediately update backend
+    dispatch(updateProfile({ 
+      id: currentValues.id, 
+      data: { language: updatedLanguages.map(l => l.id) } 
+    }));
   };
 
   const handleRemoveLanguage = (languageId: number) => {
     console.log("handleRemoveLanguage", languageId);
-    setSelectedLanguages((prev) =>
-      prev.filter((lang) => lang.id !== languageId)
-    );
+    const updatedLanguages = selectedlanguages.filter((lang) => lang.id !== languageId);
+    setSelectedLanguages(updatedLanguages);
+    
+    // Immediately update backend
+    dispatch(updateProfile({ 
+      id: currentValues.id, 
+      data: { language: updatedLanguages.map(l => l.id) } 
+    }));
   };
 
   const handleAvailableOnChange = (availability: Skill[]) => {
     console.log("availability", availability);
     setSelectedAvailable(availability);
+    
+    // Immediately update backend
+    dispatch(updateProfile({ 
+      id: currentValues.id, 
+      data: { available_to: availability.map(a => a.id) } 
+    }));
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -173,7 +205,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditCont
     // Ensure country is passed as an ID
 
     if ((formData as any).country || (formData as any).country === "") {
-      updatedData.country = (selectedCountry as any)?.id;
+      updatedData.country = selectedCountry ? selectedCountry.id : null;
     }
     if ((formData as any).languages) {
       // selectedlanguages.map((lang) => lang.id)
@@ -242,6 +274,7 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditCont
                   selectedSkills={selectedSkills as any}
                   onSelectSkill={handleSelectSkill as any}
                   onRemoveSkill={handleRemoveSkill}
+                  profileId={currentValues?.id}
                 />
               )}
 
@@ -323,7 +356,12 @@ const EditContent = ({ title, fields, currentValues, onSave, onClose }: EditCont
             </div>
           )}
 
-          {field.key != "featuredClients" && (
+          {/* Show update button for text fields and country, hide for auto-updating fields */}
+          {field.key !== "featuredClients" && 
+           field.key !== "skill" && 
+           field.key !== "languages" && 
+           field.key !== "available" && 
+           field.key !== "academics" && (
             <Button
               onClick={handleUpdate}
               type="submit"

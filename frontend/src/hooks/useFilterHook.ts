@@ -45,12 +45,12 @@ export const useFilterManagement = () => {
   // Fetch all filter options when the hook is used
   useEffect(() => {
     // Dispatch all filter fetching actions
-    dispatch(fetchAcademics({} as any));
+    dispatch(fetchAcademics());
     dispatch(fetchExpertise({}));
-    dispatch(fetchCountry({}));
+    dispatch(fetchCountry());
     dispatch(fetchClient({}));
-    dispatch(fetchLanguage({}));
-    dispatch(fetchAvailableTo({} as any));
+    dispatch(fetchLanguage({ search: "" } as any));
+    dispatch(fetchAvailableTo());
   }, [dispatch]);
 
   // Centralized method to update filters

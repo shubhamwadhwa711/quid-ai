@@ -30,6 +30,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Spinner } from "flowbite-react";
 import { Badge } from "@/components/ui/badge";
+import { LinkedInSyncPreview } from "@/components/LinkedInSyncPreview";
 // Main Profile Component
 const ProfileScreen = () => {
   const { data: session } = useSession();
@@ -38,6 +39,7 @@ const ProfileScreen = () => {
   const { profile, loading, syncLoading, error } = useAppSelector((state) => state.Profile);
 
   const [isCopiedURL, setIsCopiedURL] = useState(false);
+  const [linkedInPreviewOpen, setLinkedInPreviewOpen] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -65,14 +67,10 @@ const ProfileScreen = () => {
   };
 
   const handleSyncWithLinkedIn = () => {
-    console.log("� [PROFILE SCREEN] Sync with LinkedIn button clicked!");
-    console.log("�📋 [PROFILE SCREEN] Current profile state before sync:", {
-      id: profile?.id,
-      linkedin_data: profile?.linkedin_data,
-      skills: profile?.skill?.length || 0,
-      education: profile?.education?.length || 0,
-    });
-    dispatch(syncWithLinkedIn());
+    console.log("🔵 LinkedIn button clicked!");
+    console.log("🔵 syncLoading:", syncLoading);
+    console.log("🔵 linkedInPreviewOpen:", linkedInPreviewOpen);
+    setLinkedInPreviewOpen(true);
   };
 
   // Define handlers for different popups
@@ -316,17 +314,17 @@ const ProfileScreen = () => {
             <Button
               onClick={handleSyncWithLinkedIn}
               disabled={syncLoading}
-              className="w-full bg-[#0A66C2] hover:bg-[#085BA8] text-lg proxima-bold text-white rounded-full transition-colors gap-2 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full relative z-50 bg-[#0A66C2] hover:bg-[#085BA8] text-lg proxima-bold text-white rounded-full transition-colors gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {syncLoading ? (
                 <>
                   <Spinner size="sm" />
-                  <span>Syncing...</span>
+                  Syncing...
                 </>
               ) : (
                 <>
                   <Linkedin className="w-5 h-5" />
-                  <span className="proxima-bold">Sync with LinkedIn</span>
+                  Sync with LinkedIn
                 </>
               )}
             </Button>
@@ -408,8 +406,8 @@ const ProfileScreen = () => {
           </Button>
         </div>
         <div className="flex flex-wrap gap-2 min-h-12 p-2">
-          {profile?.languages && profile.languages.length > 0 ? (
-            profile.languages.map((lang, index) => (
+          {profile?.language && profile.language.length > 0 ? (
+            profile.language.map((lang, index) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -509,13 +507,19 @@ const ProfileScreen = () => {
         <div className="flex flex-wrap gap-2 min-h-12 p-2">
           {profile?.client && profile.client.length > 0 ? (
             profile.client.map((cli, index) => (
-              <span
+              <div
                 key={cli.id}
-                className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
+                className="px-3 py-2 rounded-3xl bg-white/20 text-xs font-bold flex items-center gap-2"
               >
-                {/* <img src={cli.logo} alt="" className="uniform-logo-inverted " /> */}
-                {cli.name}
-              </span>
+                {cli.logo && (
+                  <img 
+                    src={cli.logo} 
+                    alt={cli.name} 
+                    className="w-5 h-5 rounded-full object-cover"
+                  />
+                )}
+                <span>{cli.name}</span>
+              </div>
             ))
           ) : (
             <span className="text-sm text-white/50">
@@ -557,6 +561,12 @@ const ProfileScreen = () => {
           </DrawerContent>
         </Drawer>
       )}
+      
+      {/* LinkedIn Sync Preview Dialog */}
+      <LinkedInSyncPreview 
+        open={linkedInPreviewOpen} 
+        onOpenChange={setLinkedInPreviewOpen}
+      />
     </div>
   );
 };

@@ -19,12 +19,13 @@ export default function Custom404() {
         },
     };
 
+    const itemEasing: [number, number, number, number] = [0.17, 0.55, 0.55, 1];
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.8, ease: 'easeOut' },
+            transition: { duration: 0.8, ease: itemEasing },
         },
     };
 

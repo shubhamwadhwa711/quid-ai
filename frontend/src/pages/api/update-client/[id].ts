@@ -37,14 +37,21 @@ export default async function handler(
 
       // Append text fields
       for (const key in fields) {
-        formData.append(key, fields[key][0]); // `fields` is an object with arrays
+        const value = Array.isArray(fields[key]) ? fields[key][0] : fields[key];
+        if (value !== undefined) {
+          formData.append(key, value as string);
+        }
       }
 
       // Append files if any
       for (const key in files) {
-        const file = files[key] as formidable.File;
-        const fileStream = fs.createReadStream(file.filepath);
-        formData.append(key, fileStream, file.originalFilename);
+        const fileEntry = files[key];
+        const file = Array.isArray(fileEntry) ? fileEntry[0] : fileEntry;
+        if (file) {
+          const fileStream = fs.createReadStream(file.filepath);
+          const filename = file.originalFilename || undefined;
+          formData.append(key, fileStream as any, filename);
+        }
       }
 
       // Send the processed form data to the backend

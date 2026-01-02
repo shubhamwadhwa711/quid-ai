@@ -68,6 +68,8 @@ export interface Profile {
   industry: Industry;
   country: Country;
   linkedin_url: string;
+  linkedin_profile_url?: string;
+  linkedin_data?: boolean;
   projects: Project[];
   available_to?: Availability[];
   languages?: Language[];

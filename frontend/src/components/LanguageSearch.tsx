@@ -12,7 +12,7 @@ interface Language {
 
 interface LanguageSearchProps {
   selectedLanguages: Language[];
-  onSelectLanguage: (language: string) => void;
+  onSelectLanguage: (language: Language) => void;
   onRemoveLanguage: (languageId: number) => void;
 }
 
@@ -23,9 +23,7 @@ const LanguageSearch: React.FC<LanguageSearchProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const dispatch = useAppDispatch();
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { language } = useAppSelector((state) => state.Language);
 
@@ -42,32 +40,14 @@ const LanguageSearch: React.FC<LanguageSearchProps> = ({
     if (debouncedValue.trim()) {
         console.log("debouncedValue",debouncedValue)
       dispatch(fetchLanguage({ search: debouncedValue }));
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
     }
   }, [debouncedValue, dispatch]);
-
-  // Handle clicking outside to close suggestions
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleAddLanguage = (language: Language) => {
     if (!selectedLanguages.some((l) => l.id === language.id)) {
       onSelectLanguage(language);
     }
     setInputValue("");
-    setShowSuggestions(false);
   };
   console.log("INSIDE LANGUAGES")
   return (
@@ -85,43 +65,59 @@ const LanguageSearch: React.FC<LanguageSearchProps> = ({
         />
       </div>
 
-      {/* Suggestion Dropdown */}
-      {showSuggestions && language.length > 0 && (
-        <div
-          ref={dropdownRef}
-          className="absolute z-10 mt-1 w-full bg-[#262640] rounded-lg shadow-lg max-h-40 overflow-y-auto"
-        >
-          {language.map((language) => (
-            <div
-              key={language.id}
-              onClick={() => handleAddLanguage(language)}
-              className="p-2 cursor-pointer hover:bg-[#7C2BD3] text-white"
-            >
-              {language.name}
-            </div>
-          ))}
+      {/* Available Languages - Inline Results */}
+      {debouncedValue && language.length > 0 && (
+        <div className="mt-4">
+          <h3 className="text-sm font-medium text-gray-400 mb-2">
+            Available Languages
+          </h3>
+          <div className="max-h-48 overflow-y-auto hide-scrollbar space-y-2">
+            {language.map((lang) => (
+              <div
+                key={lang.id}
+                onClick={() => handleAddLanguage(lang)}
+                className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition ${
+                  selectedLanguages.some((l) => l.id === lang.id)
+                    ? 'bg-[#2A2A4A] border border-[#7C2BD3]'
+                    : 'bg-[#1E1E38] hover:bg-[#2A2A4A] border border-[#3A3A5A]'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#7C2BD3] to-[#075AA8] flex items-center justify-center">
+                    <Globe className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-white font-medium">{lang.name}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Selected Languages */}
-      <div className="flex flex-wrap gap-2 pt-4">
+      <div className="mt-6 pt-6 border-t border-[#3A3A5A]">
+        <h3 className="text-sm font-medium text-gray-400 mb-3">
+          Selected Languages ({selectedLanguages?.length || 0})
+        </h3>
+        <div className="flex flex-wrap gap-2">
         {selectedLanguages?.map((language) => (
           <Badge
             key={language.id}
             variant="none"
-            className="border-none text-xs whitespace-nowrap rounded-3xl bg-white/30 flex items-center"
+            className="border-none text-xs whitespace-nowrap rounded-3xl bg-gradient-to-r from-[#2A2A4A] to-[#1E1E38] border border-[#3A3A5A] flex items-center px-3 py-2"
           >
             <span>{language.name}</span>
             <Button
               type="button"
               variant="ghost"
               onClick={() => onRemoveLanguage(language.id)}
-              className="h-4 w-4 p-0 ml-1"
+              className="h-4 w-4 p-0 ml-2 hover:text-red-400"
             >
-              <X size={10} />
+              <X size={12} />
             </Button>
           </Badge>
         ))}
+      </div>
       </div>
     </div>
   );

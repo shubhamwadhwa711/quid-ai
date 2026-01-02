@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
 import axios from "axios";
-import { MergeProfile } from "@/lib/profileMerge";
+import { mergeProfiles } from "@/lib/profileMerge";
 import axiosInstanceUnauthorized from "@/lib/axiosInstanceUnauthorized";
 import { profileUserData } from "./profile";
 import { profile } from "console";
@@ -93,7 +93,7 @@ export interface Profile {
   linkedin_url: string;
   projects: Project[];
   available_to?: Availability[];
-  languages?: Language[];
+  language?: Language[];
   linkedin_profile_url: string;
   linkedin_data: boolean;
 }
@@ -347,17 +347,11 @@ export const syncWithLinkedIn = createAsyncThunk(
   "profile/syncWithLinkedIn",
   async (_, { rejectWithValue, dispatch, getState }: any) => {
     try {
-      console.log(
-        "🔗 [LINKEDIN SYNC] ==================== STARTING LINKEDIN SYNC ===================="
-      );
       const state = getState();
       let profileData = state.Profile.profile;
 
       // If no profile in state, fetch it first
       if (!profileData) {
-        console.log(
-          "⚠️ [LINKEDIN SYNC] No profile in state, fetching from backend..."
-        );
         const response = await axiosInstance.get("/profile/");
         profileData = response.data.results[0];
         console.log("✅ [LINKEDIN SYNC] Profile fetched:", profileData?.id);
@@ -368,31 +362,7 @@ export const syncWithLinkedIn = createAsyncThunk(
         return rejectWithValue("No profile found");
       }
 
-      console.log("📋 [LINKEDIN SYNC] Current profile state:", {
-        id: profileData.id,
-        email: profileData.user?.email,
-        current_skills: profileData.skill?.length || 0,
-        current_education: profileData.education?.length || 0,
-        current_projects: profileData.projects?.length || 0,
-      });
-
-      // Fetch LinkedIn user info
-      console.log(
-        "🔍 [LINKEDIN SYNC] Step 1: Fetching LinkedIn user info from OAuth..."
-      );
       const linkedInResponse = await axios.get("/api/linkedin-info");
-      console.log("✅ [LINKEDIN SYNC] LinkedIn OAuth data:", {
-        vanityName: linkedInResponse.data.vanityName,
-        name: linkedInResponse.data.name,
-        email: linkedInResponse.data.email,
-      });
-
-      // Fetch data from Unipile API
-      console.log("🌐 [LINKEDIN SYNC] Step 2: Calling Unipile API...");
-      console.log(
-        "🌐 [LINKEDIN SYNC] Unipile URL:",
-        `${process.env.NEXT_PUBLIC_UNIPILE_LINKEDIN_URL}${linkedInResponse.data.vanityName}`
-      );
 
       const UnipileResponse = await axios.request({
         method: "GET",
@@ -413,22 +383,6 @@ export const syncWithLinkedIn = createAsyncThunk(
           account_id: `${process.env.NEXT_PUBLIC_UNIPILE_ACCOUNT_ID}`,
         },
       });
-
-      console.log("✅ [LINKEDIN SYNC] Unipile API response received:", {
-        headline: UnipileResponse.data.headline,
-        location: UnipileResponse.data.location,
-        skills_count: UnipileResponse.data.skills?.length || 0,
-        education_count: UnipileResponse.data.education?.length || 0,
-        experience_count: UnipileResponse.data.experience?.length || 0,
-        projects_count: UnipileResponse.data.projects?.length || 0,
-      });
-      console.log(
-        "📊 [LINKEDIN SYNC] Full Unipile data:",
-        UnipileResponse.data
-      );
-
-      // Get country list and find matching country
-      console.log("🌍 [LINKEDIN SYNC] Step 3: Matching location to country...");
       const countryResponse: any =
         (await dispatch(fetchCountry())).payload || {};
       const countryList = Array.isArray(countryResponse)
@@ -439,22 +393,9 @@ export const syncWithLinkedIn = createAsyncThunk(
         (country: any) =>
           country.name === locationParts?.[locationParts.length - 1]
       );
-      console.log("✅ [LINKEDIN SYNC] Country match result:", {
-        linkedin_location: UnipileResponse?.data?.location,
-        matched_country: country?.name || "None",
-        country_id: country?.id || "None",
-      });
 
-      // Get expertise/skills list
-      console.log(
-        "🎯 [LINKEDIN SYNC] Step 4: Fetching expertise/skills list..."
-      );
       const projectSkillList =
         (await dispatch(fetchExpertise({}))).payload || [];
-      console.log(
-        "✅ [LINKEDIN SYNC] Available skills in system:",
-        projectSkillList?.length || 0
-      );
 
       // Create skill name to ID mapping
       const skillNameToIdMap = Array.isArray(projectSkillList)
@@ -473,10 +414,6 @@ export const syncWithLinkedIn = createAsyncThunk(
           return tags || [];
         }) || [];
 
-      console.log("🏷️ [LINKEDIN SYNC] Project tags mapped:", tagList);
-
-      // Step 1: Update basic profile info
-      console.log("📝 [LINKEDIN SYNC] Step 5: Updating basic profile info...");
       const profileUpdateData = {
         linkedin_profile_url: UnipileResponse.data.profile_picture_url_large,
         linkedin_url: `https://linkedin.com/in/${linkedInResponse.data.vanityName}`,
@@ -484,10 +421,6 @@ export const syncWithLinkedIn = createAsyncThunk(
         headline: UnipileResponse.data.headline,
         summary: UnipileResponse.data.headline,
       };
-      console.log(
-        "📊 [LINKEDIN SYNC] Profile update payload:",
-        profileUpdateData
-      );
 
       await dispatch(
         updateProfile({
@@ -495,59 +428,27 @@ export const syncWithLinkedIn = createAsyncThunk(
           data: profileUpdateData,
         })
       );
-      console.log("✅ [LINKEDIN SYNC] Basic profile info updated");
-
-      // Step 2: Post education data if empty
-      console.log("🎓 [LINKEDIN SYNC] Step 6: Checking education data...");
-      console.log(
-        "📊 [LINKEDIN SYNC] Current education count:",
-        profileData.education.length
-      );
-      console.log(
-        "📊 [LINKEDIN SYNC] LinkedIn education count:",
-        UnipileResponse.data.education?.length || 0
-      );
 
       if (
         profileData.education.length === 0 &&
         UnipileResponse.data.education?.length > 0
       ) {
-        console.log(
-          "📤 [LINKEDIN SYNC] Posting education data...",
-          UnipileResponse.data.education
-        );
         await dispatch(
           postBulkAcademics({
             profileId: profileData.id,
             educationData: UnipileResponse.data.education,
           })
         );
-        console.log("✅ [LINKEDIN SYNC] Education data posted");
       } else {
         console.log(
           "⏭️ [LINKEDIN SYNC] Skipping education (already has data or no LinkedIn education)"
         );
       }
 
-      // Step 3: Post projects data if empty
-      console.log("💼 [LINKEDIN SYNC] Step 7: Checking projects data...");
-      console.log(
-        "📊 [LINKEDIN SYNC] Current projects count:",
-        profileData.projects.length
-      );
-      console.log(
-        "📊 [LINKEDIN SYNC] LinkedIn projects count:",
-        UnipileResponse.data.projects?.length || 0
-      );
-
       if (
         profileData.projects.length === 0 &&
         UnipileResponse.data.projects?.length > 0
       ) {
-        console.log(
-          "📤 [LINKEDIN SYNC] Posting projects data...",
-          UnipileResponse.data.projects
-        );
         await dispatch(
           postBulkProjects({
             profileId: profileData.id,
@@ -555,19 +456,11 @@ export const syncWithLinkedIn = createAsyncThunk(
             projectData: UnipileResponse.data.projects,
           })
         );
-        console.log("✅ [LINKEDIN SYNC] Projects data posted");
       } else {
         console.log(
           "⏭️ [LINKEDIN SYNC] Skipping projects (already has data or no LinkedIn projects)"
         );
       }
-
-      // Step 4: Post work experience/companies if empty
-      console.log("🏢 [LINKEDIN SYNC] Step 8: Checking client/company data...");
-      console.log(
-        "📊 [LINKEDIN SYNC] Current client count:",
-        profileData.client.length
-      );
 
       const ClientData =
         UnipileResponse?.data?.work_experience?.map((client: any) => {
@@ -577,56 +470,29 @@ export const syncWithLinkedIn = createAsyncThunk(
           };
         }) || [];
 
-      console.log(
-        "📊 [LINKEDIN SYNC] LinkedIn work experience count:",
-        ClientData.length
-      );
-
       if (profileData.client.length === 0 && ClientData.length > 0) {
-        console.log("📤 [LINKEDIN SYNC] Posting client data...", ClientData);
         await dispatch(postBulkClient(ClientData));
-        console.log("✅ [LINKEDIN SYNC] Client data posted");
       } else {
         console.log(
           "⏭️ [LINKEDIN SYNC] Skipping clients (already has data or no LinkedIn work experience)"
         );
       }
 
-      // Step 5: Post skills if empty
-      console.log("🛠️ [LINKEDIN SYNC] Step 9: Checking skills data...");
-      console.log(
-        "📊 [LINKEDIN SYNC] Current skills count:",
-        profileData.skill.length
-      );
-      console.log(
-        "📊 [LINKEDIN SYNC] LinkedIn skills count:",
-        UnipileResponse.data.skills?.length || 0
-      );
-
       if (
         profileData.skill.length === 0 &&
         UnipileResponse.data.skills?.length > 0
       ) {
-        console.log(
-          "📤 [LINKEDIN SYNC] Posting skills data...",
-          UnipileResponse.data.skills
-        );
         await dispatch(
           postBulkSkills({
             skillsData: UnipileResponse.data.skills,
           })
         );
-        console.log("✅ [LINKEDIN SYNC] Skills data posted");
       } else {
         console.log(
           "⏭️ [LINKEDIN SYNC] Skipping skills (already has data or no LinkedIn skills)"
         );
       }
 
-      // Step 6: Mark LinkedIn data as synced
-      console.log(
-        "✅ [LINKEDIN SYNC] Step 10: Marking LinkedIn data as synced..."
-      );
       await dispatch(
         updateProfile({
           id: profileData.id,
@@ -634,11 +500,6 @@ export const syncWithLinkedIn = createAsyncThunk(
             linkedin_data: true,
           },
         })
-      );
-      console.log("✅ [LINKEDIN SYNC] linkedin_data flag set to true");
-
-      console.log(
-        "✅ [LINKEDIN SYNC] ==================== LINKEDIN SYNC COMPLETED SUCCESSFULLY ===================="
       );
       return { success: true, message: "LinkedIn profile synced successfully" };
     } catch (error: any) {

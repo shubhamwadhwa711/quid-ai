@@ -53,27 +53,40 @@ export const postClient = createAsyncThunk(
     }
   }
 );
-
-export const updateClient = createAsyncThunk(
-  "client/updateClient",
-  async (formData, { rejectWithValue, dispatch }) => {
+// Async Thunk to update a company (e.g., logo)
+export const updateCompany = createAsyncThunk(
+  "client/updateCompany",
+  async ({ id, data }: { id: number; data: FormData }, { rejectWithValue }) => {
     try {
-      console.log("Adding client...", formData);
-      const response = await axiosInstance.post(`/client/`, formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("Client updated successfully", response.data);
+      const response = await axiosInstance.patch(`/all-company/${id}/`, data);
       return response.data;
     } catch (error: any) {
-      console.error("Error updating client:", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to add client"
+        error.response?.data?.message || "Failed to update company "
       );
     }
   }
 );
+export const updateClient = createAsyncThunk<
+  any,
+  { profile: number; company: number | null; isFeatured: boolean }
+>("client/updateClient", async (formData, { rejectWithValue }) => {
+  try {
+    console.log("Adding client...", formData);
+    const response = await axiosInstance.post(`/client/`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Client updated successfully", response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error updating client:", error);
+    return rejectWithValue(
+      error.response?.data?.message || "Failed to add client"
+    );
+  }
+});
 
 export const deleteClient = createAsyncThunk(
   "client/deleteClient",
@@ -119,6 +132,24 @@ const clientSlice = createSlice({
         state.clients.push(action.payload);
       })
       .addCase(postClient.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateCompany.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCompany.fulfilled, (state, action) => {
+        state.loading = false;
+        // Update the company in the list
+        const index = state.clients.findIndex(
+          (c) => c.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.clients[index] = action.payload;
+        }
+      })
+      .addCase(updateCompany.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

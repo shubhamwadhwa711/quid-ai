@@ -20,7 +20,10 @@ const initialState: CountryState = {
 };
 
 // Async Thunk to fetch company data
-export const fetchCountryList = createAsyncThunk(
+export const fetchCountryList = createAsyncThunk<
+  any,
+  Record<string, string | number>
+>(
   "country/fetchCountryList",
   async (SearchData, { rejectWithValue }) => {
     try {

@@ -30,52 +30,65 @@ export const AcademicCard = ({ academic }: { academic: Academic }) => {
   }, [dispatch,academic.profile, academic.id]);
 
   return (
-    <Card key={academic.id} className="bg-white h-40">
-      <CardHeader className="p-0">
-        <div className="flex justify-between items-start">
-          <div className="p-4">
-            <CardTitle className="text-base text-black font-semibold truncate">
-              {academic.degree}
-            </CardTitle>
-           
-          </div>
-          <EditAcademic academic={academic} />
-        </div>
-      </CardHeader>
-
-      <CardContent className="-mt-4">
-        <div className="text-sm text-gray-600">
-          <div className="flex items-center gap-1">
-            <Calendar size={14} className="text-gray-400" />
-            <span>
-              {academic.start_year} - {academic.end_year || "Present"}
-            </span>
-          </div>
-          <div className="flex items-center gap-1">
-            <School size={14} className="text-gray-400" />
-            <span className="truncate">{academic.school}</span>
-          </div>
-
-          {academic.description && (
-            <div className="mt-1 text-xs text-gray-500 line-clamp-3">
-              {academic.description}
+    <div className="relative group">
+      <div className="bg-gradient-to-br from-[#1E1E38] to-[#0F0F30] rounded-xl p-4 border border-[#3A3A5A] hover:border-[#7C2BD3] transition-all duration-300 hover:shadow-lg hover:shadow-[#7C2BD3]/20">
+        {/* Header */}
+        <div className="flex justify-between items-start mb-3">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#7C2BD3] to-[#075AA8] flex items-center justify-center flex-shrink-0">
+                <School className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-white leading-tight">
+                  {academic.degree}
+                </h3>
+                {academic.field_of_study && (
+                  <p className="text-sm text-gray-400">
+                    {academic.field_of_study}
+                  </p>
+                )}
+              </div>
             </div>
-          )}
+          </div>
+          
+          {/* Actions */}
+          <div className="flex gap-1">
+            <EditAcademic academic={academic} />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-400/10"
+              onClick={onRemoveAcademics}
+            >
+              <Trash size={16} />
+            </Button>
+          </div>
         </div>
-      </CardContent>
 
-      <CardFooter className="-mt-4">
-        <Button
-          variant="destructive"
-          size="sm"
-          className=" hover:bg-red-50  transition-colors h-8 text-xs"
-          onClick={onRemoveAcademics}
-        >
-          <Trash size={14} />
-          Remove
-        </Button>
-      </CardFooter>
-    </Card>
+        {/* School Name */}
+        <div className="mb-3">
+          <p className="text-white font-medium">{academic.school}</p>
+        </div>
+
+        {/* Date */}
+        <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
+          <Calendar size={14} />
+          <span>
+            {academic.start_year} - {academic.end_year || "Present"}
+          </span>
+        </div>
+
+        {/* Description */}
+        {academic.description && (
+          <div className="mt-3 pt-3 border-t border-[#3A3A5A]">
+            <p className="text-sm text-gray-300 line-clamp-3">
+              {academic.description}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

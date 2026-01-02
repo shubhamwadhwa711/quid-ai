@@ -106,9 +106,10 @@ export const authOptions: AuthOptions = {
             expires_at: Math.floor(Date.now() / 1000) + qProfile.expires_in,
           };
         } catch (error) {
+          const err = error as any;
           console.error(
             "Token exchange failed:",
-            error.response?.data || error
+            err?.response?.data || err
           );
           throw new Error("Profile not found");
         }

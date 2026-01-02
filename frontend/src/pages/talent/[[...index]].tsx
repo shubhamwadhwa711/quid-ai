@@ -15,10 +15,10 @@ import Image from "next/image";
 // Main Profile Component
 const Talent = () => {
   const dispatch = useAppDispatch();
-  const { aiprofile, loading, error } = useAppSelector(
+  const { aiProfile, loading, error } = useAppSelector(
     (state) => state.AIProfile
   );
-  const { usprofile } = useAppSelector((state) => state.USProfile);
+  const { usProfile } = useAppSelector((state) => state.USProfile);
   const router = useRouter();
   // const { talenttype, id } = router.query;
   const talenttype = router.query.index?.[0] as string | undefined;
@@ -39,8 +39,10 @@ const Talent = () => {
   // console.log("profile", profile);
   const [userData, setUserData] = useState<Profile | null>(null);
   console.log("userData", userData);
-  console.log("aiprofile", aiprofile);
-  console.log("usprofile", usprofile);
+  console.log("aiProfile", aiProfile);
+  console.log("usProfile", usProfile);
+  const summaryText = talenttype === "AI" ? aiProfile?.summary : usProfile?.summary;
+  const talentId = talenttype === "AI" ? aiProfile?.id ?? null : usProfile?.id ?? null;
   // State for controlling which popup is currently open
   // useEffect(() => {
   //   setUserData(profile);
@@ -65,17 +67,17 @@ const Talent = () => {
             {/* Profile image (left) */}
             <div className="h-32 w-32 flex-shrink-0 rounded-full">
 
-              {aiprofile ? (
+              {aiProfile ? (
                 <Image
-                  src={aiprofile.image || aiprofile.linkedin_profile_url}
+                  src={aiProfile.image || aiProfile.linkedin_profile_url || "/AI.jpg"}
                   alt="AI Profile"
                   width={100}
                   height={100}
                   className="h-full w-full rounded-full"
                 />
-              ) : usprofile ? (
+              ) : usProfile ? (
                 <Image
-                  src={usprofile.image || usprofile.linkedin_profile_url}
+                  src={usProfile.image || usProfile.linkedin_profile_url || "/AI.jpg"}
                   alt="US Profile"
                   width={100}
                   height={100}
@@ -87,8 +89,8 @@ const Talent = () => {
             <div className="ml-4">
               <div className="flex justify-between">
                 <h1 className="text-2xl proxima-medium">
-                  {aiprofile?.user?.first_name || usprofile?.user?.first_name}{" "}
-                  {aiprofile?.user?.last_name || usprofile?.user?.last_name}
+                  {aiProfile?.user?.first_name || usProfile?.user?.first_name}{" "}
+                  {aiProfile?.user?.last_name || usProfile?.user?.last_name}
                 </h1>
                 {/* <Button
                   size="icon"
@@ -99,12 +101,12 @@ const Talent = () => {
               <div className="flex items-center mt-1">
                 <MapPin size={16} className="mr-1" />
                 <span className="">
-                  {aiprofile?.country.name || usprofile?.country.name}
+                  {aiProfile?.country.name || usProfile?.country.name}
                 </span>
               </div>
               <div className="mt-2 w-full pr-2">
                 <p className=" w-full text-xs font-semibold">
-                  {aiprofile?.headline}
+                  {aiProfile?.headline}
                 </p>
               </div>
               <div className=" absolute top-24 right-0  flex justify-center">
@@ -118,7 +120,7 @@ const Talent = () => {
                 <div className="flex  items-center gap-2 ">
                   {/* <img src="/Icons/linkdein.png" alt="" /> */}
                   <span className=" text-xs mt-2 font-bold  text-nowrap">
-                    {/* {aiprofile?.linkedin_url?.slice(7)} */}
+                    {/* {aiProfile?.linkedin_url?.slice(7)} */}
                   </span>
                 </div>
               </div>
@@ -148,7 +150,7 @@ const Talent = () => {
             </div>
             <div className="flex flex-wrap gap-2">
               {talenttype === "AI"
-                ? aiprofile?.skill.map((s: any, index: number) => (
+                ? aiProfile?.skill.map((s: any, index: number) => (
                   <span
                     key={index}
                     className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -156,7 +158,7 @@ const Talent = () => {
                     {s.name}
                   </span>
                 ))
-                : usprofile?.skill.map((s: any, index: number) => (
+                : usProfile?.skill.map((s: any, index: number) => (
                   <span
                     key={index}
                     className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -185,9 +187,7 @@ const Talent = () => {
         <div className="space-y-4">
           <div className="pl-4">
             <p>
-              {aiprofile?.summary?.length || usprofile?.summary?.length > 200
-                ? `${aiprofile?.summary}`
-                : aiprofile?.summary}
+              {summaryText || ""}
             </p>
           </div>
         </div>
@@ -207,7 +207,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.language?.map((lang: any, index: number) => (
+            ? aiProfile?.languages?.map((lang: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -215,7 +215,7 @@ const Talent = () => {
                 {lang.name}
               </span>
             ))
-            : usprofile?.language?.map((lang: any, index: number) => (
+            : usProfile?.languages?.map((lang: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -240,7 +240,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.education.map((edu: any, index: number) => (
+            ? aiProfile?.education.map((edu: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -248,7 +248,7 @@ const Talent = () => {
                 {edu.degree}
               </span>
             ))
-            : usprofile?.education.map((edu: any, index: number) => (
+            : usProfile?.education.map((edu: any, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -273,7 +273,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.available_to?.map((aval: any) => (
+            ? aiProfile?.available_to?.map((aval: any) => (
               <span
                 key={aval.id}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -281,7 +281,7 @@ const Talent = () => {
                 {aval.name}
               </span>
             ))
-            : usprofile?.available_to?.map((aval: any) => (
+            : usProfile?.available_to?.map((aval: any) => (
               <span
                 key={aval.id}
                 className="px-3 py-1 rounded-3xl bg-white/20 text-sm"
@@ -306,7 +306,7 @@ const Talent = () => {
         </div>
         <div className="flex flex-wrap gap-2">
           {talenttype === "AI"
-            ? aiprofile?.client.map((cli: any) => (
+            ? aiProfile?.client.map((cli: any) => (
               <span
                 key={cli.id}
                 className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
@@ -314,7 +314,7 @@ const Talent = () => {
                 {cli.name}
               </span>
             ))
-            : usprofile?.client.map((cli: any) => (
+            : usProfile?.client.map((cli: any) => (
               <span
                 key={cli.id}
                 className="px-3 py-2  rounded-3xl bg-white/20 text-xs font-bold"
@@ -339,16 +339,16 @@ const Talent = () => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mt-4">
           {talenttype === "AI"
-            ? aiprofile?.projects.map((project: any, index: number) => (
+            ? aiProfile?.projects.map((project: any, index: number) => (
               <Card
                 onClick={() =>
                   // Only allow navigation if linkedin_data is true
-                  aiprofile?.linkedin_data && router.push(
-                    `/talent/${aiprofile?.id}/project/${project.id}`
+                  aiProfile?.linkedin_data && router.push(
+                    `/talent/${aiProfile?.id}/project/${project.id}`
                   )
                 }
                 key={index}
-                className={`hover:shadow-md border-none relative bg-gray-800 transition flex-shrink-0 w-44 h-48 ${!aiprofile?.linkedin_data ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+                className={`hover:shadow-md border-none relative bg-gray-800 transition flex-shrink-0 w-44 h-48 ${!aiProfile?.linkedin_data ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
                   }`}
               >
                 <div className="relative h-4/5">
@@ -366,16 +366,16 @@ const Talent = () => {
                 </div>
               </Card>
             ))
-            : usprofile?.projects.map((project: any, index: number) => (
+            : usProfile?.projects.map((project: any, index: number) => (
               <Card
                 onClick={() =>
                   // Only allow navigation if linkedin_data is true
-                  usprofile?.linkedin_data && router.push(
-                    `/talent/${usprofile?.id}/project/${project.id}`
+                  usProfile?.linkedin_data && router.push(
+                    `/talent/${usProfile?.id}/project/${project.id}`
                   )
                 }
                 key={index}
-                className={`hover:shadow-md border-none relative bg-gray-800 transition flex-shrink-0 w-44 h-48 ${!usprofile?.linkedin_data ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
+                className={`hover:shadow-md border-none relative bg-gray-800 transition flex-shrink-0 w-44 h-48 ${!usProfile?.linkedin_data ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
                   }`}
               >
                 <div className="relative h-4/5">
@@ -409,7 +409,7 @@ const Talent = () => {
       )} */}
       {showConnectForm && (
         <ConnectDrawer
-          talentId={aiprofile?.id}
+          talentId={talentId}
           showConnectForm={showConnectForm}
           setShowConnectForm={setShowConnectForm}
         />

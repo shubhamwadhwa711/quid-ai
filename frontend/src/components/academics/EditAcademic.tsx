@@ -40,9 +40,15 @@ export const EditAcademic = ({ academic }: { academic: Academic }) => {
   }, []);
 
   const handleSubmit = useCallback(() => {
+    const profileId = academic?.profile ?? profile?.id;
+    if (!profileId) {
+      console.error("Missing profile id for academics update");
+      return;
+    }
+
     dispatch(
       updateAcademics({
-        id: academic?.profile || profile?.id,
+        id: profileId,
         eid: formData.id,
         data: formData as any,
       })
@@ -56,7 +62,7 @@ export const EditAcademic = ({ academic }: { academic: Academic }) => {
       .catch((error) => {
         console.error("Error updating academic:", error);
       });
-  }, [formData, dispatch]);
+  }, [academic?.profile, dispatch, formData, profile?.id]);
 
   const resetFormOnClose = useCallback(() => {
     if (!open) {

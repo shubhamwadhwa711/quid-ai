@@ -26,6 +26,7 @@ const ServicesPage = () => {
         },
     };
 
+    const itemEasing: [number, number, number, number] = [0.17, 0.55, 0.55, 1];
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
@@ -33,7 +34,7 @@ const ServicesPage = () => {
             y: 0,
             transition: {
                 duration: 0.5,
-                ease: 'easeOut',
+                ease: itemEasing,
             },
         },
     };

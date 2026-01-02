@@ -15,20 +15,20 @@ interface Skill {
 
 interface SkillSearchProps {
   selectedSkills: Skill[];
-  onSelectSkill: (skill: string) => void;
+  onSelectSkill: (skill: Skill) => void;
   onRemoveSkill: (skillId: number) => void;
+  profileId?: number;
 }
 
 const SkillSearch: React.FC<SkillSearchProps> = ({
   selectedSkills,
   onSelectSkill,
   onRemoveSkill,
+  profileId,
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const dispatch = useAppDispatch();
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const { expertise } = useAppSelector((state) => state.Expertise);
 
@@ -44,42 +44,33 @@ const SkillSearch: React.FC<SkillSearchProps> = ({
   useEffect(() => {
     if (debouncedValue.trim()) {
       dispatch(fetchExpertise({ search: debouncedValue }));
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
     }
   }, [debouncedValue, dispatch]);
 
-  // Handle clicking outside to close suggestions
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const handleAddSkill = (skill: Skill) => {
     if (!selectedSkills.some((s) => s.id === skill.id)) {
-      onSelectSkill(skill.name);
+      onSelectSkill(skill);
     }
     setInputValue("");
-    setShowSuggestions(false);
   };
 
-  const handleAddUnknownSkill = () => {
+  const handleAddUnknownSkill = async () => {
     if (inputValue.trim()) {
       const newSkill = inputValue;
 
-      dispatch(postExpertise({ id: 0, name: newSkill }));
-      // onSelectSkill(newSkill);
-      // setInputValue("");
-      // setShowSuggestions(false);
+      try {
+        // Create the skill in the backend first
+        const result = await dispatch(postExpertise({ id: 0, name: newSkill })).unwrap();
+        
+        // Then add it to selected skills
+        if (result && result.id) {
+          onSelectSkill(result);
+        }
+        
+        setInputValue("");
+      } catch (error) {
+        console.error("Failed to add skill:", error);
+      }
     }
   };
 
@@ -113,43 +104,59 @@ const SkillSearch: React.FC<SkillSearchProps> = ({
         )}
       </div>
 
-      {/* Suggestion Dropdown */}
-      {showSuggestions && expertise.length > 0 && (
-        <div
-          ref={dropdownRef}
-          className="absolute z-10 mt-1 w-full bg-[#262640] rounded-lg shadow-lg max-h-40 overflow-y-auto"
-        >
-          {expertise.map((skill) => (
-            <div
-              key={skill.id}
-              onClick={() => handleAddSkill(skill)}
-              className="p-2 cursor-pointer hover:bg-[#7C2BD3] text-white"
-            >
-              {skill.name}
-            </div>
-          ))}
+      {/* Available Skills - Inline Results */}
+      {debouncedValue && expertise.length > 0 && (
+        <div className="mt-4">
+          <h3 className="text-sm font-medium text-gray-400 mb-2">
+            Available Skills
+          </h3>
+          <div className="max-h-48 overflow-y-auto hide-scrollbar space-y-2">
+            {expertise.map((skill) => (
+              <div
+                key={skill.id}
+                onClick={() => handleAddSkill(skill)}
+                className={`flex items-center justify-between px-4 py-2.5 rounded-xl cursor-pointer transition ${
+                  selectedSkills.some((s) => s.id === skill.id)
+                    ? 'bg-[#2A2A4A] border border-[#7C2BD3]'
+                    : 'bg-[#1E1E38] hover:bg-[#2A2A4A] border border-[#3A3A5A]'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#7C2BD3] to-[#075AA8] flex items-center justify-center">
+                    <Brain className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-white font-medium">{skill.name}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* Selected Skills */}
-      <div className="flex flex-wrap gap-2 pt-4 pb-20 overflow-y-scroll overflow-x-hidden max-h-96 hide-scrollbar">
+      <div className="mt-6 pt-6 border-t border-[#3A3A5A]">
+        <h3 className="text-sm font-medium text-gray-400 mb-3">
+          Selected Skills ({selectedSkills?.length || 0})
+        </h3>
+        <div className="flex flex-wrap gap-2 pb-20 max-h-64 overflow-y-auto hide-scrollbar">
         {selectedSkills?.map((skill) => (
           <Badge
             key={skill.id}
             variant="none"
-            className="border-none text-xs whitespace-nowrap rounded-3xl bg-white/30 flex items-center"
+            className="border-none text-xs whitespace-nowrap rounded-3xl bg-gradient-to-r from-[#2A2A4A] to-[#1E1E38] border border-[#3A3A5A] flex items-center px-3 py-2"
           >
             <span>{skill.name}</span>
             <Button
               type="button"
               variant="ghost"
               onClick={() => onRemoveSkill(skill.id)}
-              className="h-4 w-4 p-0 ml-1"
+              className="h-4 w-4 p-0 ml-2 hover:text-red-400"
             >
-              <X size={10} />
+              <X size={12} />
             </Button>
           </Badge>
         ))}
+      </div>
       </div>
     </div>
   );

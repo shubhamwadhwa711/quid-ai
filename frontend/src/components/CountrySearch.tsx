@@ -31,7 +31,7 @@ const CountrySearch = ({
   // Dispatch search action when the user types
   useEffect(() => {
     if (searchTerm.length > 0) {
-      dispatch(fetchCountryList({ SearchData: searchTerm } as any));
+      dispatch(fetchCountryList({ search: searchTerm } as any));
     }
   }, [searchTerm, dispatch]);
 
@@ -120,25 +120,25 @@ const CountrySearch = ({
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-[#1E1E38] rounded-md shadow-lg border border-[#3A3A5A]"
+          className="absolute z-10 mt-1 w-full max-h-60 overflow-auto bg-[#1E1E38] rounded-xl shadow-lg border border-[#3A3A5A] hide-scrollbar"
         >
           {countryList.length > 0 ? (
             countryList.map((country) => (
               <div
                 key={country.id}
                 onClick={() => handleSelectCountry(country)}
-                className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-[#2A2A4A] transition"
+                className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#2A2A4A] transition"
               >
-                <span className="text-white">{country.name}</span>
+                <span className="text-white font-medium">{country.name}</span>
                 {selectedCountry && selectedCountry.id === country.id && (
-                  <Check size={16} className="text-[#7C2BD3]" />
+                  <Check size={18} className="text-[#7C2BD3]" />
                 )}
               </div>
             ))
           ) : searchTerm ? (
-            <div className="px-4 py-2 text-gray-400">No countries found</div>
+            <div className="px-4 py-3 text-center text-gray-400">No countries found</div>
           ) : (
-            <div className="px-4 py-2 text-gray-400">
+            <div className="px-4 py-3 text-center text-gray-400">
               Type to search countries
             </div>
           )}
