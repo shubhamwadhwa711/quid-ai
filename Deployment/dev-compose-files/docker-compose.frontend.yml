@@ -6,6 +6,7 @@ services:
       context: ../frontend
       dockerfile: Dockerfile
     container_name: frontend-qa
+    restart: unless-stopped
     ports:
       - "8007:3000"
     # env_file:

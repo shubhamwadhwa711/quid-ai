@@ -4,6 +4,7 @@ services:
   celery:
     image: backend-qa-image:latest
     container_name: celery-qa
+    restart: unless-stopped
     command: sh -c "ls && celery -A core worker -l info"
     volumes:
       - ../Backend:/app

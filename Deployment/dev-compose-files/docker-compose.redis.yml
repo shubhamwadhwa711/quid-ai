@@ -2,6 +2,7 @@ version: "3.8"
 services:
   redis:
     container_name: "redis-qa"
+    restart: unless-stopped
     image: redis:alpine
     networks:
       quid-ai-nw:
