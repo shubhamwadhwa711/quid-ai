@@ -1,8 +1,39 @@
+import logging
+from urllib.parse import urlparse
+
+import requests
+from django.core.files.base import ContentFile
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import *
 from apps.insight.models import AssociatedCompany
 from apps.insight.serializers import AssociatedCompanySerializer
+
+logger = logging.getLogger(__name__)
+
+# LinkedIn CDN URLs are time-signed (~30-90d). Storing them rots silently, so
+# when sync sends one we fetch it server-side and save it into Profile.image.
+LINKEDIN_CDN_HOSTS = {
+    "media.licdn.com",
+    "media-exp1.licdn.com",
+    "media-exp2.licdn.com",
+    "static.licdn.com",
+}
+
+
+def _download_linkedin_picture(profile, url):
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+    except requests.RequestException as exc:
+        logger.warning("LinkedIn picture download failed for profile %s: %s", profile.id, exc)
+        return False
+    ctype = (resp.headers.get("Content-Type") or "").lower()
+    ext = "png" if "png" in ctype else "webp" if "webp" in ctype else "jpg"
+    if profile.image:
+        profile.image.delete(save=False)
+    profile.image.save(f"linkedin_{profile.id}.{ext}", ContentFile(resp.content), save=False)
+    return True
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only = True)
@@ -72,7 +103,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         if validated_data.get('first_name',None):
             first_name = validated_data.pop('first_name')
             instance.user.first_name = first_name
-        
+
         if "last_name" in validated_data.keys():
             last_name = validated_data.pop('last_name')
             instance.user.last_name = last_name
@@ -81,8 +112,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         instance.user.save()
 
+        linkedin_url = validated_data.get("linkedin_profile_url")
+        if linkedin_url and (urlparse(linkedin_url).hostname or "") in LINKEDIN_CDN_HOSTS:
+            if _download_linkedin_picture(instance, linkedin_url):
+                validated_data["linkedin_profile_url"] = ""
+
         # Update instance with remaining fields
-        return super().update(instance, validated_data)       
+        return super().update(instance, validated_data)
 
 class EducationSerializer(serializers.ModelSerializer):
     class Meta:

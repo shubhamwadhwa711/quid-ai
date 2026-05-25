@@ -41,7 +41,7 @@ const nextConfig = withPWA({
         pathname: "/media/**",
       },
       {
-        protocol: "http",
+        protocol: "https",
         hostname: "api.quidai.org",
         pathname: "/media/**",
       },
