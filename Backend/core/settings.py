@@ -30,9 +30,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY= os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('EMAIL_USE_TLS', 'False').lower() in ['true', '1', 'yes']
+DEBUG = os.getenv('DEBUG', 'False').lower() in ['true', '1', 'yes']
 ENVIRONMENT = 'DEV'
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'api-quidai.shubpy.com', '194.163.166.189','api.quidai.org','94.237.52.216']
+
+# Behind the Plesk/nginx reverse proxy: trust the forwarded scheme/host so that
+# request.build_absolute_uri() (used for media/logo URLs) returns https, not http.
+# nginx must send `proxy_set_header X-Forwarded-Proto $scheme;` for this to work.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://api-quidai.shubpy.com",
