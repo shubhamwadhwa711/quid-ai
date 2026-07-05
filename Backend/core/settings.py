@@ -291,6 +291,14 @@ CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", CELERY_BROKER_URL)
 
 
+# UNIPILE (LinkedIn sync) — used by the resync_linkedin_pictures command to
+# re-fetch fresh profile-picture URLs server-side. Same credentials the
+# frontend uses (NEXT_PUBLIC_UNIPILE_*).
+UNIPILE_URL = os.getenv("UNIPILE_URL", "")
+UNIPILE_ACCOUNT_ID = os.getenv("UNIPILE_ACCOUNT_ID", "")
+UNIPILE_API_KEY = os.getenv("UNIPILE_API_KEY", "")
+
+
 
 
 SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY=os.getenv('SOCIAL_AUTH_LINKEDIN_OPENIDCONNECT_KEY')

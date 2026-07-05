@@ -1,9 +1,23 @@
+import logging
+
 from django.db.models.signals import post_save, pre_save
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.conf import settings
 from .models import Profile, Enquiry
 from .tasks import  send_mail_talent
+
+logger = logging.getLogger(__name__)
+
+
+def _queue_mail(subject, message, sender_email, recipient_email):
+    """Queue a notification email without letting a broker/mail outage bubble
+    up into the caller. A profile approval (or enquiry) must never 500 just
+    because the Celery broker is unreachable."""
+    try:
+        send_mail_talent.delay(subject, message, sender_email, recipient_email)
+    except Exception as exc:
+        logger.warning("Failed to queue mail to %s: %s", recipient_email, exc)
 
 @receiver(pre_save, sender=Profile)
 def profile_pre_save(sender, instance, **kwargs):
@@ -20,7 +34,7 @@ def profile_approve( sender, instance, created, **kwargs):
         sender_email = settings.DEFAULT_FROM_EMAIL
         recipient_email = [instance.user.email]
         
-        send_mail_talent.delay(subject, message, sender_email, recipient_email)     
+        _queue_mail(subject, message, sender_email, recipient_email)
 
 @receiver(pre_save, sender=Enquiry)
 def enquiry_pre_save(sender, instance, **kwargs):
@@ -45,8 +59,8 @@ def send_approval_email(sender, instance, created, **kwargs):
         recipient_email = [instance.profile.user.email]
         
         
-        send_mail_talent.delay(subject, message, sender_email, recipient_email)
-        return   
+        _queue_mail(subject, message, sender_email, recipient_email)
+        return
     if (
         (not created)
         and (not auto)
@@ -60,7 +74,7 @@ def send_approval_email(sender, instance, created, **kwargs):
         )
         sender_email = settings.DEFAULT_FROM_EMAIL
         recipient_email = [instance.profile.user.email]
-        send_mail_talent.delay(subject, message, sender_email, recipient_email)
+        _queue_mail(subject, message, sender_email, recipient_email)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
